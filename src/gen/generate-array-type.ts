@@ -6,14 +6,14 @@ import { replacer } from "@utils/replacer";
 import { shouldSplitTypes } from "@utils/should-split-types";
 import { sortMixed } from "@utils/sort";
 
+import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
 import type { ElementBase, FieldAnalysis } from "@/types/field.types";
-import type { Primitive } from "@/types/gen";
-import type { TypeGenConfig } from "@/types/gen-config.types";
+import type { Primitive } from "@/types/gen.types";
 
 type GenerateArrayTypeParams<TName extends string, _TBase extends ElementBase, TUnique extends Primitive> = {
 	stats: FieldAnalysis<TUnique>;
-	config: TypeGenConfig;
+	config: Config;
 	// baseType: TBase;
 	typeName?: TName | undefined;
 };
@@ -55,7 +55,7 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 			config,
 		});
 
-		const typeDef = getArrayTypeString({ elementType, readonly: config.useReadonlyArrays });
+		const typeDef = getArrayTypeString({ elementType, readonly: config.type.useReadonlyArrays });
 
 		return {
 			typeDef,
@@ -66,7 +66,7 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 	// non-literal
 	if (stats.isString) {
 		const elementType = createElementType({ base: "string", combined: "string", config });
-		const typeDef = getArrayTypeString({ elementType, readonly: config.useReadonlyArrays });
+		const typeDef = getArrayTypeString({ elementType, readonly: config.type.useReadonlyArrays });
 
 		return {
 			typeDef,
@@ -76,7 +76,7 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 
 	if (stats.isNumber) {
 		const elementType = createElementType({ base: "number", combined: "number", config });
-		const typeDef = getArrayTypeString({ elementType, readonly: config.useReadonlyArrays });
+		const typeDef = getArrayTypeString({ elementType, readonly: config.type.useReadonlyArrays });
 
 		return {
 			typeDef,
@@ -86,7 +86,7 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 
 	if (stats.isBoolean) {
 		const elementType = createElementType({ base: "boolean", combined: "boolean", config });
-		const typeDef = getArrayTypeString({ elementType, readonly: config.useReadonlyArrays });
+		const typeDef = getArrayTypeString({ elementType, readonly: config.type.useReadonlyArrays });
 
 		return {
 			typeDef,
@@ -96,7 +96,7 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 
 	const elementType = "any" as const;
 
-	const typeDef = getArrayTypeString({ elementType, readonly: config.useReadonlyArrays });
+	const typeDef = getArrayTypeString({ elementType, readonly: config.type.useReadonlyArrays });
 
 	return {
 		typeDef,

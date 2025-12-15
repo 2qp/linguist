@@ -7,16 +7,16 @@ import { replacer } from "@utils/replacer";
 import { shouldSplitTypes } from "@utils/should-split-types";
 import { sortMixed } from "@utils/sort";
 
+import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
 import type { ElementBase } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
-import type { TypeGenConfig } from "@/types/gen-config.types";
 
 type GenerateLanguageNameTypeParams<T extends Primitive, TName extends string, TBase extends ElementBase> = {
 	languageNames: T[] | readonly T[];
 	typeName: TName;
 	baseType: TBase;
-	config: TypeGenConfig;
+	config: Config;
 };
 
 type GenerateLanguageNameTypeType = <T extends Primitive, TName extends string, TBase extends ElementBase>(
@@ -52,7 +52,7 @@ const generateLanguageNameType: GenerateLanguageNameTypeType = ({ languageNames,
 		};
 	}
 
-	const chunks = chunkArray(sortedNames, config.itemsPerSegment);
+	const chunks = chunkArray(sortedNames, config.type.itemsPerSegment);
 
 	const segmentDefs = createSegmentDefs({ chunks, typeName });
 	const segmentRefs = createSegmentRefs({ chunks, typeName });

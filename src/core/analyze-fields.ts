@@ -1,11 +1,11 @@
+import type { Config } from "@/types/config.types";
 import type { FieldAnalysis, FieldAnalysisMap } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
-import type { TypeGenConfig } from "@/types/gen-config.types";
 import type { LanguageData } from "@/types/lang.types";
 
 type AnalyzeFieldsParams = {
 	data: LanguageData;
-	config: TypeGenConfig;
+	config: Config;
 };
 
 type AnalyzeFieldsType = (params: AnalyzeFieldsParams) => FieldAnalysisMap;
@@ -55,9 +55,9 @@ const analyzeFields: AnalyzeFieldsType = ({ data, config }) => {
 			(isNumber && !isString && !isBoolean) ||
 			(isBoolean && !isString && !isNumber);
 
-		const shouldBeLiteral = !isArray && isPureType && uniqueCount > 0 && uniqueCount <= config.maxLiteralValues;
+		const shouldBeLiteral = !isArray && isPureType && uniqueCount > 0 && uniqueCount <= config.type.maxLiteralValues;
 		const shouldBeLiteralArray =
-			isArray && uniqueCount > 0 && uniqueCount <= config.maxArrayLiteralItems && itemType !== "mixed";
+			isArray && uniqueCount > 0 && uniqueCount <= config.type.maxArrayLiteralItems && itemType !== "mixed";
 
 		const analysis: FieldAnalysis = {
 			isOptional,

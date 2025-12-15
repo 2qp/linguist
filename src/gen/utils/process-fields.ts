@@ -1,16 +1,16 @@
 import { generateUniqueTypeName } from "./generate-unique-type-name";
 import { generateFieldType } from "@gen/generate-field-type";
 
+import type { Config } from "@/types/config.types";
 import type { FieldAnalysis } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
-import type { TypeGenConfig } from "@/types/gen-config.types";
 import type { OutputDefs, OutputMap } from "@/types/output.types";
 
 type ProcessFieldsParams<TUnique extends Primitive> = {
 	fields: Array<[string, FieldAnalysis<TUnique>]>;
 	totalLanguages: number;
 	existing: Existing;
-	config: TypeGenConfig;
+	config: Config;
 	existingNames: Set<string>;
 };
 
@@ -44,8 +44,8 @@ const processFields: ProcessFieldsType = ({ fields, existing, totalLanguages, co
 
 	const shouldGenerateType =
 		(stats.shouldBeLiteral || stats.shouldBeLiteralArray) &&
-		stats.languagesUsing >= config.minLanguagesForNamedType &&
-		parseFloat(usagePercent) >= config.minUsagePercent;
+		stats.languagesUsing >= config.type.minLanguagesForNamedType &&
+		parseFloat(usagePercent) >= config.type.minUsagePercent;
 
 	if (!shouldGenerateType) {
 		return processFields({ fields: remainingFields, config, existing, totalLanguages, existingNames });

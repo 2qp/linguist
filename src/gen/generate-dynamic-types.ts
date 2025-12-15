@@ -11,14 +11,14 @@ import { emitTypeSafeAccessors } from "@/emit/emit-typesafe-accessors";
 import { emitUtilityTypes } from "@/emit/emit-utility-types";
 import { emitValidationHelpers } from "@/emit/emit-validation-helpers";
 
+import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
-import type { TypeGenConfig } from "@/types/gen-config.types";
 import type { LanguageName } from "@/types/identifiers.types";
 import type { LanguageData } from "@/types/lang.types";
 import type { Existing } from "./utils/process-fields";
 
 type GenerateDynamicTypesParams = {
-	config: TypeGenConfig;
+	config: Config;
 	data?: LanguageData | undefined;
 };
 
@@ -39,7 +39,7 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config, data }) => {
 		languageNames,
 		typeName: LANGUAGE_NAME,
 		baseType: "string" as const,
-		config: { ...config, useReadonlyArrays: false },
+		config: { ...config, type: { ...config.type, useReadonlyArrays: false } },
 	});
 
 	const existingTypes = new Map<string, GeneratedDefs<string, LanguageName>>([
@@ -90,7 +90,7 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config, data }) => {
 		output_validation_helpers,
 	].join("");
 
-	if (config.showFieldStats) {
+	if (config.type.showFieldStats) {
 		//
 
 		const stats = emitStats({

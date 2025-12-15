@@ -1,11 +1,11 @@
+import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
 import type { FieldAnalysisMap } from "@/types/field.types";
-import type { TypeGenConfig } from "@/types/gen-config.types";
 
 type EmitStatsParams = {
 	map: FieldAnalysisMap;
 	types: Map<string, GeneratedDefs<string, string>>;
-	config: TypeGenConfig;
+	config: Config;
 	totals: { total: number; size: number };
 	langs: string[];
 };
@@ -27,8 +27,8 @@ const emitStats: EmitStatsType = ({ map, types, config, totals, langs }) => {
 
 			const output_named_type = ` -> ${namedType}`;
 			const output_split_into =
-				config.splitLargeTypes && stats.uniqueValues.size >= config.minItemsForSplit
-					? ` [SPLIT into ${Math.ceil(stats.uniqueValues.size / config.itemsPerSegment)} segments]`
+				config.type.splitLargeTypes && stats.uniqueValues.size >= config.type.minItemsForSplit
+					? ` [SPLIT into ${Math.ceil(stats.uniqueValues.size / config.type.itemsPerSegment)} segments]`
 					: "";
 
 			const output_array = stats.isArray ? `, array[${stats.uniqueValues.size}]` : "";
@@ -49,8 +49,8 @@ const emitStats: EmitStatsType = ({ map, types, config, totals, langs }) => {
 		.join("");
 
 	const output_lang_split_into =
-		config.splitLargeTypes && totals.total >= config.minItemsForSplit
-			? `// Language names split into ${Math.ceil(totals.total / config.itemsPerSegment)} segments (${config.itemsPerSegment} per segment)\n`
+		config.type.splitLargeTypes && totals.total >= config.type.minItemsForSplit
+			? `// Language names split into ${Math.ceil(totals.total / config.type.itemsPerSegment)} segments (${config.type.itemsPerSegment} per segment)\n`
 			: "";
 
 	const output_sample_names = `// Sample names: ${langs

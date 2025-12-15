@@ -1,14 +1,10 @@
 import { generateFieldType } from "@gen/generate-field-type";
 
+import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
 import type { FieldAnalysisMap } from "@/types/field.types";
-import type { TypeGenConfig } from "@/types/gen-config.types";
 
-const emitLanguageType = (
-	map: FieldAnalysisMap,
-	types: Map<string, GeneratedDefs<string, string>>,
-	config: TypeGenConfig,
-) => {
+const emitLanguageType = (map: FieldAnalysisMap, types: Map<string, GeneratedDefs<string, string>>, config: Config) => {
 	const fields = [...map].flatMap(([field, stats]) => {
 		//
 

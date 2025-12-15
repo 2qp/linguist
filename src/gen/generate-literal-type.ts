@@ -8,16 +8,16 @@ import { replacer } from "@utils/replacer";
 import { shouldSplitTypes } from "@utils/should-split-types";
 import { sortMixed } from "@utils/sort";
 
+import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
 import type { ElementBase } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
-import type { TypeGenConfig } from "@/types/gen-config.types";
 
 type GenerateLiteralTypeParams<T extends Primitive, TBase extends ElementBase, TName extends string> = {
 	values: Set<T>;
 	baseType: TBase;
 	typeName?: TName | undefined;
-	config: TypeGenConfig;
+	config: Config;
 };
 
 type GenerateLiteralTypeType = <T extends Primitive, TBase extends ElementBase, TName extends string>(
@@ -35,7 +35,7 @@ const generateLiteralType: GenerateLiteralTypeType = ({ values, baseType, config
 	if (sortedValues.length === 0) {
 		const elementType = baseType;
 
-		const typeDef = getArrayTypeString({ elementType, readonly: config.useReadonlyArrays });
+		const typeDef = getArrayTypeString({ elementType, readonly: config.type.useReadonlyArrays });
 
 		return {
 			typeDef,
@@ -67,7 +67,7 @@ const generateLiteralType: GenerateLiteralTypeType = ({ values, baseType, config
 		};
 	}
 
-	const chunks = chunkArray(sortedValues, config.itemsPerSegment);
+	const chunks = chunkArray(sortedValues, config.type.itemsPerSegment);
 
 	const segmentDefs = createSegmentDefs({ chunks, typeName });
 	const segmentRefs = createSegmentRefs({ chunks, typeName });

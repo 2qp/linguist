@@ -1,11 +1,11 @@
+import type { Config } from "@/types/config.types";
 import type { ElementBase } from "@/types/field.types";
 import type { EleExpr, Primitive } from "@/types/gen.types";
-import type { TypeGenConfig } from "@/types/gen-config.types";
 
 type CreateElementTypeParams<T, TBase extends ElementBase> = {
 	combined: T;
 	base: TBase;
-	config: TypeGenConfig;
+	config: Config;
 };
 
 type CreateElementTypeType = <T extends Primitive, TBase extends ElementBase>(
@@ -15,7 +15,7 @@ type CreateElementTypeType = <T extends Primitive, TBase extends ElementBase>(
 const createElementType: CreateElementTypeType = ({ base, combined, config }) => {
 	//
 
-	if (config.allowFlexibleTypes) {
+	if (config.type.allowFlexibleTypes) {
 		return `((${combined}) | (${base} & {}))` as const;
 	}
 

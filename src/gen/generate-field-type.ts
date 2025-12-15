@@ -1,16 +1,16 @@
 import { generateArrayType } from "./generate-array-type";
 import { generateLiteralType } from "./generate-literal-type";
 
+import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
 import type { ElementBase, FieldAnalysis } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
-import type { TypeGenConfig } from "@/types/gen-config.types";
 
 type GenerateFieldTypeParams<TName extends string, _TBase extends ElementBase, TUnique extends Primitive> = {
 	field: string;
 	stats: FieldAnalysis<TUnique>;
 	typeName?: TName | undefined;
-	config: TypeGenConfig;
+	config: Config;
 };
 
 type GenerateFieldTypeType = <TName extends string, TBase extends ElementBase, TUnique extends Primitive>(
@@ -67,7 +67,7 @@ const generateFieldType: GenerateFieldTypeType = ({ stats, typeName = undefined,
 			return generateLiteralType({ values: stats.uniqueValues, baseType: "string", config, typeName });
 		}
 
-		const typeDef = config.allowFlexibleTypes ? ("string | (string & {})" as const) : ("string" as const);
+		const typeDef = config.type.allowFlexibleTypes ? ("string | (string & {})" as const) : ("string" as const);
 
 		return {
 			typeDef,

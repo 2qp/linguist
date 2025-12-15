@@ -1,9 +1,9 @@
-import type { TypeGenConfig } from "@/types/gen-config.types";
+import type { Config } from "@/types/config.types";
 
-type ShouldSplitTypesType = <T>(config: TypeGenConfig, names: T[]) => boolean;
+type ShouldSplitTypesType = <T>(config: Config, names: T[]) => boolean;
 
 const shouldSplitTypes: ShouldSplitTypesType = (config, names) => {
-	return config.splitLargeTypes && names.length >= config.minItemsForSplit;
+	return config.type.splitLargeTypes && names.length >= config.type.minItemsForSplit;
 };
 
 export { shouldSplitTypes };
