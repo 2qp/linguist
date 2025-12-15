@@ -23,10 +23,11 @@ const comparePrimitives: ComparePrimitivesType = (a, b) => {
 	return String(a).localeCompare(String(b));
 };
 
-type SortMixedType = <T extends Primitive>(values: T[]) => T[];
+type SortMixedType = <T extends Primitive>(values: T[] | ReadonlyArray<T>) => T[];
 
 const sortMixed: SortMixedType = (values) => {
-	return values.sort(comparePrimitives);
+	const arr = [...values];
+	return arr.sort(comparePrimitives);
 };
 
 export { comparePrimitives, sortMixed };
