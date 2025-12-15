@@ -12,4 +12,8 @@ type TypeGeneratorConfig = {
 	useReadonlyArrays: boolean;
 };
 
-export type { TypeGeneratorConfig as TypeGenConfig };
+type TypeGenConfigFile = {
+	type: TypeGeneratorConfig;
+};
+
+export type { TypeGeneratorConfig as TypeGenConfig, TypeGenConfigFile };
