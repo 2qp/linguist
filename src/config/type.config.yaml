@@ -1,0 +1,37 @@
+# Type Generation Config
+type:
+  # Limits for literal types (for performance and readability)
+  maxLiteralValues: 5000              # Max unique values for primitive literals
+  maxArrayLiteralItems: 5000          # Max unique items for array literals
+  
+  # Union type splitting
+  splitLargeTypes: true               # Split large union types into segments
+  itemsPerSegment: 50                 # How many items per segment
+  minItemsForSplit: 20                # Minimum items before considering split
+  
+  # Named type generation thresholds
+  minLanguagesForNamedType: 0         # Min languages using a field to generate named type
+  minUsagePercent: 0                  # Min percentage of languages using field
+  
+  # Debug output
+  showFieldStats: true
+  showExamples: 3
+  
+  # Type generation strategy
+  allowFlexibleTypes: true            # Add (string & {}) for extensibility
+  useReadonlyArrays: true             # Generate readonly array types
+
+
+# type TypeGeneratorConfig = {
+#   maxLiteralValues: number;
+#   maxArrayLiteralItems: number;
+#   splitLargeTypes: boolean;
+#   itemsPerSegment: number;
+#   minItemsForSplit: number;
+#   minLanguagesForNamedType: number;
+#   minUsagePercent: number;
+#   showFieldStats: boolean;
+#   showExamples: number;
+#   allowFlexibleTypes: boolean;
+#   useReadonlyArrays: boolean;
+# };
