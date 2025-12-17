@@ -1,0 +1,9 @@
+data:
+  paths:
+    outputDir: "./out"
+    esmDir: "./out/esm"
+    jsonDir: "./out/json"
+    mapsDir: "./out/maps"
+    typesDir: "./out/types"
+    flatDir: "./out/flat"
+    manifestsDir: "./out/manifests"
