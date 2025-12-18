@@ -1,7 +1,7 @@
 import { yamlLoader } from "./yaml-loader";
 import { readFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
+import { resolvePath } from "@utils/resolve-path";
 
 import type { Config } from "@/types/config.types";
 import type { CoreConfigFile } from "@/types/core.types";
@@ -15,10 +15,7 @@ type ConfigLoaderType = () => Promise<Config>;
 const configLoader: ConfigLoaderType = async () => {
 	//
 
-	const __filename = fileURLToPath(import.meta.url);
-	const __dirname = dirname(__filename);
-
-	const path = join(__dirname, "..", "..", "config");
+	const path = resolvePath("src/config");
 
 	const corePath = join(path, "core.config.yaml");
 	const typeGenPath = join(path, "type.config.yaml");
