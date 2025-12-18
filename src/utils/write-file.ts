@@ -2,7 +2,7 @@ import { ensureDir } from "./ensure-dir";
 import { writeFile as writeFileAsync } from "node:fs/promises";
 import { dirname } from "node:path";
 
-type WriteFileParams = { filePath: string; content: string; options: Parameters<typeof writeFileAsync>["2"] };
+type WriteFileParams = { filePath: string; content: string; options?: Parameters<typeof writeFileAsync>["2"] };
 
 type WriteFileType = (params: WriteFileParams) => Promise<void>;
 
