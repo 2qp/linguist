@@ -10,6 +10,21 @@ type TypeGeneratorConfig = {
 	showExamples: number;
 	allowFlexibleTypes: boolean;
 	useReadonlyArrays: boolean;
+
+	//
+	paths: Paths;
+	out: Out;
+	options: Options;
+};
+
+type Out = {
+	fileName: string;
+};
+
+type Options = {};
+
+type Paths = {
+	outputDir: string;
 };
 
 type TypeGenConfigFile = {

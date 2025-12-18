@@ -21,6 +21,17 @@ type:
   allowFlexibleTypes: true            # Add (string & {}) for extensibility
   useReadonlyArrays: true             # Generate readonly array types
 
+  #
+  paths:
+    outputDir: "src/generated/types"
+
+  #
+  out:
+    fileName: "language-types.generated.ts"
+
+  #
+  options:
+
 
 # type TypeGeneratorConfig = {
 #   maxLiteralValues: number;
