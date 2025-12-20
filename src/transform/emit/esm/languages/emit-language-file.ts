@@ -1,0 +1,27 @@
+import { stringify } from "safe-stable-stringify";
+
+import type { Language } from "@/generated/types/language-types.generated";
+import type { NormalizedName } from "@/transform/utils/normalize-name";
+
+type EmitLanguageFileParams = { norm: NormalizedName; data: Partial<Language> | undefined };
+
+type EmitLanguageFileType = (params: EmitLanguageFileParams) => string;
+
+const emitLanguageFile: EmitLanguageFileType = ({ norm, data }) => {
+	//
+	const jsonStr = stringify(data, null, 2);
+
+	return [
+		`const ${norm.varName} = ${jsonStr} as const;`,
+		"\n",
+		"\n",
+		`export { ${norm.varName} };`,
+		"\n",
+		"\n",
+		`export type ${norm.typeName} = typeof ${norm.varName};`,
+		"\n",
+	].join("");
+};
+
+export { emitLanguageFile };
+export type { EmitLanguageFileParams, EmitLanguageFileType };
