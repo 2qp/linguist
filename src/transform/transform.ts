@@ -1,5 +1,6 @@
 import { ensureDir } from "../utils/ensure-dir";
 import { groupByType } from "./core/group-by-type";
+import { createIndexes } from "./emit/esm/indexes/create-indexes";
 import { createLanguageFiles } from "./emit/esm/languages/create-language-files";
 import { join } from "node:path";
 import { getFile } from "@services/fetch/get-file";
@@ -25,13 +26,15 @@ const transform: TransformType = async () => {
 
 	if (!languages) throw Error("Unable to load yaml source data");
 
-	await Promise.all([ensureDir(esmDir), ensureDir(join(esmDir, "languages"))]);
+	await Promise.all([ensureDir(esmDir), ensureDir(join(esmDir, "indexes")), ensureDir(join(esmDir, "languages"))]);
 
 	const grouped = groupByType({ languages });
 
 	for (const [type, typeLanguages] of Object.entries(grouped)) {
 		await createLanguageFiles({ languages: typeLanguages, type, config });
 	}
+
+	await createIndexes({ languages, config });
 };
 
 await transform({});
