@@ -17,6 +17,9 @@ type ProcessWithExporter<Tuple extends unknown[]> = {
 type ProcessWithAwaited<Tuple extends unknown[]> = {
 	[I in keyof Tuple]: Tuple[I] extends (...args: unknown[]) => unknown ? Awaited<ReturnType<Tuple[I]>> : Tuple[I];
 };
-type ProcessTuple<T, K extends (keyof T | (string & {}))[]> = ProcessWithExporter<ProcessWithAwaited<ToTuple<T, K>>>;
 
-export type { ExtractMainExport, ProcessTuple, ProcessWithAwaited, ProcessWithExporter, ToTuple };
+type ProcessLazyTuple<T, K extends (keyof T | (string & {}))[]> = ProcessWithExporter<
+	ProcessWithAwaited<ToTuple<T, K>>
+>;
+
+export type { ExtractMainExport, ProcessLazyTuple, ProcessWithAwaited, ProcessWithExporter, ToTuple };
