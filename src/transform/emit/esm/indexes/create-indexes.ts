@@ -1,4 +1,5 @@
 import { emitIndexByExtension } from "./emit-index-by-extension";
+import { emitIndexById } from "./emit-index-by-id";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ensureDir } from "@utils/ensure-dir";
@@ -20,7 +21,10 @@ const createIndexes: CreateIndexesType = async ({ languages, config }) => {
 	const indexesDir = join(config.data.paths.esmDir, "indexes");
 	await ensureDir(indexesDir);
 
-	const indexEmitters: IndexEmitter[] = [{ name: "by-extension", emitter: emitIndexByExtension }];
+	const indexEmitters: IndexEmitter[] = [
+		{ name: "by-id", emitter: emitIndexById },
+		{ name: "by-extension", emitter: emitIndexByExtension },
+	];
 
 	await Promise.all(
 		indexEmitters.map(async ({ name, emitter }) => {
