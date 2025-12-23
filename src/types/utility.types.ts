@@ -4,4 +4,8 @@ type Entries<T> = {
 
 type LooseToStrict<T> = T extends unknown ? (string extends T ? never : T) : never;
 
-export type { Entries, LooseToStrict };
+type Prettify<T> = {
+	[K in keyof T]: T[K];
+} & {};
+
+export type { Entries, LooseToStrict, Prettify };
