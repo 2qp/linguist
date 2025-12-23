@@ -43,7 +43,7 @@ const emitIndexById: IndexEmitterType = ({ languages, config }): string => {
 		"\n",
 		"} as const;",
 		"\n\n",
-		"export default byId;",
+		"export { byId };",
 		"\n\n",
 		"export type ById = typeof byId;",
 		"\n",
