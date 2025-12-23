@@ -1,16 +1,18 @@
-type ToTuple<T, K extends readonly (keyof T | (string & {}))[]> = {
-	[I in keyof K]: K[I] extends keyof T ? T[K[I]] : never;
+type ToTuple<T, K extends readonly (keyof T | (string & {}))[], R = never> = {
+	[I in keyof K]: K[I] extends keyof T ? T[K[I]] : R;
 };
 
 type ExtractMainExport<T> = {
 	[K in keyof T]: T[K] extends ((...args: unknown[]) => unknown) | object | string | number | boolean ? T[K] : never;
 }[keyof T];
 
-type ProcessWithExporter<Tuple extends unknown[]> = {
+type ProcessWithExporter<Tuple extends unknown[], R = never> = {
 	[I in keyof Tuple]: Tuple[I] extends unknown[]
 		? ProcessWithExporter<Tuple[I]>
 		: Tuple[I] extends infer Module
-			? ExtractMainExport<Module>
+			? ExtractMainExport<Module> extends ExtractMainExport<R>
+				? R
+				: ExtractMainExport<Module>
 			: never;
 };
 
@@ -18,8 +20,9 @@ type ProcessWithAwaited<Tuple extends unknown[]> = {
 	[I in keyof Tuple]: Tuple[I] extends (...args: unknown[]) => unknown ? Awaited<ReturnType<Tuple[I]>> : Tuple[I];
 };
 
-type ProcessLazyTuple<T, K extends (keyof T | (string & {}))[]> = ProcessWithExporter<
-	ProcessWithAwaited<ToTuple<T, K>>
+type ProcessLazyTuple<T, K extends (keyof T | (string & {}))[], R = never> = ProcessWithExporter<
+	ProcessWithAwaited<ToTuple<T, K, R>>,
+	R
 >;
 
 export type { ExtractMainExport, ProcessLazyTuple, ProcessWithAwaited, ProcessWithExporter, ToTuple };
