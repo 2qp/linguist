@@ -2,6 +2,12 @@ type ToTuple<T, K extends readonly (keyof T | (string & {}))[], R = never> = {
 	[I in keyof K]: K[I] extends keyof T ? T[K[I]] : R;
 };
 
+type ToObj<T, K extends readonly (keyof T | (string & {}))[], R = never> = {
+	[I in K[number]]: I extends keyof T ? T[I] : R;
+};
+
+type ToObjOne<T, K extends keyof T | (string & {}), R = never> = K extends keyof T ? T[K] : R;
+
 type ExtractMainExport<T> = {
 	[K in keyof T]: T[K] extends ((...args: unknown[]) => unknown) | object | string | number | boolean ? T[K] : never;
 }[keyof T];
@@ -25,4 +31,4 @@ type ProcessLazyTuple<T, K extends (keyof T | (string & {}))[], R = never> = Pro
 	R
 >;
 
-export type { ExtractMainExport, ProcessLazyTuple, ProcessWithAwaited, ProcessWithExporter, ToTuple };
+export type { ExtractMainExport, ProcessLazyTuple, ProcessWithAwaited, ProcessWithExporter, ToObj, ToTuple, ToObjOne };
