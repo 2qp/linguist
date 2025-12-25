@@ -24,10 +24,15 @@ type:
   #
   paths:
     outputDir: "src/generated/types"
+  
+  #
+  aliases:
+    outputDir: "@/generated/types"
 
   #
   out:
     fileName: "language-types.generated.ts"
+    fileNameNoExt: "language-types.generated"
 
   #
   options:

@@ -13,12 +13,14 @@ type TypeGeneratorConfig = {
 
 	//
 	paths: Paths;
+	aliases: Paths;
 	out: Out;
 	options: Options;
 };
 
 type Out = {
 	fileName: string;
+	fileNameNoExt: string;
 };
 
 type Options = {};
