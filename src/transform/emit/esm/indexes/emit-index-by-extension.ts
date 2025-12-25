@@ -57,7 +57,23 @@ const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string =
 		//
 	});
 
+	const types = [...extensionMap.entries()].flatMap(([ext, nameSet]) => {
+		//
+
+		const vars = [...nameSet]
+			.map((name) => {
+				const norm = normalizeName(name);
+				return `${norm.typeName}`;
+			})
+			.join(",");
+
+		return `  "${ext}": [${[vars]}],` as const;
+
+		//
+	});
+
 	const entries = result.join("\n");
+	const typeEntries = types.join("\n");
 
 	const imports = allUniqueNames
 		.map((name) => {
@@ -68,10 +84,29 @@ const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string =
 		})
 		.join("\n");
 
+	const manualTypeImports = [
+		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}"`,
+	].join("\n");
+
+	const typeImports = allUniqueNames
+		.map((name) => {
+			const norm = normalizeName(name);
+			const langData = languages[name];
+			const type = langData?.type || "programming";
+			return ` import type { ${norm.typeName} } from "${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}";`;
+		})
+		.join("\n");
+
 	return [
 		`${imports}`,
 		"\n\n",
-		`const byExtension = {\n${entries}\n} as const;\n\nexport { byExtension } ;\n\nexport type ByExtension = typeof byExtension;\n`,
+		`${typeImports}`,
+		"\n\n",
+		`${manualTypeImports}`,
+		"\n\n",
+		`const byExtension : ByExtension = {\n${entries}\n} as const;\n\nexport { byExtension };`,
+		"\n\n",
+		`export type ByExtension = {\n${typeEntries}\n} & FallbackForUnknownKeys<Language[]>;\n`,
 	].join("");
 };
 
