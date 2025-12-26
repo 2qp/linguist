@@ -31,4 +31,15 @@ type ProcessLazyTuple<T, K extends (keyof T | (string & {}))[], R = never> = Pro
 	R
 >;
 
-export type { ExtractMainExport, ProcessLazyTuple, ProcessWithAwaited, ProcessWithExporter, ToObj, ToTuple, ToObjOne };
+type AwaitedReturnOrSelf<T> = T extends (...args: unknown[]) => unknown ? Awaited<ReturnType<T>> : T;
+
+export type {
+	AwaitedReturnOrSelf,
+	ExtractMainExport,
+	ProcessLazyTuple,
+	ProcessWithAwaited,
+	ProcessWithExporter,
+	ToObj,
+	ToObjOne,
+	ToTuple,
+};
