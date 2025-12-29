@@ -71,7 +71,7 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config, data }) => {
 		? `export type ${LANGUAGE_NAME} = ${generatedTypes.get(LANGUAGE_NAME)?.typeDef};\n`
 		: "";
 	const output_sorted_types = emitTypesSection(generatedTypes, LANGUAGE_NAME);
-	const output_fields = emitLanguageType(fieldStats, generatedTypes, config);
+	const output_fields = emitLanguageType({ stats: fieldStats, types: generatedTypes, config });
 	const output_utility_types = emitUtilityTypes(LANGUAGE_NAME);
 	const output_typesafe_accessors = emitTypeSafeAccessors(LANGUAGE_NAME);
 	const output_validation_helpers = emitValidationHelpers(LANGUAGE_NAME);

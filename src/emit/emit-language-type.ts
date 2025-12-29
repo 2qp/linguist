@@ -4,8 +4,16 @@ import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
 import type { FieldAnalysisMap } from "@/types/field.types";
 
-const emitLanguageType = (map: FieldAnalysisMap, types: Map<string, GeneratedDefs<string, string>>, config: Config) => {
-	const fields = [...map].flatMap(([field, stats]) => {
+type EmitLanguageTypeParams = {
+	stats: FieldAnalysisMap;
+	types: Map<string, GeneratedDefs<string, string>>;
+	config: Config;
+};
+
+type EmitLanguageTypeType = (params: EmitLanguageTypeParams) => string;
+
+const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
+	const fields = [...stats].flatMap(([field, stats]) => {
 		//
 
 		const typeNames = [...types].map(([tName, _]) => {
@@ -34,3 +42,4 @@ const emitLanguageType = (map: FieldAnalysisMap, types: Map<string, GeneratedDef
 };
 
 export { emitLanguageType };
+export type { EmitLanguageTypeParams, EmitLanguageTypeType };
