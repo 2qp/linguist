@@ -1,5 +1,6 @@
 import { emitIndexByExtension } from "./emit-index-by-extension";
 import { emitIndexById } from "./emit-index-by-id";
+import { emitLazyIndexByExtension } from "./emit-lazy-index-by-extension";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ensureDir } from "@utils/ensure-dir";
@@ -24,6 +25,8 @@ const createIndexes: CreateIndexesType = async ({ languages, config }) => {
 	const indexEmitters: IndexEmitter[] = [
 		{ name: "by-id", emitter: emitIndexById },
 		{ name: "by-extension", emitter: emitIndexByExtension },
+
+		{ name: "lazy-by-extension", emitter: emitLazyIndexByExtension },
 	];
 
 	await Promise.all(
