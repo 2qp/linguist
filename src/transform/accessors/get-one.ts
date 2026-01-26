@@ -18,15 +18,16 @@ type GetOneOverloaded = {
 
 	// <I, T extends string>(index: I, ext: T): ToObjOne<I, T, CombinedPropsFromAny<I>>;
 
-	<I, T extends string>(index: I, ext: T): I[keyof I];
+	<I, T extends string>(index: I, ext: T): I[keyof I] | undefined;
 };
 
-type GetLangByExtensionType = GetOneOverloaded;
+type GetOneType = GetOneOverloaded;
 
-const getOne: GetLangByExtensionType = (index: object, ext: string) => {
+const getOne: GetOneType = (index: object, ext: string) => {
 	//
 
-	return index[ext as keyof typeof index] || [];
+	return index[ext as keyof typeof index];
 };
 
 export { getOne };
+export type { GetOneType };
