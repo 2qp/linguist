@@ -106,7 +106,7 @@ const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string =
 		"\n\n",
 		`const byExtension : ByExtension = {\n${entries}\n} as const;\n\nexport { byExtension };`,
 		"\n\n",
-		`export type ByExtension = {\n${typeEntries}\n} & FallbackForUnknownKeys<Language[]>;\n`,
+		`export type ByExtension = {\n${typeEntries}\n} & FallbackForUnknownKeys<Language[] | undefined>;\n`,
 	].join("");
 };
 
