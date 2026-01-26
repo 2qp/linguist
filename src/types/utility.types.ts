@@ -8,4 +8,8 @@ type Prettify<T> = {
 	[K in keyof T]: T[K];
 } & {};
 
-export type { Entries, LooseToStrict, Prettify };
+type ExtractExplicit<T extends Record<string, unknown>> = {
+	[K in keyof T as string extends K ? never : K]: T[K];
+};
+
+export type { Entries, ExtractExplicit, LooseToStrict, Prettify };
