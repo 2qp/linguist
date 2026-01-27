@@ -2,6 +2,7 @@ import { ensureDir } from "../utils/ensure-dir";
 import { groupByType } from "./core/group-by-type";
 import { createIndexes } from "./emit/esm/indexes/create-indexes";
 import { createLanguageFiles } from "./emit/esm/languages/create-language-files";
+import { createMaps } from "./emit/maps/create-maps";
 import { join } from "node:path";
 import { getFile } from "@services/fetch/get-file";
 import { configLoader } from "@/infra/loaders/config-loader";
@@ -35,6 +36,8 @@ const transform: TransformType = async () => {
 	}
 
 	await createIndexes({ languages, config });
+
+	await createMaps({ languages, config });
 };
 
 await transform({});
