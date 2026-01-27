@@ -1,0 +1,59 @@
+import { emitManifest } from "./emit-manifest";
+import { join } from "node:path";
+import { ensureDir } from "@utils/ensure-dir";
+import { writeFile } from "@utils/write-file";
+import stringify from "safe-stable-stringify";
+
+import type { Languages } from "@/generated/types/language-types.generated";
+import type { Config } from "@/types/config.types";
+import type { ManifestEmitter } from "./types";
+
+type CreateManifestsParams = { languages: Languages; config: Config };
+
+type CreateManifestsType = (params: CreateManifestsParams) => Promise<void>;
+
+const createManifests: CreateManifestsType = async ({ config, languages }) => {
+	//
+
+	const indexesDir = join(config.data.paths.manifestsDir, ".");
+	await ensureDir(indexesDir);
+
+	const indexEmitters: ManifestEmitter[] = [
+		{ name: "base", config: { key: "name", set: "name", data: "extensions" } },
+		{ name: "filenames", config: { key: "name", set: "name", data: "filenames" } },
+		{ name: "interpreters", config: { key: "name", set: "name", data: "interpreters" } },
+		{
+			name: "languages",
+			config: {
+				key: "name",
+				set: "name",
+				data: "interpreters",
+				isCustom: true,
+				custom: { name: "name", id: "language_id" },
+			},
+		},
+	] as const;
+
+	await Promise.all(
+		indexEmitters.map(async ({ name, config }) => {
+			//
+
+			const map = emitManifest({ languages, config });
+
+			if (!map) return;
+
+			const filePath = join(indexesDir, `${name}.json`);
+
+			const content = Object.fromEntries(map);
+
+			const json = stringify(content, (_k, v) => (v instanceof Set ? [...v] : v), 2);
+
+			if (!json) return;
+
+			await writeFile({ content: json, filePath });
+		}),
+	);
+};
+
+export { createManifests };
+export type { CreateManifestsParams, CreateManifestsType };

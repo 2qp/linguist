@@ -3,6 +3,7 @@ import { groupByType } from "./core/group-by-type";
 import { createIndexes } from "./emit/esm/indexes/create-indexes";
 import { createLanguageFiles } from "./emit/esm/languages/create-language-files";
 import { createFlats } from "./emit/flat/create-flats";
+import { createManifests } from "./emit/manifests/create-manifests";
 import { createMaps } from "./emit/maps/create-maps";
 import { join } from "node:path";
 import { getFile } from "@services/fetch/get-file";
@@ -41,6 +42,8 @@ const transform: TransformType = async () => {
 	await createMaps({ languages, config });
 
 	await createFlats({ languages, config });
+
+	await createManifests({ languages, config });
 };
 
 await transform({});
