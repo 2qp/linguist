@@ -1,5 +1,6 @@
 import { ensureDir } from "../utils/ensure-dir";
 import { groupByType } from "./core/group-by-type";
+import { createCategories } from "./emit/esm/categories/create-categories";
 import { createIndexes } from "./emit/esm/indexes/create-indexes";
 import { createLanguageFiles } from "./emit/esm/languages/create-language-files";
 import { createFlats } from "./emit/flat/create-flats";
@@ -36,6 +37,8 @@ const transform: TransformType = async () => {
 	for (const [type, typeLanguages] of Object.entries(grouped)) {
 		await createLanguageFiles({ languages: typeLanguages, type, config });
 	}
+
+	await createCategories({ config, grouped });
 
 	await createIndexes({ languages, config });
 
