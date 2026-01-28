@@ -3,6 +3,7 @@ import { emitJSONFlat } from "./emit-json-flat";
 import { join } from "node:path";
 import { ensureDir } from "@utils/ensure-dir";
 import { writeFile } from "@utils/write-file";
+import { createJsonExport } from "@/transform/utils/create-json-export";
 
 import type { Languages } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
@@ -29,6 +30,11 @@ const createFlats: CreateFlatsType = async ({ config, languages }) => {
 			const filePath = join(indexesDir, fileName);
 			const content = emitter({ languages, config });
 			await writeFile({ filePath, content });
+
+			if (ext === "json") {
+				const exportPath = join(indexesDir, `${name}.ts`);
+				await createJsonExport({ alias: name, filePath: exportPath, sourcePath: `./${name}.json` });
+			}
 		}),
 	);
 };

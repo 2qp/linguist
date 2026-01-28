@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { ensureDir } from "@utils/ensure-dir";
 import { writeFile } from "@utils/write-file";
 import stringify from "safe-stable-stringify";
+import { createJsonExport } from "@/transform/utils/create-json-export";
 
 import type { Languages } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
@@ -19,7 +20,7 @@ const createManifests: CreateManifestsType = async ({ config, languages }) => {
 	await ensureDir(indexesDir);
 
 	const indexEmitters: ManifestEmitter[] = [
-		{ name: "base", config: { key: "name", set: "name", data: "extensions" } },
+		{ name: "extensions", config: { key: "name", set: "name", data: "extensions" } },
 		{ name: "filenames", config: { key: "name", set: "name", data: "filenames" } },
 		{ name: "interpreters", config: { key: "name", set: "name", data: "interpreters" } },
 		{
@@ -43,6 +44,7 @@ const createManifests: CreateManifestsType = async ({ config, languages }) => {
 			if (!map) return;
 
 			const filePath = join(indexesDir, `${name}.json`);
+			const exportPath = join(indexesDir, `${name}.ts`);
 
 			const content = Object.fromEntries(map);
 
@@ -51,6 +53,7 @@ const createManifests: CreateManifestsType = async ({ config, languages }) => {
 			if (!json) return;
 
 			await writeFile({ content: json, filePath });
+			await createJsonExport({ alias: name, filePath: exportPath, sourcePath: `./${name}.json` });
 		}),
 	);
 };
