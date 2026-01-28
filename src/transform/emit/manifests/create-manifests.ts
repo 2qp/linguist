@@ -48,7 +48,7 @@ const createManifests: CreateManifestsType = async ({ config, languages }) => {
 
 			const content = Object.fromEntries(map);
 
-			const json = stringify(content, (_k, v) => (v instanceof Set ? [...v] : v), 2);
+			const json = stringify(content, (_k, v) => (v instanceof Set ? [...v] : v));
 
 			if (!json) return;
 
