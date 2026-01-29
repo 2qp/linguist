@@ -97,6 +97,9 @@ const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string =
 		})
 		.join("\n");
 
+	const obj = "byExtension" as const;
+	const typeName = "ByExtension" as const;
+
 	return [
 		`${imports}`,
 		"\n\n",
@@ -104,9 +107,11 @@ const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string =
 		"\n\n",
 		`${manualTypeImports}`,
 		"\n\n",
-		`const byExtension : ByExtension = {\n${entries}\n} as const;\n\nexport { byExtension };`,
+		`const ${obj} : ${typeName} = {\n${entries}\n} as const;`,
 		"\n\n",
-		`export type ByExtension = {\n${typeEntries}\n} & FallbackForUnknownKeys<Language[] | undefined>;\n`,
+		`type ${typeName} = {\n${typeEntries}\n} & FallbackForUnknownKeys<Language[] | undefined>;\n\n`,
+		`export { ${obj} };\n`,
+		`export type { ${typeName} };`,
 	].join("");
 };
 

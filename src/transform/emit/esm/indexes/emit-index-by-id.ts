@@ -59,6 +59,9 @@ const emitIndexById: IndexEmitterType = ({ languages, config }): string => {
 	const joinedManualTypeImports = manualTypeImports.join("\n");
 	const joinedTypeEntries = types.join("\n");
 
+	const obj = "byId" as const;
+	const typeName = "ById" as const;
+
 	// later with ts compiler api
 	return [
 		`${joinedImports}`,
@@ -67,16 +70,12 @@ const emitIndexById: IndexEmitterType = ({ languages, config }): string => {
 		"\n\n",
 		`${joinedManualTypeImports}`,
 		"\n\n",
-		"const byId : ById = {",
-		"\n",
-		`${joinedResult}`,
-		"\n",
-		"} as const;",
+		`const ${obj} : ${typeName} = {\n${joinedResult}\n} as const;`,
 		"\n\n",
-		`type ById = {\n${joinedTypeEntries}\n} & FallbackForUnknownKeys<Language | undefined>;\n`,
+		`type ${typeName} = {\n${joinedTypeEntries}\n} & FallbackForUnknownKeys<Language | undefined>;\n`,
 		"\n\n",
-		"export { byId };\n",
-		"export type { ById };",
+		`export { ${obj} };\n`,
+		`export type { ${typeName} };`,
 		"\n",
 	].join("");
 };

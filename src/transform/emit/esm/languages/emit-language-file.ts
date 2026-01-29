@@ -15,10 +15,11 @@ const emitLanguageFile: EmitLanguageFileType = ({ norm, data }) => {
 		`const ${norm.varName} = ${jsonStr} as const;`,
 		"\n",
 		"\n",
-		`export { ${norm.varName} };`,
+		`type ${norm.typeName} = typeof ${norm.varName};`,
 		"\n",
 		"\n",
-		`export type ${norm.typeName} = typeof ${norm.varName};`,
+		`export { ${norm.varName} };\n`,
+		`export type { ${norm.typeName} }`,
 		"\n",
 	].join("");
 };

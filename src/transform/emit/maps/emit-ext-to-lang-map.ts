@@ -38,10 +38,14 @@ const emitExtToLangMap: MapEmitterType = ({ languages }): string => {
 		.toArray()
 		.join("\n");
 
+	const obj = "extensionToLanguage" as const;
+	const typeName = "ExtensionToLanguage" as const;
+
 	return [
-		`const extensionToLanguage = {\n${entries}\n} as const;`,
-		"\n\nexport { extensionToLanguage };",
-		"\n\nexport type ExtensionToLanguage = typeof extensionToLanguage;\n",
+		`const ${obj} = {\n${entries}\n} as const;\n\n`,
+		`type ${typeName} = typeof ${obj};\n\n`,
+		`export { ${obj} };\n`,
+		`export type { ${typeName} };\n`,
 	].join("");
 };
 
