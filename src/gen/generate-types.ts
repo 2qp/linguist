@@ -11,7 +11,7 @@ import type { LanguageData } from "@/types/lang.types";
 
 type GenerateTypesParams = {};
 
-type GenerateTypesType = (params: GenerateTypesParams) => void;
+type GenerateTypesType = (params: GenerateTypesParams) => Promise<void>;
 
 const generateTypes: GenerateTypesType = async () => {
 	//
