@@ -3,7 +3,7 @@ import { stringify } from "safe-stable-stringify";
 
 import type { BuildInfo } from "@/types/build.types";
 
-const writeBuildInfo = async (hash: string, url: string, path: string) => {
+const writeBuildInfo = async (hash: string, url: string, path: string = "./build-info.json") => {
 	//
 
 	const build: BuildInfo = {
