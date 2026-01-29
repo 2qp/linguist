@@ -6,10 +6,16 @@ type Paths = {
 	typesDir: string;
 	flatDir: string;
 	manifestsDir: string;
+	gettersDir: string;
+};
+
+type SourcePaths = {
+	gettersDir: string;
 };
 
 type DataConfig = {
 	paths: Paths;
+	sourcePaths: SourcePaths;
 };
 
 type DataConfigFile = {

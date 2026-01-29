@@ -6,6 +6,7 @@ import { createLanguageFiles } from "./emit/esm/languages/create-language-files"
 import { createFlats } from "./emit/flat/create-flats";
 import { createManifests } from "./emit/manifests/create-manifests";
 import { createMaps } from "./emit/maps/create-maps";
+import { createReExports } from "./utils/create-re-exports";
 import { join } from "node:path";
 import { getFile } from "@services/fetch/get-file";
 import { configLoader } from "@/infra/loaders/config-loader";
@@ -47,9 +48,12 @@ const transform: TransformType = async () => {
 	await createFlats({ languages, config });
 
 	await createManifests({ languages, config });
-};
 
-await transform({});
+	await createReExports({
+		sourceDir: config.data.sourcePaths.gettersDir,
+		outputFile: join(config.data.paths.gettersDir, "index.ts"),
+	});
+};
 
 export { transform };
 export type { TransformParams, TransformType };

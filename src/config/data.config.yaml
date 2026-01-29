@@ -7,3 +7,7 @@ data:
     typesDir: "@/generated/data/esm/languages"
     flatDir: "src/generated/data/flat"
     manifestsDir: "src/generated/data/manifests"
+    gettersDir: "src/generated/getters/"
+
+  sourcePaths:
+    gettersDir: "src/transform/accessors/"
