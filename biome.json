@@ -46,6 +46,7 @@
 				"organizeImports": {
 					"level": "on",
 					"options": {
+						"identifierOrder": "natural",
 						"groups": [
 							{ "type": false, "source": ":PATH:" },
 
