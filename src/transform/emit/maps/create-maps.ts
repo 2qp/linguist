@@ -1,4 +1,8 @@
 import { emitExtToLangMap } from "./emit-ext-to-lang-map";
+import { emitFileNameToLanguage } from "./filename-to-language";
+import { emitInterpreterToLanguage } from "./interpreter-to-language";
+import { emitLanguageIdToName } from "./language-id-to-name";
+import { emitLanguageToCategory } from "./language-to-category";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ensureDir } from "@utils/ensure-dir";
@@ -20,7 +24,13 @@ const createMaps: CreateMapsType = async ({ config, languages }) => {
 	const indexesDir = join(config.data.paths.mapsDir, ".");
 	await ensureDir(indexesDir);
 
-	const indexEmitters: MapEmitter[] = [{ name: "ext-to-lang", emitter: emitExtToLangMap }];
+	const indexEmitters: MapEmitter[] = [
+		{ name: "ext-to-lang", emitter: emitExtToLangMap },
+		{ name: "filename-to-lang", emitter: emitFileNameToLanguage },
+		{ name: "interpreter-to-lang", emitter: emitInterpreterToLanguage },
+		{ name: "language-id-to-name", emitter: emitLanguageIdToName },
+		{ name: "language-to-category", emitter: emitLanguageToCategory },
+	];
 
 	await Promise.all(
 		indexEmitters.map(async ({ name, emitter }) => {
