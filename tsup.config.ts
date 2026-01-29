@@ -1,10 +1,17 @@
 import { defineConfig } from "tsup";
 
 const config = defineConfig({
-	entry: ["src/index.ts"],
+	entry: ["src/generated/**/*.ts"],
 	clean: true,
-	format: ["cjs", "esm"],
+	format: ["esm"],
 	dts: true,
+	treeshake: true,
+	minify: true,
+	splitting: true,
+	loader: {
+		".json": "copy",
+	},
+	target: "es2020",
 });
 
 export default config;
