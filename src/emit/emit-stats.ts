@@ -1,3 +1,6 @@
+import { getMappedFieldOrType } from "@gen/utils/get-mapped-field-or-type";
+import { FIELD_TYPE_MAPPING } from "@/constants/field-type-mapping";
+
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
 import type { FieldAnalysisMap } from "@/types/field.types";
@@ -19,9 +22,18 @@ const emitStats: EmitStatsType = ({ map, types, config, totals, langs }) => {
 		.map(([field, stats]) => {
 			//
 			const usagePercent = ((stats.languagesUsing / totals.total) * 100).toFixed(1);
-			const namedType = [...types.keys()].find(
-				(tName) => tName.toLowerCase() === field.toLowerCase().replace(/_/g, ""),
-			);
+			const namedType = [...types.keys()].find((tName) => {
+				//
+
+				const remappedField = getMappedFieldOrType({
+					value: field,
+					from: "field",
+					to: "type",
+					remapper: FIELD_TYPE_MAPPING,
+				});
+
+				return tName.toLowerCase() === remappedField.value.toLowerCase().replace(/_/g, "");
+			});
 
 			const output_field = `// ${field}: used in ${stats.languagesUsing}/${totals.total} (${usagePercent}%)`;
 

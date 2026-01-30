@@ -1,5 +1,7 @@
 import { generateUniqueTypeName } from "./generate-unique-type-name";
+import { getMappedFieldOrType } from "./get-mapped-field-or-type";
 import { generateFieldType } from "@gen/generate-field-type";
+import { FIELD_TYPE_MAPPING } from "@/constants/field-type-mapping";
 
 import type { Config } from "@/types/config.types";
 import type { FieldAnalysis } from "@/types/field.types";
@@ -51,11 +53,15 @@ const processFields: ProcessFieldsType = ({ fields, existing, totalLanguages, co
 		return processFields({ fields: remainingFields, config, existing, totalLanguages, existingNames });
 	}
 
-	const baseTypeName = field
-		.split(/[^a-zA-Z0-9]+/)
-		.filter((word) => word.length > 0)
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-		.join("");
+	const res = getMappedFieldOrType({ value: field, from: "field", to: "type", remapper: FIELD_TYPE_MAPPING });
+
+	const baseTypeName = res.resolved
+		? res.value
+		: field
+				.split(/[^a-zA-Z0-9]+/)
+				.filter((word) => word.length > 0)
+				.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+				.join("");
 
 	const typeName = generateUniqueTypeName(baseTypeName, existingNames);
 	const updatedNames = new Set(existingNames).add(typeName);

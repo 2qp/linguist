@@ -1,4 +1,6 @@
 import { generateFieldType } from "@gen/generate-field-type";
+import { getMappedFieldOrType } from "@gen/utils/get-mapped-field-or-type";
+import { FIELD_TYPE_MAPPING } from "@/constants/field-type-mapping";
 
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
@@ -17,7 +19,16 @@ const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
 		//
 
 		const typeNames = [...types].map(([tName, _]) => {
-			const typeName = tName.toLowerCase() === field.toLowerCase().replace(/_/g, "") ? tName : undefined;
+			//
+
+			const remappedField = getMappedFieldOrType({
+				value: field,
+				from: "field",
+				to: "type",
+				remapper: FIELD_TYPE_MAPPING,
+			});
+
+			const typeName = tName.toLowerCase() === remappedField.value.toLowerCase().replace(/_/g, "") ? tName : undefined;
 
 			return typeName;
 		});
@@ -34,6 +45,9 @@ const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
 
 		return result;
 	});
+
+	// console.log(stats, "STATS");
+	// console.log(types, "TYPES ");
 
 	const start = `\nexport type Language = {\n`;
 	const end = `}\n\n` as const;
