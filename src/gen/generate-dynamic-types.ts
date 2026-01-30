@@ -1,4 +1,3 @@
-import { generateLanguageNameType } from "./generate-language-name-type";
 import { processFields } from "./utils/process-fields";
 import { analyzeFields } from "@core/analyze-fields";
 import { LANGUAGE_NAME, SOURCE_FILE_NAME } from "@/constants/identifiers";
@@ -35,24 +34,25 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config, data }) => {
 	const totalLanguages = keys.length;
 	const languageNames = keys.sort();
 
-	const languageNameResult = generateLanguageNameType({
-		languageNames,
-		typeName: LANGUAGE_NAME,
-		baseType: "string" as const,
-		config: { ...config, type: { ...config.type, useReadonlyArrays: false } },
-	});
+	// const languageNameResult = generateLanguageNameType({
+	// 	languageNames,
+	// 	typeName: LANGUAGE_NAME,
+	// 	baseType: "string" as const,
+	// 	config: { ...config, type: { ...config.type, useReadonlyArrays: false } },
+	// });
 
 	const existingTypes = new Map<string, GeneratedDefs<string, LanguageName>>([
-		[LANGUAGE_NAME, { segmentDefs: languageNameResult.segmentDefs, typeDef: languageNameResult.typeDef }],
+		// [LANGUAGE_NAME, { segmentDefs: languageNameResult.segmentDefs, typeDef: languageNameResult.typeDef }],
 	]);
 
 	const existing: Existing = {
-		segments: [...languageNameResult.segmentDefs],
+		// segments: [...languageNameResult.segmentDefs],
+		segments: [],
 		types: existingTypes,
 	};
 
 	const fieldsArray = [...fieldStats].sort();
-	const existingNames = new Set([LANGUAGE_NAME]);
+	const existingNames = new Set([]);
 	const { generatedTypes, allSegmentDefinitions } = processFields({
 		fields: fieldsArray,
 		totalLanguages,

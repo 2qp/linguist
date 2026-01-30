@@ -3,7 +3,7 @@ import { stringify } from "safe-stable-stringify";
 import type { Language } from "@/generated/types/language-types.generated";
 import type { NormalizedName } from "@/transform/utils/normalize-name";
 
-type EmitLanguageFileParams = { norm: NormalizedName; data: Partial<Language> | undefined };
+type EmitLanguageFileParams = { norm: NormalizedName; data: Language | undefined };
 
 type EmitLanguageFileType = (params: EmitLanguageFileParams) => string;
 

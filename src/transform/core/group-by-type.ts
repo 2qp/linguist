@@ -5,12 +5,12 @@ type GroupByTypeParams = {
 	languages: Languages;
 };
 
-type GroupByTypeType = (params: GroupByTypeParams) => Record<Type, Partial<Languages>>;
+type GroupByTypeType = (params: GroupByTypeParams) => Record<Type, Languages>;
 
 const groupByType: GroupByTypeType = ({ languages }) => {
 	//
 
-	const record: Record<Type, Partial<Languages>> = {
+	const record: Record<Type, Languages> = {
 		data: {},
 		markup: {},
 		programming: {},

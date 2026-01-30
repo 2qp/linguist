@@ -7,7 +7,7 @@ import type { Languages } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
 
 type CreateLanguageFilesParams = {
-	languages: Partial<Languages>;
+	languages: Languages;
 	type: string;
 	config: Config;
 };
@@ -20,10 +20,10 @@ const createLanguageFiles: CreateLanguageFilesType = async ({ type, languages, c
 	const typeDir = join(config.data.paths.esmDir, "languages", type);
 
 	await Promise.all(
-		Object.entries(languages).map(async ([origName, data]) => {
-			const norm = normalizeName(origName);
+		Object.entries(languages).map(async ([name, data]) => {
+			const norm = normalizeName(name);
 			const filePath = join(typeDir, `${norm.fileName}.ts`);
-			const content = emitLanguageFile({ norm, data });
+			const content = emitLanguageFile({ norm, data: { ...data, name } });
 			await writeFile({ filePath, content });
 		}),
 	);
