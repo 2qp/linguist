@@ -2,3 +2,4 @@ core:
   url: "https://github.com/github-linguist/linguist/blob/main/lib/linguist/languages.yml?raw=true"
   name: "languages.yml"
   build_info_path: "./build-info.json"
+  basis: "committed" # committed | working-tree
