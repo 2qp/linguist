@@ -14,19 +14,19 @@
 // };
 
 type GetOneOverloaded = {
-	<I, T extends keyof I>(index: I, ext: T): I[T];
+	<I, T extends keyof I>(registry: I, key: T): I[T];
 
 	// <I, T extends string>(index: I, ext: T): ToObjOne<I, T, CombinedPropsFromAny<I>>;
 
-	<I, T extends string>(index: I, ext: T): I[keyof I] | undefined;
+	<I, T extends string>(registry: I, key: T): I[keyof I] | undefined;
 };
 
 type GetOneType = GetOneOverloaded;
 
-const getOne: GetOneType = (index: object, ext: string) => {
+const getOne: GetOneType = (registry: Record<string, unknown>, key: string) => {
 	//
 
-	return index[ext as keyof typeof index];
+	return registry[key as keyof typeof registry];
 };
 
 export { getOne };

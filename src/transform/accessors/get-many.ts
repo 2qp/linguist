@@ -2,17 +2,17 @@ import type { ExtractExplicit } from "@/types/utility.types";
 
 type GetManyOverloaded = {
 	<I extends Record<string, unknown>, const T extends readonly (keyof ExtractExplicit<I>)[]>(
-		index: I,
-		exts: T,
+		registry: I,
+		keys: T,
 		strict?: true,
 	): { [K in keyof T]: I[T[K]] };
 
-	<I extends Record<string, unknown>, T extends string[]>(index: I, ext: T, strict: false): I[string][] | undefined;
+	<I extends Record<string, unknown>, T extends string[]>(registry: I, keys: T, strict: false): I[string][] | undefined;
 };
 
 type GetManyType = GetManyOverloaded;
 
-const getMany: GetManyType = (object: object, keys: string[]) => {
+const getMany: GetManyType = (registry: Record<string, unknown>, keys: string[]) => {
 	//
 
 	const items: unknown[] = [];
@@ -24,7 +24,7 @@ const getMany: GetManyType = (object: object, keys: string[]) => {
 
 		if (!key) continue;
 
-		const element = object[key as keyof typeof object];
+		const element = registry[key as keyof typeof registry];
 
 		items.push(element);
 	}
