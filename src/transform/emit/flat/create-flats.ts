@@ -20,7 +20,7 @@ const createFlats: CreateFlatsType = async ({ config, languages }) => {
 	await ensureDir(indexesDir);
 
 	const indexEmitters: FlatEmitter[] = [
-		{ name: "all.esm", emitter: emitESMFlat },
+		{ name: "languages", emitter: emitESMFlat },
 		{ name: "all", emitter: emitJSONFlat },
 	];
 
