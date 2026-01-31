@@ -1,24 +1,57 @@
 {
 	"name": "linguist-map",
-	"version": "1.0.0",
-	"description": "",
-	"main": "index.js",
+	"version": "0.0.1",
+	"description": "Linguist languages.yml data",
 	"type": "module",
 	"sideEffects": false,
+	"exports": {
+		"./data/*": {
+			"require": "./dist/data/*.cjs",
+
+			"types": "./dist/data/*.d.ts",
+			"import": "./dist/data/*.js"
+		},
+		"./getters": {
+			"require": "./dist/getters/index.cjs",
+
+			"types": "./dist/getters/index.d.ts",
+			"import": "./dist/getters/index.js"
+		},
+		"./*": {
+			"require": "./dist/types/*.cjs",
+
+			"types": "./dist/types/*.d.ts",
+			"import": "./dist/types/*.js"
+		}
+	},
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "pnpm run generate && tsup",
 		"dev": "tsup --watch",
-		"generate": "tsx ./src/entry/entry.ts"
+		"generate": "tsx ./src/entry/entry.ts",
+		"lint": "biome check --write"
 	},
 	"keywords": [
 		"linguist",
-		"language",
-		"extension",
-		"file-type",
-		"map"
+		"languages",
+		"language-data",
+		"language-metadata",
+		"extension"
 	],
-	"author": "",
+	"author": {
+		"name": "2qp",
+		"url": "https://github.com/2qp"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/2qp/linguist-map.git"
+	},
+	"bugs": {
+		"url": "https://github.com/2qp/linguist-map/issues"
+	},
 	"license": "ISC",
 	"packageManager": "pnpm@10.24.0",
 	"devDependencies": {
