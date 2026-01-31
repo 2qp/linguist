@@ -1,6 +1,5 @@
 type Paths = {
 	outputDir: string;
-	esmDir: string;
 	jsonDir: string;
 	mapsDir: string;
 	typesDir: string;

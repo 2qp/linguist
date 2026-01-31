@@ -23,7 +23,7 @@ const transform: TransformType = async () => {
 
 	const config = await configLoader();
 
-	const { esmDir } = config.data.paths;
+	const { outputDir } = config.data.paths;
 
 	const yamlStr = await getFile<string>(config.core.url, "text");
 
@@ -31,7 +31,11 @@ const transform: TransformType = async () => {
 
 	if (!languages) throw Error("Unable to load yaml source data");
 
-	await Promise.all([ensureDir(esmDir), ensureDir(join(esmDir, "indexes")), ensureDir(join(esmDir, "languages"))]);
+	await Promise.all([
+		ensureDir(outputDir),
+		ensureDir(join(outputDir, "indexes")),
+		ensureDir(join(outputDir, "languages")),
+	]);
 
 	const grouped = groupByType({ languages });
 

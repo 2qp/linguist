@@ -13,7 +13,7 @@ type CreateCategoriesType = (params: CreateCategoriesParams) => Promise<void>;
 const createCategories: CreateCategoriesType = async ({ config, grouped }) => {
 	//
 
-	const catDir = join(config.data.paths.esmDir, "categories");
+	const catDir = join(config.data.paths.outputDir, "categories");
 	await ensureDir(catDir);
 
 	await Promise.all(

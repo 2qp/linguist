@@ -17,7 +17,7 @@ type CreateLanguageFilesType = (params: CreateLanguageFilesParams) => Promise<vo
 const createLanguageFiles: CreateLanguageFilesType = async ({ type, languages, config }) => {
 	//
 
-	const typeDir = join(config.data.paths.esmDir, "languages", type);
+	const typeDir = join(config.data.paths.outputDir, "languages", type);
 
 	await Promise.all(
 		Object.entries(languages).map(async ([name, data]) => {

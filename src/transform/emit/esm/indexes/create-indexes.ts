@@ -20,7 +20,7 @@ type CreateIndexesType = (params: CreateIndexesParams) => Promise<void>;
 const createIndexes: CreateIndexesType = async ({ languages, config }) => {
 	//
 
-	const indexesDir = join(config.data.paths.esmDir, "indexes");
+	const indexesDir = join(config.data.paths.outputDir, "indexes");
 	await ensureDir(indexesDir);
 
 	const indexEmitters: IndexEmitter[] = [

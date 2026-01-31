@@ -1,10 +1,9 @@
 data:
   paths:
     outputDir: "src/generated/data"
-    esmDir: "src/generated/data/esm"
     jsonDir: "src/generated/data/json"
     mapsDir: "src/generated/data/maps"
-    typesDir: "@/generated/data/esm/languages"
+    typesDir: "@/generated/data/languages"
     flatDir: "src/generated/data/flat"
     manifestsDir: "src/generated/data/manifests"
     gettersDir: "src/generated/getters/"
