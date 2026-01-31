@@ -3,7 +3,7 @@ import { defineConfig } from "tsup";
 const config = defineConfig({
 	entry: ["src/generated/**/*.ts"],
 	clean: true,
-	format: ["esm"],
+	format: ["esm", "cjs"],
 	dts: true,
 	treeshake: true,
 	minify: true,
