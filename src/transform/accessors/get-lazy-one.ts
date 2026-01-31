@@ -1,19 +1,19 @@
-import type { AwaitedReturnOrSelf } from "@/types/data-utility.types";
+import type { AwaitedReturnOrSelf, SyncOrAsyncFn } from "@/types/data-utility.types";
 
-type GetOneOverloaded = {
-	<I, T extends keyof I>(index: I, ext: T): Promise<AwaitedReturnOrSelf<I[T]>>;
+type GetLazyOneOverloaded = {
+	<I, T extends keyof I>(registry: I, key: T): Promise<AwaitedReturnOrSelf<I[T]>>;
 
-	<I, T extends string>(index: I, ext: T): Promise<AwaitedReturnOrSelf<I[keyof I]> | undefined>;
+	<I, T extends string>(registry: I, key: T): Promise<AwaitedReturnOrSelf<I[keyof I]> | undefined>;
 };
 
 // type GetLazyOneParams = {};
 
-type GetLazyOneType = GetOneOverloaded;
+type GetLazyOneType = GetLazyOneOverloaded;
 
-const getLazyOne: GetLazyOneType = async (index: object, ext: string) => {
+const getLazyOne: GetLazyOneType = async (registry: Record<string, SyncOrAsyncFn>, key: string) => {
 	//
 
-	const loader: () => Promise<unknown> = index[ext as keyof typeof index];
+	const loader = registry[key as keyof typeof registry];
 
 	if (!loader) return undefined;
 

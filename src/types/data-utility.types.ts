@@ -33,12 +33,15 @@ type ProcessLazyTuple<T, K extends (keyof T | (string & {}))[], R = never> = Pro
 
 type AwaitedReturnOrSelf<T> = T extends (...args: unknown[]) => unknown ? Awaited<ReturnType<T>> : T;
 
+type SyncOrAsyncFn<T = unknown> = (() => T) | (() => Promise<T>);
+
 export type {
 	AwaitedReturnOrSelf,
 	ExtractMainExport,
 	ProcessLazyTuple,
 	ProcessWithAwaited,
 	ProcessWithExporter,
+	SyncOrAsyncFn,
 	ToObj,
 	ToObjOne,
 	ToTuple,
