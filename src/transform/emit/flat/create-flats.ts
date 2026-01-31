@@ -21,7 +21,7 @@ const createFlats: CreateFlatsType = async ({ config, languages }) => {
 
 	const indexEmitters: FlatEmitter[] = [
 		{ name: "all.esm", emitter: emitESMFlat },
-		{ name: "all", emitter: emitJSONFlat, ext: "json" },
+		{ name: "all", emitter: emitJSONFlat },
 	];
 
 	await Promise.all(
@@ -31,6 +31,7 @@ const createFlats: CreateFlatsType = async ({ config, languages }) => {
 			const content = emitter({ languages, config });
 			await writeFile({ filePath, content });
 
+			// wont untill #32063
 			if (ext === "json") {
 				const exportPath = join(indexesDir, `${name}.ts`);
 				await createJsonExport({ alias: name, filePath: exportPath, sourcePath: `./${name}.json` });

@@ -3,7 +3,6 @@ import { join } from "node:path";
 import { ensureDir } from "@utils/ensure-dir";
 import { writeFile } from "@utils/write-file";
 import stringify from "safe-stable-stringify";
-import { createJsonExport } from "@/transform/utils/create-json-export";
 
 import type { Languages } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
@@ -43,17 +42,21 @@ const createManifests: CreateManifestsType = async ({ config, languages }) => {
 
 			if (!map) return;
 
-			const filePath = join(indexesDir, `${name}.json`);
-			const exportPath = join(indexesDir, `${name}.ts`);
+			const filePath = join(indexesDir, `${name}.ts`);
+			// const exportPath = join(indexesDir, `${name}.ts`);
 
 			const content = Object.fromEntries(map);
 
-			const json = stringify(content, (_k, v) => (v instanceof Set ? [...v] : v));
+			const json = stringify(content, (_k, v) => (v instanceof Set ? [...v] : v), 2);
+
+			const statements = ([`const ${name} = ${json} as const;`, "\n\n", `export { ${name} };`, "\n\n"] as const).join(
+				"",
+			);
 
 			if (!json) return;
 
-			await writeFile({ content: json, filePath });
-			await createJsonExport({ alias: name, filePath: exportPath, sourcePath: `./${name}.json` });
+			await writeFile({ content: statements, filePath });
+			// await createJsonExport({ alias: name, filePath: exportPath, sourcePath: `./${name}.json`, json });
 		}),
 	);
 };
