@@ -8,7 +8,6 @@ import { emitStats } from "@/emit/emit-stats";
 import { emitTypesSection } from "@/emit/emit-types-sections";
 import { emitTypeSafeAccessors } from "@/emit/emit-typesafe-accessors";
 import { emitUtilityTypes } from "@/emit/emit-utility-types";
-import { emitValidationHelpers } from "@/emit/emit-validation-helpers";
 
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
@@ -74,7 +73,7 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config, data }) => {
 	const output_fields = emitLanguageType({ stats: fieldStats, types: generatedTypes, config });
 	const output_utility_types = emitUtilityTypes(LANGUAGE_NAME);
 	const output_typesafe_accessors = emitTypeSafeAccessors(LANGUAGE_NAME);
-	const output_validation_helpers = emitValidationHelpers(LANGUAGE_NAME);
+	// const output_validation_helpers = emitValidationHelpers(LANGUAGE_NAME);
 
 	const output = [
 		output_header,
@@ -87,7 +86,6 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config, data }) => {
 		//
 		output_utility_types,
 		output_typesafe_accessors,
-		output_validation_helpers,
 	].join("");
 
 	if (config.type.showFieldStats) {
