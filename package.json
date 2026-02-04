@@ -41,9 +41,10 @@
 	],
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "pnpm run generate && tsup",
+		"clean": "rimraf dist src/generated",
+		"build": "pnpm run clean && pnpm run generate && tsup",
 		"dev": "tsup --watch",
-		"generate": "tsx ./src/entry/entry.ts",
+		"generate": "rimraf src/generated && tsx ./src/entry/entry.ts",
 		"lint": "biome check --write"
 	},
 	"keywords": [
@@ -72,6 +73,7 @@
 		"@types/node": "^25.2.0",
 		"glob": "^13.0.1",
 		"js-yaml": "^4.1.1",
+		"rimraf": "^6.1.2",
 		"safe-stable-stringify": "^2.5.0",
 		"tsup": "^8.5.1",
 		"tsx": "^4.21.0",
