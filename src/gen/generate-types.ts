@@ -6,6 +6,7 @@ import { resolvePath } from "@utils/resolve-path";
 import { writeFile } from "@utils/write-file";
 import { configLoader } from "@/infra/loaders/config-loader";
 import { yamlLoader } from "@/infra/loaders/yaml-loader";
+import { createReExports } from "@/transform/utils/create-re-exports";
 
 import type { LanguageData } from "@/types/lang.types";
 
@@ -34,6 +35,11 @@ const generateTypes: GenerateTypesType = async () => {
 		await ensureDir(outputDir);
 		const outputPath = join(outputDir, config.type.out.fileName);
 		await writeFile({ content: typesOutput, filePath: outputPath });
+
+		await createReExports({
+			sourceDir: outputDir,
+			outputFile: join(outputDir, "index.ts"),
+		});
 
 		// mmmaybe use `ora spinner`
 		console.info(`Types generated to: ${outputPath}\n`);
