@@ -13,6 +13,8 @@ type FieldAnalysis<TUnique extends Primitive = Primitive> = {
 	shouldBeLiteral: boolean;
 	shouldBeLiteralArray: boolean;
 	sampleValues: unknown[];
+
+	typeName?: string;
 };
 
 type FieldAnalysisMap = Map<string, FieldAnalysis>;

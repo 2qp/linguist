@@ -1,7 +1,6 @@
 import { generateUniqueTypeName } from "./generate-unique-type-name";
 import { getMappedFieldOrType } from "./get-mapped-field-or-type";
 import { generateFieldType } from "@gen/generate-field-type";
-import { FIELD_TYPE_MAPPING } from "@/constants/field-type-mapping";
 
 import type { Config } from "@/types/config.types";
 import type { FieldAnalysis } from "@/types/field.types";
@@ -21,13 +20,16 @@ type Existing = {
 	segments: string[];
 };
 
-type ProcessFieldsReturnType = {
+type ProcessFieldsReturnType<TUnique extends Primitive> = {
 	generatedTypes: OutputMap;
 	allSegmentDefinitions: string[];
 	updatedExistingNames: Set<string>;
+	updatedFields: Array<[string, FieldAnalysis<TUnique>]>;
 };
 
-type ProcessFieldsType = <TUnique extends Primitive>(params: ProcessFieldsParams<TUnique>) => ProcessFieldsReturnType;
+type ProcessFieldsType = <TUnique extends Primitive>(
+	params: ProcessFieldsParams<TUnique>,
+) => ProcessFieldsReturnType<TUnique>;
 
 const processFields: ProcessFieldsType = ({ fields, existing, totalLanguages, config, existingNames }) => {
 	//
@@ -37,6 +39,7 @@ const processFields: ProcessFieldsType = ({ fields, existing, totalLanguages, co
 			generatedTypes: new Map(existing.types),
 			allSegmentDefinitions: [...existing.segments],
 			updatedExistingNames: existingNames,
+			updatedFields: [],
 		};
 	}
 
@@ -53,7 +56,7 @@ const processFields: ProcessFieldsType = ({ fields, existing, totalLanguages, co
 		return processFields({ fields: remainingFields, config, existing, totalLanguages, existingNames });
 	}
 
-	const res = getMappedFieldOrType({ value: field, from: "field", to: "type", remapper: FIELD_TYPE_MAPPING });
+	const res = getMappedFieldOrType({ value: field, from: "field", to: "type", remapper: config.type.naming.fields });
 
 	const baseTypeName = res.resolved
 		? res.value
@@ -63,10 +66,17 @@ const processFields: ProcessFieldsType = ({ fields, existing, totalLanguages, co
 				.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
 				.join("");
 
+	const isStrict = config.type.strict;
+	const prefix = isStrict ? config.type.naming.strictPrefix : "";
+
+	const typeNameKey = generateUniqueTypeName(`${prefix}${baseTypeName}`, existingNames);
+
 	const typeName = generateUniqueTypeName(baseTypeName, existingNames);
 	const updatedNames = new Set(existingNames).add(typeName);
 
-	const result = generateFieldType({ field, stats, typeName, config });
+	const newStats = { ...stats, typeName };
+
+	const result = generateFieldType({ field, stats: newStats, typeName, config });
 
 	const remainingResult = processFields({
 		fields: remainingFields,
@@ -78,12 +88,13 @@ const processFields: ProcessFieldsType = ({ fields, existing, totalLanguages, co
 
 	return {
 		generatedTypes: new Map<string, OutputDefs>([
-			[typeName, { typeDef: result.typeDef, segmentDefs: result.segmentDefs }],
+			[typeNameKey, { typeDef: result.typeDef, segmentDefs: result.segmentDefs }],
 			...existing.types,
 			...remainingResult.generatedTypes,
 		]),
 		allSegmentDefinitions: [...result.segmentDefs, ...remainingResult.allSegmentDefinitions, ...existing.segments],
 		updatedExistingNames: remainingResult.updatedExistingNames,
+		updatedFields: [...remainingResult.updatedFields, [field, newStats]],
 	};
 };
 
