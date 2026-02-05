@@ -66,8 +66,8 @@ const processFields: ProcessFieldsType = ({ fields, existing, totalLanguages, co
 				.map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
 				.join("");
 
-	const isStrict = config.type.strict;
-	const prefix = isStrict ? config.type.naming.strictPrefix : "";
+	const secondary = config.type.secondary.enabled;
+	const prefix = secondary ? config.type.naming.secondaryPrefix : "";
 
 	const typeNameKey = generateUniqueTypeName(`${prefix}${baseTypeName}`, existingNames);
 
@@ -94,7 +94,7 @@ const processFields: ProcessFieldsType = ({ fields, existing, totalLanguages, co
 		]),
 		allSegmentDefinitions: [...result.segmentDefs, ...remainingResult.allSegmentDefinitions, ...existing.segments],
 		updatedExistingNames: remainingResult.updatedExistingNames,
-		updatedFields: [...remainingResult.updatedFields, [field, newStats]],
+		updatedFields: [[field, newStats], ...remainingResult.updatedFields],
 	};
 };
 
