@@ -9,8 +9,10 @@ type TypeGeneratorConfig = {
 	showFieldStats: boolean;
 	showExamples: number;
 	allowFlexibleTypes: boolean;
-	strict: boolean;
 	useReadonlyArrays: boolean;
+
+	//
+	secondary: SecondaryOptions;
 
 	//
 	paths: Paths;
@@ -27,6 +29,10 @@ type Out = {
 
 type Options = {};
 
+type SecondaryOptions = {
+	enabled: boolean;
+} & Pick<TypeGeneratorConfig, "allowFlexibleTypes" | "useReadonlyArrays">;
+
 type Paths = {
 	outputDir: string;
 };
@@ -39,7 +45,7 @@ type FieldType = {
 type NamingConfig = {
 	language: string;
 	languageName: string;
-	strictPrefix: string;
+	secondaryPrefix: string;
 	fields: FieldType[];
 };
 

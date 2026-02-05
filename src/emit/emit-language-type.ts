@@ -25,10 +25,10 @@ const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
 				return typeName;
 			}
 
-			if (config.type.strict) {
+			if (config.type.secondary.enabled) {
 				//
 
-				const regex = new RegExp(config.type.naming.strictPrefix, "gi");
+				const regex = new RegExp(config.type.naming.secondaryPrefix, "gi");
 
 				const replaced = replacer(tName, regex, "").toLowerCase();
 
@@ -57,10 +57,10 @@ const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
 	// console.log(stats, "STATS");
 	// console.log(types, "TYPES ");
 
-	if (config.type.strict) {
+	if (config.type.secondary.enabled) {
 		//
 
-		const name = `${config.type.naming.strictPrefix}${config.type.naming.language}`;
+		const name = `${config.type.naming.secondaryPrefix}${config.type.naming.language}`;
 
 		const start = `\nexport type ${name} = {\n`;
 		const end = `}\n\n` as const;
