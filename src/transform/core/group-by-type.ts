@@ -10,7 +10,7 @@ type GroupByTypeType = (params: GroupByTypeParams) => Record<Type, Languages>;
 const groupByType: GroupByTypeType = ({ languages }) => {
 	//
 
-	const record: Record<Type, Languages> = {
+	const record: Record<Type, Partial<Languages>> = {
 		data: {},
 		markup: {},
 		programming: {},
@@ -29,7 +29,7 @@ const groupByType: GroupByTypeType = ({ languages }) => {
 		record[type][name] = data;
 	}
 
-	return record;
+	return record as Record<Type, Languages>;
 };
 
 export { groupByType };
