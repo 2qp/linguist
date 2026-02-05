@@ -1,5 +1,4 @@
 import { getMappedFieldOrType } from "@gen/utils/get-mapped-field-or-type";
-import { FIELD_TYPE_MAPPING } from "@/constants/field-type-mapping";
 
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
@@ -29,7 +28,7 @@ const emitStats: EmitStatsType = ({ map, types, config, totals, langs }) => {
 					value: field,
 					from: "field",
 					to: "type",
-					remapper: FIELD_TYPE_MAPPING,
+					remapper: config.type.naming.fields,
 				});
 
 				return tName.toLowerCase() === remappedField.value.toLowerCase().replace(/_/g, "");
