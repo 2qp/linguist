@@ -6,19 +6,19 @@ import type { Config } from "@/types/config.types";
 import type { FieldAnalysisMap } from "@/types/field.types";
 import type { LanguageData } from "@/types/lang.types";
 
-type EmitStrictTypesParams = {
+type EmitSecondaryTypesParams = {
 	stats: FieldAnalysisMap;
 	config: Config;
 	data: LanguageData | undefined;
 	// types: Map<string, GeneratedDefs<string, string>>;
 };
 
-type EmitStrictTypesType = (params: EmitStrictTypesParams) => string[];
+type EmitSecondaryTypesType = (params: EmitSecondaryTypesParams) => string[];
 
-const emitStrictTypes: EmitStrictTypesType = ({ config: rawConfig, stats, data }) => {
+const emitSecondaryTypes: EmitSecondaryTypesType = ({ config: rawConfig, stats, data }) => {
 	//
 
-	const config = { ...rawConfig, type: { ...rawConfig.type, allowFlexibleTypes: false } };
+	const config: Config = { ...rawConfig, type: { ...rawConfig.type, ...rawConfig.type.secondary } };
 
 	if (!data) throw Error("Unable load yaml data on [emitStrictTypes] x");
 
@@ -36,7 +36,7 @@ const emitStrictTypes: EmitStrictTypesType = ({ config: rawConfig, stats, data }
 
 	const newStrictFieldStats = new Map(fields.updatedFields);
 
-	const name = `${config.type.naming.strictPrefix}${config.type.naming.languageName}`;
+	const name = `${config.type.naming.secondaryPrefix}${config.type.naming.languageName}`;
 
 	const output_strict_language_name_type = fields.generatedTypes.has(name)
 		? `export type ${name} = ${fields.generatedTypes.get(name)?.typeDef};\n`
@@ -50,7 +50,7 @@ const emitStrictTypes: EmitStrictTypesType = ({ config: rawConfig, stats, data }
 		config,
 	});
 
-	const strict = config.type.strict
+	const strict = config.type.secondary.enabled
 		? [
 				output_strict_language_name_type,
 
@@ -63,5 +63,5 @@ const emitStrictTypes: EmitStrictTypesType = ({ config: rawConfig, stats, data }
 	return strict;
 };
 
-export { emitStrictTypes };
-export type { EmitStrictTypesParams, EmitStrictTypesType };
+export { emitSecondaryTypes };
+export type { EmitSecondaryTypesParams as EmitStrictTypesParams, EmitSecondaryTypesType as EmitStrictTypesType };
