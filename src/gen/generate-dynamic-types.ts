@@ -1,8 +1,8 @@
 import { processFields } from "./utils/process-fields";
 import { analyzeFields } from "@core/analyze-fields";
-import { LANGUAGE_NAME, SOURCE_FILE_NAME } from "@/constants/identifiers";
 import { emitAutogenHeader } from "@/emit/emit-autogen-header";
 import { emitLanguageType } from "@/emit/emit-language-type";
+import { emitSecondaryTypes } from "@/emit/emit-secondary-types";
 import { emitSegmentSection } from "@/emit/emit-segment-section";
 import { emitStats } from "@/emit/emit-stats";
 import { emitTypesSection } from "@/emit/emit-types-sections";
@@ -22,8 +22,10 @@ type GenerateDynamicTypesParams = {
 
 type GenerateDynamicTypesType = (params: GenerateDynamicTypesParams) => string;
 
-const generateDynamicTypes: GenerateDynamicTypesType = ({ config, data }) => {
+const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, data }) => {
 	//
+
+	const config = { ...base, type: { ...base.type, secondary: { ...base.type.secondary, enabled: false } } };
 
 	if (!data) throw Error("Unable load yaml data");
 
@@ -52,7 +54,7 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config, data }) => {
 
 	const fieldsArray = [...fieldStats].sort();
 	const existingNames = new Set([]);
-	const { generatedTypes, allSegmentDefinitions } = processFields({
+	const fields = processFields({
 		fields: fieldsArray,
 		totalLanguages,
 		existing,
@@ -60,20 +62,37 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config, data }) => {
 		existingNames,
 	});
 
+	const newFieldStats = new Map(fields.updatedFields);
+
+	const name = config.type.naming.languageName;
+
 	// OUTPUTS
-	const output_header = emitAutogenHeader(SOURCE_FILE_NAME, config, {
+	const output_header = emitAutogenHeader(config.core.name, config, {
 		size: fieldStats.size,
 		total: totalLanguages,
 	});
-	const output_segments = emitSegmentSection(allSegmentDefinitions);
-	const output_lang_name_export = generatedTypes.has(LANGUAGE_NAME)
-		? `export type ${LANGUAGE_NAME} = ${generatedTypes.get(LANGUAGE_NAME)?.typeDef};\n`
+
+	const output_segments = emitSegmentSection(fields.allSegmentDefinitions);
+
+	const output_lang_name_export = fields.generatedTypes.has(name)
+		? `export type ${name} = ${fields.generatedTypes.get(name)?.typeDef};\n`
 		: "";
-	const output_sorted_types = emitTypesSection(generatedTypes, LANGUAGE_NAME);
-	const output_fields = emitLanguageType({ stats: fieldStats, types: generatedTypes, config });
-	const output_utility_types = emitUtilityTypes(LANGUAGE_NAME);
-	const output_typesafe_accessors = emitTypeSafeAccessors(LANGUAGE_NAME);
+
+	const output_sorted_types = emitTypesSection(fields.generatedTypes, name);
+
+	const output_language_type = emitLanguageType({
+		stats: newFieldStats,
+		types: fields.generatedTypes,
+		config,
+	});
+
+	const output_utility_types = emitUtilityTypes(name);
+
+	const output_typesafe_accessors = emitTypeSafeAccessors(name);
 	// const output_validation_helpers = emitValidationHelpers(LANGUAGE_NAME);
+
+	// STRICT
+	const secondary = emitSecondaryTypes({ config: base, data, stats: fieldStats });
 
 	const output = [
 		output_header,
@@ -81,7 +100,10 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config, data }) => {
 		output_segments,
 		output_lang_name_export,
 		output_sorted_types,
-		output_fields,
+		output_language_type,
+
+		//
+		...secondary,
 
 		//
 		output_utility_types,
@@ -93,7 +115,7 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config, data }) => {
 
 		const stats = emitStats({
 			map: fieldStats,
-			types: generatedTypes,
+			types: fields.generatedTypes,
 			config,
 			langs: languageNames,
 			totals: { size: fieldStats.size, total: totalLanguages },
