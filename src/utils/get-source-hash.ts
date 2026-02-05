@@ -9,6 +9,7 @@ type GetSourceHashType = (params: GetSourceHashParams) => string | undefined;
 const contentSources = {
 	committed: "xargs -I {} git show HEAD:{}",
 	"working-tree": "xargs sha1sum",
+	"all-changes": "",
 } as const satisfies Record<CoreConfig["basis"], string>;
 
 const getSourceHash: GetSourceHashType = (basis) => {
@@ -22,6 +23,8 @@ const getSourceHash: GetSourceHashType = (basis) => {
 
 	// git history or fs
 	const contentSource = contentSources[basis];
+
+	if (basis === "all-changes") return `fallback-${Date.now()}`;
 
 	try {
 		const cmd = `git ls-files ${includeStr} | ${excludeStr} | ${contentSource} | sha1sum`;

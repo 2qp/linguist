@@ -1,4 +1,4 @@
-type Basis = "committed" | "working-tree";
+type Basis = "committed" | "working-tree" | "all-changes";
 
 type CoreConfig = {
 	url: string;
