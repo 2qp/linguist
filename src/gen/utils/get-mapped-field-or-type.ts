@@ -1,13 +1,10 @@
-type FieldTypeMapping = {
-	readonly field: string;
-	readonly type: string;
-};
+import type { FieldType } from "@/types/gen-config.types";
 
 type GetMappedFieldOrTypeParams = {
 	value: string;
-	from: keyof FieldTypeMapping;
-	to: keyof FieldTypeMapping;
-	remapper: readonly FieldTypeMapping[];
+	from: keyof FieldType;
+	to: keyof FieldType;
+	remapper: readonly FieldType[];
 };
 
 type GetMappedFieldOrTypeType = (params: GetMappedFieldOrTypeParams) => { value: string; resolved: boolean };
@@ -26,4 +23,4 @@ const getMappedFieldOrType: GetMappedFieldOrTypeType = ({ from, to, value, remap
 };
 
 export { getMappedFieldOrType };
-export type { FieldTypeMapping, GetMappedFieldOrTypeParams, GetMappedFieldOrTypeType };
+export type { GetMappedFieldOrTypeParams, GetMappedFieldOrTypeType };

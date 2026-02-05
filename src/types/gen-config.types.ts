@@ -9,6 +9,7 @@ type TypeGeneratorConfig = {
 	showFieldStats: boolean;
 	showExamples: number;
 	allowFlexibleTypes: boolean;
+	strict: boolean;
 	useReadonlyArrays: boolean;
 
 	//
@@ -16,6 +17,7 @@ type TypeGeneratorConfig = {
 	aliases: Paths;
 	out: Out;
 	options: Options;
+	naming: NamingConfig;
 };
 
 type Out = {
@@ -29,8 +31,20 @@ type Paths = {
 	outputDir: string;
 };
 
+type FieldType = {
+	readonly field: string;
+	readonly type: string;
+};
+
+type NamingConfig = {
+	language: string;
+	languageName: string;
+	strictPrefix: string;
+	fields: FieldType[];
+};
+
 type TypeGenConfigFile = {
 	type: TypeGeneratorConfig;
 };
 
-export type { TypeGeneratorConfig as TypeGenConfig, TypeGenConfigFile };
+export type { FieldType, TypeGeneratorConfig as TypeGenConfig, TypeGenConfigFile };
