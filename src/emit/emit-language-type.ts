@@ -1,6 +1,5 @@
 import { generateFieldType } from "@gen/generate-field-type";
-import { getMappedFieldOrType } from "@gen/utils/get-mapped-field-or-type";
-import { FIELD_TYPE_MAPPING } from "@/constants/field-type-mapping";
+import { replacer } from "@utils/replacer";
 
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
@@ -21,15 +20,24 @@ const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
 		const typeNames = [...types].map(([tName, _]) => {
 			//
 
-			const remappedField = getMappedFieldOrType({
-				value: field,
-				from: "field",
-				to: "type",
-				remapper: FIELD_TYPE_MAPPING,
-			});
+			if (!stats.typeName) {
+				const typeName = tName.toLowerCase() === field.toLowerCase().replace(/_/g, "") ? tName : undefined;
+				return typeName;
+			}
 
-			const typeName = tName.toLowerCase() === remappedField.value.toLowerCase().replace(/_/g, "") ? tName : undefined;
+			if (config.type.strict) {
+				//
 
+				const regex = new RegExp(config.type.naming.strictPrefix, "gi");
+
+				const replaced = replacer(tName, regex, "").toLowerCase();
+
+				const typeName = replaced === stats.typeName.toLowerCase() ? tName : undefined;
+
+				return typeName;
+			}
+
+			const typeName = tName.toLowerCase() === stats.typeName.toLowerCase() ? tName : undefined;
 			return typeName;
 		});
 
@@ -49,7 +57,20 @@ const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
 	// console.log(stats, "STATS");
 	// console.log(types, "TYPES ");
 
-	const start = `\nexport type Language = {\n`;
+	if (config.type.strict) {
+		//
+
+		const name = `${config.type.naming.strictPrefix}${config.type.naming.language}`;
+
+		const start = `\nexport type ${name} = {\n`;
+		const end = `}\n\n` as const;
+
+		return [start, ...fields, end].join("");
+	}
+
+	const name = config.type.naming.language;
+
+	const start = `\nexport type ${name} = {\n`;
 	const end = `}\n\n` as const;
 
 	return [start, ...fields, end].join("");
