@@ -8,7 +8,7 @@ import type { IndexEmitterType } from "./types";
 const emitLazyIndexById: IndexEmitterType = ({ languages, config }): string => {
 	//
 
-	const entries = Object.entries(languages)
+	const entries = (Object.entries(languages) as Entries<Languages>)
 		.filter((lang) => lang[1].language_id !== undefined)
 		.map(([name, data]) => {
 			const norm = normalizeName(name);

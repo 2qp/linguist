@@ -5,6 +5,7 @@ import { normalizeName } from "@/transform/utils/normalize-name";
 
 import type { Languages } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
+import type { Entries } from "@/types/utility.types";
 
 type CreateLanguageFilesParams = {
 	languages: Languages;
@@ -20,7 +21,7 @@ const createLanguageFiles: CreateLanguageFilesType = async ({ type, languages, c
 	const typeDir = join(config.data.paths.outputDir, "languages", type);
 
 	await Promise.all(
-		Object.entries(languages).map(async ([name, data]) => {
+		(Object.entries(languages) as Entries<Languages>).map(async ([name, data]) => {
 			const norm = normalizeName(name);
 			const filePath = join(typeDir, `${norm.fileName}.ts`);
 			const content = emitLanguageFile({ norm, data: { ...data, name } });
