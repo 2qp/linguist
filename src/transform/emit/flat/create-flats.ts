@@ -1,5 +1,6 @@
 import { emitESMFlat } from "./emit-esm-flat";
 import { emitJSONFlat } from "./emit-json-flat";
+import { emitNormalizedAllFlat } from "./emit-normalized-all-flat";
 import { join } from "node:path";
 import { ensureDir } from "@utils/ensure-dir";
 import { writeFile } from "@utils/write-file";
@@ -22,6 +23,7 @@ const createFlats: CreateFlatsType = async ({ config, languages }) => {
 	const indexEmitters: FlatEmitter[] = [
 		{ name: "languages", emitter: emitESMFlat },
 		{ name: "all", emitter: emitJSONFlat },
+		{ name: "normalized-all", emitter: emitNormalizedAllFlat },
 	];
 
 	await Promise.all(
