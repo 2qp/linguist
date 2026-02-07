@@ -1,6 +1,7 @@
 import { generateDynamicTypes } from "./generate-dynamic-types";
 import { join } from "node:path";
 import { getFile } from "@services/fetch/get-file";
+import { buildEntries } from "@utils/build-entries";
 import { ensureDir } from "@utils/ensure-dir";
 import { resolvePath } from "@utils/resolve-path";
 import { writeFile } from "@utils/write-file";
@@ -28,7 +29,11 @@ const generateTypes: GenerateTypesType = async () => {
 	try {
 		console.info(`Reading: ${yamlPath}...\n`);
 
-		const data = yamlLoader<LanguageData>({ str: fileStr });
+		const rawData = yamlLoader<LanguageData>({ str: fileStr });
+
+		if (!rawData) throw Error("Unable load yaml data");
+
+		const data = buildEntries({ source: rawData });
 
 		const typesOutput = generateDynamicTypes({ config: config, data });
 
