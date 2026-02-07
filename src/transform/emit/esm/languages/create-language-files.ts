@@ -24,7 +24,7 @@ const createLanguageFiles: CreateLanguageFilesType = async ({ type, languages, c
 		(Object.entries(languages) as Entries<Languages>).map(async ([name, data]) => {
 			const norm = normalizeName(name);
 			const filePath = join(typeDir, `${norm.fileName}.ts`);
-			const content = emitLanguageFile({ norm, data: { ...data, name } });
+			const content = emitLanguageFile({ norm, data });
 			await writeFile({ filePath, content });
 		}),
 	);
