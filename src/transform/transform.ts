@@ -9,6 +9,7 @@ import { createMaps } from "./emit/maps/create-maps";
 import { createReExports } from "./utils/create-re-exports";
 import { join } from "node:path";
 import { getFile } from "@services/fetch/get-file";
+import { buildEntries } from "@utils/build-entries";
 import { configLoader } from "@/infra/loaders/config-loader";
 import { yamlLoader } from "@/infra/loaders/yaml-loader";
 
@@ -27,9 +28,11 @@ const transform: TransformType = async () => {
 
 	const yamlStr = await getFile<string>(config.core.url, "text");
 
-	const languages = yamlLoader<Languages>({ str: yamlStr });
+	const rawLanguages = yamlLoader<Languages>({ str: yamlStr });
 
-	if (!languages) throw Error("Unable to load yaml source data");
+	if (!rawLanguages) throw Error("Unable to load yaml source data");
+
+	const languages = buildEntries({ source: rawLanguages });
 
 	await Promise.all([
 		ensureDir(outputDir),
