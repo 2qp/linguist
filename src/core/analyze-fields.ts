@@ -1,7 +1,7 @@
 import type { Config } from "@/types/config.types";
 import type { FieldAnalysis, FieldAnalysisMap } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
-import type { LanguageData, LanguageFields } from "@/types/lang.types";
+import type { LanguageData } from "@/types/lang.types";
 
 type AnalyzeFieldsParams = {
 	data: LanguageData;
@@ -13,14 +13,7 @@ type AnalyzeFieldsType = (params: AnalyzeFieldsParams) => FieldAnalysisMap;
 const analyzeFields: AnalyzeFieldsType = ({ data, config }) => {
 	//
 
-	// const languagesx = Object.values(data);
-	const languages = Object.entries(data).map(
-		([name, value]) =>
-			({
-				name,
-				...value,
-			}) as LanguageFields satisfies LanguageFields,
-	);
+	const languages = Object.values(data);
 
 	const allKeys = languages.flatMap((obj) => Object.keys(obj));
 	const uniqueKeys = [...new Set(allKeys)];
