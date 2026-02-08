@@ -7,7 +7,7 @@ const emitInterpreterToLanguage: MapEmitterType = ({ languages }): string => {
 	//
 
 	const buildExtensionMap = () => {
-		const interpreterToLangMap = new Map<Interpreters[number], LanguageName>();
+		const interpreterToLangMap = new Map<Interpreters[number], Set<LanguageName>>();
 
 		for (const languageName of Object.keys(languages) as LanguageName[]) {
 			if (!languageName) continue;
@@ -21,11 +21,11 @@ const emitInterpreterToLanguage: MapEmitterType = ({ languages }): string => {
 			for (const interpreter of interpreters) {
 				const exist = interpreterToLangMap.get(interpreter);
 				if (!exist) {
-					interpreterToLangMap.set(interpreter, languageName);
+					interpreterToLangMap.set(interpreter, new Set([languageName]));
 					continue;
 				}
 
-				interpreterToLangMap.set(interpreter, languageName);
+				interpreterToLangMap.set(interpreter, new Set(exist).add(languageName));
 			}
 		}
 
@@ -36,7 +36,7 @@ const emitInterpreterToLanguage: MapEmitterType = ({ languages }): string => {
 
 	const entries = extensionMap
 		.entries()
-		.map(([ext, names]) => `  "${ext}": ${stringify(names)},`)
+		.map(([ext, names]) => `  "${ext}": ${stringify([...names])},`)
 		.toArray()
 		.join("\n");
 
