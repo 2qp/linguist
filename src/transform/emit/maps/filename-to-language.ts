@@ -7,7 +7,7 @@ const emitFileNameToLanguage: MapEmitterType = ({ languages }): string => {
 	//
 
 	const buildExtensionMap = () => {
-		const fileNameToLangMap = new Map<Filenames[number], LanguageName>();
+		const fileNameToLangMap = new Map<Filenames[number], Set<LanguageName>>();
 
 		for (const languageName of Object.keys(languages) as LanguageName[]) {
 			if (!languageName) continue;
@@ -21,11 +21,11 @@ const emitFileNameToLanguage: MapEmitterType = ({ languages }): string => {
 			for (const filename of filenames) {
 				const exist = fileNameToLangMap.get(filename);
 				if (!exist) {
-					fileNameToLangMap.set(filename, languageName);
+					fileNameToLangMap.set(filename, new Set([languageName]));
 					continue;
 				}
 
-				fileNameToLangMap.set(filename, languageName);
+				fileNameToLangMap.set(filename, new Set(exist).add(languageName));
 			}
 		}
 
@@ -36,7 +36,7 @@ const emitFileNameToLanguage: MapEmitterType = ({ languages }): string => {
 
 	const entries = extensionMap
 		.entries()
-		.map(([ext, names]) => `  "${ext}": ${stringify(names)},`)
+		.map(([ext, names]) => `  "${ext}": ${stringify([...names])},`)
 		.toArray()
 		.join("\n");
 
