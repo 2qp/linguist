@@ -103,7 +103,8 @@ const sanitizeTypeName = (str: string) => {
 
 	const ready = /^\d/.test(result) ? `_${result}` : result;
 
-	const capitalized = capitalize(`${ready}Type`);
+	// const capitalized = capitalize(`${ready}Type`);
+	const capitalized = capitalize(ready);
 
 	return capitalized;
 };
@@ -133,9 +134,9 @@ type NormalizedName = {
 
 // type NormalizeNameParams = {};
 
-type NormalizeNameType = (name: string) => NormalizedName;
+type NormalizeName = (name: string) => NormalizedName;
 
-const normalizeName: NormalizeNameType = (name) => {
+const normalizeName: NormalizeName = (name) => {
 	//
 
 	return {
@@ -148,4 +149,4 @@ const normalizeName: NormalizeNameType = (name) => {
 };
 
 export { normalizeName };
-export type { NormalizedName, NormalizeNameType };
+export type { NormalizedName, NormalizeName };
