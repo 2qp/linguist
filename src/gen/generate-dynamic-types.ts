@@ -95,7 +95,7 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, data }) 
 	// STRICT
 	const secondary = emitSecondaryTypes({ config: base, data, stats: fieldStats });
 
-	const output_typeNames = emitLanguagePropertyTypeName({ types: fields.generatedTypes });
+	const output_typeNames = emitLanguagePropertyTypeName({ types: fields.generatedTypes, config });
 
 	const output = [
 		output_header,
