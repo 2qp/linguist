@@ -1,6 +1,7 @@
 import { processFields } from "./utils/process-fields";
 import { analyzeFields } from "@core/analyze-fields";
 import { emitAutogenHeader } from "@/emit/emit-autogen-header";
+import { emitLanguagePropertyTypeName } from "@/emit/emit-language-property-type-name";
 import { emitLanguageType } from "@/emit/emit-language-type";
 import { emitSecondaryTypes } from "@/emit/emit-secondary-types";
 import { emitSegmentSection } from "@/emit/emit-segment-section";
@@ -94,6 +95,8 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, data }) 
 	// STRICT
 	const secondary = emitSecondaryTypes({ config: base, data, stats: fieldStats });
 
+	const output_typeNames = emitLanguagePropertyTypeName({ types: fields.generatedTypes });
+
 	const output = [
 		output_header,
 		//
@@ -107,6 +110,7 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, data }) 
 
 		//
 		output_utility_types,
+		output_typeNames,
 		output_typesafe_accessors,
 	].join("");
 
