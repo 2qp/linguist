@@ -56,11 +56,13 @@ const createFallback = <
 
 	const fall = `FallbackForUnknownKeys<${join(falls, " | " as const)}>` as const;
 
+	const asyncFall = `FallbackForUnknownKeys<() => Promise<${join(falls, " | " as const)}>>` as const;
+
 	const typeStatement = `type ${norm.typeName} = typeof ${norm.varName};` as const;
 
 	const exportStatement = [`export { ${norm.varName} };\n`, `export type { ${norm.typeName} };\n`] as const;
 
-	return { typeImports, varStatement, fall, typeStatement, exportStatement, norm };
+	return { typeImports, varStatement, fall, asyncFall, typeStatement, exportStatement, norm };
 };
 
 export { createFallback };
