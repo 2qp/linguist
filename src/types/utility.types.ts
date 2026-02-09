@@ -12,4 +12,8 @@ type ExtractExplicit<T extends Record<string, unknown>> = {
 	[K in keyof T as string extends K ? never : K]: T[K];
 };
 
-export type { Entries, ExtractExplicit, LooseToStrict, Prettify };
+type NonUndefined<T> = T extends undefined ? never : T;
+
+type ExtractArrayElement<T> = T extends readonly (infer U)[] ? U : T;
+
+export type { Entries, ExtractArrayElement, ExtractExplicit, LooseToStrict, NonUndefined, Prettify };
