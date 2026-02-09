@@ -61,6 +61,13 @@ const capitalize = (s: string): string => {
 	return (s?.[0]?.toUpperCase() ?? "") + (s?.slice(1) ?? "");
 };
 
+const toCamelCase = (str: string): string => {
+	return str
+		.replace(/^[\s_-]+/, "")
+		.toLowerCase()
+		.replace(/[\s_-]+(.)/g, (_, c) => c.toUpperCase());
+};
+
 const escapeForCharClass = (s: string) => s.replace(/[\\^$.*+?()[\]{}|-]/g, "\\$&");
 
 const sanitizeFileName = (str: string) => {
@@ -119,6 +126,7 @@ const sanitizeVarName = (str: string) => {
 type NormalizedName = {
 	key: string;
 	varName: string;
+	varNameCamel: string;
 	typeName: string;
 	fileName: string;
 };
@@ -133,6 +141,7 @@ const normalizeName: NormalizeNameType = (name) => {
 	return {
 		key: name,
 		varName: sanitizeVarName(name),
+		varNameCamel: toCamelCase(sanitizeVarName(name)),
 		typeName: sanitizeTypeName(name),
 		fileName: sanitizeFileName(name),
 	};
