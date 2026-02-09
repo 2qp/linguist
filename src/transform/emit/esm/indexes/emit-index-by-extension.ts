@@ -1,3 +1,4 @@
+import { createFallback } from "@/transform/utils/create-fallback";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
 
@@ -85,7 +86,7 @@ const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string =
 		.join("\n");
 
 	const manualTypeImports = [
-		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}"`,
+		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}";`,
 	].join("\n");
 
 	const typeImports = allUniqueNames
@@ -97,8 +98,9 @@ const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string =
 		})
 		.join("\n");
 
-	const obj = "byExtension" as const;
-	const typeName = "ByExtension" as const;
+	const obj = "by Extension" as const;
+
+	const fallback = createFallback({ config, name: obj, falls: ["Language[]", "undefined"], types: ["Language"] });
 
 	return [
 		`${imports}`,
@@ -107,11 +109,11 @@ const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string =
 		"\n\n",
 		`${manualTypeImports}`,
 		"\n\n",
-		`const ${obj} : ${typeName} = {\n${entries}\n} as const;`,
+		`const ${fallback.norm.varName} : ${fallback.norm.typeName} = {\n${entries}\n} as const;`,
 		"\n\n",
-		`type ${typeName} = {\n${typeEntries}\n} & FallbackForUnknownKeys<Language[] | undefined>;\n\n`,
-		`export { ${obj} };\n`,
-		`export type { ${typeName} };`,
+		`type ${fallback.norm.typeName} = {\n${typeEntries}\n} & ${fallback.fall};\n\n`,
+		`export { ${fallback.norm.varName} };\n`,
+		`export type { ${fallback.norm.typeName} };`,
 	].join("");
 };
 

@@ -1,4 +1,5 @@
 import { join } from "@utils/join";
+import { createFallback } from "@/transform/utils/create-fallback";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
 
@@ -73,23 +74,27 @@ const emitLazyIndexByExtension: IndexEmitterType = ({ languages, config }): stri
 	});
 
 	const manualTypeImports = [
-		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}"` as const,
+		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}";` as const,
 	];
 
 	const typeEntries = types.join("\n");
 	const typeImportsEntries = typeImports.join("\n");
 	const manualTypeImportsEntries = manualTypeImports.join("\n");
 
+	const obj = "lazy By Extension" as const;
+
+	const fallback = createFallback({ config, name: obj, falls: ["Language[]", "undefined"], types: ["Language"] });
+
 	const out = [
 		`${typeImportsEntries}`,
 		"\n\n",
 		`${manualTypeImportsEntries}`,
 		"\n\n",
-		`const lazyByExtension : LazyByExtension = {\n${entries}\n} as const;\n\n` as const,
-		`type LazyByExtension = {\n${typeEntries}\n} & FallbackForUnknownKeys<() => Promise<Language[] | undefined>>;`,
+		`const ${fallback.norm.varName} : ${fallback.norm.typeName} = {\n${entries}\n} as const;\n\n` as const,
+		`type ${fallback.norm.typeName} = {\n${typeEntries}\n} & ${fallback.asyncFall};`,
 		`\n`,
-		`export { lazyByExtension}; \n` as const,
-		`export type { LazyByExtension }`,
+		`export { ${fallback.norm.varName} }; \n` as const,
+		`export type { ${fallback.norm.typeName} }`,
 	] as const;
 
 	const stringifiedOut = join(out, "\n");

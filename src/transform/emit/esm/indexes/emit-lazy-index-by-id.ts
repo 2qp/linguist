@@ -1,3 +1,4 @@
+import { createFallback } from "@/transform/utils/create-fallback";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
 
@@ -38,12 +39,16 @@ const emitLazyIndexById: IndexEmitterType = ({ languages, config }): string => {
 	});
 
 	const manualTypeImports = [
-		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}"` as const,
+		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}";` as const,
 	];
 
 	const joinedTypeImports = typeImports.join("\n");
 	const joinedManualTypeImports = manualTypeImports.join("\n");
 	const joinedTypeEntries = types.join("\n");
+
+	const obj = "lazy By Id" as const;
+
+	const fallback = createFallback({ config, name: obj, falls: ["Language", "undefined"], types: ["Language"] });
 
 	// later with ts compiler api
 	return [
@@ -51,19 +56,11 @@ const emitLazyIndexById: IndexEmitterType = ({ languages, config }): string => {
 		"\n\n",
 		`${joinedManualTypeImports}`,
 		"\n\n",
-		"const lazyById : LazyById = {",
+		`const ${fallback.norm.varName} : ${fallback.norm.typeName} = {\n${entries.join("\n")}\n} as const;\n\n` as const,
 		"\n",
-		`${entries.join("\n")}`,
-		"\n",
-		"} as const;",
+		`type ${fallback.norm.typeName} = {\n${joinedTypeEntries}\n} & ${fallback.asyncFall};`,
 		"\n\n",
-
-		`type LazyById = {\n${joinedTypeEntries}\n} & FallbackForUnknownKeys<() => Promise<Language | undefined>>;`,
-		"\n\n",
-		"export { lazyById };",
-		"\n",
-		"export type { LazyById };",
-		"\n",
+		fallback.exportStatement.join(""),
 	].join("");
 };
 
