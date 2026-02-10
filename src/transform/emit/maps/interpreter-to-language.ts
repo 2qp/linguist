@@ -1,9 +1,10 @@
 import { stringify } from "safe-stable-stringify";
+import { createFallback } from "@/transform/utils/create-fallback";
 
 import type { Interpreters, LanguageName } from "@/generated/types/language-types.generated";
 import type { MapEmitterType } from "./types";
 
-const emitInterpreterToLanguage: MapEmitterType = ({ languages }): string => {
+const emitInterpreterToLanguage: MapEmitterType = ({ languages, config }): string => {
 	//
 
 	const buildExtensionMap = () => {
@@ -40,15 +41,17 @@ const emitInterpreterToLanguage: MapEmitterType = ({ languages }): string => {
 		.toArray()
 		.join("\n");
 
-	const obj = "interpreterToLanguage" as const;
-	const typeName = "InterpreterToLanguage" as const;
+	const obj = "interpreter To Language" as const;
 
-	return [
-		`const ${obj} = {\n${entries}\n} as const;\n\n`,
-		`type ${typeName} = typeof ${obj};\n\n`,
-		`export { ${obj} };\n`,
-		`export type { ${typeName} };\n`,
-	].join("");
+	const fb = createFallback({
+		config,
+		name: obj,
+		obj: `{\n${entries}\n}`,
+		falls: ["ReadonlyArray<LanguageName>", "undefined"],
+		types: ["LanguageName"],
+	});
+
+	return [fb.typeImports[0], fb.raw, fb.varStatement, fb.typeStatement, ...fb.exportStatement].join("\n\n");
 };
 
 export { emitInterpreterToLanguage };

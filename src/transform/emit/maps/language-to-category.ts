@@ -1,9 +1,10 @@
 import { stringify } from "safe-stable-stringify";
+import { createFallback } from "@/transform/utils/create-fallback";
 
 import type { LanguageName, Type } from "@/generated/types/language-types.generated";
 import type { MapEmitterType } from "./types";
 
-const emitLanguageToCategory: MapEmitterType = ({ languages }): string => {
+const emitLanguageToCategory: MapEmitterType = ({ languages, config }): string => {
 	//
 
 	const buildExtensionMap = () => {
@@ -32,15 +33,17 @@ const emitLanguageToCategory: MapEmitterType = ({ languages }): string => {
 		.toArray()
 		.join("\n");
 
-	const obj = "languageToCategory" as const;
-	const typeName = "LanguageToCategory" as const;
+	const obj = "language To Category" as const;
 
-	return [
-		`const ${obj} = {\n${entries}\n} as const;\n\n`,
-		`type ${typeName} = typeof ${obj};\n\n`,
-		`export { ${obj} };\n`,
-		`export type { ${typeName} };\n`,
-	].join("");
+	const fb = createFallback({
+		config,
+		name: obj,
+		obj: `{\n${entries}\n}`,
+		falls: ["Type", "undefined"],
+		types: ["Type"],
+	});
+
+	return [fb.typeImports[0], fb.raw, fb.varStatement, fb.typeStatement, ...fb.exportStatement].join("\n\n");
 };
 
 export { emitLanguageToCategory };
