@@ -51,8 +51,7 @@ const createFallback = <
 	] as const;
 
 	const varStatement =
-		`const ${norm.varName}: typeof _${norm.varName} & FallbackForUnknownKeys<${join(falls, " | " as const)}> =
-		_${norm.varName};` as const;
+		`const ${norm.varName}: typeof _${norm.varName} & FallbackForUnknownKeys<${join(falls, " | " as const)}> = _${norm.varName};` as const;
 
 	const fall = `FallbackForUnknownKeys<${join(falls, " | " as const)}>` as const;
 
@@ -66,4 +65,4 @@ const createFallback = <
 };
 
 export { createFallback };
-export type { CreateFallbackParams };
+export type { CreateFallbackParams, FallBackPatterns };
