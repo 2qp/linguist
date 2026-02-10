@@ -19,6 +19,7 @@ type CreateFallbackParams<
 	falls: TFalls;
 	types: TTypes;
 	config: Config;
+	obj?: string;
 };
 
 // type CreateFallbackType = <const TName extends string, const TFalls extends LanguagePropertyTypeName>(
@@ -40,6 +41,7 @@ const createFallback = <
 	falls,
 	types,
 	config,
+	obj,
 }: CreateFallbackParams<TName, TFalls, TTypes>) => {
 	//
 
@@ -50,6 +52,8 @@ const createFallback = <
 		`\n\n`,
 	] as const;
 
+	const raw = `const _${norm.varName} = ${obj} as const;` as const;
+
 	const varStatement =
 		`const ${norm.varName}: typeof _${norm.varName} & FallbackForUnknownKeys<${join(falls, " | " as const)}> = _${norm.varName};` as const;
 
@@ -59,9 +63,13 @@ const createFallback = <
 
 	const typeStatement = `type ${norm.typeName} = typeof ${norm.varName};` as const;
 
-	const exportStatement = [`export { ${norm.varName} };\n`, `export type { ${norm.typeName} };\n`] as const;
+	const exportVar = `export { ${norm.varName} };` as const;
 
-	return { typeImports, varStatement, fall, asyncFall, typeStatement, exportStatement, norm };
+	const exportVarType = `export type { ${norm.typeName} };` as const;
+
+	const exportStatement = [exportVar, exportVarType] as const;
+
+	return { raw, typeImports, varStatement, fall, asyncFall, typeStatement, exportStatement, norm };
 };
 
 export { createFallback };
