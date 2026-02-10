@@ -1,4 +1,5 @@
 import stringify from "safe-stable-stringify";
+import { createFallback } from "@/transform/utils/create-fallback";
 import { normalizeName } from "@/transform/utils/normalize-name";
 
 import type { Language, LanguageName } from "@/generated/types";
@@ -37,26 +38,20 @@ const emitNormalizedAllFlat: FlatEmitterType = ({ config, languages }) => {
 
 	const content = stringify(normalized, null, 2);
 
-	const manualTypeImports = [
-		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}"` as const,
-	].join("\n");
+	const name = "normalized All" as const;
 
-	const name = "normalizedAll" as const;
-	const typeName = "NormalizedAll" as const;
+	const fallback = createFallback({ config, name, falls: ["Language", "undefined"], types: ["Language"] });
 
 	const statements = (
 		[
-			manualTypeImports,
+			fallback.typeImports.join(""),
+			`const _${fallback.norm.varName} = ${content} as const;`,
 			"\n\n",
-			`const _${name} = ${content} as const;`,
+			fallback.varStatement,
 			"\n\n",
-			`const ${name}: typeof _${name} & FallbackForUnknownKeys<Language | undefined> = _${name};`,
+			fallback.typeStatement,
 			"\n\n",
-			`type ${typeName} = typeof ${name};`,
-			"\n\n",
-			`export { ${name} };`,
-			"\n",
-			`export type { ${typeName} };`,
+			fallback.exportStatement.join(""),
 		] as const
 	).join("");
 
