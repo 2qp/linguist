@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { ensureDir } from "@utils/ensure-dir";
 import { writeFile } from "@utils/write-file";
 import stringify from "safe-stable-stringify";
+import { createStatements } from "@/transform/utils/create-statements";
 
 import type { Languages } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
@@ -35,10 +36,10 @@ const createManifests: CreateManifestsType = async ({ config, languages }) => {
 	] as const;
 
 	await Promise.all(
-		indexEmitters.map(async ({ name, config }) => {
+		indexEmitters.map(async ({ name, config: eConf }) => {
 			//
 
-			const map = emitManifest({ languages, config });
+			const map = emitManifest({ languages, config: eConf });
 
 			if (!map) return;
 
@@ -47,15 +48,15 @@ const createManifests: CreateManifestsType = async ({ config, languages }) => {
 
 			const content = Object.fromEntries(map);
 
-			const json = stringify(content, (_k, v) => (v instanceof Set ? [...v] : v), 2);
+			const json = stringify(content, (_k, v) => (v instanceof Set ? [...v] : v), 2) || "";
 
-			const statements = ([`const ${name} = ${json} as const;`, "\n\n", `export { ${name} };`, "\n\n"] as const).join(
-				"",
-			);
+			const statements = createStatements({ config, name, obj: json });
+
+			const str = statements.join("\n\n");
 
 			if (!json) return;
 
-			await writeFile({ content: statements, filePath });
+			await writeFile({ content: str, filePath });
 			// await createJsonExport({ alias: name, filePath: exportPath, sourcePath: `./${name}.json`, json });
 		}),
 	);
