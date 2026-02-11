@@ -1,3 +1,5 @@
+import { createSafeName } from "./create-safe-name";
+
 const SPECIAL_CHAR_REPLACEMENTS = {
 	"#": "Sharp",
 	"*": "Star",
@@ -106,7 +108,9 @@ const sanitizeTypeName = (str: string) => {
 	// const capitalized = capitalize(`${ready}Type`);
 	const capitalized = capitalize(ready);
 
-	return capitalized;
+	const safeName = createSafeName(capitalized);
+
+	return safeName;
 };
 
 const sanitizeVarName = (str: string) => {
