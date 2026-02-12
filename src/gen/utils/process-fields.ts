@@ -3,6 +3,8 @@ import { getMappedFieldOrType } from "./get-mapped-field-or-type";
 import { generateFieldType } from "@gen/generate-field-type";
 import { normalizeName } from "@/transform/utils/normalize-name";
 
+import type { Ref } from "@core/create-reference";
+import type { Field, UID } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
 import type { FieldAnalysis } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
@@ -10,11 +12,12 @@ import type { OutputDefs, OutputMap } from "@/types/output.types";
 import type { ExtractSetElement } from "@/types/utility.types";
 
 type ProcessFieldsParams<TUnique extends Primitive> = {
-	fields: Array<[string, FieldAnalysis<TUnique>]>;
+	fields: Array<[Field, FieldAnalysis<TUnique>]>;
 	totalLanguages: number;
 	config: Config;
 	existing?: Existing<TUnique>;
 	existingNames?: Set<string>;
+	ref?: Ref | undefined;
 };
 
 type Existing<TUnique extends Primitive = Primitive> = {
@@ -26,7 +29,7 @@ type ProcessFieldsReturnType<TUnique extends Primitive> = {
 	generatedTypes: OutputMap<TUnique>;
 	allSegmentDefinitions: string[];
 	updatedExistingNames: Set<string>;
-	updatedFields: Array<[string, FieldAnalysis<TUnique>]>;
+	updatedFields: Array<[Field, FieldAnalysis<TUnique>]>;
 };
 
 type ProcessFieldsType = <TUnique extends Primitive>(
@@ -38,9 +41,10 @@ const processFields: ProcessFieldsType = ({
 	config,
 	totalLanguages,
 	existingNames = new Set(),
+	ref,
 	existing = {
 		segments: [],
-		types: new Map<string, OutputDefs<ExtractSetElement<(typeof fields)[0][1]["uniqueValues"]>>>(),
+		types: new Map<UID, OutputDefs<ExtractSetElement<(typeof fields)[0][1]["uniqueValues"]>>>(),
 	},
 }) => {
 	//
@@ -84,17 +88,21 @@ const processFields: ProcessFieldsType = ({
 
 	const result = generateFieldType({ field, stats: newStats, typeName, config });
 
+	const uid = ref?.fieldToUid.get(field);
+	if (!uid) throw new Error(`unable to find UID for field: "${field}" ~ "${typeNameKey}"`);
+
 	const remainingResult = processFields({
 		fields: remainingFields,
 		existingNames: updatedNames,
 		config,
 		existing,
 		totalLanguages,
+		ref,
 	});
 
 	return {
-		generatedTypes: new Map<string, OutputDefs<ExtractSetElement<typeof stats.uniqueValues>>>([
-			[typeNameKey, { typeDef: result.typeDef, segmentDefs: result.segmentDefs } as const],
+		generatedTypes: new Map<UID, OutputDefs<ExtractSetElement<typeof stats.uniqueValues>>>([
+			[uid, { typeDef: result.typeDef, segmentDefs: result.segmentDefs, type: typeNameKey } as const],
 			...existing.types,
 			...remainingResult.generatedTypes,
 		] as const),

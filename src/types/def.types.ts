@@ -57,6 +57,8 @@ type GeneratedDefs<T extends Primitive, TName extends string, TBase extends Elem
 	// woah w/o Prettify :0
 
 	segmentDefs: ReadonlyArray<SegmentDef<T, TName>> | never[];
+
+	type: string;
 };
 
 // type TypeDefx<TName extends string, T extends Primitive, TBase extends ElementBase> =
