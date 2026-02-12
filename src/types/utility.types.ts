@@ -16,4 +16,6 @@ type NonUndefined<T> = T extends undefined ? never : T;
 
 type ExtractArrayElement<T> = T extends readonly (infer U)[] ? U : T;
 
-export type { Entries, ExtractArrayElement, ExtractExplicit, LooseToStrict, NonUndefined, Prettify };
+type ExtractSetElement<T> = T extends Set<infer U> ? U : T;
+
+export type { Entries, ExtractArrayElement, ExtractExplicit, ExtractSetElement, LooseToStrict, NonUndefined, Prettify };
