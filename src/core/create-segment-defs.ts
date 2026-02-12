@@ -1,5 +1,6 @@
 import { join } from "@utils/join";
 import { stringify } from "@utils/stringify";
+import { normalizeName } from "@/transform/utils/normalize-name";
 
 import type { Primitive, SegmentDef } from "@/types/gen.types";
 
@@ -8,15 +9,17 @@ type CreateSegmentDefsParams<T extends Primitive, TName extends string> = {
 	chunks: ReadonlyArray<ReadonlyArray<T>>;
 };
 
-type CreateSegmentDefsType = <T extends Primitive, TName extends string>(
+type CreateSegmentDefsType = <T extends Primitive, const TName extends string>(
 	params: CreateSegmentDefsParams<T, TName>,
 ) => ReadonlyArray<SegmentDef<T, TName>>;
 
 const createSegmentDefs: CreateSegmentDefsType = ({ chunks, typeName }) => {
 	//
 
+	const { constant } = normalizeName(typeName);
+
 	const segmentDefs = chunks.map((chunk, index) => {
-		const segmentName = `${typeName}_${index + 1}` as const;
+		const segmentName = `${constant}_${index + 1}` as const;
 
 		const stringified = chunk.map((value) => stringify(value));
 

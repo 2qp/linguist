@@ -35,7 +35,7 @@ type TEleExpr<T extends ElementBase = ElementBase> =
 
 type TEleListExpr<T extends ElementBase = ElementBase> = ArrayTypeDef<TEleExpr<T>>;
 
-type TNameId<TName extends string> = `${TName}_${number}`;
+type TNameId<TName extends string> = `${Uppercase<TName>}_${number}`;
 
 type SegmentDef<T extends Primitive, TName extends string> = `const ${TNameId<TName>} = [${T}, ${T}] as const;`;
 

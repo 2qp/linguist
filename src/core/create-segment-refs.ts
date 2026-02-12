@@ -1,3 +1,5 @@
+import { normalizeName } from "@/transform/utils/normalize-name";
+
 import type { IdType, Primitive } from "@/types/gen.types";
 
 type CreateSegmentRefsParams<T extends Primitive, TName extends string> = {
@@ -12,8 +14,10 @@ type CreateSegmentRefsType = <T extends Primitive, TName extends string>(
 const createSegmentRefs: CreateSegmentRefsType = ({ chunks, typeName }) => {
 	//
 
+	const { constant } = normalizeName(typeName);
+
 	const segmentRefs = chunks.map((_, index) => {
-		const segmentName = `${typeName}_${index + 1}` as const;
+		const segmentName = `${constant}_${index + 1}` as const;
 		return `typeof ${segmentName}[number]` as const;
 	});
 
