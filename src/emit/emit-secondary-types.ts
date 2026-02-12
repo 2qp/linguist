@@ -15,10 +15,10 @@ type EmitSecondaryTypesParams = {
 
 type EmitSecondaryTypesType = (params: EmitSecondaryTypesParams) => string[];
 
-const emitSecondaryTypes: EmitSecondaryTypesType = ({ config: rawConfig, stats, data }) => {
+const emitSecondaryTypes: EmitSecondaryTypesType = ({ config, stats, data }) => {
 	//
 
-	const config: Config = { ...rawConfig, type: { ...rawConfig.type, ...rawConfig.type.secondary } };
+	if (!config.type.secondary.enabled) return [];
 
 	if (!data) throw Error("Unable load yaml data on [emitStrictTypes] x");
 
