@@ -1,21 +1,25 @@
+import { createFieldSet } from "@gen/utils/create-field-set";
+
 import type { Config } from "@/types/config.types";
 import type { FieldAnalysis, FieldAnalysisMap } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 import type { LanguageData } from "@/types/lang.types";
+import type { Ref } from "./create-reference";
 
 type AnalyzeFieldsParams = {
 	data: LanguageData;
 	config: Config;
+	ref: Ref;
 };
 
 type AnalyzeFieldsType = (params: AnalyzeFieldsParams) => FieldAnalysisMap;
 
-const analyzeFields: AnalyzeFieldsType = ({ data, config }) => {
+const analyzeFields: AnalyzeFieldsType = ({ data, config, ref }) => {
 	//
 
 	const languages = Object.values(data);
 
-	const allKeys = languages.flatMap((obj) => Object.keys(obj));
+	const allKeys = createFieldSet({ source: data, config });
 	const uniqueKeys = [...new Set(allKeys)];
 	const allFields = uniqueKeys.sort();
 
@@ -60,6 +64,9 @@ const analyzeFields: AnalyzeFieldsType = ({ data, config }) => {
 		const shouldBeLiteralArray =
 			isArray && uniqueCount > 0 && uniqueCount <= config.type.maxArrayLiteralItems && itemType !== "mixed";
 
+		const uid = ref.fieldToUid.get(field);
+		if (!uid) throw new Error(`unable to find UID "${uid}" for "${field}"`);
+
 		const analysis: FieldAnalysis = {
 			isOptional,
 			isArray,
@@ -73,6 +80,7 @@ const analyzeFields: AnalyzeFieldsType = ({ data, config }) => {
 			shouldBeLiteral,
 			shouldBeLiteralArray,
 			sampleValues,
+			uid,
 		};
 
 		return [field, analysis] as const;

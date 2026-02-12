@@ -1,3 +1,4 @@
+import type { Field, UID } from "./branded.types";
 import type { Primitive } from "./gen.types";
 
 type FieldAnalysis<TUnique extends Primitive = Primitive> = {
@@ -14,10 +15,11 @@ type FieldAnalysis<TUnique extends Primitive = Primitive> = {
 	shouldBeLiteralArray: boolean;
 	sampleValues: unknown[];
 
+	uid: UID;
 	typeName?: string;
 };
 
-type FieldAnalysisMap = Map<string, FieldAnalysis>;
+type FieldAnalysisMap = Map<Field, FieldAnalysis>;
 
 type ElementType = "string" | "number" | "boolean" | "mixed";
 type ElementBase = Exclude<ElementType, "mixed">;
