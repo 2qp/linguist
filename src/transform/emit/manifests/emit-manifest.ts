@@ -1,4 +1,4 @@
-import type { Language, LanguageName, Languages } from "@/generated/types/language-types.generated";
+import type { Language, LanguageName, Languages } from "@/types/generated.types";
 import type { Entries } from "@/types/utility.types";
 
 type EmitManifestConfig =

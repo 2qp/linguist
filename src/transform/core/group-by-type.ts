@@ -1,4 +1,4 @@
-import type { Languages, Type } from "@/generated/types/language-types.generated";
+import type { Languages, Type } from "@/types/generated.types";
 import type { Entries } from "@/types/utility.types";
 
 type GroupByTypeParams = {

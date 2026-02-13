@@ -1,7 +1,7 @@
 import { stringify } from "safe-stable-stringify";
 import { createFallback } from "@/transform/utils/create-fallback";
 
-import type { Interpreters, LanguageName } from "@/generated/types/language-types.generated";
+import type { Interpreters, LanguageName } from "@/types/generated.types";
 import type { MapEmitterType } from "./types";
 
 const emitInterpreterToLanguage: MapEmitterType = ({ languages, config }): string => {

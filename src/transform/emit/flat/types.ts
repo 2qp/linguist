@@ -1,5 +1,5 @@
-import type { Languages } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
+import type { Languages } from "@/types/generated.types";
 
 type FlatEmitterParams = { languages: Languages | Readonly<Languages>; config: Config };
 

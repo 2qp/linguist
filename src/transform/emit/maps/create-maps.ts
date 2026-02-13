@@ -7,8 +7,8 @@ import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ensureDir } from "@utils/ensure-dir";
 
-import type { Languages } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
+import type { Languages } from "@/types/generated.types";
 import type { MapEmitter } from "./types";
 
 type CreateMapsParams = {

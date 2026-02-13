@@ -1,8 +1,8 @@
 import { normalizeName } from "./normalize-name";
 import { join } from "@utils/join";
 
-import type { LanguagePropertyTypeName } from "@/generated/types";
 import type { Config } from "@/types/config.types";
+import type { LanguagePropertyTypeName } from "@/types/generated.types";
 
 type FallBackPatterns =
 	| LanguagePropertyTypeName

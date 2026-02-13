@@ -13,7 +13,7 @@ import { buildEntries } from "@utils/build-entries";
 import { configLoader } from "@/infra/loaders/config-loader";
 import { yamlLoader } from "@/infra/loaders/yaml-loader";
 
-import type { Languages } from "@/generated/types/language-types.generated";
+import type { Languages } from "@/types/generated.types";
 
 type TransformParams = {};
 

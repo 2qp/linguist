@@ -1,7 +1,7 @@
 import { stringify } from "safe-stable-stringify";
 import { createFallback } from "@/transform/utils/create-fallback";
 
-import type { Filenames, LanguageName } from "@/generated/types/language-types.generated";
+import type { Filenames, LanguageName } from "@/types/generated.types";
 import type { MapEmitterType } from "./types";
 
 const emitFileNameToLanguage: MapEmitterType = ({ languages, config }): string => {

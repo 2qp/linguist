@@ -6,8 +6,8 @@ import { ensureDir } from "@utils/ensure-dir";
 import { writeFile } from "@utils/write-file";
 import { createJsonExport } from "@/transform/utils/create-json-export";
 
-import type { Languages } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
+import type { Languages } from "@/types/generated.types";
 import type { FlatEmitter } from "./types";
 
 type CreateFlatsParams = { languages: Languages; config: Config };

@@ -3,8 +3,8 @@ import { join } from "node:path";
 import { writeFile } from "@utils/write-file";
 import { normalizeName } from "@/transform/utils/normalize-name";
 
-import type { Languages } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
+import type { Languages } from "@/types/generated.types";
 import type { Entries } from "@/types/utility.types";
 
 type CreateLanguageFilesParams = {

@@ -3,8 +3,8 @@ import { join } from "node:path";
 import { ensureDir } from "@utils/ensure-dir";
 import { writeFile } from "@utils/write-file";
 
-import type { Languages, Type } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
+import type { Languages, Type } from "@/types/generated.types";
 
 type CreateCategoriesParams = { grouped: Record<Type, Partial<Languages>>; config: Config };
 

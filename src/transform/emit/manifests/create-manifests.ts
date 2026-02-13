@@ -5,8 +5,8 @@ import { writeFile } from "@utils/write-file";
 import stringify from "safe-stable-stringify";
 import { createStatements } from "@/transform/utils/create-statements";
 
-import type { Languages } from "@/generated/types/language-types.generated";
 import type { Config } from "@/types/config.types";
+import type { Languages } from "@/types/generated.types";
 import type { ManifestEmitter } from "./types";
 
 type CreateManifestsParams = { languages: Languages; config: Config };

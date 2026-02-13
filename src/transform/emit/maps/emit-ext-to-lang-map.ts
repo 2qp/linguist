@@ -1,6 +1,6 @@
 import { createFallback } from "@/transform/utils/create-fallback";
 
-import type { Extensions, LanguageName } from "@/generated/types/language-types.generated";
+import type { Extensions, LanguageName } from "@/types/generated.types";
 import type { MapEmitterType } from "./types";
 
 const emitExtToLangMap: MapEmitterType = ({ languages, config }): string => {

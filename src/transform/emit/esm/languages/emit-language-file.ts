@@ -1,7 +1,7 @@
 import { stringify } from "safe-stable-stringify";
 
-import type { Language } from "@/generated/types/language-types.generated";
 import type { NormalizedName } from "@/transform/utils/normalize-name";
+import type { Language } from "@/types/generated.types";
 
 type EmitLanguageFileParams = { norm: NormalizedName; data: Language | undefined };
 

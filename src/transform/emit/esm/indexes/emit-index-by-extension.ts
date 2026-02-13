@@ -2,7 +2,7 @@ import { createFallback } from "@/transform/utils/create-fallback";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
 
-import type { Extensions, LanguageName } from "@/generated/types/language-types.generated";
+import type { Extensions, LanguageName } from "@/types/generated.types";
 import type { IndexEmitterType } from "./types";
 
 const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string => {

@@ -1,6 +1,6 @@
 import { normalizeName } from "@/transform/utils/normalize-name";
 
-import type { Languages } from "@/generated/types/language-types.generated";
+import type { Languages } from "@/types/generated.types";
 import type { Entries } from "@/types/utility.types";
 import type { FlatEmitterType } from "./types";
 
