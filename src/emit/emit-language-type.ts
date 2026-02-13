@@ -1,6 +1,6 @@
 import { generateFieldType } from "@gen/generate-field-type";
-import { replacer } from "@utils/replacer";
 
+import type { Ref } from "@core/create-reference";
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
 import type { FieldAnalysisMap } from "@/types/field.types";
@@ -9,6 +9,7 @@ type EmitLanguageTypeParams = {
 	stats: FieldAnalysisMap;
 	types: Map<string, GeneratedDefs<string, string>>;
 	config: Config;
+	ref: Ref;
 };
 
 type EmitLanguageTypeType = (params: EmitLanguageTypeParams) => string;
@@ -17,28 +18,14 @@ const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
 	const fields = [...stats].flatMap(([field, stats]) => {
 		//
 
-		const typeNames = [...types].map(([tName, _]) => {
+		const typeNames = [...types].map(([segUid, def]) => {
 			//
 
-			if (!stats.typeName) {
-				const typeName = tName.toLowerCase() === field.toLowerCase().replace(/_/g, "") ? tName : undefined;
-				return typeName;
-			}
+			const uid = stats.uid;
 
-			if (config.type.secondary.enabled) {
-				//
+			if (uid !== segUid) return undefined;
 
-				const regex = new RegExp(config.type.naming.secondaryPrefix, "gi");
-
-				const replaced = replacer(tName, regex, "").toLowerCase();
-
-				const typeName = replaced === stats.typeName.toLowerCase() ? tName : undefined;
-
-				return typeName;
-			}
-
-			const typeName = tName.toLowerCase() === stats.typeName.toLowerCase() ? tName : undefined;
-			return typeName;
+			return def.type;
 		});
 
 		const result = typeNames
