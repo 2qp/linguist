@@ -1,5 +1,6 @@
 import { processFields } from "./utils/process-fields";
 import { analyzeFields } from "@core/analyze-fields";
+import { createReference } from "@core/create-reference";
 import { emitAutogenHeader } from "@/emit/emit-autogen-header";
 import { emitLanguagePropertyTypeName } from "@/emit/emit-language-property-type-name";
 import { emitLanguageType } from "@/emit/emit-language-type";
@@ -11,10 +12,7 @@ import { emitTypeSafeAccessors } from "@/emit/emit-typesafe-accessors";
 import { emitUtilityTypes } from "@/emit/emit-utility-types";
 
 import type { Config } from "@/types/config.types";
-import type { GeneratedDefs } from "@/types/def.types";
-import type { LanguageName } from "@/types/identifiers.types";
 import type { LanguageData } from "@/types/lang.types";
-import type { Existing } from "./utils/process-fields";
 
 type GenerateDynamicTypesParams = {
 	config: Config;
@@ -30,37 +28,23 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, data }) 
 
 	if (!data) throw Error("Unable load yaml data");
 
-	const fieldStats = analyzeFields({ data, config });
+	const ref = createReference({ config, source: data });
+
+	const fieldStats = analyzeFields({ data, config, ref });
+
+	//
 
 	const keys = Object.keys(data);
 	const totalLanguages = keys.length;
 	const languageNames = keys.sort();
 
-	// const languageNameResult = generateLanguageNameType({
-	// 	languageNames,
-	// 	typeName: LANGUAGE_NAME,
-	// 	baseType: "string" as const,
-	// 	config: { ...config, type: { ...config.type, useReadonlyArrays: false } },
-	// });
-
-	const existingTypes = new Map<string, GeneratedDefs<string, LanguageName>>([
-		// [LANGUAGE_NAME, { segmentDefs: languageNameResult.segmentDefs, typeDef: languageNameResult.typeDef }],
-	]);
-
-	const existing: Existing = {
-		// segments: [...languageNameResult.segmentDefs],
-		segments: [],
-		types: existingTypes,
-	};
-
 	const fieldsArray = [...fieldStats].sort();
-	const existingNames = new Set([]);
+
 	const fields = processFields({
 		fields: fieldsArray,
 		totalLanguages,
-		existing,
 		config,
-		existingNames,
+		ref,
 	});
 
 	const newFieldStats = new Map(fields.updatedFields);
@@ -75,16 +59,13 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, data }) 
 
 	const output_segments = emitSegmentSection(fields.allSegmentDefinitions);
 
-	const output_lang_name_export = fields.generatedTypes.has(name)
-		? `export type ${name} = ${fields.generatedTypes.get(name)?.typeDef};\n`
-		: "";
-
 	const output_sorted_types = emitTypesSection(fields.generatedTypes, name);
 
 	const output_language_type = emitLanguageType({
 		stats: newFieldStats,
 		types: fields.generatedTypes,
 		config,
+		ref,
 	});
 
 	const output_utility_types = emitUtilityTypes(name);
@@ -93,7 +74,7 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, data }) 
 	// const output_validation_helpers = emitValidationHelpers(LANGUAGE_NAME);
 
 	// STRICT
-	const secondary = emitSecondaryTypes({ config: base, data, stats: fieldStats });
+	const secondary = emitSecondaryTypes({ config: base, data, stats: fieldStats, ref });
 
 	const output_typeNames = emitLanguagePropertyTypeName({ types: fields.generatedTypes, config });
 
@@ -101,7 +82,6 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, data }) 
 		output_header,
 		//
 		output_segments,
-		output_lang_name_export,
 		output_sorted_types,
 		output_language_type,
 
