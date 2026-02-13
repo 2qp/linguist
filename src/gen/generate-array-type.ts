@@ -33,7 +33,7 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 		if (shouldSplit && typeName) {
 			//
 
-			return generateSegmentedArrayType({ values: stats.uniqueValues, baseType: stats.itemType, config, typeName });
+			return generateSegmentedArrayType({ stats, baseType: stats.itemType, config, typeName });
 		}
 
 		const sortedValues = sortMixed([...stats.uniqueValues]);
@@ -60,6 +60,7 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 		return {
 			typeDef,
 			segmentDefs: [],
+			type: stats.type,
 		};
 	}
 
@@ -71,6 +72,7 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 		return {
 			typeDef,
 			segmentDefs: [],
+			type: stats.type,
 		};
 	}
 
@@ -81,6 +83,7 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 		return {
 			typeDef,
 			segmentDefs: [],
+			type: stats.type,
 		};
 	}
 
@@ -91,6 +94,7 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 		return {
 			typeDef,
 			segmentDefs: [],
+			type: stats.type,
 		};
 	}
 
@@ -101,6 +105,7 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 	return {
 		typeDef,
 		segmentDefs: [],
+		type: stats.type,
 	};
 };
 

@@ -16,7 +16,7 @@ type FieldAnalysis<TUnique extends Primitive = Primitive> = {
 	sampleValues: unknown[];
 
 	uid: UID;
-	typeName?: string;
+	type: string;
 };
 
 type FieldAnalysisMap = Map<Field, FieldAnalysis>;

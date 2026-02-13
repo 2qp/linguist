@@ -8,11 +8,11 @@ import { sortMixed } from "@utils/sort";
 
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
-import type { ElementBase } from "@/types/field.types";
+import type { ElementBase, FieldAnalysis } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 
 type GenerateSegmentedArrayTypeParams<T extends Primitive, TBase extends ElementBase, TName extends string> = {
-	values: Set<T>;
+	stats: FieldAnalysis<T>;
 	baseType: TBase;
 	typeName: TName;
 	config: Config;
@@ -22,10 +22,10 @@ type GenerateSegmentedArrayTypeType = <T extends Primitive, TBase extends Elemen
 	params: GenerateSegmentedArrayTypeParams<T, TBase, TName>,
 ) => GeneratedDefs<T, TName, TBase>;
 
-const generateSegmentedArrayType: GenerateSegmentedArrayTypeType = ({ values, baseType, typeName, config }) => {
+const generateSegmentedArrayType: GenerateSegmentedArrayTypeType = ({ stats, baseType, typeName, config }) => {
 	//
 
-	const filteredValues = [...values].filter((v) => typeof v === baseType);
+	const filteredValues = [...stats.uniqueValues].filter((v) => typeof v === baseType);
 
 	const sortedValues = sortMixed(filteredValues);
 
@@ -37,6 +37,7 @@ const generateSegmentedArrayType: GenerateSegmentedArrayTypeType = ({ values, ba
 		return {
 			typeDef,
 			segmentDefs: [],
+			type: stats.type,
 		};
 	}
 
@@ -55,6 +56,7 @@ const generateSegmentedArrayType: GenerateSegmentedArrayTypeType = ({ values, ba
 	return {
 		typeDef,
 		segmentDefs,
+		type: stats.type,
 	};
 };
 

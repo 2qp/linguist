@@ -84,7 +84,10 @@ const processFields: ProcessFieldsType = ({
 	const typeName = generateUniqueTypeName(segmentBaseTypeName, existingNames);
 	const updatedNames = new Set(existingNames).add(typeName);
 
-	const newStats = { ...stats, typeName: typeNameKey };
+	const newStats: FieldAnalysis<ExtractSetElement<(typeof fields)[0][1]["uniqueValues"]>> = {
+		...stats,
+		type: typeNameKey,
+	};
 
 	const result = generateFieldType({ field, stats: newStats, typeName, config });
 

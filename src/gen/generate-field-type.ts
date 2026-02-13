@@ -33,38 +33,41 @@ const generateFieldType: GenerateFieldTypeType = ({ stats, typeName = undefined,
 			if (values.length === 1 && values[0] !== undefined) {
 				const bool = values[0];
 
-				if (bool) return { typeDef: `true`, segmentDefs: [] };
+				if (bool) return { typeDef: `true`, segmentDefs: [], type: stats.type };
 
-				return { typeDef: `false`, segmentDefs: [] };
+				return { typeDef: `false`, segmentDefs: [], type: stats.type };
 			}
 
 			return {
 				typeDef: "boolean",
 				segmentDefs: [],
+				type: stats.type,
 			};
 		}
 
 		return {
 			typeDef: "boolean",
 			segmentDefs: [],
+			type: stats.type,
 		};
 	}
 
 	//
 	if (stats.isNumber) {
 		if (stats.shouldBeLiteral) {
-			return generateLiteralType({ values: stats.uniqueValues, baseType: "number", config, typeName });
+			return generateLiteralType({ stats, baseType: "number", config, typeName });
 		}
 		return {
 			typeDef: "number",
 			segmentDefs: [],
+			type: stats.type,
 		};
 	}
 
 	//
 	if (stats.isString) {
 		if (stats.shouldBeLiteral) {
-			return generateLiteralType({ values: stats.uniqueValues, baseType: "string", config, typeName });
+			return generateLiteralType({ stats, baseType: "string", config, typeName });
 		}
 
 		const typeDef = config.type.allowFlexibleTypes ? ("string | (string & {})" as const) : ("string" as const);
@@ -72,6 +75,7 @@ const generateFieldType: GenerateFieldTypeType = ({ stats, typeName = undefined,
 		return {
 			typeDef,
 			segmentDefs: [],
+			type: stats.type,
 		};
 	}
 
@@ -82,6 +86,7 @@ const generateFieldType: GenerateFieldTypeType = ({ stats, typeName = undefined,
 	return {
 		typeDef: elementType,
 		segmentDefs: [],
+		type: stats.type,
 	};
 };
 
