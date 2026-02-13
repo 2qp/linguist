@@ -1,9 +1,12 @@
+import { stringify } from "safe-stable-stringify";
+
 import type { Config } from "@/types/config.types";
 import type { TypeGenConfig } from "@/types/gen-config.types";
 
-const formatConfigAsComments = (config: TypeGenConfig): string[] =>
-	Object.entries(config).map(([k, v]) => `//   ${k}: ${JSON.stringify(v)}`);
-
+const formatConfigAsComments = (config: TypeGenConfig): string[] => {
+	const jsonStr = stringify(config, null, 2);
+	return jsonStr.split("\n").map((line) => `// ${line}`);
+};
 //
 const emitAutogenHeader = (source: string, config: Config, totals: { total: number; size: number }): string => {
 	const { total, size } = totals;
