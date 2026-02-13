@@ -1,9 +1,10 @@
 import { join } from "@utils/join";
 
+import type { UID } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
 
-type EmitLanguagePropertyTypeNameParams = { types: Map<string, GeneratedDefs<string, string>>; config: Config };
+type EmitLanguagePropertyTypeNameParams = { types: Map<UID, GeneratedDefs<string, string>>; config: Config };
 
 type EmitLanguagePropertyTypeNameType = (
 	params: EmitLanguagePropertyTypeNameParams,
@@ -12,11 +13,14 @@ type EmitLanguagePropertyTypeNameType = (
 const emitLanguagePropertyTypeName: EmitLanguagePropertyTypeNameType = ({ types, config }) => {
 	//
 
+	const existing = [`"${config.type.naming.language}"`] as const;
+
 	const typesAr = types
 		.keys()
 		.toArray()
-		.concat(config.type.naming.language)
-		.map((type) => `"${type}"` as const);
+		.map((type) => `"${types.get(type)?.type}"` as const)
+		.concat(existing)
+		.sort();
 
 	const seperated = join(typesAr, " | ");
 
