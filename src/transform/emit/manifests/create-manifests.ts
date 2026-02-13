@@ -50,9 +50,9 @@ const createManifests: CreateManifestsType = async ({ config, languages }) => {
 
 			const json = stringify(content, (_k, v) => (v instanceof Set ? [...v] : v), 2) || "";
 
-			const statements = createStatements({ config, name, obj: json });
+			const { common, primary } = createStatements({ config, name, obj: json, falls: [], types: [] });
 
-			const str = statements.join("\n\n");
+			const str = [primary.varTemplate, primary.typeSt, common.exportVar, common.exportVarType].join("\n\n");
 
 			if (!json) return;
 
