@@ -1,7 +1,11 @@
+declare const brand: unique symbol;
+
+type Brand<T, B> = T & { readonly [brand]: B };
+
 /**
  * uid of a `Field` type
  */
-type UID = string & { readonly __brand: "UID" };
+type UID = Brand<string, "UID">;
 
 /**
  * field name of a `Language` `Object`.
@@ -10,6 +14,6 @@ type UID = string & { readonly __brand: "UID" };
  *
  * ref with `UID` type
  */
-type Field = string & { readonly __brand: "Field" };
+type Field = Brand<string, "Field">;
 
 export type { Field, UID };
