@@ -1,5 +1,5 @@
 import { join } from "@utils/join";
-import { createFallback } from "@/transform/utils/create-fallback";
+import { createStatements } from "@/transform/utils/create-statements";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
 
@@ -73,31 +73,30 @@ const emitLazyIndexByExtension: IndexEmitterType = ({ languages, config }): stri
 		return ` import type { ${norm.typeName} } from "${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}";` as const;
 	});
 
-	const manualTypeImports = [
-		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}";` as const,
-	];
-
 	const typeEntries = types.join("\n");
 	const typeImportsEntries = typeImports.join("\n");
-	const manualTypeImportsEntries = manualTypeImports.join("\n");
 
 	const obj = "lazy By Extension" as const;
 
-	const fallback = createFallback({ config, name: obj, falls: ["Language[]", "undefined"], types: ["Language"] });
+	const { common, primary, secondary } = createStatements({
+		name: obj,
+		obj: `{\n${entries}\n}`,
+		typeObj: `{\n${typeEntries}\n}`,
+		types: ["Language", "FallbackForUnknownKeys"],
+		falls: ["Language[]", "undefined"],
+		config,
+	});
 
 	const out = [
-		`${typeImportsEntries}`,
-		"\n\n",
-		`${manualTypeImportsEntries}`,
-		"\n\n",
-		`const ${fallback.norm.varName} : ${fallback.norm.typeName} = {\n${entries}\n} as const;\n\n` as const,
-		`type ${fallback.norm.typeName} = {\n${typeEntries}\n} & ${fallback.asyncFall};`,
-		`\n`,
-		`export { ${fallback.norm.varName} }; \n` as const,
-		`export type { ${fallback.norm.typeName} }`,
+		typeImportsEntries,
+		common.typeImports,
+		primary.varTypedTemplate,
+		secondary.typeAsyncFallbackTemplate,
+		common.exportVar,
+		common.exportVarType,
 	] as const;
 
-	const stringifiedOut = join(out, "\n");
+	const stringifiedOut = join(out, "\n\n");
 
 	return stringifiedOut;
 };
