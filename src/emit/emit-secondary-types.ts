@@ -2,6 +2,7 @@ import { emitLanguageType } from "./emit-language-type";
 import { emitTypesSection } from "./emit-types-sections";
 import { processFields } from "@gen/utils/process-fields";
 
+import type { Ref } from "@core/create-reference";
 import type { Config } from "@/types/config.types";
 import type { FieldAnalysisMap } from "@/types/field.types";
 import type { LanguageData } from "@/types/lang.types";
@@ -10,15 +11,18 @@ type EmitSecondaryTypesParams = {
 	stats: FieldAnalysisMap;
 	config: Config;
 	data: LanguageData | undefined;
+	ref: Ref;
 	// types: Map<string, GeneratedDefs<string, string>>;
 };
 
 type EmitSecondaryTypesType = (params: EmitSecondaryTypesParams) => string[];
 
-const emitSecondaryTypes: EmitSecondaryTypesType = ({ config, stats, data }) => {
+const emitSecondaryTypes: EmitSecondaryTypesType = ({ config: rawConfig, stats, data, ref }) => {
 	//
 
-	if (!config.type.secondary.enabled) return [];
+	if (!rawConfig.type.secondary.enabled) return [];
+
+	const config: Config = { ...rawConfig, type: { ...rawConfig.type, ...rawConfig.type.secondary } };
 
 	if (!data) throw Error("Unable load yaml data on [emitStrictTypes] x");
 
@@ -29,18 +33,13 @@ const emitSecondaryTypes: EmitSecondaryTypesType = ({ config, stats, data }) => 
 	const fields = processFields({
 		fields: fieldsArray,
 		totalLanguages,
-		existing: { segments: [], types: new Map() },
 		config,
-		existingNames: new Set([]),
+		ref,
 	});
 
 	const newStrictFieldStats = new Map(fields.updatedFields);
 
 	const name = `${config.type.naming.secondaryPrefix}${config.type.naming.languageName}`;
-
-	const output_strict_language_name_type = fields.generatedTypes.has(name)
-		? `export type ${name} = ${fields.generatedTypes.get(name)?.typeDef};\n`
-		: "";
 
 	const output_strict_sorted_types = emitTypesSection(fields.generatedTypes, name);
 
@@ -48,17 +47,10 @@ const emitSecondaryTypes: EmitSecondaryTypesType = ({ config, stats, data }) => 
 		stats: newStrictFieldStats,
 		types: fields.generatedTypes,
 		config,
+		ref,
 	});
 
-	const strict = config.type.secondary.enabled
-		? [
-				output_strict_language_name_type,
-
-				output_strict_sorted_types,
-
-				output_strict_language_type,
-			]
-		: [];
+	const strict = [output_strict_sorted_types, output_strict_language_type];
 
 	return strict;
 };
