@@ -2,7 +2,7 @@ import stringify from "safe-stable-stringify";
 import { createFallback } from "@/transform/utils/create-fallback";
 import { normalizeName } from "@/transform/utils/normalize-name";
 
-import type { Language, LanguageName } from "@/generated/types";
+import type { Language, LanguageName } from "@/types/generated.types";
 import type { FlatEmitterType } from "./types";
 
 const emitNormalizedAllFlat: FlatEmitterType = ({ config, languages }) => {
