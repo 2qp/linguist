@@ -1,15 +1,30 @@
 import type { Field } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
-import type { LanguageData } from "@/types/lang.types";
 
-type CreateFieldSetParams = {
-	source: LanguageData;
+type CreateFieldSetParams<T = Record<string, unknown>> = {
+	source: T;
 	config: Config;
 };
 
-type CreateFieldSet = (params: CreateFieldSetParams) => Set<Field>;
+type CreateFieldSet = <T extends Record<string, unknown>, TField extends keyof T[keyof T] | Field>(
+	params: CreateFieldSetParams<T>,
+) => Set<TField | Field>;
 
-const createFieldSet: CreateFieldSet = ({ source }) => {
+type CreateFieldSetOverloaded = {
+	<T extends Record<string, unknown>, TField extends keyof T[keyof T]>(
+		params: CreateFieldSetParams<T> & { _tag: "typed" },
+	): Set<TField>;
+
+	<T extends Record<string, unknown>>(params: CreateFieldSetParams<T> & { _tag?: "generic" }): Set<Field>;
+};
+
+/**
+ *
+ * @param {Tag} _tag - return type discriminator
+ * - `"generic"`: => set of `Field` Branded type
+ * - `"typed"`: => set of `keyof T[keyof T]`
+ */
+const createFieldSet: CreateFieldSetOverloaded = ({ source }: CreateFieldSetParams) => {
 	//
 
 	const fields = new Set<Field>();
