@@ -1,4 +1,5 @@
 type Basis = "committed" | "working-tree" | "all-changes";
+type Phase = "generate" | "transform";
 
 type CoreConfig = {
 	url: string;
@@ -11,4 +12,4 @@ type CoreConfigFile = {
 	core: CoreConfig;
 };
 
-export type { CoreConfig, CoreConfigFile };
+export type { CoreConfig, CoreConfigFile, Phase };
