@@ -18,4 +18,19 @@ type ExtractArrayElement<T> = T extends readonly (infer U)[] ? U : T;
 
 type ExtractSetElement<T> = T extends Set<infer U> ? U : T;
 
-export type { Entries, ExtractArrayElement, ExtractExplicit, ExtractSetElement, LooseToStrict, NonUndefined, Prettify };
+type HomogeneousArray<T, K> = K extends keyof T[keyof T]
+	? Exclude<T[keyof T][K], undefined> extends readonly unknown[]
+		? Exclude<T[keyof T][K], undefined>[number][]
+		: Exclude<T[keyof T][K], undefined>[]
+	: never;
+
+export type {
+	Entries,
+	ExtractArrayElement,
+	ExtractExplicit,
+	ExtractSetElement,
+	LooseToStrict,
+	NonUndefined,
+	Prettify,
+	HomogeneousArray,
+};
