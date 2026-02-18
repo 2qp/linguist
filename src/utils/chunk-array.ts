@@ -1,8 +1,17 @@
 // type ChunkArrayParams = {};
 
-type ChunkArrayType = <T>(array: T[], chunkSize: number) => ReadonlyArray<ReadonlyArray<T>>;
+type ChunkArrayType = <T extends unknown[]>(
+	array: T,
+	chunkSize: number,
+) => T extends unknown[] ? ReadonlyArray<ReadonlyArray<T[number]>> : never;
 
-const chunkArray: ChunkArrayType = (array, chunkSize) => {
+type ChunkArrayOverloaded = {
+	<const T extends unknown[]>(array: T, chunkSize: number): T extends unknown[] ? T[number][][] : never;
+
+	<const T extends unknown[]>(array: unknown[], chunkSize: number): T[number][][];
+};
+
+const chunkArray: ChunkArrayOverloaded = (array, chunkSize) => {
 	//
 
 	if (chunkSize <= 0) throw new Error("chunkSize must be positive");
