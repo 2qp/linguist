@@ -49,7 +49,7 @@ const findSourceFilesInDirectory = async (
 	const allFiles = await glob(pattern, {
 		cwd: normalizedDir,
 		absolute: true,
-		ignore: exclude || ["**/*.d.ts", "**/node_modules/**"],
+		ignore: [...(exclude || []), "**/*.d.ts", "**/node_modules/**"],
 	});
 
 	return allFiles.filter((file) => {
@@ -317,6 +317,7 @@ const createReExports: CreateReExportsType = async (config) => {
 
 	await generateSingleFileExports(program, checker, sourceFiles, config);
 };
+
 export { createReExports };
 export type { CreateReExportsParams, CreateReExportsType, ReExportConfig };
 
