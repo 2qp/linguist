@@ -3,11 +3,12 @@ import { generateFieldType } from "@gen/generate-field-type";
 import type { Ref } from "@core/create-reference";
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
-import type { FieldAnalysisMap } from "@/types/field.types";
+import type { ProcessedFieldAnalysisMap } from "@/types/field.types";
+import type { Primitive } from "@/types/gen.types";
 
 type EmitLanguageTypeParams = {
-	stats: FieldAnalysisMap;
-	types: Map<string, GeneratedDefs<string, string>>;
+	stats: ProcessedFieldAnalysisMap;
+	types: Map<string, GeneratedDefs<Primitive, string>>;
 	config: Config;
 	ref: Ref;
 };

@@ -1,18 +1,20 @@
 import { getMappedFieldOrType } from "@gen/utils/get-mapped-field-or-type";
 
+import type { UID } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
 import type { FieldAnalysisMap } from "@/types/field.types";
+import type { Primitive } from "@/types/gen.types";
 
 type EmitStatsParams = {
 	map: FieldAnalysisMap;
-	types: Map<string, GeneratedDefs<string, string>>;
+	types: Map<UID, GeneratedDefs<Primitive, string>>;
 	config: Config;
 	totals: { total: number; size: number };
 	langs: string[];
 };
 
-type EmitStatsType = (params: EmitStatsParams) => void;
+type EmitStatsType = (params: EmitStatsParams) => string;
 
 const emitStats: EmitStatsType = ({ map, types, config, totals, langs }) => {
 	//
