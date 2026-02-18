@@ -10,6 +10,8 @@ type EleListExpr<T extends Primitive, TBase extends ElementBase> = ArrayTypeDef<
 
 type Parenthesize<T extends Primitive> = `(${T})`;
 
+type QuoteString<T> = T extends string ? `"${T}"` : T extends Exclude<Primitive, string> ? T : never;
+
 // type SelfPair<T extends ElementBase = ElementBase> = {
 // 	[K in T]: `${Parenthesize<K>} | ${Parenthesize<Flex<K>>}`;
 // }[T] & {};
@@ -35,11 +37,13 @@ type TEleExpr<T extends ElementBase = ElementBase> =
 
 type TEleListExpr<T extends ElementBase = ElementBase> = ArrayTypeDef<TEleExpr<T>>;
 
-type TNameId<TName extends string> = `${Uppercase<TName>}_${number}`;
+type Capitalized<Str extends string> = Uppercase<Str>;
 
-type SegmentDef<T extends Primitive, TName extends string> = `const ${TNameId<TName>} = [${T}, ${T}] as const;`;
+type NameId<TName extends string> = `${Capitalized<TName>}_${number}`;
 
-type IdElement<TName extends string> = `${TNameId<TName>}[number]`;
+type SegmentDef<T extends Primitive, TName extends string> = `const ${NameId<TName>} = [${T}, ${T}] as const;`;
+
+type IdElement<TName extends string> = `${NameId<TName>}[number]`;
 
 type IdType<TName extends string> = `typeof ${IdElement<TName>}`;
 
@@ -53,16 +57,18 @@ type ArrayTypeDef<T extends Primitive> = `${ReadonlyListExpr<T>}` | `${ListExpr<
 
 export type {
 	ArrayTypeDef,
+	Capitalized,
 	EleExpr,
 	EleListExpr,
 	Flex,
 	IdElement,
 	IdType,
+	NameId,
 	Parenthesize,
 	Primitive,
+	QuoteString,
 	SegmentDef,
 	SelfPair,
 	TEleExpr,
 	TEleListExpr,
-	TNameId,
 };
