@@ -1,7 +1,8 @@
+import type { Field } from "@/types/branded.types";
 import type { FieldType } from "@/types/gen-config.types";
 
 type GetMappedFieldOrTypeParams = {
-	value: string;
+	value: string | Field;
 	from: keyof FieldType;
 	to: keyof FieldType;
 	remapper: readonly FieldType[];
