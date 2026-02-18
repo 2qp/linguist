@@ -1,25 +1,43 @@
 import { createFieldSet } from "@gen/utils/create-field-set";
 
+import type { Field } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
 import type { FieldAnalysis, FieldAnalysisMap } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 import type { LanguageData } from "@/types/lang.types";
+import type { WithPhase } from "@/types/phantom.types";
 import type { Ref } from "./create-reference";
 
-type AnalyzeFieldsParams = {
-	data: LanguageData;
+type AnalyzeFieldsParams<TSource extends LanguageData> = {
+	source: TSource;
 	config: Config;
 	ref: Ref;
 };
 
-type AnalyzeFieldsType = (params: AnalyzeFieldsParams) => FieldAnalysisMap;
+// type AnalyzeFieldsType = <T extends LanguageData, TField extends keyof T[keyof T] = Field>(
+// 	params: AnalyzeFieldsParams<T>,
+// ) => FieldAnalysisMap<TField>;
 
-const analyzeFields: AnalyzeFieldsType = ({ data, config, ref }) => {
+type AnalyzeFieldsOverloaded = {
+	<TSource extends LanguageData, TField extends keyof TSource[keyof TSource]>(
+		params: AnalyzeFieldsParams<TSource> & WithPhase<"transform">,
+	): FieldAnalysisMap<TField>;
+
+	<TSource extends LanguageData>(
+		params: AnalyzeFieldsParams<TSource> & Partial<WithPhase<"generate">>,
+	): FieldAnalysisMap<Field>;
+};
+
+const analyzeFields: AnalyzeFieldsOverloaded = <TSource extends LanguageData>({
+	source,
+	config,
+	ref,
+}: AnalyzeFieldsParams<TSource>) => {
 	//
 
-	const languages = Object.values(data);
+	const languages = Object.values(source);
 
-	const allKeys = createFieldSet({ source: data, config });
+	const allKeys = createFieldSet({ source, config });
 	const uniqueKeys = [...new Set(allKeys)];
 	const allFields = uniqueKeys.sort();
 
@@ -90,4 +108,4 @@ const analyzeFields: AnalyzeFieldsType = ({ data, config, ref }) => {
 };
 
 export { analyzeFields };
-export type { AnalyzeFieldsParams, AnalyzeFieldsType };
+export type { AnalyzeFieldsParams };
