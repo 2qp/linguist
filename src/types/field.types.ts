@@ -16,12 +16,29 @@ type FieldAnalysis<TUnique extends Primitive = Primitive> = {
 	sampleValues: unknown[];
 
 	uid: UID;
+};
+
+type ProcessedFieldAnalysis<TUnique extends Primitive = Primitive> = FieldAnalysis<TUnique> & {
+	/**
+	 * `"AceMode"`, `"Aliases"`...
+	 */
 	type: string;
 };
 
-type FieldAnalysisMap = Map<Field, FieldAnalysis>;
+type FieldAnalysisMap<TField = Field, TUnique extends Primitive = Primitive> = Map<TField, FieldAnalysis<TUnique>>;
+type ProcessedFieldAnalysisMap<TField = Field, TUnique extends Primitive = Primitive> = Map<
+	TField,
+	ProcessedFieldAnalysis<TUnique>
+>;
 
 type ElementType = "string" | "number" | "boolean" | "mixed";
 type ElementBase = Exclude<ElementType, "mixed">;
 
-export type { FieldAnalysis, FieldAnalysisMap, ElementType, ElementBase };
+export type {
+	ElementBase,
+	ElementType,
+	FieldAnalysis,
+	FieldAnalysisMap,
+	ProcessedFieldAnalysis,
+	ProcessedFieldAnalysisMap,
+};
