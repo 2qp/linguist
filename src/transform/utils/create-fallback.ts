@@ -1,8 +1,8 @@
 import { normalizeName } from "./normalize-name";
 import { join } from "@utils/join";
 
-import type { LanguagePropertyTypeName } from "@/generated/types";
 import type { Config } from "@/types/config.types";
+import type { LanguagePropertyTypeName } from "@/types/generated.types";
 
 type FallBackPatterns =
 	| LanguagePropertyTypeName
@@ -30,7 +30,7 @@ type CreateFallbackParams<
  *
  * could use this for creating fallbacks for `objects` which are unable to defien type explicitly.
  *
- * this uses existing `object` and recreate a bew `object` with appended typeof `object` and fallback
+ * this uses existing `_object` and recreate a bew `object` with appended typeof `object` and fallback
  */
 const createFallback = <
 	const TName extends string,
