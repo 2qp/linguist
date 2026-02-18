@@ -1,4 +1,7 @@
-type JoinType = <T extends readonly string[], TSep extends string>(arr: T, sep: TSep) => JoinRelaxed<T, TSep>;
+type JoinType = <const T extends readonly string[], const TSep extends string>(
+	arr: T,
+	sep: TSep,
+) => JoinRelaxed<T, TSep>;
 
 const join: JoinType = (arr, sep) => arr.join(sep) as JoinRelaxed<typeof arr, typeof sep>;
 
