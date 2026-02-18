@@ -6,13 +6,13 @@ import { normalizeName } from "@/transform/utils/normalize-name";
 import type { Ref } from "@core/create-reference";
 import type { Field, UID } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
-import type { FieldAnalysis } from "@/types/field.types";
+import type { FieldAnalysis, ProcessedFieldAnalysis } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 import type { OutputDefs, OutputMap } from "@/types/output.types";
 import type { ExtractSetElement } from "@/types/utility.types";
 
-type ProcessFieldsParams<TUnique extends Primitive> = {
-	fields: Array<[Field, FieldAnalysis<TUnique>]>;
+type ProcessFieldsParams<TField extends string = Field, TUnique extends Primitive = Primitive> = {
+	fields: Array<[TField, FieldAnalysis<TUnique>]>;
 	totalLanguages: number;
 	config: Config;
 	existing?: Existing<TUnique>;
@@ -25,16 +25,16 @@ type Existing<TUnique extends Primitive = Primitive> = {
 	segments: string[];
 };
 
-type ProcessFieldsReturnType<TUnique extends Primitive> = {
+type ProcessFieldsReturnType<TField = Field, TUnique extends Primitive = Primitive> = {
 	generatedTypes: OutputMap<TUnique>;
 	allSegmentDefinitions: string[];
 	updatedExistingNames: Set<string>;
-	updatedFields: Array<[Field, FieldAnalysis<TUnique>]>;
+	updatedFields: Array<[TField, ProcessedFieldAnalysis<TUnique>]>;
 };
 
-type ProcessFieldsType = <TUnique extends Primitive>(
-	params: ProcessFieldsParams<TUnique>,
-) => ProcessFieldsReturnType<TUnique>;
+type ProcessFieldsType = <TField extends string = Field, TUnique extends Primitive = Primitive>(
+	params: ProcessFieldsParams<TField, TUnique>,
+) => ProcessFieldsReturnType<TField, TUnique>;
 
 const processFields: ProcessFieldsType = ({
 	fields,
@@ -84,14 +84,14 @@ const processFields: ProcessFieldsType = ({
 	const typeName = generateUniqueTypeName(segmentBaseTypeName, existingNames);
 	const updatedNames = new Set(existingNames).add(typeName);
 
-	const newStats: FieldAnalysis<ExtractSetElement<(typeof fields)[0][1]["uniqueValues"]>> = {
+	const newStats: ProcessedFieldAnalysis<ExtractSetElement<(typeof fields)[0][1]["uniqueValues"]>> = {
 		...stats,
 		type: typeNameKey,
 	};
 
 	const result = generateFieldType({ field, stats: newStats, typeName, config });
 
-	const uid = ref?.fieldToUid.get(field);
+	const uid = ref?.fieldToUid.get(field as unknown as Field);
 	if (!uid) throw new Error(`unable to find UID for field: "${field}" ~ "${typeNameKey}"`);
 
 	const remainingResult = processFields({

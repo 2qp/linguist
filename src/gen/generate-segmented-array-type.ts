@@ -8,11 +8,11 @@ import { sortMixed } from "@utils/sort";
 
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
-import type { ElementBase, FieldAnalysis } from "@/types/field.types";
+import type { ElementBase, ProcessedFieldAnalysis } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 
 type GenerateSegmentedArrayTypeParams<T extends Primitive, TBase extends ElementBase, TName extends string> = {
-	stats: FieldAnalysis<T>;
+	stats: ProcessedFieldAnalysis<T>;
 	baseType: TBase;
 	typeName: TName;
 	config: Config;
