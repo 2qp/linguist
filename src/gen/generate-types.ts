@@ -35,7 +35,7 @@ const generateTypes: GenerateTypesType = async () => {
 
 		const data = buildEntries({ source: rawData });
 
-		const typesOutput = generateDynamicTypes({ config: config, data });
+		const typesOutput = generateDynamicTypes({ config: config, source: data });
 
 		await ensureDir(outputDir);
 		const outputPath = join(outputDir, config.type.out.fileName);

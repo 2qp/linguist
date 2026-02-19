@@ -14,27 +14,25 @@ import { emitUtilityTypes } from "@/emit/emit-utility-types";
 import type { Config } from "@/types/config.types";
 import type { LanguageData } from "@/types/lang.types";
 
-type GenerateDynamicTypesParams = {
+type GenerateDynamicTypesParams<TSource extends Record<string, unknown> = LanguageData> = {
 	config: Config;
-	data?: LanguageData | undefined;
+	source: TSource;
 };
 
 type GenerateDynamicTypesType = (params: GenerateDynamicTypesParams) => string;
 
-const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, data }) => {
+const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, source }) => {
 	//
 
 	const config = { ...base, type: { ...base.type, secondary: { ...base.type.secondary, enabled: false } } };
 
-	if (!data) throw Error("Unable load yaml data");
+	const ref = createReference({ config, source });
 
-	const ref = createReference({ config, source: data });
-
-	const fieldStats = analyzeFields({ data, config, ref });
+	const fieldStats = analyzeFields({ source, config, ref });
 
 	//
 
-	const keys = Object.keys(data);
+	const keys = Object.keys(source);
 	const totalLanguages = keys.length;
 	const languageNames = keys.sort();
 
@@ -73,8 +71,7 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, data }) 
 	const output_typesafe_accessors = emitTypeSafeAccessors(name);
 	// const output_validation_helpers = emitValidationHelpers(LANGUAGE_NAME);
 
-	// STRICT
-	const secondary = emitSecondaryTypes({ config: base, data, stats: fieldStats, ref });
+	const secondary = emitSecondaryTypes({ config: base, data: source, stats: fieldStats, ref });
 
 	const output_typeNames = emitLanguagePropertyTypeName({ types: fields.generatedTypes, config });
 
@@ -100,7 +97,7 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, data }) 
 		const stats = emitStats({
 			map: fieldStats,
 			types: fields.generatedTypes,
-			config,
+			config: base,
 			langs: languageNames,
 			totals: { size: fieldStats.size, total: totalLanguages },
 		});
