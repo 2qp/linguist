@@ -1,7 +1,7 @@
 type BuildInfo = {
 	source: string;
 	hash: string;
-	generatedAt: string;
+	generated_at: string;
 };
 
 export type { BuildInfo };
