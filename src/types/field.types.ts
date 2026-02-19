@@ -31,6 +31,13 @@ type ProcessedFieldAnalysisMap<TField = Field, TUnique extends Primitive = Primi
 	ProcessedFieldAnalysis<TUnique>
 >;
 
+type FieldAnalysisArray<TField = Field, TUnique extends Primitive = Primitive> = Readonly<
+	[TField, FieldAnalysis<TUnique>]
+>[];
+type ProcessedFieldAnalysisArray<TField = Field, TUnique extends Primitive = Primitive> = Readonly<
+	[TField, ProcessedFieldAnalysis<TUnique>]
+>[];
+
 type ElementType = "string" | "number" | "boolean" | "mixed";
 type ElementBase = Exclude<ElementType, "mixed">;
 
@@ -38,7 +45,9 @@ export type {
 	ElementBase,
 	ElementType,
 	FieldAnalysis,
+	FieldAnalysisArray,
 	FieldAnalysisMap,
 	ProcessedFieldAnalysis,
+	ProcessedFieldAnalysisArray,
 	ProcessedFieldAnalysisMap,
 };
