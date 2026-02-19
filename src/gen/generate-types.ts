@@ -1,41 +1,27 @@
 import { generateDynamicTypes } from "./generate-dynamic-types";
 import { join } from "node:path";
-import { getFile } from "@services/fetch/get-file";
-import { buildEntries } from "@utils/build-entries";
 import { ensureDir } from "@utils/ensure-dir";
 import { resolvePath } from "@utils/resolve-path";
 import { writeFile } from "@utils/write-file";
-import { configLoader } from "@/infra/loaders/config-loader";
-import { yamlLoader } from "@/infra/loaders/yaml-loader";
 import { createReExports } from "@/transform/utils/create-re-exports";
 
+import type { Config } from "@/types/config.types";
 import type { LanguageData } from "@/types/lang.types";
 
-type GenerateTypesParams = {};
+type GenerateTypesParams<TSource extends Record<string, unknown> = LanguageData> = {
+	config: Config;
+	source: TSource;
+};
 
 type GenerateTypesType = (params: GenerateTypesParams) => Promise<void>;
 
-const generateTypes: GenerateTypesType = async () => {
+const generateTypes: GenerateTypesType = async ({ config, source }) => {
 	//
-
-	const config = await configLoader();
-
-	const fileStr = await getFile<string>(config.core.url, "text");
-
-	const yamlPath = config.core.url;
 
 	const outputDir = resolvePath(config.type.paths.outputDir);
 
 	try {
-		console.info(`Reading: ${yamlPath}...\n`);
-
-		const rawData = yamlLoader<LanguageData>({ str: fileStr });
-
-		if (!rawData) throw Error("Unable load yaml data");
-
-		const data = buildEntries({ source: rawData });
-
-		const typesOutput = generateDynamicTypes({ config: config, source: data });
+		const typesOutput = generateDynamicTypes({ config: config, source });
 
 		await ensureDir(outputDir);
 		const outputPath = join(outputDir, config.type.out.fileName);

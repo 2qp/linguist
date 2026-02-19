@@ -8,31 +8,24 @@ import { createManifests } from "./emit/manifests/create-manifests";
 import { createMaps } from "./emit/maps/create-maps";
 import { createReExports } from "./utils/create-re-exports";
 import { join } from "node:path";
-import { getFile } from "@services/fetch/get-file";
-import { buildEntries } from "@utils/build-entries";
-import { configLoader } from "@/infra/loaders/config-loader";
-import { yamlLoader } from "@/infra/loaders/yaml-loader";
 
+import type { Config } from "@/types/config.types";
 import type { Languages } from "@/types/generated.types";
+import type { LanguageData } from "@/types/lang.types";
 
-type TransformParams = {};
+type TransformParams = {
+	config: Config;
+	source: LanguageData | Languages;
+};
 
 type TransformType = (params: TransformParams) => Promise<void>;
 
-const transform: TransformType = async () => {
+const transform: TransformType = async ({ config, source }) => {
 	//
 
-	const config = await configLoader();
+	const languages = source as unknown as Languages;
 
 	const { outputDir } = config.data.paths;
-
-	const yamlStr = await getFile<string>(config.core.url, "text");
-
-	const rawLanguages = yamlLoader<Languages>({ str: yamlStr });
-
-	if (!rawLanguages) throw Error("Unable to load yaml source data");
-
-	const languages = buildEntries({ source: rawLanguages });
 
 	await Promise.all([
 		ensureDir(outputDir),
