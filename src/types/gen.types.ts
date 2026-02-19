@@ -41,7 +41,7 @@ type Capitalized<Str extends string> = Uppercase<Str>;
 
 type NameId<TName extends string> = `${Capitalized<TName>}_${number}`;
 
-type SegmentDef<T extends Primitive, TName extends string> = `const ${NameId<TName>} = [${T}, ${T}] as const;`;
+// type SegmentDef<T extends Primitive, TName extends string> = `const ${NameId<TName>} = [${T}, ${T}] as const;`;
 
 type IdElement<TName extends string> = `${NameId<TName>}[number]`;
 
@@ -67,7 +67,6 @@ export type {
 	Parenthesize,
 	Primitive,
 	QuoteString,
-	SegmentDef,
 	SelfPair,
 	TEleExpr,
 	TEleListExpr,

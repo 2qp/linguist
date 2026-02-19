@@ -1,15 +1,6 @@
 import type { ElementBase } from "./field.types";
-import type {
-	ArrayTypeDef,
-	EleExpr,
-	Flex,
-	IdType,
-	Primitive,
-	SegmentDef,
-	SelfPair,
-	TEleExpr,
-	TEleListExpr,
-} from "./gen.types";
+import type { ArrayTypeDef, EleExpr, Flex, IdType, Primitive, SelfPair, TEleExpr, TEleListExpr } from "./gen.types";
+import type { SegmentDef } from "./segment.types";
 
 type TypeDefUnion<T extends Primitive> = `"${T}" | "${T}"`;
 
@@ -52,12 +43,19 @@ type TypeDef<TName extends string, T extends Primitive, TBase extends ElementBas
 	| `${"any"}`
 	| (ArrayTypeDef<"any"> & {});
 
-type GeneratedDefs<T extends Primitive, TName extends string, TBase extends ElementBase = ElementBase> = {
+type GeneratedDefs<
+	T extends Primitive = Primitive,
+	TName extends string = string,
+	TBase extends ElementBase = ElementBase,
+> = {
 	typeDef: TypeDef<TName, T, TBase> & {};
 	// woah w/o Prettify :0
 
-	segmentDefs: ReadonlyArray<SegmentDef<T, TName>> | never[];
+	segmentDefs: ReadonlyArray<SegmentDef<T[][], TName>>;
 
+	/**
+	 * `"AceMode"`, `"Aliases"`...
+	 */
 	type: string;
 };
 
