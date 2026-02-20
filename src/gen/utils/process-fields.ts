@@ -3,21 +3,22 @@ import { getMappedFieldOrType } from "./get-mapped-field-or-type";
 import { generateFieldType } from "@gen/generate-field-type";
 import { normalizeName } from "@/transform/utils/normalize-name";
 
+import type { Meta } from "@core/create-meta";
 import type { Ref } from "@core/create-reference";
 import type { Field, UID } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
-import type { FieldAnalysis, ProcessedFieldAnalysis } from "@/types/field.types";
+import type { FieldAnalysisArray, ProcessedFieldAnalysis, ProcessedFieldAnalysisArray } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 import type { OutputDefs, OutputMap } from "@/types/output.types";
 import type { ExtractSetElement } from "@/types/utility.types";
 
 type ProcessFieldsParams<TField extends string = Field, TUnique extends Primitive = Primitive> = {
-	fields: Array<[TField, FieldAnalysis<TUnique>]>;
-	totalLanguages: number;
+	fields: FieldAnalysisArray<TField, TUnique>;
 	config: Config;
 	existing?: Existing<TUnique>;
 	existingNames?: Set<string>;
 	ref?: Ref | undefined;
+	meta: Meta;
 };
 
 type Existing<TUnique extends Primitive = Primitive> = {
@@ -29,7 +30,7 @@ type ProcessFieldsReturnType<TField = Field, TUnique extends Primitive = Primiti
 	generatedTypes: OutputMap<TUnique>;
 	allSegmentDefinitions: string[];
 	updatedExistingNames: Set<string>;
-	updatedFields: Array<[TField, ProcessedFieldAnalysis<TUnique>]>;
+	updatedFields: ProcessedFieldAnalysisArray<TField, TUnique>;
 };
 
 type ProcessFieldsType = <TField extends string = Field, TUnique extends Primitive = Primitive>(
@@ -39,8 +40,8 @@ type ProcessFieldsType = <TField extends string = Field, TUnique extends Primiti
 const processFields: ProcessFieldsType = ({
 	fields,
 	config,
-	totalLanguages,
 	existingNames = new Set(),
+	meta,
 	ref,
 	existing = {
 		segments: [],
@@ -60,7 +61,7 @@ const processFields: ProcessFieldsType = ({
 
 	const [[field, stats], ...remainingFields] = fields;
 
-	const usagePercent = ((stats.languagesUsing / totalLanguages) * 100).toFixed(1);
+	const usagePercent = ((stats.languagesUsing / meta.languageCount) * 100).toFixed(1);
 
 	const shouldGenerateType =
 		(stats.shouldBeLiteral || stats.shouldBeLiteralArray) &&
@@ -68,7 +69,7 @@ const processFields: ProcessFieldsType = ({
 		parseFloat(usagePercent) >= config.type.minUsagePercent;
 
 	if (!shouldGenerateType) {
-		return processFields({ fields: remainingFields, config, existing, totalLanguages, existingNames });
+		return processFields({ fields: remainingFields, config, existing, existingNames, ref, meta });
 	}
 
 	const res = getMappedFieldOrType({ value: field, from: "field", to: "type", remapper: config.type.naming.fields });
@@ -99,7 +100,7 @@ const processFields: ProcessFieldsType = ({
 		existingNames: updatedNames,
 		config,
 		existing,
-		totalLanguages,
+		meta,
 		ref,
 	});
 
