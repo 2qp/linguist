@@ -1,5 +1,6 @@
 import type { Field } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
+import type { WithPhase } from "@/types/phantom.types";
 
 type CreateFieldSetParams<T = Record<string, unknown>> = {
 	source: T;
@@ -12,10 +13,10 @@ type CreateFieldSet = <T extends Record<string, unknown>, TField extends keyof T
 
 type CreateFieldSetOverloaded = {
 	<T extends Record<string, unknown>, TField extends keyof T[keyof T]>(
-		params: CreateFieldSetParams<T> & { _tag: "typed" },
+		params: CreateFieldSetParams<T> & WithPhase<"transform">,
 	): Set<TField>;
 
-	<T extends Record<string, unknown>>(params: CreateFieldSetParams<T> & { _tag?: "generic" }): Set<Field>;
+	<T extends Record<string, unknown>>(params: CreateFieldSetParams<T> & Partial<WithPhase<"transform">>): Set<Field>;
 };
 
 /**
@@ -46,3 +47,16 @@ const createFieldSet: CreateFieldSetOverloaded = ({ source }: CreateFieldSetPara
 
 export { createFieldSet };
 export type { CreateFieldSetParams, CreateFieldSet };
+
+const isRecord = (value: unknown): value is Record<string, unknown> => {
+	return typeof value === "object" && value !== null && !Array.isArray(value);
+};
+
+const isPlainObject = (value: unknown): value is Record<string, unknown> => {
+	return (
+		typeof value === "object" &&
+		value !== null &&
+		!Array.isArray(value) &&
+		Object.getPrototypeOf(value) === Object.prototype
+	);
+};
