@@ -104,7 +104,7 @@ const analyzeFields: AnalyzeFieldsOverloaded = <TSource extends LanguageData>({
 		return [field, analysis] as const;
 	});
 
-	return [...fieldAnalyses].sort();
+	return fieldAnalyses;
 };
 
 export { analyzeFields };
