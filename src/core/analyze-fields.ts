@@ -2,7 +2,7 @@ import { createFieldSet } from "@gen/utils/create-field-set";
 
 import type { Field } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
-import type { FieldAnalysis, FieldAnalysisMap } from "@/types/field.types";
+import type { FieldAnalysis, FieldAnalysisArray } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 import type { LanguageData } from "@/types/lang.types";
 import type { WithPhase } from "@/types/phantom.types";
@@ -21,11 +21,11 @@ type AnalyzeFieldsParams<TSource extends LanguageData> = {
 type AnalyzeFieldsOverloaded = {
 	<TSource extends LanguageData, TField extends keyof TSource[keyof TSource]>(
 		params: AnalyzeFieldsParams<TSource> & WithPhase<"transform">,
-	): FieldAnalysisMap<TField>;
+	): FieldAnalysisArray<TField>;
 
 	<TSource extends LanguageData>(
 		params: AnalyzeFieldsParams<TSource> & Partial<WithPhase<"generate">>,
-	): FieldAnalysisMap<Field>;
+	): FieldAnalysisArray<Field>;
 };
 
 const analyzeFields: AnalyzeFieldsOverloaded = <TSource extends LanguageData>({
@@ -104,7 +104,7 @@ const analyzeFields: AnalyzeFieldsOverloaded = <TSource extends LanguageData>({
 		return [field, analysis] as const;
 	});
 
-	return new Map(fieldAnalyses);
+	return [...fieldAnalyses].sort();
 };
 
 export { analyzeFields };
