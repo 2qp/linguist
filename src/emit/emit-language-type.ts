@@ -3,11 +3,11 @@ import { generateFieldType } from "@gen/generate-field-type";
 import type { Ref } from "@core/create-reference";
 import type { Config } from "@/types/config.types";
 import type { GeneratedDefs } from "@/types/def.types";
-import type { ProcessedFieldAnalysisMap } from "@/types/field.types";
+import type { ProcessedFieldAnalysisArray } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 
 type EmitLanguageTypeParams = {
-	stats: ProcessedFieldAnalysisMap;
+	stats: ProcessedFieldAnalysisArray;
 	types: Map<string, GeneratedDefs<Primitive, string>>;
 	config: Config;
 	ref: Ref;
@@ -16,7 +16,7 @@ type EmitLanguageTypeParams = {
 type EmitLanguageTypeType = (params: EmitLanguageTypeParams) => string;
 
 const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
-	const fields = [...stats].flatMap(([field, stats]) => {
+	const fields = stats.flatMap(([field, stats]) => {
 		//
 
 		const typeNames = [...types].map(([segUid, def]) => {
