@@ -117,4 +117,4 @@ const processFields: ProcessFieldsType = ({
 };
 
 export { processFields };
-export type { Existing, ProcessFieldsParams, ProcessFieldsType };
+export type { Existing, ProcessFieldsParams, ProcessFieldsReturnType, ProcessFieldsType };
