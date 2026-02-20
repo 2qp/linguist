@@ -1,40 +1,27 @@
-import { getMappedFieldOrType } from "@gen/utils/get-mapped-field-or-type";
-
 import type { Meta } from "@core/create-meta";
-import type { UID } from "@/types/branded.types";
+import type { ProcessFieldsReturnType } from "@gen/utils/process-fields";
+import type { Field } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
-import type { GeneratedDefs } from "@/types/def.types";
-import type { FieldAnalysisArray } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 
-type EmitStatsParams = {
-	stats: FieldAnalysisArray;
-	types: Map<UID, GeneratedDefs<Primitive, string>>;
+type EmitStatsParams<TField extends string = Field, TUnique extends Primitive = Primitive> = {
+	fields: ProcessFieldsReturnType<TField, TUnique>;
 	config: Config;
 	meta: Meta;
 };
 
 type EmitStatsType = (params: EmitStatsParams) => string;
 
-const emitStats: EmitStatsType = ({ stats, types, config, meta }) => {
+const emitStats: EmitStatsType = ({ fields, config, meta }) => {
 	//
 
-	stats
+	const stats = fields.updatedFields;
+
+	const stats_out = stats
 		.map(([field, stats]) => {
 			//
 			const usagePercent = ((stats.languagesUsing / meta.languageCount) * 100).toFixed(1);
-			const namedType = [...types.keys()].find((tName) => {
-				//
-
-				const remappedField = getMappedFieldOrType({
-					value: field,
-					from: "field",
-					to: "type",
-					remapper: config.type.naming.fields,
-				});
-
-				return tName.toLowerCase() === remappedField.value.toLowerCase().replace(/_/g, "");
-			});
+			const namedType = stats.type;
 
 			const output_field = `// ${field}: used in ${stats.languagesUsing}/${meta.languageCount} (${usagePercent}%)`;
 
@@ -73,7 +60,7 @@ const emitStats: EmitStatsType = ({ stats, types, config, meta }) => {
 
 	return [
 		`// Field Statistics:\n`,
-		stats,
+		stats_out,
 		"\n",
 
 		//
