@@ -90,10 +90,9 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, source, 
 		//
 
 		const stats_output = emitStats({
-			stats,
-			types: fields.generatedTypes,
-			config: base,
+			fields,
 			meta,
+			config: base,
 		});
 
 		return [output, stats_output].join("");
