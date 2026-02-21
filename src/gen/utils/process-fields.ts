@@ -13,7 +13,7 @@ import type { OutputDefs, OutputMap } from "@/types/output.types";
 import type { ExtractSetElement } from "@/types/utility.types";
 
 type ProcessFieldsParams<TField extends string = Field, TUnique extends Primitive = Primitive> = {
-	fields: FieldAnalysisArray<TField, TUnique>;
+	stats: FieldAnalysisArray<TField, TUnique>;
 	config: Config;
 	existing?: Existing<TUnique>;
 	existingNames?: Set<string>;
@@ -38,19 +38,19 @@ type ProcessFieldsType = <TField extends string = Field, TUnique extends Primiti
 ) => ProcessFieldsReturnType<TField, TUnique>;
 
 const processFields: ProcessFieldsType = ({
-	fields,
+	stats,
 	config,
 	existingNames = new Set(),
 	meta,
 	ref,
 	existing = {
 		segments: [],
-		types: new Map<UID, OutputDefs<ExtractSetElement<(typeof fields)[0][1]["uniqueValues"]>>>(),
+		types: new Map<UID, OutputDefs<ExtractSetElement<(typeof stats)[0][1]["uniqueValues"]>>>(),
 	},
 }) => {
 	//
 
-	if (fields.length === 0 || fields[0] === undefined) {
+	if (stats.length === 0 || stats[0] === undefined) {
 		return {
 			generatedTypes: new Map(existing.types),
 			allSegmentDefinitions: [...existing.segments],
@@ -59,17 +59,17 @@ const processFields: ProcessFieldsType = ({
 		};
 	}
 
-	const [[field, stats], ...remainingFields] = fields;
+	const [[field, stat], ...remainingFields] = stats;
 
-	const usagePercent = ((stats.languagesUsing / meta.languageCount) * 100).toFixed(1);
+	const usagePercent = ((stat.languagesUsing / meta.languageCount) * 100).toFixed(1);
 
 	const shouldGenerateType =
-		(stats.shouldBeLiteral || stats.shouldBeLiteralArray) &&
-		stats.languagesUsing >= config.type.minLanguagesForNamedType &&
+		(stat.shouldBeLiteral || stat.shouldBeLiteralArray) &&
+		stat.languagesUsing >= config.type.minLanguagesForNamedType &&
 		parseFloat(usagePercent) >= config.type.minUsagePercent;
 
 	if (!shouldGenerateType) {
-		return processFields({ fields: remainingFields, config, existing, existingNames, ref, meta });
+		return processFields({ stats: remainingFields, config, existing, existingNames, ref, meta });
 	}
 
 	const res = getMappedFieldOrType({ value: field, from: "field", to: "type", remapper: config.type.naming.fields });
@@ -85,18 +85,18 @@ const processFields: ProcessFieldsType = ({
 	const typeName = generateUniqueTypeName(segmentBaseTypeName, existingNames);
 	const updatedNames = new Set(existingNames).add(typeName);
 
-	const newStats: ProcessedFieldAnalysis<ExtractSetElement<(typeof fields)[0][1]["uniqueValues"]>> = {
-		...stats,
+	const newStats: ProcessedFieldAnalysis<ExtractSetElement<(typeof stats)[0][1]["uniqueValues"]>> = {
+		...stat,
 		type: typeNameKey,
 	};
 
-	const result = generateFieldType({ field, stats: newStats, typeName, config });
+	const result = generateFieldType({ stats: newStats, typeName, config });
 
 	const uid = ref?.fieldToUid.get(field as unknown as Field);
 	if (!uid) throw new Error(`unable to find UID for field: "${field}" ~ "${typeNameKey}"`);
 
 	const remainingResult = processFields({
-		fields: remainingFields,
+		stats: remainingFields,
 		existingNames: updatedNames,
 		config,
 		existing,
@@ -105,7 +105,7 @@ const processFields: ProcessFieldsType = ({
 	});
 
 	return {
-		generatedTypes: new Map<UID, OutputDefs<ExtractSetElement<typeof stats.uniqueValues>>>([
+		generatedTypes: new Map<UID, OutputDefs<ExtractSetElement<typeof stat.uniqueValues>>>([
 			[uid, { typeDef: result.typeDef, segmentDefs: result.segmentDefs, type: typeNameKey } as const],
 			...existing.types,
 			...remainingResult.generatedTypes,
