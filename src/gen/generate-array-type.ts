@@ -6,23 +6,11 @@ import { replacer } from "@utils/replacer";
 import { shouldSplitTypes } from "@utils/should-split-types";
 import { sortMixed } from "@utils/sort";
 
-import type { Config } from "@/types/config.types";
-import type { GeneratedDefs } from "@/types/def.types";
-import type { ElementBase, ProcessedFieldAnalysis } from "@/types/field.types";
-import type { Primitive } from "@/types/gen.types";
+import type { DefsGenerator } from "./types";
 
-type GenerateArrayTypeParams<TName extends string, _TBase extends ElementBase, TUnique extends Primitive> = {
-	stats: ProcessedFieldAnalysis<TUnique>;
-	config: Config;
-	// baseType: TBase;
-	typeName?: TName | undefined;
-};
+type GenerateArrayType = DefsGenerator<"no_base">;
 
-type GenerateArrayTypeType = <TName extends string, TBase extends ElementBase, TUnique extends Primitive>(
-	params: GenerateArrayTypeParams<TName, TBase, TUnique>,
-) => GeneratedDefs<TUnique, TName, ElementBase>;
-
-const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) => {
+const generateArrayType: GenerateArrayType = ({ stats, config, typeName }) => {
 	//
 
 	if (stats.shouldBeLiteralArray && stats.itemType && stats.itemType !== "mixed") {
@@ -110,4 +98,4 @@ const generateArrayType: GenerateArrayTypeType = ({ stats, config, typeName }) =
 };
 
 export { generateArrayType };
-export type { GenerateArrayTypeParams, GenerateArrayTypeType };
+export type { GenerateArrayType };

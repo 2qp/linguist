@@ -8,23 +8,11 @@ import { replacer } from "@utils/replacer";
 import { shouldSplitTypes } from "@utils/should-split-types";
 import { sortMixed } from "@utils/sort";
 
-import type { Config } from "@/types/config.types";
-import type { GeneratedDefs } from "@/types/def.types";
-import type { ElementBase, ProcessedFieldAnalysis } from "@/types/field.types";
-import type { Primitive } from "@/types/gen.types";
+import type { DefsGenerator } from "./types";
 
-type GenerateLiteralTypeParams<T extends Primitive, TBase extends ElementBase, TName extends string> = {
-	stats: ProcessedFieldAnalysis<T>;
-	baseType: TBase;
-	typeName?: TName | undefined;
-	config: Config;
-};
+type GenerateLiteralType = DefsGenerator;
 
-type GenerateLiteralTypeType = <T extends Primitive, TBase extends ElementBase, TName extends string>(
-	params: GenerateLiteralTypeParams<T, TBase, TName>,
-) => GeneratedDefs<T, TName, TBase>;
-
-const generateLiteralType: GenerateLiteralTypeType = ({ baseType, config, stats, typeName = undefined }) => {
+const generateLiteralType: GenerateLiteralType = ({ baseType, config, stats, typeName = undefined }) => {
 	//
 
 	const filteredValues = [...stats.uniqueValues].filter((v) => typeof v === baseType);
@@ -88,4 +76,4 @@ const generateLiteralType: GenerateLiteralTypeType = ({ baseType, config, stats,
 };
 
 export { generateLiteralType };
-export type { GenerateLiteralTypeParams, GenerateLiteralTypeType };
+export type { GenerateLiteralType };

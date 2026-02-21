@@ -9,29 +9,11 @@ import { emitTypesSection } from "@/emit/emit-types-sections";
 import { emitTypeSafeAccessors } from "@/emit/emit-typesafe-accessors";
 import { emitUtilityTypes } from "@/emit/emit-utility-types";
 
-import type { Meta } from "@core/create-meta";
-import type { Ref } from "@core/create-reference";
-import type { Field } from "@/types/branded.types";
-import type { Config } from "@/types/config.types";
-import type { FieldAnalysisArray } from "@/types/field.types";
-import type { Primitive } from "@/types/gen.types";
-import type { LanguageData } from "@/types/lang.types";
+import type { Generator } from "./types";
 
-type GenerateDynamicTypesParams<
-	TSource extends Record<string, unknown> = LanguageData,
-	TField extends string = Field,
-	TUnique extends Primitive = Primitive,
-> = {
-	config: Config;
-	source: TSource;
-	ref: Ref;
-	meta: Meta;
-	stats: FieldAnalysisArray<TField, TUnique>;
-};
+type GenerateDynamicTypes = Generator<string>;
 
-type GenerateDynamicTypesType = (params: GenerateDynamicTypesParams) => string;
-
-const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, source, meta, ref, stats }) => {
+const generateDynamicTypes: GenerateDynamicTypes = ({ config: base, ...params }) => {
 	//
 
 	const config = { ...base, type: { ...base.type, secondary: { ...base.type.secondary, enabled: false } } };
@@ -39,26 +21,23 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, source, 
 	//
 
 	const fields = processFields({
-		fields: stats,
+		...params,
 		config,
-		meta,
-		ref,
 	});
 
 	const name = config.type.naming.languageName;
 
 	// OUTPUTS
-	const output_header = emitAutogenHeader(config.core.name, config, meta);
+	const output_header = emitAutogenHeader(config.core.name, config, params.meta);
 
 	const output_segments = emitSegmentSection(fields.allSegmentDefinitions);
 
 	const output_sorted_types = emitTypesSection(fields.generatedTypes, name);
 
 	const output_language_type = emitLanguageType({
-		stats: fields.updatedFields,
-		types: fields.generatedTypes,
+		fields,
 		config,
-		ref,
+		...params,
 	});
 
 	const output_utility_types = emitUtilityTypes(name);
@@ -66,16 +45,16 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, source, 
 	const output_typesafe_accessors = emitTypeSafeAccessors(name);
 	// const output_validation_helpers = emitValidationHelpers(LANGUAGE_NAME);
 
-	const secondary = emitSecondaryTypes({ config: base, source, stats, ref, meta });
+	const secondary = emitSecondaryTypes({ ...params, config: base, fields });
 
-	const output_typeNames = emitLanguagePropertyTypeName({ types: fields.generatedTypes, config });
+	const output_typeNames = emitLanguagePropertyTypeName({ ...params, fields, config });
 
 	const output = [
 		output_header,
 		//
 		output_segments,
 		output_sorted_types,
-		output_language_type,
+		...output_language_type,
 
 		//
 		...secondary,
@@ -90,16 +69,16 @@ const generateDynamicTypes: GenerateDynamicTypesType = ({ config: base, source, 
 		//
 
 		const stats_output = emitStats({
+			...params,
 			fields,
-			meta,
 			config: base,
 		});
 
-		return [output, stats_output].join("");
+		return [output, ...stats_output].join("");
 	}
 
 	return output;
 };
 
 export { generateDynamicTypes };
-export type { GenerateDynamicTypesParams, GenerateDynamicTypesType };
+export type { GenerateDynamicTypes };

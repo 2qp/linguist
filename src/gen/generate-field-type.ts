@@ -1,23 +1,11 @@
 import { generateArrayType } from "./generate-array-type";
 import { generateLiteralType } from "./generate-literal-type";
 
-import type { Config } from "@/types/config.types";
-import type { GeneratedDefs } from "@/types/def.types";
-import type { ElementBase, ProcessedFieldAnalysis } from "@/types/field.types";
-import type { Primitive } from "@/types/gen.types";
+import type { DefsGenerator } from "./types";
 
-type GenerateFieldTypeParams<TName extends string, _TBase extends ElementBase, TUnique extends Primitive> = {
-	field: string;
-	stats: ProcessedFieldAnalysis<TUnique>;
-	typeName?: TName | undefined;
-	config: Config;
-};
+type GenerateFieldType = DefsGenerator<"no_base">;
 
-type GenerateFieldTypeType = <TName extends string, TBase extends ElementBase, TUnique extends Primitive>(
-	params: GenerateFieldTypeParams<TName, TBase, TUnique>,
-) => GeneratedDefs<TUnique, TName, ElementBase>;
-
-const generateFieldType: GenerateFieldTypeType = ({ stats, typeName = undefined, config }) => {
+const generateFieldType: GenerateFieldType = ({ stats, typeName, config }) => {
 	//
 
 	if (stats.isArray) {
@@ -91,4 +79,4 @@ const generateFieldType: GenerateFieldTypeType = ({ stats, typeName = undefined,
 };
 
 export { generateFieldType };
-export type { GenerateFieldTypeParams, GenerateFieldTypeType };
+export type { GenerateFieldType };

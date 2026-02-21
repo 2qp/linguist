@@ -6,23 +6,10 @@ import { chunkArray } from "@utils/chunk-array";
 import { join } from "@utils/join";
 import { sortMixed } from "@utils/sort";
 
-import type { Config } from "@/types/config.types";
-import type { GeneratedDefs } from "@/types/def.types";
-import type { ElementBase, ProcessedFieldAnalysis } from "@/types/field.types";
-import type { Primitive } from "@/types/gen.types";
+import type { DefsGenerator } from "./types";
 
-type GenerateSegmentedArrayTypeParams<T extends Primitive, TBase extends ElementBase, TName extends string> = {
-	stats: ProcessedFieldAnalysis<T>;
-	baseType: TBase;
-	typeName: TName;
-	config: Config;
-};
-
-type GenerateSegmentedArrayTypeType = <T extends Primitive, TBase extends ElementBase, TName extends string>(
-	params: GenerateSegmentedArrayTypeParams<T, TBase, TName>,
-) => GeneratedDefs<T, TName, TBase>;
-
-const generateSegmentedArrayType: GenerateSegmentedArrayTypeType = ({ stats, baseType, typeName, config }) => {
+type GenerateSegmentedArrayType = DefsGenerator;
+const generateSegmentedArrayType: GenerateSegmentedArrayType = ({ stats, baseType, typeName, config }) => {
 	//
 
 	const filteredValues = [...stats.uniqueValues].filter((v) => typeof v === baseType);
@@ -61,4 +48,4 @@ const generateSegmentedArrayType: GenerateSegmentedArrayTypeType = ({ stats, bas
 };
 
 export { generateSegmentedArrayType };
-export type { GenerateSegmentedArrayTypeParams, GenerateSegmentedArrayTypeType };
+export type { GenerateSegmentedArrayType };
