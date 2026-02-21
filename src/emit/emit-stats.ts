@@ -1,16 +1,6 @@
-import type { Meta } from "@core/create-meta";
-import type { ProcessFieldsReturnType } from "@gen/utils/process-fields";
-import type { Field } from "@/types/branded.types";
-import type { Config } from "@/types/config.types";
-import type { Primitive } from "@/types/gen.types";
+import type { Emitter } from "./types";
 
-type EmitStatsParams<TField extends string = Field, TUnique extends Primitive = Primitive> = {
-	fields: ProcessFieldsReturnType<TField, TUnique>;
-	config: Config;
-	meta: Meta;
-};
-
-type EmitStatsType = (params: EmitStatsParams) => string;
+type EmitStatsType = Emitter;
 
 const emitStats: EmitStatsType = ({ fields, config, meta }) => {
 	//
@@ -67,7 +57,7 @@ const emitStats: EmitStatsType = ({ fields, config, meta }) => {
 		`// Language Name Statistics:\n`,
 		`// Total languages: ${meta.languageCount}\n`,
 		output_lang_split_into,
-	].join("");
+	];
 };
 
 export { emitStats };

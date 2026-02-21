@@ -1,18 +1,13 @@
 import { join } from "@utils/join";
 
-import type { UID } from "@/types/branded.types";
-import type { Config } from "@/types/config.types";
-import type { GeneratedDefs } from "@/types/def.types";
-import type { Primitive } from "@/types/gen.types";
+import type { Emitter } from "./types";
 
-type EmitLanguagePropertyTypeNameParams = { types: Map<UID, GeneratedDefs<Primitive, string>>; config: Config };
+type EmitLanguagePropertyTypeName = Emitter<`export type LanguagePropertyTypeName = "${string}" | "${string}";\n\n`>;
 
-type EmitLanguagePropertyTypeNameType = (
-	params: EmitLanguagePropertyTypeNameParams,
-) => `export type LanguagePropertyTypeName = "${string}" | "${string}";\n\n`;
-
-const emitLanguagePropertyTypeName: EmitLanguagePropertyTypeNameType = ({ types, config }) => {
+const emitLanguagePropertyTypeName: EmitLanguagePropertyTypeName = ({ config, fields }) => {
 	//
+
+	const types = fields.generatedTypes;
 
 	const existing = [`"${config.type.naming.language}"`] as const;
 
@@ -34,4 +29,4 @@ const emitLanguagePropertyTypeName: EmitLanguagePropertyTypeNameType = ({ types,
 };
 
 export { emitLanguagePropertyTypeName };
-export type { EmitLanguagePropertyTypeNameParams, EmitLanguagePropertyTypeNameType };
+export type { EmitLanguagePropertyTypeName };

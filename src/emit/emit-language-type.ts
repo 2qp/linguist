@@ -1,42 +1,32 @@
-import { generateFieldType } from "@gen/generate-field-type";
+import type { UID } from "@/types/branded.types";
+import type { Emitter } from "./types";
 
-import type { Ref } from "@core/create-reference";
-import type { Config } from "@/types/config.types";
-import type { GeneratedDefs } from "@/types/def.types";
-import type { ProcessedFieldAnalysisArray } from "@/types/field.types";
-import type { Primitive } from "@/types/gen.types";
+type EmitLanguageType = Emitter;
 
-type EmitLanguageTypeParams = {
-	stats: ProcessedFieldAnalysisArray;
-	types: Map<string, GeneratedDefs<Primitive, string>>;
-	config: Config;
-	ref: Ref;
-};
-
-type EmitLanguageTypeType = (params: EmitLanguageTypeParams) => string;
-
-const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
-	const fields = stats.flatMap(([field, stats]) => {
+const emitLanguageType: EmitLanguageType = ({ config, fields }) => {
+	const fields_out = fields.updatedFields.flatMap(([field, stats]) => {
 		//
 
-		const typeNames = [...types].map(([segUid, def]) => {
+		const typeNames = [...fields.generatedTypes].map(([segUid, def]) => {
 			//
 
 			const uid = stats.uid;
 
 			if (uid !== segUid) return undefined;
 
-			return def.type;
+			return [uid, def.type];
 		});
 
 		const result = typeNames
-			.filter((i) => i !== undefined)
-			.map((name) => {
-				const typeDef = name ? name : generateFieldType({ field, stats, config }).typeDef;
+			.filter((i): i is [UID, string] => i !== undefined && i[0] !== undefined && i[1] !== undefined)
+			.map(([_uid, name]) => {
+				//
+
+				const typeDef = name;
 
 				const optional = stats.isOptional ? "?" : "";
 
-				return `  ${field}${optional}: ${typeDef};\n`;
+				return `	${field}${optional}: ${typeDef};\n`;
 			});
 
 		return result;
@@ -53,7 +43,7 @@ const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
 		const start = `\nexport type ${name} = {\n`;
 		const end = `}\n\n` as const;
 
-		return [start, ...fields, end].join("");
+		return [start, ...fields_out, end];
 	}
 
 	const name = config.type.naming.language;
@@ -61,8 +51,23 @@ const emitLanguageType: EmitLanguageTypeType = ({ stats, types, config }) => {
 	const start = `\nexport type ${name} = {\n`;
 	const end = `}\n\n` as const;
 
-	return [start, ...fields, end].join("");
+	return [start, ...fields_out, end];
 };
 
 export { emitLanguageType };
-export type { EmitLanguageTypeParams, EmitLanguageTypeType };
+
+// MARK: NOTES
+
+// if needed inline typedef rather than referencing exported type
+// export type Language = {  ace_mode: (typeof ACE_MODE_1[number] |
+//
+
+//
+// const res = getMappedFieldOrType({
+// 	value: field,
+// 	from: "field",
+// 	to: "type",
+// 	remapper: config.type.naming.fields,
+// });
+// const segmentBaseTypeName = res.resolved ? res.value : normalizeName(field).constant;
+// const typeName = generateUniqueTypeName(segmentBaseTypeName, new Set());
