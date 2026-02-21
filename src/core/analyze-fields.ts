@@ -2,7 +2,7 @@ import { createFieldSet } from "@gen/utils/create-field-set";
 
 import type { Field } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
-import type { FieldAnalysis, FieldAnalysisArray } from "@/types/field.types";
+import type { ElementType, FieldAnalysis, FieldAnalysisArray } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 import type { LanguageData } from "@/types/lang.types";
 import type { WithPhase } from "@/types/phantom.types";
@@ -19,13 +19,13 @@ type AnalyzeFieldsParams<TSource extends LanguageData> = {
 // ) => FieldAnalysisMap<TField>;
 
 type AnalyzeFieldsOverloaded = {
-	<TSource extends LanguageData, TField extends keyof TSource[keyof TSource]>(
+	<TSource extends LanguageData, TField extends keyof TSource[keyof TSource], TUnique extends Primitive = Primitive>(
 		params: AnalyzeFieldsParams<TSource> & WithPhase<"transform">,
-	): FieldAnalysisArray<TField>;
+	): FieldAnalysisArray<TField, TUnique>;
 
-	<TSource extends LanguageData>(
+	<TSource extends LanguageData, TUnique extends Primitive = Primitive>(
 		params: AnalyzeFieldsParams<TSource> & Partial<WithPhase<"generate">>,
-	): FieldAnalysisArray<Field>;
+	): FieldAnalysisArray<Field, TUnique>;
 };
 
 const analyzeFields: AnalyzeFieldsOverloaded = <TSource extends LanguageData>({
@@ -63,9 +63,9 @@ const analyzeFields: AnalyzeFieldsOverloaded = <TSource extends LanguageData>({
 
 		const itemTypes = new Set<string>(arrayItems.map((item) => typeof item));
 
-		const itemType: "string" | "number" | "boolean" | "mixed" =
+		const itemType: ElementType =
 			itemTypes.size === 1
-				? ((): "string" | "number" | "boolean" | "mixed" => {
+				? ((): ElementType => {
 						const t = Array.from(itemTypes)[0];
 						return t === "string" || t === "number" || t === "boolean" ? t : "mixed";
 					})()
