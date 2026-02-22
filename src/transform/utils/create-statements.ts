@@ -8,9 +8,10 @@ type FallBackPatterns =
 	| LanguagePropertyTypeName
 	| `${LanguagePropertyTypeName}[]`
 	| `ReadonlyArray<${LanguagePropertyTypeName}>`
-	| `undefined`;
+	| `undefined`
+	| (string & {});
 
-type TypeStatement = LanguagePropertyTypeName | `FallbackForUnknownKeys`;
+type TypeStatement = LanguagePropertyTypeName | `FallbackForUnknownKeys` | (string & {});
 
 type CreateStatementsParams<TName extends string, TFalls extends FallBackPatterns[], TTypes extends TypeStatement[]> = {
 	name: TName;
