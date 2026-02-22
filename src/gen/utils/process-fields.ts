@@ -30,7 +30,7 @@ type ProcessFieldsReturnType<TField = Field, TUnique extends Primitive = Primiti
 	generatedTypes: OutputMap<TUnique>;
 	allSegmentDefinitions: string[];
 	updatedExistingNames: Set<string>;
-	updatedFields: ProcessedFieldAnalysisArray<TField, TUnique>;
+	stats: ProcessedFieldAnalysisArray<TField, TUnique>;
 };
 
 type ProcessFieldsType = <TField extends string = Field, TUnique extends Primitive = Primitive>(
@@ -55,7 +55,7 @@ const processFields: ProcessFieldsType = ({
 			generatedTypes: new Map(existing.types),
 			allSegmentDefinitions: [...existing.segments],
 			updatedExistingNames: existingNames,
-			updatedFields: [],
+			stats: [],
 		};
 	}
 
@@ -112,7 +112,7 @@ const processFields: ProcessFieldsType = ({
 		] as const),
 		allSegmentDefinitions: [...result.segmentDefs, ...remainingResult.allSegmentDefinitions, ...existing.segments],
 		updatedExistingNames: remainingResult.updatedExistingNames,
-		updatedFields: [[field, newStats], ...remainingResult.updatedFields],
+		stats: [[field, newStats], ...remainingResult.stats],
 	};
 };
 

@@ -5,7 +5,7 @@ type EmitStatsType = Emitter;
 const emitStats: EmitStatsType = ({ fields, config, meta }) => {
 	//
 
-	const stats = fields.updatedFields;
+	const stats = fields.stats;
 
 	const stats_out = stats
 		.map(([field, stats]) => {

@@ -4,7 +4,7 @@ import type { Emitter } from "./types";
 type EmitLanguageType = Emitter;
 
 const emitLanguageType: EmitLanguageType = ({ config, fields }) => {
-	const fields_out = fields.updatedFields.flatMap(([field, stats]) => {
+	const fields_out = fields.stats.flatMap(([field, stats]) => {
 		//
 
 		const typeNames = [...fields.generatedTypes].map(([segUid, def]) => {
