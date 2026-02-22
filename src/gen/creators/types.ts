@@ -1,5 +1,6 @@
 import type { Meta } from "@core/create-meta";
 import type { Ref } from "@core/create-reference";
+import type { ProcessFieldsReturnType } from "@gen/utils/process-fields";
 import type { Field } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
 import type { FieldAnalysisArray } from "@/types/field.types";
@@ -13,6 +14,7 @@ type CreatorParams<
 > = {
 	source: TSource;
 	stats: FieldAnalysisArray<TField, TUnique>;
+	fields: ProcessFieldsReturnType<TField, TUnique>;
 	config: Config;
 	ref: Ref;
 	meta: Meta;

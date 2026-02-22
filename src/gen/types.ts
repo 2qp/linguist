@@ -6,6 +6,7 @@ import type { GeneratedDefs } from "@/types/def.types";
 import type { ElementBase, FieldAnalysisArray, ProcessedFieldAnalysis } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 import type { LanguageData } from "@/types/lang.types";
+import type { ProcessFieldsReturnType } from "./utils/process-fields";
 
 type DefsGeneratorParams<
 	TName extends string = string,
@@ -55,6 +56,7 @@ type GeneratorParams<
 	ref: Ref;
 	meta: Meta;
 	stats: FieldAnalysisArray<TField, TUnique>;
+	fields: ProcessFieldsReturnType<TField, TUnique>;
 };
 
 type Generator<R = Promise<void>> = <

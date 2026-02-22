@@ -1,4 +1,3 @@
-import { processFields } from "./utils/process-fields";
 import { emitAutogenHeader } from "@/emit/emit-autogen-header";
 import { emitLanguagePropertyTypeName } from "@/emit/emit-language-property-type-name";
 import { emitLanguageType } from "@/emit/emit-language-type";
@@ -20,34 +19,25 @@ const generateDynamicTypes: GenerateDynamicTypes = ({ config: base, ...params })
 
 	//
 
-	const fields = processFields({
-		...params,
-		config,
-	});
-
 	const name = config.type.naming.languageName;
 
 	// OUTPUTS
 	const output_header = emitAutogenHeader(config.core.name, config, params.meta);
 
-	const output_segments = emitSegmentSection(fields.allSegmentDefinitions);
+	const output_segments = emitSegmentSection(params.fields.allSegmentDefinitions);
 
-	const output_sorted_types = emitTypesSection(fields.generatedTypes, name);
+	const output_sorted_types = emitTypesSection(params.fields.generatedTypes, name);
 
-	const output_language_type = emitLanguageType({
-		fields,
-		config,
-		...params,
-	});
+	const output_language_type = emitLanguageType({ config, ...params });
 
 	const output_utility_types = emitUtilityTypes(name);
 
 	const output_typesafe_accessors = emitTypeSafeAccessors(name);
 	// const output_validation_helpers = emitValidationHelpers(LANGUAGE_NAME);
 
-	const secondary = emitSecondaryTypes({ ...params, config: base, fields });
+	const secondary = emitSecondaryTypes({ ...params, config: base });
 
-	const output_typeNames = emitLanguagePropertyTypeName({ ...params, fields, config });
+	const output_typeNames = emitLanguagePropertyTypeName({ ...params, config });
 
 	const output = [
 		output_header,
@@ -68,11 +58,7 @@ const generateDynamicTypes: GenerateDynamicTypes = ({ config: base, ...params })
 	if (config.type.showFieldStats) {
 		//
 
-		const stats_output = emitStats({
-			...params,
-			fields,
-			config: base,
-		});
+		const stats_output = emitStats({ ...params, config: base });
 
 		return [output, ...stats_output].join("");
 	}

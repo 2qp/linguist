@@ -2,6 +2,7 @@ import { analyzeFields } from "@core/analyze-fields";
 import { createMeta } from "@core/create-meta";
 import { createReference } from "@core/create-reference";
 import { generateTypes } from "@gen/generate-types";
+import { processFields } from "@gen/utils/process-fields";
 import { getFile } from "@services/fetch/get-file";
 import { buildEntries } from "@utils/build-entries";
 import { configLoader } from "@/infra/loaders/config-loader";
@@ -31,9 +32,11 @@ const generate: GenerateType = async () => {
 
 	const ref = createReference({ config, source });
 	const meta = createMeta({ config, source, ref });
-	const stats = analyzeFields({ source, config, ref });
 
-	await generateTypes({ source, config, ref, meta, stats });
+	const stats = analyzeFields({ source, config, ref });
+	const fields = processFields({ config, meta, stats, ref });
+
+	await generateTypes({ source, config, ref, meta, stats, fields });
 	await transform({ source, config });
 
 	await writeBuildInfo({ buffer: yamlBuffer, config });
