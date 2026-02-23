@@ -1,6 +1,6 @@
-declare const brand: unique symbol;
+declare const __brand: unique symbol;
 
-type Brand<T, B> = T & { readonly [brand]: B };
+type Brand<T, B> = T & { readonly [__brand]: B };
 
 /**
  * uid of a `Field` type
