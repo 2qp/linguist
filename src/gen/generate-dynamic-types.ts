@@ -12,10 +12,8 @@ import type { Generator } from "./types";
 
 type GenerateDynamicTypes = Generator<string>;
 
-const generateDynamicTypes: GenerateDynamicTypes = ({ config: base, ...params }) => {
+const generateDynamicTypes: GenerateDynamicTypes = ({ config, ...params }) => {
 	//
-
-	const config = { ...base, type: { ...base.type, secondary: { ...base.type.secondary, enabled: false } } };
 
 	//
 
@@ -35,7 +33,7 @@ const generateDynamicTypes: GenerateDynamicTypes = ({ config: base, ...params })
 	const output_typesafe_accessors = emitTypeSafeAccessors(name);
 	// const output_validation_helpers = emitValidationHelpers(LANGUAGE_NAME);
 
-	const secondary = emitSecondaryTypes({ ...params, config: base });
+	const secondary = emitSecondaryTypes({ ...params, config });
 
 	const output_typeNames = emitLanguagePropertyTypeName({ ...params, config });
 
@@ -58,7 +56,7 @@ const generateDynamicTypes: GenerateDynamicTypes = ({ config: base, ...params })
 	if (config.type.showFieldStats) {
 		//
 
-		const stats_output = emitStats({ ...params, config: base });
+		const stats_output = emitStats({ ...params, config });
 
 		return [output, ...stats_output].join("");
 	}

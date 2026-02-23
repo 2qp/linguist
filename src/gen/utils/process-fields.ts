@@ -7,6 +7,7 @@ import type { Meta } from "@core/create-meta";
 import type { Ref } from "@core/create-reference";
 import type { Field, UID } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
+import type { Role } from "@/types/core.types";
 import type { FieldAnalysisArray, ProcessedFieldAnalysis, ProcessedFieldAnalysisArray } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 import type { OutputDefs, OutputMap } from "@/types/output.types";
@@ -19,6 +20,7 @@ type ProcessFieldsParams<TField extends string = Field, TUnique extends Primitiv
 	existingNames?: Set<string>;
 	ref?: Ref | undefined;
 	meta: Meta;
+	_role?: Role;
 };
 
 type Existing<TUnique extends Primitive = Primitive> = {
@@ -40,13 +42,14 @@ type ProcessFieldsType = <TField extends string = Field, TUnique extends Primiti
 const processFields: ProcessFieldsType = ({
 	stats,
 	config,
-	existingNames = new Set(),
 	meta,
 	ref,
+	existingNames = new Set(),
 	existing = {
 		segments: [],
 		types: new Map<UID, OutputDefs<ExtractSetElement<(typeof stats)[0][1]["uniqueValues"]>>>(),
 	},
+	_role = "primary",
 }) => {
 	//
 
@@ -69,7 +72,7 @@ const processFields: ProcessFieldsType = ({
 		parseFloat(usagePercent) >= config.type.minUsagePercent;
 
 	if (!shouldGenerateType) {
-		return processFields({ stats: remainingFields, config, existing, existingNames, ref, meta });
+		return processFields({ stats: remainingFields, config, existing, existingNames, ref, meta, _role });
 	}
 
 	const res = getMappedFieldOrType({ value: field, from: "field", to: "type", remapper: config.type.naming.fields });
@@ -77,7 +80,7 @@ const processFields: ProcessFieldsType = ({
 	const segmentBaseTypeName = res.resolved ? res.value : normalizeName(field).constant;
 	const segmentOwnerBaseTypeName = res.resolved ? res.value : normalizeName(field).typeName;
 
-	const secondary = config.type.secondary.enabled;
+	const secondary = _role === "secondary" && config.type.secondary.enabled;
 	const prefix = secondary ? config.type.naming.secondaryPrefix : "";
 
 	const typeNameKey = generateUniqueTypeName(`${prefix}${segmentOwnerBaseTypeName}`, existingNames);
@@ -102,6 +105,7 @@ const processFields: ProcessFieldsType = ({
 		existing,
 		meta,
 		ref,
+		_role,
 	});
 
 	return {

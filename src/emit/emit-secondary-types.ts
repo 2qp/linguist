@@ -17,6 +17,7 @@ const emitSecondaryTypes: EmitSecondaryTypesType = ({ config: rawConfig, ...para
 	const fields = processFields({
 		...params,
 		config,
+		_role: "secondary",
 	});
 
 	const name = `${config.type.naming.secondaryPrefix}${config.type.naming.languageName}`;
@@ -27,6 +28,7 @@ const emitSecondaryTypes: EmitSecondaryTypesType = ({ config: rawConfig, ...para
 		...params,
 		fields,
 		config,
+		_role: "secondary",
 	});
 
 	const strict = [output_strict_sorted_types, ...output_strict_language_type];

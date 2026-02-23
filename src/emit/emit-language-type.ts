@@ -3,7 +3,7 @@ import type { Emitter } from "./types";
 
 type EmitLanguageType = Emitter;
 
-const emitLanguageType: EmitLanguageType = ({ config, fields }) => {
+const emitLanguageType: EmitLanguageType = ({ config, fields, _role = "primary" }) => {
 	const fields_out = fields.stats.flatMap(([field, stats]) => {
 		//
 
@@ -35,7 +35,7 @@ const emitLanguageType: EmitLanguageType = ({ config, fields }) => {
 	// console.log(stats, "STATS");
 	// console.log(types, "TYPES ");
 
-	if (config.type.secondary.enabled) {
+	if (_role === "secondary" && config.type.secondary.enabled) {
 		//
 
 		const name = `${config.type.naming.secondaryPrefix}${config.type.naming.language}`;
