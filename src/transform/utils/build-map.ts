@@ -1,3 +1,5 @@
+import { isNullish } from "@utils/guards";
+
 import type { ExtractArrayElement } from "@/types/utility.types";
 
 type BuildMapParams<T, Left, Right> = {
@@ -38,19 +40,19 @@ const buildMap = <
 		const key = language[left];
 		const value = language[right];
 
-		if (!key) continue;
+		if (isNullish(key)) continue;
 		if (!Array.isArray(key)) continue;
 
 		for (const item of key as T[K][Left][]) {
 			//
 
-			if (item === null || item === undefined) continue;
+			if (isNullish(item)) continue;
 
 			const keyItem = item as ExtractArrayElement<T[K][Left] & {}>;
 
 			const exist = map.get(keyItem);
 
-			if (!exist) {
+			if (isNullish(exist)) {
 				map.set(keyItem, new Set([value]));
 			}
 

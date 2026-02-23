@@ -1,3 +1,5 @@
+import { isNullish } from "@utils/guards";
+
 import type { Config } from "@/types/config.types";
 import type { HomogeneousArray } from "@/types/utility.types";
 
@@ -32,7 +34,7 @@ const createValueArray = <
 		if (!language) continue;
 
 		const element = language[field] as TSource[keyof TSource][TField];
-		if (element === undefined || element === null) continue;
+		if (isNullish(element)) continue;
 
 		if (!Array.isArray(element)) {
 			values.add(element);

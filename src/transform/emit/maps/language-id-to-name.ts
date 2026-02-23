@@ -1,3 +1,4 @@
+import { isNullish } from "@utils/guards";
 import { stringify } from "safe-stable-stringify";
 import { createFallback } from "@/transform/utils/create-fallback";
 
@@ -17,7 +18,7 @@ const emitLanguageIdToName: MapEmitterType = ({ languages, config }): string => 
 
 			const id = languageData?.language_id;
 
-			if (!id) continue;
+			if (isNullish(id)) continue;
 
 			langIdToNameMap.set(id, languageName);
 		}

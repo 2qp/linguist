@@ -1,3 +1,5 @@
+import { isNullish } from "@utils/guards";
+
 import type { Language, LanguageName, Languages } from "@/types/generated.types";
 import type { Entries } from "@/types/utility.types";
 
@@ -55,7 +57,7 @@ const emitManifest: EmitManifestType = ({ config, languages }) => {
 
 		const payload = config.isCustom ? createCustom() : data;
 
-		if (!data) continue;
+		if (isNullish(data)) continue;
 
 		if (!Array.isArray(data) || config.isCustom) {
 			map.set(key, payload);
@@ -64,7 +66,7 @@ const emitManifest: EmitManifestType = ({ config, languages }) => {
 
 		for (const extension of data) {
 			const exist = map.get(extension);
-			if (!exist) {
+			if (isNullish(exist)) {
 				map.set(extension, new Set([set]));
 				continue;
 			}
