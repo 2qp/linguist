@@ -1,5 +1,6 @@
 import { normalizeName } from "./normalize-name";
 import { join } from "@utils/join";
+import { safeReplacer } from "@utils/safe-replacer";
 
 import type { Config } from "@/types/config.types";
 import type { LanguagePropertyTypeName } from "@/types/generated.types";
@@ -11,15 +12,23 @@ type FallBackPatterns =
 	| `undefined`
 	| (string & {});
 
+type Wrapper = "ReadonlyArray<$>" | "Partial<$>" | "$";
+
 type TypeStatement = LanguagePropertyTypeName | `FallbackForUnknownKeys` | (string & {});
 
-type CreateStatementsParams<TName extends string, TFalls extends FallBackPatterns[], TTypes extends TypeStatement[]> = {
+type CreateStatementsParams<
+	TName extends string,
+	TFalls extends FallBackPatterns[],
+	TTypes extends TypeStatement[],
+	TWrapper extends Wrapper,
+> = {
 	name: TName;
 	obj: string;
 	typeObj?: string;
 	falls: TFalls;
 	types: TTypes;
 	config: Config;
+	wrapper?: TWrapper;
 };
 
 // type CreateStatements = <const TName extends string>(params: CreateStatementsParams<TName>) => void;
@@ -28,6 +37,7 @@ const createStatements = <
 	const TName extends string,
 	const TFalls extends FallBackPatterns[],
 	const TTypes extends TypeStatement[],
+	const TWrapper extends Wrapper,
 >({
 	name,
 	obj,
@@ -35,7 +45,8 @@ const createStatements = <
 	types,
 	config,
 	typeObj = "",
-}: CreateStatementsParams<TName, TFalls, TTypes>) => {
+	wrapper = "$" as TWrapper,
+}: CreateStatementsParams<TName, TFalls, TTypes, TWrapper>) => {
 	//
 
 	const { varName, typeName, ...norm } = normalizeName(name);
@@ -60,6 +71,8 @@ const createStatements = <
 
 	//
 	const prefixedVarTemplate = `const _${varName} = ${obj} as const;` as const;
+
+	const fallsWrapped = safeReplacer(wrapper, "$" as const, join(falls, " | "));
 
 	const varFallbackTypeArray = [
 		`const ${varName}: typeof _${varName}`,
@@ -99,6 +112,8 @@ const createStatements = <
 			typeAsyncFallbackTemplate,
 			fallbackTemplate,
 			asyncFallbackTemplate,
+			fallsWrapped,
+			falls,
 		},
 	} as const;
 
