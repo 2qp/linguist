@@ -32,7 +32,7 @@ const createValueArray = <
 		if (!language) continue;
 
 		const element = language[field] as TSource[keyof TSource][TField];
-		if (!element) continue;
+		if (element === undefined || element === null) continue;
 
 		if (!Array.isArray(element)) {
 			values.add(element);
