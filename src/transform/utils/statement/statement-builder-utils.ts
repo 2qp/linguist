@@ -13,5 +13,7 @@ const wrapAsConst = <const T extends string>(str: T) => `${str} as const;` as co
 const createConst = <const TName extends string, const TValue extends string>(name: TName, value: TValue) =>
 	`const ${name} = ${value}` as const;
 
-export { createConst, getWrapped, wrapAsConst };
+const createExport = <const TName extends string>(name: TName) => `export { ${name} };` as const;
+
+export { createConst, createExport, getWrapped, wrapAsConst };
 export type { Wrapper };
