@@ -1,12 +1,7 @@
 import { join } from "@utils/join";
 import { safeReplacer } from "@utils/safe-replacer";
 
-type Wrapper =
-	| "ReadonlyArray<$>"
-	| "Partial<$>"
-	| "FallbackForUnknownKeys<$>"
-	| "FallbackForUnknownKeys<() => Promise<$>>"
-	| "$";
+import type { Wrapper } from "@/types/statement.types";
 
 const getWrapped = <const TSource extends string[], TWrapper extends Wrapper>(
 	input: TSource,
@@ -43,4 +38,3 @@ const createExportType = <const TTypeName extends string>(typeName: TTypeName) =
 	`export type { ${typeName} };` as const;
 
 export { addType, createConst, createExport, createExportType, createType, extendType, getWrapped, wrapAsConst };
-export type { Wrapper };
