@@ -161,7 +161,7 @@ const sanitizeConstant = <const TName extends string>(str: TName): Uppercase<TNa
 	return transformed;
 };
 
-const sanitizeVarName = (str: string) => {
+const sanitizeVarName = <const TName extends string>(str: TName) => {
 	const regex = new RegExp(`[${Object.keys(SPECIAL_CHAR_REPLACEMENTS).map(escapeForCharClass).join("")}]`, "g");
 
 	const replaced = str.replace(
@@ -172,12 +172,12 @@ const sanitizeVarName = (str: string) => {
 	const prevResult = replaced.replace(/[^a-zA-Z0-9_$]/g, "_");
 	const result = prevResult.toLowerCase();
 
-	if (!result) return "_unknown";
-	return /^\d/.test(result) ? `_${result}` : result;
+	if (!result) return "_unknown" as const;
+	return /^\d/.test(result) ? (`_${result}` as const) : result;
 };
 
 type NormalizedName<TName extends string = string> = {
-	key: string;
+	name: TName;
 	varName: string;
 	varNameCamel: string;
 	typeName: string;
@@ -193,7 +193,7 @@ const normalizeName: NormalizeName = (name) => {
 	//
 
 	return {
-		key: name,
+		name,
 		varName: sanitizeVarName(name),
 		varNameCamel: toCamelCase(sanitizeVarName(name)),
 		typeName: sanitizeTypeName(name),
