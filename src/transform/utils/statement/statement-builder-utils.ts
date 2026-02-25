@@ -1,7 +1,12 @@
 import { join } from "@utils/join";
 import { safeReplacer } from "@utils/safe-replacer";
 
-type Wrapper = "ReadonlyArray<$>" | "Partial<$>" | "FallbackForUnknownKeys<$>" | "$";
+type Wrapper =
+	| "ReadonlyArray<$>"
+	| "Partial<$>"
+	| "FallbackForUnknownKeys<$>"
+	| "FallbackForUnknownKeys<() => Promise<$>>"
+	| "$";
 
 const getWrapped = <const TSource extends string[], TWrapper extends Wrapper>(
 	input: TSource,
@@ -23,8 +28,19 @@ const createType =
 	<const TVarName extends string>(varName: TVarName) =>
 		`type ${typeName} = typeof ${varName};` as const;
 
+const addType =
+	<const TType extends string>(type: TType) =>
+	<const TStatement extends string>(str: TStatement) =>
+		safeReplacer(str, " = ", `: ${type} = `);
+
+const extendType =
+	<const TType extends string>(type: TType) =>
+	<const TExtender extends string>(extender: TExtender) =>
+	<const TStatement extends string>(str: TStatement) =>
+		safeReplacer(str, " = ", `${type} & ${extender} = `);
+
 const createExportType = <const TTypeName extends string>(typeName: TTypeName) =>
 	`export type { ${typeName} };` as const;
 
-export { createConst, createExport, createExportType, createType, getWrapped, wrapAsConst };
+export { addType, createConst, createExport, createExportType, createType, extendType, getWrapped, wrapAsConst };
 export type { Wrapper };

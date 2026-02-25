@@ -1,5 +1,16 @@
-import { createConst, createExport, createExportType, createType, wrapAsConst } from "./statement-builder-utils";
+import {
+	addType,
+	createConst,
+	createExport,
+	createExportType,
+	createType,
+	extendType,
+	getWrapped,
+	wrapAsConst,
+} from "./statement-builder-utils";
 import { join } from "@utils/join";
+
+import type { Wrapper } from "./statement-builder-utils";
 
 type CreateStatementBuilderParams = {};
 
@@ -63,6 +74,17 @@ const createStatementBuilder = () => {
 					build: () => createType(typeName)(`${prefix}${varName}`),
 					export: () => ({
 						build: () => createExportType(typeName),
+					}),
+				}),
+
+				typeof: () => ({
+					build: () => addType(`typeof ${prefix}${varName}`)(createConst(varName, `${prefix}${varName}`, ";")),
+
+					wrap: <const TWrapper extends Wrapper, const TTypes extends string[]>(wrapper: TWrapper, types: TTypes) => ({
+						build: () =>
+							extendType("")(getWrapped(types, wrapper))(
+								addType(`typeof ${prefix}${varName}`)(createConst(varName, `${prefix}${varName}`, ";")),
+							),
 					}),
 				}),
 			}),
