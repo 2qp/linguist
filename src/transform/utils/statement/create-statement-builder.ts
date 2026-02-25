@@ -44,6 +44,28 @@ const createStatementBuilder = () => {
 					build: () => createExportType(typeName),
 				}),
 			}),
+
+			//
+			prefix: <const TPrefix extends string>(prefix: TPrefix) => ({
+				value: <const TValue extends string>(value: TValue) => ({
+					build: () => createConst(`${prefix}${varName}`, value, ";"),
+
+					asConst: () => ({
+						build: () => wrapAsConst(createConst(`${prefix}${varName}`, value, "")),
+					}),
+
+					export: () => ({
+						build: () => createExport(`${prefix}${varName}`),
+					}),
+				}),
+
+				type: <const TTypeName extends string>(typeName: TTypeName) => ({
+					build: () => createType(typeName)(`${prefix}${varName}`),
+					export: () => ({
+						build: () => createExportType(typeName),
+					}),
+				}),
+			}),
 		}),
 	};
 
