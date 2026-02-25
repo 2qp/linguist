@@ -27,7 +27,11 @@ const createStatementBuilder = () => {
 
 		var: <const TName extends string>(varName: TName) => ({
 			value: <const TValue extends string>(value: TValue) => ({
-				build: () => wrapAsConst(createConst(varName, value)),
+				build: () => createConst(varName, value, ";"),
+
+				asConst: () => ({
+					build: () => wrapAsConst(createConst(varName, value, "")),
+				}),
 
 				export: () => ({
 					build: () => createExport(varName),

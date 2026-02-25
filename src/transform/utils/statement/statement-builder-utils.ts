@@ -10,8 +10,11 @@ const getWrapped = <const TSource extends string[], TWrapper extends Wrapper>(
 
 const wrapAsConst = <const T extends string>(str: T) => `${str} as const;` as const;
 
-const createConst = <const TName extends string, const TValue extends string>(name: TName, value: TValue) =>
-	`const ${name} = ${value}` as const;
+const createConst = <const TName extends string, const TValue extends string, const TTrailing extends string>(
+	name: TName,
+	value: TValue,
+	trailing: TTrailing,
+) => `const ${name} = ${value}${trailing}` as const;
 
 const createExport = <const TName extends string>(name: TName) => `export { ${name} };` as const;
 
