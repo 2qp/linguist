@@ -1,4 +1,4 @@
-import { createConst, createExport, wrapAsConst } from "./statement-builder-utils";
+import { createConst, createExport, createExportType, createType, wrapAsConst } from "./statement-builder-utils";
 import { join } from "@utils/join";
 
 type CreateStatementBuilderParams = {};
@@ -25,6 +25,11 @@ const createStatementBuilder = () => {
 		var: <const TName extends string>(varName: TName) => ({
 			build: <const TValue extends string>(value: TValue) => wrapAsConst(createConst(varName, value)),
 			export: () => createExport(varName),
+
+			type: <const TTypeName extends string>(typeName: TTypeName) => ({
+				build: () => createType(typeName)(varName),
+				export: () => createExportType(typeName),
+			}),
 		}),
 	};
 
@@ -32,4 +37,4 @@ const createStatementBuilder = () => {
 };
 
 export { createStatementBuilder };
-export type { CreateStatementBuilderParams, CreateStatementBuilder };
+export type { CreateStatementBuilder, CreateStatementBuilderParams };

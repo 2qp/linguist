@@ -15,5 +15,13 @@ const createConst = <const TName extends string, const TValue extends string>(na
 
 const createExport = <const TName extends string>(name: TName) => `export { ${name} };` as const;
 
-export { createConst, createExport, getWrapped, wrapAsConst };
+const createType =
+	<const TTypeName extends string>(typeName: TTypeName) =>
+	<const TVarName extends string>(varName: TVarName) =>
+		`type ${typeName} = typeof ${varName};` as const;
+
+const createExportType = <const TTypeName extends string>(typeName: TTypeName) =>
+	`export type { ${typeName} };` as const;
+
+export { createConst, createExport, createExportType, createType, getWrapped, wrapAsConst };
 export type { Wrapper };
