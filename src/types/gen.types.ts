@@ -12,6 +12,8 @@ type Parenthesize<T extends Primitive> = `(${T})`;
 
 type QuoteString<T> = T extends string ? `"${T}"` : T extends Exclude<Primitive, string> ? T : never;
 
+type ToString<T> = T extends Primitive ? `${T}` : never;
+
 // type SelfPair<T extends ElementBase = ElementBase> = {
 // 	[K in T]: `${Parenthesize<K>} | ${Parenthesize<Flex<K>>}`;
 // }[T] & {};
@@ -70,4 +72,5 @@ export type {
 	SelfPair,
 	TEleExpr,
 	TEleListExpr,
+	ToString,
 };

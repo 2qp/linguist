@@ -10,7 +10,8 @@ import {
 } from "./statement-builder-utils";
 import { join } from "@utils/join";
 
-import type { ImportableType, SL, TypeRef, Wrapper } from "@/types/statement.types";
+import type { ToString } from "@/types/gen.types";
+import type { From, ImportableType, SL, TypeRef, Wrapper } from "@/types/statement.types";
 
 type CreateStatementBuilderParams = {};
 
@@ -23,15 +24,16 @@ const createStatementBuilder = () => {
 		//
 
 		import: () => ({
-			types: <const TTypes extends ImportableType[]>(types: TTypes) => ({
-				from: <const TPath extends string>(path: TPath) => ({
-					build: () => `import type { ${join(types, ", ")} } from "${path}";` as const,
+			types: <const TStrict extends ImportableType[], const TLoose extends string[]>(...args: SL<TStrict, TLoose>) => ({
+				from: <const TPaths, const TPath extends keyof TPaths>(...[paths, path]: From<TPaths, TPath>) => ({
+					build: () =>
+						`import type { ${join([...args[0], ...args[1]], ", ")} } from "${paths[path] as ToString<TPaths[TPath]>}";` as const,
 				}),
 			}),
 
 			values: <const TValues extends string[]>(values: TValues) => ({
-				from: <const TPath extends string>(path: TPath) => ({
-					build: () => `import { ${join(values, ", ")} } from "${path}";` as const,
+				from: <const TPaths, const TPath extends keyof TPaths>(...[paths, path]: From<TPaths, TPath>) => ({
+					build: () => `import { ${join(values, ", ")} } from "${paths[path] as ToString<TPaths[TPath]>}";` as const,
 				}),
 			}),
 		}),

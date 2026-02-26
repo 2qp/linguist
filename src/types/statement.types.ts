@@ -17,4 +17,6 @@ type ImportableType = LanguagePropertyTypeName | `FallbackForUnknownKeys`;
 
 type SL<T, U> = [strict: T, loose: U];
 
-export type { ImportableType, SL, TypeRef, Wrapper };
+type From<T, U> = [paths: T, path: U];
+
+export type { From, ImportableType, SL, TypeRef, Wrapper };
