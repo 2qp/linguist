@@ -11,9 +11,10 @@ type TypeRef =
 	| LanguagePropertyTypeName
 	| `${LanguagePropertyTypeName}[]`
 	| `ReadonlyArray<${LanguagePropertyTypeName}>`
-	| `undefined`
-	| (string & {});
+	| `undefined`;
 
-type ImportableType = LanguagePropertyTypeName | `FallbackForUnknownKeys` | (string & {});
+type ImportableType = LanguagePropertyTypeName | `FallbackForUnknownKeys`;
 
-export type { ImportableType, TypeRef, Wrapper };
+type SL<T, U> = [strict: T, loose: U];
+
+export type { ImportableType, SL, TypeRef, Wrapper };

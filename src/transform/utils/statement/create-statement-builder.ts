@@ -10,7 +10,7 @@ import {
 } from "./statement-builder-utils";
 import { join } from "@utils/join";
 
-import type { ImportableType, TypeRef, Wrapper } from "@/types/statement.types";
+import type { ImportableType, SL, TypeRef, Wrapper } from "@/types/statement.types";
 
 type CreateStatementBuilderParams = {};
 
@@ -80,11 +80,13 @@ const createStatementBuilder = () => {
 				typeof: () => ({
 					build: () => addType(`typeof ${prefix}${varName}`)(createConst(varName, `${prefix}${varName}`, ";")),
 
-					wrap: <const TWrapper extends Wrapper, const TTypes extends TypeRef[]>(wrapper: TWrapper, types: TTypes) => ({
-						build: () =>
-							extendType("")(getWrapped(types, wrapper))(
-								addType(`typeof ${prefix}${varName}`)(createConst(varName, `${prefix}${varName}`, ";")),
-							),
+					wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
+						types: <const TStrict extends TypeRef[], const TLoose extends string[]>(...args: SL<TStrict, TLoose>) => ({
+							build: () =>
+								extendType("")(getWrapped([...args[0], ...args[1]], wrapper))(
+									addType(`typeof ${prefix}${varName}`)(createConst(varName, `${prefix}${varName}`, ";")),
+								),
+						}),
 					}),
 				}),
 			}),
