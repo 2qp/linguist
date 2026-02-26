@@ -40,43 +40,71 @@ const createStatementBuilder = () => {
 
 		var: <const TName extends string>(varName: TName) => ({
 			value: <const TValue extends string>(value: TValue) => ({
-				build: () => createConst(varName, value, ";"),
+				build: () => [createConst(varName, value, ";"), createExport(varName)] as const,
+
+				type: <const TTypeName extends string>(typeName: TTypeName) => ({
+					build: () => [addType(typeName)(builder.var(varName).value(value).build()[0]), createExportType(typeName)],
+				}),
 
 				asConst: () => ({
 					build: () => wrapAsConst(createConst(varName, value, "")),
 				}),
-
-				export: () => ({
-					build: () => createExport(varName),
-				}),
 			}),
 
-			type: <const TTypeName extends string>(typeName: TTypeName) => ({
-				build: () => createType(typeName)(varName),
-				export: () => ({
-					build: () => createExportType(typeName),
-				}),
+			typeof: <const TTypeName extends string>(typeName: TTypeName) => ({
+				build: () => [createType(typeName)(varName), createExportType(typeName)] as const,
 			}),
 
-			//
 			prefix: <const TPrefix extends string>(prefix: TPrefix) => ({
+				asValue: () => ({
+					build: () => createConst(varName, `${prefix}${varName}`, ";"),
+
+					type: () => ({
+						wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
+							types: <const TStrict extends TypeRef[], const TLoose extends string[]>(
+								...args: SL<TStrict, TLoose>
+							) => ({
+								build: () =>
+									[
+										addType(getWrapped([...args[0], ...args[1]], wrapper))(
+											builder.var(varName).prefix(prefix).asValue().build(),
+										),
+										createExport(varName),
+									] as const,
+
+								custom: () => ({
+									var: <const TCName extends string>(_varName: (varName: TName) => TCName) => ({
+										build: () => [
+											addType(getWrapped([...args[0], ...args[1]], wrapper))(
+												builder.var(_varName(varName)).value(`${prefix}${varName}`).build()[0],
+											),
+											createExport(_varName(varName)),
+										],
+									}),
+								}),
+							}),
+						}),
+					}),
+				}),
+
 				value: <const TValue extends string>(value: TValue) => ({
-					build: () => createConst(`${prefix}${varName}`, value, ";"),
+					build: () => [createConst(`${prefix}${varName}`, value, ";"), createExport(`${prefix}${varName}`)] as const,
 
 					asConst: () => ({
 						build: () => wrapAsConst(createConst(`${prefix}${varName}`, value, "")),
 					}),
 
-					export: () => ({
-						build: () => createExport(`${prefix}${varName}`),
+					type: <const TTypeName extends string>(typeName: TTypeName) => ({
+						build: () =>
+							[
+								addType(typeName)(builder.var(varName).prefix(prefix).value(value).build()[0]),
+								createExportType(typeName),
+							] as const,
 					}),
 				}),
 
 				type: <const TTypeName extends string>(typeName: TTypeName) => ({
-					build: () => createType(typeName)(`${prefix}${varName}`),
-					export: () => ({
-						build: () => createExportType(typeName),
-					}),
+					build: () => [createType(typeName)(`${prefix}${varName}`), createExportType(typeName)] as const,
 				}),
 
 				typeof: () => ({
