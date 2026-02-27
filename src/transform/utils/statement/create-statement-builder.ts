@@ -4,7 +4,9 @@ import {
 	createExport,
 	createExportType,
 	createType,
+	createTypeofType,
 	extendType,
+	extendTypeDef,
 	getWrapped,
 	wrapAsConst,
 } from "./statement-builder-utils";
@@ -43,16 +45,39 @@ const createStatementBuilder = () => {
 				build: () => [createConst(varName, value, ";"), createExport(varName)] as const,
 
 				type: <const TTypeName extends string>(typeName: TTypeName) => ({
-					build: () => [addType(typeName)(builder.var(varName).value(value).build()[0]), createExportType(typeName)],
+					build: () =>
+						[addType(typeName)(builder.var(varName).value(value).build()[0]), createExportType(typeName)] as const,
 				}),
 
 				asConst: () => ({
 					build: () => wrapAsConst(createConst(varName, value, "")),
+					type: <const TTypeName extends string>(typeName: TTypeName) => ({
+						build: () => builder.var(varName).value(value).type(typeName).build(),
+					}),
+				}),
+			}),
+
+			type: <const TTypeName extends string>(typeName: TTypeName) => ({
+				//
+				def: <const TDef extends string>(def: TDef) => ({
+					build: () => createType(typeName)(def),
+
+					wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
+						types: <const TStrict extends TypeRef[], const TLoose extends string[]>(...args: SL<TStrict, TLoose>) => ({
+							build: () =>
+								[
+									extendTypeDef("")(getWrapped([...args[0], ...args[1]], wrapper))(
+										builder.var(varName).type(typeName).def(def).build(),
+									),
+									createExportType(typeName),
+								] as const,
+						}),
+					}),
 				}),
 			}),
 
 			typeof: <const TTypeName extends string>(typeName: TTypeName) => ({
-				build: () => [createType(typeName)(varName), createExportType(typeName)] as const,
+				build: () => [createTypeofType(typeName)(varName), createExportType(typeName)] as const,
 			}),
 
 			prefix: <const TPrefix extends string>(prefix: TPrefix) => ({
@@ -113,9 +138,12 @@ const createStatementBuilder = () => {
 					wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
 						types: <const TStrict extends TypeRef[], const TLoose extends string[]>(...args: SL<TStrict, TLoose>) => ({
 							build: () =>
-								extendType("")(getWrapped([...args[0], ...args[1]], wrapper))(
-									addType(`typeof ${prefix}${varName}`)(createConst(varName, `${prefix}${varName}`, ";")),
-								),
+								[
+									extendType("")(getWrapped([...args[0], ...args[1]], wrapper))(
+										addType(`typeof ${prefix}${varName}`)(createConst(varName, `${prefix}${varName}`, ";")),
+									),
+									createExport(varName),
+								] as const,
 						}),
 					}),
 				}),

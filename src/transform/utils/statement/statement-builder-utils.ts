@@ -18,10 +18,15 @@ const createConst = <const TName extends string, const TValue extends string, co
 
 const createExport = <const TName extends string>(name: TName) => `export { ${name} };` as const;
 
-const createType =
+const createTypeofType =
 	<const TTypeName extends string>(typeName: TTypeName) =>
 	<const TVarName extends string>(varName: TVarName) =>
 		`type ${typeName} = typeof ${varName};` as const;
+
+const createType =
+	<const TTypeName extends string>(typeName: TTypeName) =>
+	<const TVarName extends string>(varName: TVarName) =>
+		`type ${typeName} = ${varName};` as const;
 
 const addType =
 	<const TType extends string>(type: TType) =>
@@ -34,7 +39,24 @@ const extendType =
 	<const TStatement extends string>(str: TStatement) =>
 		safeReplacer(str, " = ", `${type} & ${extender} = `);
 
+const extendTypeDef =
+	<const TType extends string>(type: TType) =>
+	<const TExtender extends string>(extender: TExtender) =>
+	<const TStatement extends string>(str: TStatement) =>
+		safeReplacer(str, "}", `} & ${type} ${extender}`);
+
 const createExportType = <const TTypeName extends string>(typeName: TTypeName) =>
 	`export type { ${typeName} };` as const;
 
-export { addType, createConst, createExport, createExportType, createType, extendType, getWrapped, wrapAsConst };
+export {
+	addType,
+	createConst,
+	createExport,
+	createExportType,
+	createType,
+	createTypeofType,
+	extendType,
+	extendTypeDef,
+	getWrapped,
+	wrapAsConst,
+};
