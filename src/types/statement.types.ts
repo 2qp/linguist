@@ -19,4 +19,10 @@ type SL<T, U> = [strict: T, loose: U];
 
 type From<T, U> = [paths: T, path: U];
 
-export type { From, ImportableType, SL, TypeRef, Wrapper };
+// bruh var().prefix().asValue().type().wrap().types().custom()
+type VarPrefixAsValueWrapTypesCustomParams<TName extends string, TValue extends string> = {
+	name?: TName;
+	value?: TValue;
+};
+
+export type { VarPrefixAsValueWrapTypesCustomParams as CustomP, From, ImportableType, SL, TypeRef, Wrapper };
