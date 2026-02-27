@@ -1,8 +1,11 @@
-type ReplaceAll<S extends string, From extends string, To extends string> = From extends ""
-	? S
-	: S extends `${infer P1}${From}${infer P2}`
-		? `${P1}${To}${ReplaceAll<P2, From, To>}`
-		: S;
+type ReplaceAll<
+	S extends string,
+	From extends string,
+	To extends string,
+	Result extends string = "",
+> = S extends `${infer Head}${From}${infer Tail}`
+	? ReplaceAll<Tail, From, To, `${Result}${Head}${To}`>
+	: `${Result}${S}`;
 
 type SafeReplacerType = <const S extends string, const P extends string, const R extends string>(
 	source: S,
