@@ -13,7 +13,7 @@ import {
 import { join } from "@utils/join";
 
 import type { ToString } from "@/types/gen.types";
-import type { CustomP, From, ImportableType, SL, TypeRef, Wrapper } from "@/types/statement.types";
+import type { CustomParams, From, ImportableType, SL, TypeRef, Wrapper } from "@/types/statement.types";
 
 type CreateStatementBuilderParams = {};
 
@@ -100,7 +100,7 @@ const createStatementBuilder = () => {
 								custom: <const TCName extends string, TCValue extends string>({
 									name = varName as unknown as TCName,
 									value = `${prefix}${varName}` as const as unknown as TCValue,
-								}: CustomP<TCName, TCValue>) => ({
+								}: CustomParams<TCName, TCValue>) => ({
 									build: () =>
 										[
 											addType(getWrapped([...args[0], ...args[1]], wrapper))(builder.var(name).value(value).build()[0]),
