@@ -44,6 +44,7 @@ const createValueArray = <
 		// const ar = element as unknown as T[keyof T][keyof T[keyof T]][keyof T[keyof T][keyof T[keyof T]]] & unknown[];
 
 		for (const item of element) {
+			if (isNullish(item)) continue;
 			values.add(item);
 		}
 	}
