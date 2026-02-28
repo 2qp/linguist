@@ -4,13 +4,13 @@
 		// File Layout
 		// "rootDir": "./src",
 		// "outDir": "./dist",
-		"baseUrl": "./src",
+
 		"paths": {
-			"@core/*": ["core/*"],
-			"@gen/*": ["gen/*"],
-			"@utils/*": ["utils/*"],
-			"@services/*": ["services/*"],
-			"@/*": ["*"]
+			"@core/*": ["./src/core/*"],
+			"@gen/*": ["./src/gen/*"],
+			"@utils/*": ["./src/utils/*"],
+			"@services/*": ["./src/services/*"],
+			"@/*": ["./src/*"]
 		},
 
 		// Environment Settings
