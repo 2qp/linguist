@@ -40,7 +40,7 @@
 		"dist"
 	],
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "vitest",
 		"clean": "rimraf dist src/generated",
 		"build": "pnpm run clean && pnpm run generate && tsup",
 		"dev": "tsup --watch",
@@ -78,6 +78,8 @@
 		"safe-stable-stringify": "^2.5.0",
 		"tsup": "^8.5.1",
 		"tsx": "^4.21.0",
-		"typescript": "^5.9.3"
+		"typescript": "^5.9.3",
+		"vite-tsconfig-paths": "^6.1.1",
+		"vitest": "^4.0.18"
 	}
 }
