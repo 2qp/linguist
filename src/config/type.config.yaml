@@ -29,11 +29,11 @@ type:
 
   #
   paths:
-    outputDir: "src/generated/types"
+    outputDir: "src/generated/types/common"
   
   #
   aliases:
-    outputDir: "@/generated/types"
+    outputDir: "@/generated/types/common"
 
   #
   out:
