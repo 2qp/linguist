@@ -1,5 +1,6 @@
 import { generateUniqueTypeName } from "./generate-unique-type-name";
 import { getMappedFieldOrType } from "./get-mapped-field-or-type";
+import { createSecondaryName } from "./misc/create-secondary-name";
 import { generateFieldType } from "@gen/generate-field-type";
 import { normalizeName } from "@/transform/utils/normalize-name";
 
@@ -81,9 +82,15 @@ const processFields: ProcessFieldsType = ({
 	const segmentOwnerBaseTypeName = res.resolved ? res.value : normalizeName(field).typeName;
 
 	const secondary = _role === "secondary" && config.type.secondary.enabled;
-	const prefix = secondary ? config.type.naming.secondaryPrefix : "";
 
-	const typeNameKey = generateUniqueTypeName(`${prefix}${segmentOwnerBaseTypeName}`, existingNames);
+	const baseName = createSecondaryName({
+		name: segmentOwnerBaseTypeName,
+		config,
+		_prefix: secondary,
+		_suffix: secondary,
+	});
+
+	const typeNameKey = generateUniqueTypeName(baseName, existingNames);
 
 	const typeName = generateUniqueTypeName(segmentBaseTypeName, existingNames);
 	const updatedNames = new Set(existingNames).add(typeName);

@@ -1,3 +1,4 @@
+import { createSecondaryName } from "@gen/utils/misc/create-secondary-name";
 import { join } from "@utils/join";
 
 import type { Emitter } from "./types";
@@ -16,7 +17,7 @@ const emitLanguagePropertyTypeName: EmitLanguagePropertyTypeName = ({ config, fi
 		.toArray()
 		.flatMap(
 			(type) =>
-				[`"${types.get(type)?.type}"`, `"${config.type.naming.secondaryPrefix}${types.get(type)?.type}"`] as const,
+				[`"${types.get(type)?.type}"`, `"${createSecondaryName({ name: types.get(type)?.type, config })}"`] as const,
 		)
 		.concat(existing)
 		.sort();

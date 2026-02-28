@@ -34,6 +34,9 @@ type SecondaryOptions = {
 } & Pick<TypeGeneratorConfig, "allowFlexibleTypes" | "useReadonlyArrays">;
 
 type Paths = {
+	/**
+	 * common types folder
+	 */
 	outputDir: string;
 };
 
@@ -46,6 +49,7 @@ type NamingConfig = {
 	language: string;
 	languageName: string;
 	secondaryPrefix: string;
+	secondarySuffix: string;
 	fields: FieldType[];
 };
 

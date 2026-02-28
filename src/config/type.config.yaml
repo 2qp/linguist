@@ -43,7 +43,8 @@ type:
   naming:
     language: "Language"
     languageName: "LanguageName"
-    secondaryPrefix: "Flex"
+    secondaryPrefix: ""
+    secondarySuffix: "Relax"
     fields:
       - field: "name"
         type: "LanguageName"

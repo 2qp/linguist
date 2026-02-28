@@ -1,3 +1,5 @@
+import { createSecondaryName } from "@gen/utils/misc/create-secondary-name";
+
 import type { UID } from "@/types/branded.types";
 import type { Emitter } from "./types";
 
@@ -38,7 +40,7 @@ const emitLanguageType: EmitLanguageType = ({ config, fields, _role = "primary" 
 	if (_role === "secondary" && config.type.secondary.enabled) {
 		//
 
-		const name = `${config.type.naming.secondaryPrefix}${config.type.naming.language}`;
+		const name = createSecondaryName({ name: config.type.naming.language, config });
 
 		const start = `\nexport type ${name} = {\n`;
 		const end = `}\n\n` as const;

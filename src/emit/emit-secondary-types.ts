@@ -1,5 +1,6 @@
 import { emitLanguageType } from "./emit-language-type";
 import { emitTypesSection } from "./emit-types-sections";
+import { createSecondaryName } from "@gen/utils/misc/create-secondary-name";
 import { processFields } from "@gen/utils/process-fields";
 
 import type { Config } from "@/types/config.types";
@@ -20,7 +21,7 @@ const emitSecondaryTypes: EmitSecondaryTypesType = ({ config: rawConfig, ...para
 		_role: "secondary",
 	});
 
-	const name = `${config.type.naming.secondaryPrefix}${config.type.naming.languageName}`;
+	const name = createSecondaryName({ name: config.type.naming.languageName, config });
 
 	const output_strict_sorted_types = emitTypesSection(fields.generatedTypes, name);
 
