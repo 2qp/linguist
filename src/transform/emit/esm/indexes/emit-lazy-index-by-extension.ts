@@ -1,42 +1,17 @@
 import { join } from "@utils/join";
-import { createStatements } from "@/transform/utils/create-statements";
+import { buildMap } from "@/transform/utils/build-map";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
+import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
+import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
-import type { Extensions, LanguageName } from "@/types/generated.types";
 import type { IndexEmitterType } from "./types";
 
 const emitLazyIndexByExtension: IndexEmitterType = ({ languages, config }): string => {
 	//
 
 	//
-	const buildExtensionMap = () => {
-		const extensionMap = new Map<Extensions[number], Set<LanguageName>>();
-
-		for (const languageName of Object.keys(languages) as LanguageName[]) {
-			if (!languageName) continue;
-
-			const languageData = languages[languageName];
-
-			const extensions = languageData?.extensions;
-
-			if (!extensions) continue;
-
-			for (const extension of extensions) {
-				const exist = extensionMap.get(extension);
-				if (!exist) {
-					extensionMap.set(extension, new Set([languageName]));
-					continue;
-				}
-
-				extensionMap.set(extension, new Set(exist).add(languageName));
-			}
-		}
-
-		return extensionMap;
-	};
-
-	const extensionMap = buildExtensionMap();
+	const extensionMap = buildMap({ source: languages, left: "extensions", right: "name" });
 
 	const allUniqueNames = [...new Set([...extensionMap.values()].flatMap((set) => [...set]))];
 
@@ -78,22 +53,36 @@ const emitLazyIndexByExtension: IndexEmitterType = ({ languages, config }): stri
 
 	const obj = "lazy By Extension" as const;
 
-	const { common, primary, secondary } = createStatements({
-		name: obj,
-		obj: `{\n${entries}\n}`,
-		typeObj: `{\n${typeEntries}\n}`,
-		types: ["Language", "FallbackForUnknownKeys"],
-		falls: ["Language[]", "undefined"],
-		config,
-	});
+	const builder = createStatementBuilder();
+	const norm = normalizeName(obj);
+	const paths = createStatementPaths(config);
+
+	const var_builder = builder.var(norm.varName);
+
+	const externalTypeImports = builder
+		.import()
+		.types(["Language", "FallbackForUnknownKeys"], [])
+		.from(paths, "commons")
+		.build();
+
+	const [var_stmt, var_export_stmt] = var_builder.value(`{\n${entries}\n}`).asConst().type(norm.typeName).build();
+
+	const [type_stmt, type_export_stmt] = var_builder
+		.type(norm.typeName)
+		.def(`{\n${typeEntries}\n}`)
+		.wrap("FallbackForUnknownKeys<() => Promise<$>>")
+		.types(["Language[]", "undefined"], [])
+		.build();
 
 	const out = [
 		typeImportsEntries,
-		common.typeImports,
-		primary.varTypedTemplate,
-		secondary.typeAsyncFallbackTemplate,
-		common.exportVar,
-		common.exportVarType,
+		externalTypeImports,
+		//
+		var_stmt,
+		type_stmt,
+		//
+		var_export_stmt,
+		type_export_stmt,
 	] as const;
 
 	const stringifiedOut = join(out, "\n\n");
