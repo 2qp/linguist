@@ -10,6 +10,7 @@
 			"@gen/*": ["./src/gen/*"],
 			"@utils/*": ["./src/utils/*"],
 			"@services/*": ["./src/services/*"],
+			"@tests/*": ["./tests/*"],
 			"@/*": ["./src/*"]
 		},
 
