@@ -1,4 +1,4 @@
-import { isNullish } from "@utils/guards";
+import { isEmpty, isNullish } from "@utils/guards";
 
 import type { ExtractArrayElement, KeysOfUnion, ValueFromUnion, ValueFromUnionByKey } from "@/types/utility.types";
 
@@ -30,7 +30,7 @@ type BuildReturn<
 > = TVariant extends "set"
 	? Map<ExtractArrayElement<TSource[K][TLeft]>, Set<TSource[K][TRight]>>
 	: TVariant extends "custom"
-		? Map<ExtractArrayElement<TSource[K][TLeft]>, { [Key in TProperties[number]]: ValueFromUnion<TSource[K], Key> }>
+		? Map<ExtractArrayElement<TSource[K][TLeft]>, { [Key in TProperties[number]]: ValueFromUnion<TSource[K], Key> }[]>
 		: TVariant extends "primitive"
 			? Map<ExtractArrayElement<TSource[K][TLeft]>, ValueFromUnionByKey<TSource[keyof TSource], TRight>>
 			: undefined;
@@ -69,13 +69,29 @@ const buildMap = <
 
 			for (const item of key as TSource[K][TLeft][]) {
 				//
+
 				if (isNullish(item)) continue;
+
 				const keyItem = item as ExtractArrayElement<TSource[K][TLeft]>;
 				const exist = map.get(keyItem);
+
 				if (isNullish(exist)) {
+					//
+
+					if (isNullish(value)) {
+						map.set(keyItem, new Set([]));
+						continue;
+					}
+
 					map.set(keyItem, new Set([value]));
 					continue;
 				}
+
+				if (isNullish(value)) {
+					map.set(keyItem, new Set(exist));
+					continue;
+				}
+
 				map.set(keyItem, new Set(exist).add(value));
 			}
 		}
@@ -90,7 +106,7 @@ const buildMap = <
 
 		const map = new Map<
 			ExtractArrayElement<TSource[K][TLeft]>,
-			{ [Key in TProperties[number]]: ValueFromUnion<TSource[K], Key> }
+			{ [Key in TProperties[number]]: ValueFromUnion<TSource[K], Key> }[]
 		>();
 
 		for (const name of Object.keys(source) as K[]) {
@@ -101,7 +117,8 @@ const buildMap = <
 
 			const key = language[left];
 
-			const valueMap = props.map((key) => [key, language[key]]) as KeysOfUnion<TSource[keyof TSource]>[][];
+			const valueMap = props.map((key) => [key, language[key]]).filter(([_, value]) => value != null);
+
 			const value = Object.fromEntries(valueMap);
 
 			if (isNullish(key)) continue;
@@ -118,13 +135,28 @@ const buildMap = <
 
 				const keyItem = item as ExtractArrayElement<TSource[K][TLeft]>;
 
-				// const exist = map.get(keyItem);
+				const exist = map.get(keyItem);
 
-				// if (isNullish(exist)) {
-				// 	map.set(keyItem, value);
-				// }
+				const isValueEmpty = isNullish(value) || isEmpty(value);
 
-				map.set(keyItem, value);
+				if (isNullish(exist)) {
+					//
+
+					if (isValueEmpty) {
+						map.set(keyItem, []);
+						continue;
+					}
+
+					map.set(keyItem, [value]);
+					continue;
+				}
+
+				if (isValueEmpty) {
+					map.set(keyItem, exist);
+					continue;
+				}
+
+				map.set(keyItem, exist.concat(value));
 			}
 		}
 		return map as BuildReturn<TSource, K, TLeft, TRight, TProperties, TVariant>;
@@ -147,6 +179,7 @@ const buildMap = <
 			const value = language[right];
 
 			if (isNullish(key)) continue;
+			if (isNullish(value)) continue;
 			if (Array.isArray(key)) continue;
 
 			map.set(key as ExtractArrayElement<TSource[K][TLeft]>, value);
