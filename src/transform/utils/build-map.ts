@@ -1,67 +1,162 @@
 import { isNullish } from "@utils/guards";
 
-import type { ExtractArrayElement } from "@/types/utility.types";
+import type { ExtractArrayElement, KeysOfUnion, ValueFromUnion, ValueFromUnionByKey } from "@/types/utility.types";
 
-type BuildMapParams<T, Left, Right> = {
-	source: T;
-	left: Left;
-	right: Right;
-	// kPrimitive?: IsPrimitive;
-	// vArray?: IsValueArray;
-};
+type BuildVariant = "primitive" | "set" | "custom";
 
-type BuildMapReturnType<
-	T extends Record<string, unknown>,
-	Left extends keyof T[keyof T],
-	Right extends keyof T[keyof T],
-	K extends keyof T,
-> = Map<ExtractArrayElement<T[K][Left] & {}>, Set<T[K][Right]>> & {};
+type ParamBase<TSource> = { source: TSource };
+
+type Params<
+	TSource,
+	TVariant extends BuildVariant = BuildVariant,
+	TLeft extends KeysOfUnion<TSource[keyof TSource]> = KeysOfUnion<TSource[keyof TSource]>,
+	TRight extends KeysOfUnion<TSource[keyof TSource]> = KeysOfUnion<TSource[keyof TSource]>,
+	TProperties extends KeysOfUnion<TSource[keyof TSource]>[] = KeysOfUnion<TSource[keyof TSource]>[],
+> = TVariant extends "set"
+	? { kind: TVariant; left: TLeft; right: TRight }
+	: TVariant extends "custom"
+		? { kind: TVariant; left: TLeft; properties: TProperties }
+		: TVariant extends "primitive"
+			? { kind?: TVariant; key: TLeft; value: TRight }
+			: undefined;
+
+type BuildReturn<
+	TSource extends Record<string, unknown>,
+	K extends keyof TSource,
+	TLeft extends KeysOfUnion<TSource[keyof TSource]>,
+	TRight extends KeysOfUnion<TSource[keyof TSource]>,
+	TProperties extends KeysOfUnion<TSource[keyof TSource]>[],
+	TVariant extends BuildVariant,
+> = TVariant extends "set"
+	? Map<ExtractArrayElement<TSource[K][TLeft]>, Set<TSource[K][TRight]>>
+	: TVariant extends "custom"
+		? Map<ExtractArrayElement<TSource[K][TLeft]>, { [Key in TProperties[number]]: ValueFromUnion<TSource[K], Key> }>
+		: TVariant extends "primitive"
+			? Map<ExtractArrayElement<TSource[K][TLeft]>, ValueFromUnionByKey<TSource[keyof TSource], TRight>>
+			: undefined;
 
 const buildMap = <
-	T extends Record<string, unknown>,
-	Left extends keyof T[keyof T],
-	Right extends keyof T[keyof T],
-	K extends keyof T,
->({
-	source,
-	left,
-	right,
-}: BuildMapParams<T, Left, Right>): BuildMapReturnType<T, Left, Right, K> => {
+	const TSource extends Record<string, unknown>,
+	const K extends keyof TSource,
+	const TLeft extends KeysOfUnion<TSource[keyof TSource]>,
+	const TRight extends KeysOfUnion<TSource[keyof TSource]>,
+	const TProperties extends KeysOfUnion<TSource[keyof TSource]>[],
+	const TVariant extends BuildVariant = "primitive",
+>(
+	params: Params<TSource, TVariant, TLeft, TRight, TProperties> & ParamBase<TSource>,
+): BuildReturn<TSource, K, TLeft, TRight, TProperties, TVariant> => {
 	//
 
-	const map = new Map<ExtractArrayElement<T[K][Left] & {}>, Set<T[K][Right]> & {}>();
+	if (params.kind === "set") {
+		//
+		const source = params.source;
+		const left = params.left;
+		const right = params.right;
 
-	for (const name of Object.keys(source) as K[]) {
-		if (!name) continue;
+		const map = new Map<ExtractArrayElement<TSource[K][TLeft]>, Set<TSource[K][TRight]>>();
 
-		const language = source[name];
-		if (!language) continue;
+		for (const name of Object.keys(source) as K[]) {
+			if (!name) continue;
 
-		const key = language[left];
-		const value = language[right];
+			const language = source[name];
+			if (!language) continue;
 
-		if (isNullish(key)) continue;
-		if (!Array.isArray(key)) continue;
+			const key = language[left];
+			const value = language[right];
 
-		for (const item of key as T[K][Left][]) {
-			//
+			if (isNullish(key)) continue;
+			if (!Array.isArray(key)) continue;
 
-			if (isNullish(item)) continue;
-
-			const keyItem = item as ExtractArrayElement<T[K][Left] & {}>;
-
-			const exist = map.get(keyItem);
-
-			if (isNullish(exist)) {
-				map.set(keyItem, new Set([value]));
+			for (const item of key as TSource[K][TLeft][]) {
+				//
+				if (isNullish(item)) continue;
+				const keyItem = item as ExtractArrayElement<TSource[K][TLeft]>;
+				const exist = map.get(keyItem);
+				if (isNullish(exist)) {
+					map.set(keyItem, new Set([value]));
+					continue;
+				}
+				map.set(keyItem, new Set(exist).add(value));
 			}
-
-			map.set(keyItem, new Set(exist).add(value));
 		}
+		return map as BuildReturn<TSource, K, TLeft, TRight, TProperties, TVariant>;
 	}
 
-	return map;
+	if (params.kind === "custom") {
+		//
+		const source = params.source;
+		const left = params.left;
+		const props = params.properties;
+
+		const map = new Map<
+			ExtractArrayElement<TSource[K][TLeft]>,
+			{ [Key in TProperties[number]]: ValueFromUnion<TSource[K], Key> }
+		>();
+
+		for (const name of Object.keys(source) as K[]) {
+			if (!name) continue;
+
+			const language = source[name];
+			if (!language) continue;
+
+			const key = language[left];
+
+			const valueMap = props.map((key) => [key, language[key]]) as KeysOfUnion<TSource[keyof TSource]>[][];
+			const value = Object.fromEntries(valueMap);
+
+			if (isNullish(key)) continue;
+
+			if (!Array.isArray(key)) {
+				map.set(key as ExtractArrayElement<TSource[K][TLeft]>, value);
+				continue;
+			}
+
+			for (const item of key as TSource[K][TLeft][]) {
+				//
+
+				if (isNullish(item)) continue;
+
+				const keyItem = item as ExtractArrayElement<TSource[K][TLeft]>;
+
+				// const exist = map.get(keyItem);
+
+				// if (isNullish(exist)) {
+				// 	map.set(keyItem, value);
+				// }
+
+				map.set(keyItem, value);
+			}
+		}
+		return map as BuildReturn<TSource, K, TLeft, TRight, TProperties, TVariant>;
+	}
+
+	if (params.kind === "primitive") {
+		const source = params.source;
+		const left = params.key;
+		const right = params.value;
+
+		const map = new Map<ExtractArrayElement<TSource[K][TLeft]>, TSource[K][TRight]>();
+
+		for (const name of Object.keys(source) as K[]) {
+			if (!name) continue;
+
+			const language = source[name];
+			if (!language) continue;
+
+			const key = language[left];
+			const value = language[right];
+
+			if (isNullish(key)) continue;
+			if (Array.isArray(key)) continue;
+
+			map.set(key as ExtractArrayElement<TSource[K][TLeft]>, value);
+		}
+		return map as BuildReturn<TSource, K, TLeft, TRight, TProperties, TVariant>;
+	}
+
+	return undefined as BuildReturn<TSource, K, TLeft, TRight, TProperties, TVariant>;
 };
 
 export { buildMap };
-export type { BuildMapParams };
+
+export type { Params as BuildParams, BuildVariant };

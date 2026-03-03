@@ -12,6 +12,16 @@ type ExtractExplicit<T extends Record<string, unknown>> = {
 	[K in keyof T as string extends K ? never : K]: T[K];
 };
 
+type ExtractIndexSignature<T extends Record<string, unknown>> = {
+	[K in keyof T as string extends K ? K : never]: T[K];
+};
+
+type KeysOfUnion<T> = T extends T ? keyof T : never;
+
+type ValueFromUnion<T, K extends PropertyKey> = T extends unknown ? (K extends keyof T ? T[K] : never) : never;
+
+type ValueFromUnionByKey<T, K extends KeysOfUnion<T>> = T extends unknown ? (K extends keyof T ? T[K] : never) : never;
+
 type NonUndefined<T> = T extends undefined ? never : T;
 
 type ExtractArrayElement<T> = T extends readonly (infer U)[] ? U : T;
@@ -28,9 +38,13 @@ export type {
 	Entries,
 	ExtractArrayElement,
 	ExtractExplicit,
+	ExtractIndexSignature,
 	ExtractSetElement,
+	HomogeneousArray,
+	KeysOfUnion,
 	LooseToStrict,
 	NonUndefined,
 	Prettify,
-	HomogeneousArray,
+	ValueFromUnion,
+	ValueFromUnionByKey,
 };
