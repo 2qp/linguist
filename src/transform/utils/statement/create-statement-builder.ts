@@ -50,7 +50,7 @@ const createStatementBuilder = () => {
 				}),
 
 				asConst: () => ({
-					build: () => wrapAsConst(createConst(varName, value, "")),
+					build: () => [wrapAsConst(createConst(varName, value, "")), createExport(varName)] as const,
 					type: <const TTypeName extends string>(typeName: TTypeName) => ({
 						build: () => [builder.var(varName).value(value).type(typeName).build()[0], createExport(varName)] as const,
 					}),
