@@ -34,7 +34,22 @@ type HomogeneousArray<T, K> = K extends keyof T[keyof T]
 		: Exclude<T[keyof T][K], undefined>[]
 	: never;
 
+type DeepPartial<T> = T extends (...args: unknown[]) => unknown
+	? T
+	: T extends Array<infer U>
+		? DeepPartialArray<U>
+		: T extends object
+			? DeepPartialObject<T>
+			: T | undefined;
+
+type DeepPartialArray<T> = Array<DeepPartial<T>>;
+
+type DeepPartialObject<T> = {
+	[K in keyof T]?: DeepPartial<T[K]>;
+};
+
 export type {
+	DeepPartial,
 	Entries,
 	ExtractArrayElement,
 	ExtractExplicit,
