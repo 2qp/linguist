@@ -1,6 +1,6 @@
 import type { ElementBase } from "./field.types";
 
-type Primitive = string | number | bigint | boolean;
+type Primitive = string | number | bigint | boolean | null | undefined;
 
 type Flex<T extends ElementBase = "string"> = `${T} & {}`;
 
