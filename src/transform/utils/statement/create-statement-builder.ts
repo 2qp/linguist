@@ -12,7 +12,7 @@ import {
 } from "./statement-builder-utils";
 import { join } from "@utils/join";
 
-import type { ToString } from "@/types/gen.types";
+import type { Primitive, ToString } from "@/types/gen.types";
 import type { CustomParams, From, ImportableType, SL, TypeRef, Wrapper } from "@/types/statement.types";
 
 type CreateStatementBuilderParams = {};
@@ -40,49 +40,30 @@ const createStatementBuilder = () => {
 			}),
 		}),
 
-		var: <const TName extends string>(varName: TName) => ({
-			value: <const TValue extends string>(value: TValue) => ({
+		var: <const TName extends Primitive>(varName: TName) => ({
+			value: <const TValue extends Primitive>(value: TValue) => ({
 				build: () => [createConst(varName, value, ";"), createExport(varName)] as const,
 
-				type: <const TTypeName extends string>(typeName: TTypeName) => ({
-					build: () =>
-						[addType(typeName)(builder.var(varName).value(value).build()[0]), createExportType(typeName)] as const,
+				type: <const TTypeName extends Primitive>(typeName: TTypeName) => ({
+					build: () => [addType(typeName)(createConst(varName, value, ";")), createExport(varName)] as const,
 				}),
 
 				asConst: () => ({
 					build: () => [wrapAsConst(createConst(varName, value, "")), createExport(varName)] as const,
-					type: <const TTypeName extends string>(typeName: TTypeName) => ({
-						build: () => [builder.var(varName).value(value).type(typeName).build()[0], createExport(varName)] as const,
+					type: <const TTypeName extends Primitive>(typeName: TTypeName) => ({
+						build: () =>
+							[addType(typeName)(wrapAsConst(createConst(varName, value, ""))), createExport(varName)] as const,
 					}),
 				}),
 			}),
 
-			type: <const TTypeName extends string>(typeName: TTypeName) => ({
-				//
-				def: <const TDef extends string>(def: TDef) => ({
-					build: () => createType(typeName)(def),
-
-					wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
-						types: <const TStrict extends TypeRef[], const TLoose extends string[]>(...args: SL<TStrict, TLoose>) => ({
-							build: () =>
-								[
-									extendTypeDef("")(getWrapped([...args[0], ...args[1]], wrapper))(
-										builder.var(varName).type(typeName).def(def).build(),
-									),
-									createExportType(typeName),
-								] as const,
-						}),
-					}),
-				}),
-			}),
-
-			typeof: <const TTypeName extends string>(typeName: TTypeName) => ({
-				build: () => [createTypeofType(typeName)(varName), createExportType(typeName)] as const,
+			typeof: <const TTypeName extends Primitive>(_varName: TTypeName) => ({
+				build: () => [createTypeofType(_varName)(varName), createExportType(_varName)] as const,
 			}),
 
 			prefix: <const TPrefix extends string>(prefix: TPrefix) => ({
 				asValue: () => ({
-					build: () => createConst(varName, `${prefix}${varName}`, ";"),
+					build: () => [createConst(varName, `${prefix}${varName}`, ";"), createExport(varName)] as const,
 
 					type: () => ({
 						wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
@@ -92,19 +73,24 @@ const createStatementBuilder = () => {
 								build: () =>
 									[
 										addType(getWrapped([...args[0], ...args[1]], wrapper))(
-											builder.var(varName).prefix(prefix).asValue().build(),
+											createConst(varName, `${prefix}${varName}`, ";"),
 										),
 										createExport(varName),
 									] as const,
 
-								custom: <const TCName extends string, TCValue extends string>({
-									name = varName as unknown as TCName,
-									value = `${prefix}${varName}` as const as unknown as TCValue,
-								}: CustomParams<TCName, TCValue>) => ({
+								custom: <const TCName extends Primitive, const TCValue extends Primitive>(
+									cb: (prev: CustomParams<TName, `${TPrefix}${TName}`>) => CustomParams<TCName, TCValue>,
+								) => ({
 									build: () =>
 										[
-											addType(getWrapped([...args[0], ...args[1]], wrapper))(builder.var(name).value(value).build()[0]),
-											createExport(name),
+											addType(getWrapped([...args[0], ...args[1]], wrapper))(
+												createConst(
+													cb({ name: varName, value: `${prefix}${varName}` }).name,
+													cb({ name: varName, value: `${prefix}${varName}` }).value,
+													";",
+												),
+											),
+											createExport(cb({ name: varName, value: `${prefix}${varName}` }).name),
 										] as const,
 								}),
 							}),
@@ -112,28 +98,36 @@ const createStatementBuilder = () => {
 					}),
 				}),
 
-				value: <const TValue extends string>(value: TValue) => ({
+				value: <const TValue extends Primitive>(value: TValue) => ({
 					build: () => [createConst(`${prefix}${varName}`, value, ";"), createExport(`${prefix}${varName}`)] as const,
 
 					asConst: () => ({
-						build: () => wrapAsConst(createConst(`${prefix}${varName}`, value, "")),
-					}),
-
-					type: <const TTypeName extends string>(typeName: TTypeName) => ({
 						build: () =>
 							[
-								addType(typeName)(builder.var(varName).prefix(prefix).value(value).build()[0]),
-								createExportType(typeName),
+								wrapAsConst(createConst(`${prefix}${varName}`, value, "")),
+								createExport(`${prefix}${varName}`),
+							] as const,
+					}),
+
+					type: <const TTypeName extends Primitive>(typeName: TTypeName) => ({
+						build: () =>
+							[
+								addType(typeName)(createConst(`${prefix}${varName}`, value, ";")),
+								createExport(`${prefix}${varName}`),
 							] as const,
 					}),
 				}),
 
-				type: <const TTypeName extends string>(typeName: TTypeName) => ({
+				type: <const TTypeName extends Primitive>(typeName: TTypeName) => ({
 					build: () => [createType(typeName)(`${prefix}${varName}`), createExportType(typeName)] as const,
 				}),
 
 				typeof: () => ({
-					build: () => addType(`typeof ${prefix}${varName}`)(createConst(varName, `${prefix}${varName}`, ";")),
+					build: () =>
+						[
+							addType(`typeof ${prefix}${varName}`)(createConst(varName, `${prefix}${varName}`, ";")),
+							createExport(varName),
+						] as const,
 
 					wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
 						types: <const TStrict extends TypeRef[], const TLoose extends string[]>(...args: SL<TStrict, TLoose>) => ({
@@ -143,6 +137,29 @@ const createStatementBuilder = () => {
 										addType(`typeof ${prefix}${varName}`)(createConst(varName, `${prefix}${varName}`, ";")),
 									),
 									createExport(varName),
+								] as const,
+						}),
+					}),
+				}),
+			}),
+		}),
+
+		type: <const TTypeName extends Primitive>(typeName: TTypeName) => ({
+			//
+			alias: () => ({
+				//
+
+				ref: <const TReference extends Primitive>(ref: TReference) => ({
+					build: () => [createType(typeName)(ref), createExportType(typeName)] as const,
+				}),
+
+				exp: <const TExpression extends `{ ${Primitive} }`>(exp: TExpression) => ({
+					wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
+						types: <const TStrict extends TypeRef[], const TLoose extends string[]>(...args: SL<TStrict, TLoose>) => ({
+							build: () =>
+								[
+									extendTypeDef("")(getWrapped([...args[0], ...args[1]], wrapper))(createType(typeName)(exp)),
+									createExportType(typeName),
 								] as const,
 						}),
 					}),
