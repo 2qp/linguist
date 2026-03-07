@@ -52,5 +52,8 @@
 		"moduleDetection": "force",
 		"skipLibCheck": true,
 		"allowArbitraryExtensions": true
-	}
+	},
+
+	"include": ["./src", "./tests"],
+	"exclude": ["node_modules"]
 }
