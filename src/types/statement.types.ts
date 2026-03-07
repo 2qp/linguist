@@ -1,3 +1,4 @@
+import type { Primitive } from "./gen.types";
 import type { LanguagePropertyTypeName } from "./generated.types";
 
 type Wrapper =
@@ -21,9 +22,9 @@ type SL<T, U> = [strict: T, loose: U];
 type From<T, U> = [paths: T, path: U];
 
 // mmm var().prefix().asValue().type().wrap().types().custom()
-type VarPrefixAsValueWrapTypesCustomParams<TName extends string, TValue extends string> = {
-	name?: TName;
-	value?: TValue;
+type VarPrefixAsValueWrapTypesCustomParams<TName extends Primitive, TValue extends Primitive> = {
+	name: TName;
+	value: TValue;
 };
 
 export type { VarPrefixAsValueWrapTypesCustomParams as CustomParams, From, ImportableType, SL, TypeRef, Wrapper };
