@@ -5,6 +5,7 @@ type Wrapper =
 	| "Partial<$>"
 	| "FallbackForUnknownKeys<$>"
 	| "FallbackForUnknownKeys<() => Promise<$>>"
+	| "($)"
 	| "$";
 
 type TypeRef =
