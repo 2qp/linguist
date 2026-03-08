@@ -19,6 +19,12 @@ type CreateStatementBuilderParams = {};
 
 type CreateStatementBuilder = (params?: CreateStatementBuilderParams) => void;
 
+/**
+ * @deprecated
+ * old nested implementation.
+ *
+ * use `create-statement-builder.ts` instead.
+ */
 const createStatementBuilder = () => {
 	//
 
