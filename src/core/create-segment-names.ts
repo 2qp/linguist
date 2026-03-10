@@ -1,13 +1,13 @@
 import { normalizeName } from "@/transform/utils/normalize-name";
 
-import type { NameId, Primitive } from "@/types/gen.types";
+import type { NameId } from "@/types/gen.types";
 
-type CreateSegmentNamesParams<TChunks extends Primitive[][], TName extends string> = {
+type CreateSegmentNamesParams<TChunks extends unknown[][], TName extends string> = {
 	typeName: TName;
 	chunks: TChunks;
 };
 
-type CreateSegmentNames = <const TChunks extends Primitive[][], const TName extends string>(
+type CreateSegmentNames = <const TChunks extends unknown[][], const TName extends string>(
 	params: CreateSegmentNamesParams<TChunks, TName>,
 ) => ReadonlyArray<NameId<TName>>;
 
