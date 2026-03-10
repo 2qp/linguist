@@ -4,6 +4,7 @@ import type { LanguagePropertyTypeName } from "./generated.types";
 type Wrapper =
 	| "ReadonlyArray<$>"
 	| "Partial<$>"
+	| "ReadonlyArray<Partial<$>>"
 	| "FallbackForUnknownKeys<$>"
 	| "FallbackForUnknownKeys<() => Promise<$>>"
 	| "($)"
