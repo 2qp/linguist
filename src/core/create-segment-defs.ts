@@ -1,37 +1,41 @@
 import { join } from "@utils/join";
-import stringify from "safe-stable-stringify";
+import { stringify } from "safe-stable-stringify";
 import { normalizeName } from "@/transform/utils/normalize-name";
 
 import type { Primitive } from "@/types/gen.types";
-import type { WithPhase } from "@/types/phantom.types";
-import type { SegmentChunkedDef, SegmentDef } from "@/types/segment.types";
+import type { SegmentDef, SegmentDefRecord } from "@/types/segment.types";
 
-type CreateSegmentDefsParams<TChunks extends Primitive[][], TName extends string> = {
+type CreateSegmentDefsParams<TChunks extends unknown[][], TName extends string> = {
 	typeName: TName;
 	chunks: TChunks;
 };
 
-// type CreateSegmentDefsType = <const T extends Primitive[][], const TName extends string>(
-// 	params: CreateSegmentDefsParams<T, TName>,
-// ) => SegmentDef<T, TName>[];
+type PrimitiveReturn<T extends Primitive[][], TName extends string> = SegmentDef<T, TName>[] & {};
+
+type RecordReturn<T extends Record<string, unknown>[][], TName extends string> = SegmentDefRecord<
+	T,
+	TName,
+	{ partial: true }
+>[] & {};
 
 type CreateSegmentDefsOverloaded = {
 	//
 
 	<const TChunks extends Primitive[][], const TName extends string>(
-		params: CreateSegmentDefsParams<TChunks, TName> & WithPhase<"transform">,
-	): SegmentChunkedDef<TChunks, TName>[];
+		params: CreateSegmentDefsParams<TChunks, TName>,
+	): PrimitiveReturn<TChunks, TName>;
 
-	<const TChunks extends Primitive[][], const TName extends string>(
-		params: CreateSegmentDefsParams<TChunks, TName> & Partial<WithPhase<"generate">>,
-	): SegmentDef<TChunks, TName>[];
+	<const TChunks extends Record<string, unknown>[][], const TName extends string>(
+		params: CreateSegmentDefsParams<TChunks, TName>,
+	): RecordReturn<TChunks, TName>;
 
 	//
 };
-/**
- * usually 50 per chunk
- */
-const createSegmentDefs: CreateSegmentDefsOverloaded = ({ chunks, typeName }) => {
+
+const createSegmentDefs: CreateSegmentDefsOverloaded = (<const T extends unknown[][], const TName extends string>({
+	chunks,
+	typeName,
+}: CreateSegmentDefsParams<T, TName>) => {
 	//
 
 	const { constant } = normalizeName(typeName);
@@ -49,7 +53,7 @@ const createSegmentDefs: CreateSegmentDefsOverloaded = ({ chunks, typeName }) =>
 	});
 
 	return segmentDefs;
-};
+}) as CreateSegmentDefsOverloaded;
 
 export { createSegmentDefs };
 export type { CreateSegmentDefsParams };
