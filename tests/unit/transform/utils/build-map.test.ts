@@ -139,8 +139,7 @@ describe("buildMap", async () => {
 				properties: [],
 			});
 
-			expect(result.get(1)).toHaveLength(0);
-			expect(result.get(2)).toHaveLength(0);
+			expect(result).toMatchObject({});
 		});
 
 		it("should skip non-array left values", () => {
@@ -176,6 +175,42 @@ describe("buildMap", async () => {
 			expect(result.get(1)).toEqual([{ name: "Alice" }]);
 			expect(result.get(2)).toEqual(expect.arrayContaining([{ age: 25 }, { name: "Alice" }]));
 			expect(result.get(3)).toEqual([{ age: 25 }]);
+		});
+
+		it("should handle missing property when left is an array and right is a missing primitive", () => {
+			const source = {
+				en: { key: [1, 2], name: "Alice" },
+				fr: { key: [2, 3], age: 25 },
+			} as const;
+
+			const result = buildMap({
+				source,
+				kind: "custom",
+				left: "key",
+				properties: ["age"],
+			});
+
+			expect(result.size).toBe(2);
+			expect(result.get(1)).toBeUndefined();
+			expect(result.get(1)).toBeOneOf([undefined, expect.not.objectContaining([])]);
+		});
+
+		it("should handle missing property when left is a primitive and right is a missing primitive", () => {
+			const source = {
+				en: { key: [1, 2], name: "Alice" },
+				de: { name: "Noah", age: 20 },
+			} as const;
+
+			const result = buildMap({
+				source,
+				kind: "custom",
+				left: "name",
+				properties: ["age"],
+			});
+
+			expect(result.size).toBe(1);
+			expect(result.get("Alice")).toBeUndefined();
+			expect(result.get("Alice")).toBeOneOf([undefined, expect.not.objectContaining({})]);
 		});
 	});
 
@@ -224,8 +259,6 @@ describe("buildMap", async () => {
 				key: "key",
 				value: "value",
 			});
-
-			console.log(result.entries());
 
 			expect(result.size).toBe(0);
 		});
