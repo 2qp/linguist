@@ -121,7 +121,10 @@ const buildMap = <
 
 			const value = Object.fromEntries(valueMap);
 
+			const isValueEmpty = isNullish(value) || isEmpty(value);
+
 			if (isNullish(key)) continue;
+			if (isValueEmpty) continue;
 
 			if (!Array.isArray(key)) {
 				map.set(key as ExtractArrayElement<TSource[K][TLeft]>, value);
@@ -136,8 +139,6 @@ const buildMap = <
 				const keyItem = item as ExtractArrayElement<TSource[K][TLeft]>;
 
 				const exist = map.get(keyItem);
-
-				const isValueEmpty = isNullish(value) || isEmpty(value);
 
 				if (isNullish(exist)) {
 					//
