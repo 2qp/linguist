@@ -18,7 +18,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const paths = createStatementPaths(dummyStmtPaths as Config);
 				const builder = createStatementBuilder();
 
-				const stmt_empty = builder.import().types([], []).from(paths, "commons").build();
+				const stmt_empty = builder.import().types([], []).from(paths, "common").build();
 
 				expectTypeOf(stmt_empty).toEqualTypeOf<`import type {  } from "${string}/${string}";`>();
 			});
@@ -30,7 +30,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const stmt_filled = builder
 					.import()
 					.types(["AceMode", "TmScopeRelax"], ["Custom"])
-					.from(paths, "commons")
+					.from(paths, "common")
 					.build();
 
 				expectTypeOf(
@@ -43,7 +43,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const builder = createStatementBuilder();
 
 				const type: string = "...";
-				const stmt_dynamic = builder.import().types(["AceMode", "TmScopeRelax"], [type]).from(paths, "commons").build();
+				const stmt_dynamic = builder.import().types(["AceMode", "TmScopeRelax"], [type]).from(paths, "common").build();
 
 				expectTypeOf(
 					stmt_dynamic,
@@ -58,7 +58,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_empty = builder.import().values([]).from(paths, "commons").build();
+				const stmt_empty = builder.import().values([]).from(paths, "common").build();
 
 				expectTypeOf(stmt_empty).toEqualTypeOf<`import {  } from "${string}/${string}";`>();
 			});
@@ -67,7 +67,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_filled_one = builder.import().values(["all"]).from(paths, "commons").build();
+				const stmt_filled_one = builder.import().values(["all"]).from(paths, "common").build();
 
 				expectTypeOf(stmt_filled_one).toEqualTypeOf<`import { all } from "${string}/${string}";`>();
 			});
@@ -76,7 +76,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_filled = builder.import().values(["ace_mode_array", "index_by_id"]).from(paths, "commons").build();
+				const stmt_filled = builder.import().values(["ace_mode_array", "index_by_id"]).from(paths, "common").build();
 
 				expectTypeOf(stmt_filled).toEqualTypeOf<`import { ace_mode_array, index_by_id } from "${string}/${string}";`>();
 			});
@@ -86,7 +86,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const builder = createStatementBuilder();
 
 				const value: string = "...";
-				const stmt_dynamic_one = builder.import().values([value]).from(paths, "commons").build();
+				const stmt_dynamic_one = builder.import().values([value]).from(paths, "common").build();
 
 				expectTypeOf(stmt_dynamic_one).toEqualTypeOf<`import { ${string} } from "${string}/${string}";`>();
 			});
@@ -96,7 +96,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const builder = createStatementBuilder();
 
 				const value: string = "...";
-				const stmt_dynamic = builder.import().values([value, value]).from(paths, "commons").build();
+				const stmt_dynamic = builder.import().values([value, value]).from(paths, "common").build();
 
 				expectTypeOf(stmt_dynamic).toEqualTypeOf<`import { ${string}, ${string} } from "${string}/${string}";`>();
 			});

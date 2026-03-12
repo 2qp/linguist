@@ -18,7 +18,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths as Config);
 				const builder = createStatementBuilder();
 
-				const stmt = builder.import().types([], []).from(paths, "commons").build();
+				const stmt = builder.import().types([], []).from(paths, "common").build();
 
 				expect(stmt).toContain("import");
 				expect(stmt).toContain("type");
@@ -31,7 +31,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths as Config);
 				const builder = createStatementBuilder();
 
-				const stmt = builder.import().types(["AceMode", "TmScopeRelax"], ["Custom"]).from(paths, "commons").build();
+				const stmt = builder.import().types(["AceMode", "TmScopeRelax"], ["Custom"]).from(paths, "common").build();
 
 				expect(stmt).toContain("AceMode");
 				expect(stmt).toContain("TmScopeRelax");
@@ -43,7 +43,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths as Config);
 				const builder = createStatementBuilder();
 
-				const stmt_empty = builder.import().types([], []).from(paths, "commons").build();
+				const stmt_empty = builder.import().types([], []).from(paths, "common").build();
 
 				expect(stmt_empty).toEqual(`import type {  } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -55,7 +55,7 @@ describe("createStatementBuilder", async () => {
 				const stmt_filled = builder
 					.import()
 					.types(["AceMode", "TmScopeRelax"], ["Custom"])
-					.from(paths, "commons")
+					.from(paths, "common")
 					.build();
 
 				expect(stmt_filled).toEqual(`import type { AceMode, TmScopeRelax, Custom } from "OUT_DIR/FILE_NO_EXT";`);
@@ -66,7 +66,7 @@ describe("createStatementBuilder", async () => {
 				const builder = createStatementBuilder();
 
 				const type: string = "SomeType";
-				const stmt_dynamic = builder.import().types(["AceMode", "TmScopeRelax"], [type]).from(paths, "commons").build();
+				const stmt_dynamic = builder.import().types(["AceMode", "TmScopeRelax"], [type]).from(paths, "common").build();
 
 				expect(stmt_dynamic).toEqual(`import type { AceMode, TmScopeRelax, ${type} } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -79,7 +79,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_empty = builder.import().values([]).from(paths, "commons").build();
+				const stmt_empty = builder.import().values([]).from(paths, "common").build();
 
 				expect(stmt_empty).toEqual(`import {  } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -88,7 +88,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_filled_one = builder.import().values(["all"]).from(paths, "commons").build();
+				const stmt_filled_one = builder.import().values(["all"]).from(paths, "common").build();
 
 				expect(stmt_filled_one).toEqual(`import { all } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -97,7 +97,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_filled = builder.import().values(["ace_mode_array", "index_by_id"]).from(paths, "commons").build();
+				const stmt_filled = builder.import().values(["ace_mode_array", "index_by_id"]).from(paths, "common").build();
 
 				expect(stmt_filled).toEqual(`import { ace_mode_array, index_by_id } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -107,7 +107,7 @@ describe("createStatementBuilder", async () => {
 				const builder = createStatementBuilder();
 
 				const value: string = "something";
-				const stmt_dynamic_one = builder.import().values([value]).from(paths, "commons").build();
+				const stmt_dynamic_one = builder.import().values([value]).from(paths, "common").build();
 
 				expect(stmt_dynamic_one).toEqual(`import { ${value} } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -119,7 +119,7 @@ describe("createStatementBuilder", async () => {
 				const value: string = "something";
 				const value2: string = "something_else";
 
-				const stmt_dynamic = builder.import().values([value, value2]).from(paths, "commons").build();
+				const stmt_dynamic = builder.import().values([value, value2]).from(paths, "common").build();
 
 				expect(stmt_dynamic).toEqual(`import { ${value}, ${value2} } from "OUT_DIR/FILE_NO_EXT";`);
 			});
