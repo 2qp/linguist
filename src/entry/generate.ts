@@ -37,7 +37,7 @@ const generate: GenerateType = async () => {
 	const fields = processFields({ config, meta, stats, ref });
 
 	await generateTypes({ source, config, ref, meta, stats, fields });
-	await transform({ source, config });
+	await transform({ source, config, stats: fields.stats });
 
 	await writeBuildInfo({ buffer: yamlBuffer, config });
 };
