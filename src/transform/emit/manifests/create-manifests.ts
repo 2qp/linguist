@@ -1,8 +1,8 @@
-import { emitManifest } from "./emit-manifest";
 import { join } from "node:path";
 import { ensureDir } from "@utils/ensure-dir";
 import { writeFile } from "@utils/write-file";
-import stringify from "safe-stable-stringify";
+import { stringify } from "safe-stable-stringify";
+import { buildMap } from "@/transform/utils/build-map";
 import { createStatements } from "@/transform/utils/create-statements";
 
 import type { Config } from "@/types/config.types";
@@ -20,17 +20,15 @@ const createManifests: CreateManifestsType = async ({ config, languages }) => {
 	await ensureDir(indexesDir);
 
 	const indexEmitters: ManifestEmitter[] = [
-		{ name: "extensions", config: { key: "name", set: "name", data: "extensions" } },
-		{ name: "filenames", config: { key: "name", set: "name", data: "filenames" } },
-		{ name: "interpreters", config: { key: "name", set: "name", data: "interpreters" } },
+		{ name: "extensions", config: { kind: "set", left: "extensions", right: "name" } },
+		{ name: "filenames", config: { kind: "set", left: "filenames", right: "name" } },
+		{ name: "interpreters", config: { kind: "set", left: "interpreters", right: "name" } },
 		{
 			name: "languages",
 			config: {
-				key: "name",
-				set: "name",
-				data: "interpreters",
-				isCustom: true,
-				custom: { name: "name", id: "language_id" },
+				kind: "custom",
+				left: "name",
+				properties: ["language_id", "name"],
 			},
 		},
 	] as const;
@@ -39,9 +37,7 @@ const createManifests: CreateManifestsType = async ({ config, languages }) => {
 		indexEmitters.map(async ({ name, config: eConf }) => {
 			//
 
-			const map = emitManifest({ languages, config: eConf });
-
-			if (!map) return;
+			const map = buildMap({ source: languages, ...eConf });
 
 			const filePath = join(indexesDir, `${name}.ts`);
 			// const exportPath = join(indexesDir, `${name}.ts`);
