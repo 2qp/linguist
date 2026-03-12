@@ -5,6 +5,8 @@ type Paths = {
 	typesDir: string;
 	flatDir: string;
 	manifestsDir: string;
+	arraysDir: string;
+
 	gettersDir: string;
 };
 

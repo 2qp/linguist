@@ -6,6 +6,7 @@ data:
     typesDir: "@/generated/data/languages"
     flatDir: "src/generated/data/flat"
     manifestsDir: "src/generated/data/manifests"
+    arraysDir: "src/generated/data/arrays"
     gettersDir: "src/generated/getters/"
 
   sourcePaths:
