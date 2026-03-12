@@ -28,17 +28,15 @@ type:
     useReadonlyArrays: true
 
   #
-  paths:
-    outputDir: "src/generated/types/common"
-  
-  #
-  aliases:
-    outputDir: "@/generated/types/common"
-
-  #
   out:
-    fileName: "language-types.generated.ts"
-    fileNameNoExt: "language-types.generated"
+    common:
+      file:
+        name: "language-types.generated"
+        ext: ".ts"
+      dir:
+        rel: "src/generated/types/common"
+        alias: "@/generated/types/common"
+
 
   naming:
     language: "Language"

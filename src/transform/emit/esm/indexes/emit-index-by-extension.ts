@@ -1,6 +1,7 @@
 import { createFallback } from "@/transform/utils/create-fallback";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
+import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
 import type { Extensions, LanguageName } from "@/types/generated.types";
 import type { IndexEmitterType } from "./types";
@@ -85,9 +86,9 @@ const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string =
 		})
 		.join("\n");
 
-	const manualTypeImports = [
-		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}";`,
-	].join("\n");
+	const paths = createStatementPaths(config);
+
+	const manualTypeImports = [`import type { Language, FallbackForUnknownKeys } from "${paths.common}";`].join("\n");
 
 	const typeImports = allUniqueNames
 		.map((name) => {

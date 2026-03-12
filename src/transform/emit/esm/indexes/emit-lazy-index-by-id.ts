@@ -1,6 +1,7 @@
 import { createFallback } from "@/transform/utils/create-fallback";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
+import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
 import type { Languages } from "@/types/generated.types";
 import type { Entries } from "@/types/utility.types";
@@ -38,9 +39,9 @@ const emitLazyIndexById: IndexEmitterType = ({ languages, config }): string => {
 		//
 	});
 
-	const manualTypeImports = [
-		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}";` as const,
-	];
+	const paths = createStatementPaths(config);
+
+	const manualTypeImports = [`import type { Language, FallbackForUnknownKeys } from "${paths.common}";` as const];
 
 	const joinedTypeImports = typeImports.join("\n");
 	const joinedManualTypeImports = manualTypeImports.join("\n");

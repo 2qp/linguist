@@ -3,6 +3,7 @@ import { generateDynamicTypes } from "@gen/generate-dynamic-types";
 import { ensureDir } from "@utils/ensure-dir";
 import { resolvePath } from "@utils/resolve-path";
 import { writeFile } from "@utils/write-file";
+import { createOutFilesMeta } from "@/transform/utils/create-out-files-meta";
 import { createReExports } from "@/transform/utils/create-re-exports";
 
 import type { Creator } from "./types";
@@ -12,11 +13,12 @@ const createDynamicTypes: Creator = async (params) => {
 
 	const typesOutput = generateDynamicTypes(params);
 
-	const outputDir = resolvePath(params.config.type.paths.outputDir);
+	const { common } = createOutFilesMeta(params.config);
+
+	const outputDir = resolvePath(common.config.dir.rel);
 	await ensureDir(outputDir);
 
-	const outputPath = join(outputDir, params.config.type.out.fileName);
-	await writeFile({ content: typesOutput, filePath: outputPath });
+	await writeFile({ content: typesOutput, filePath: common.path });
 
 	await createReExports({
 		sourceDir: outputDir,

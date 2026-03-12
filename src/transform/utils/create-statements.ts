@@ -1,4 +1,5 @@
 import { normalizeName } from "./normalize-name";
+import { createStatementPaths } from "./statement/create-statement-paths";
 import { join } from "@utils/join";
 import { safeReplacer } from "@utils/safe-replacer";
 
@@ -33,6 +34,11 @@ type CreateStatementsParams<
 
 // type CreateStatements = <const TName extends string>(params: CreateStatementsParams<TName>) => void;
 
+/**
+ * @deprecated
+ *
+ * use `create-statement-builder.ts`
+ */
 const createStatements = <
 	const TName extends string,
 	const TFalls extends FallBackPatterns[],
@@ -51,11 +57,10 @@ const createStatements = <
 
 	const { varName, typeName, ...norm } = normalizeName(name);
 
+	const paths = createStatementPaths(config);
+
 	//
-	const typeImportsAr = [
-		`import type { ${join(types, ", " as const)} }`,
-		` from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}";`,
-	] as const;
+	const typeImportsAr = [`import type { ${join(types, ", " as const)} }`, ` from "${paths.common}";`] as const;
 
 	const typeImports = join(typeImportsAr, "");
 

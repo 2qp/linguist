@@ -1,5 +1,6 @@
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
+import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
 import type { Config } from "@/types/config.types";
 import type { Languages } from "@/types/generated.types";
@@ -59,9 +60,9 @@ const emitCategoryFile: EmitCategoryFileType = ({ config, languages, category })
 		return ` import type { ${norm.typeName} } from "${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}";` as const;
 	});
 
-	const manualTypeImports = [
-		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}"` as const,
-	];
+	const paths = createStatementPaths(config);
+
+	const manualTypeImports = [`import type { Language, FallbackForUnknownKeys } from "${paths.common}"` as const];
 
 	const joinedResult = result.join("\n");
 	const joinedImports = imports.join("\n");

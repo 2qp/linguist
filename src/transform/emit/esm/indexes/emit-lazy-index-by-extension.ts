@@ -62,7 +62,7 @@ const emitLazyIndexByExtension: IndexEmitterType = ({ languages, config }): stri
 	const externalTypeImports = builder
 		.import()
 		.types(["Language", "FallbackForUnknownKeys"], [])
-		.from(paths, "commons")
+		.from(paths, "common")
 		.build();
 
 	const [var_stmt, var_export_stmt] = var_builder.value(`{\n${entries}\n}`).asConst().type(norm.typeName).build();

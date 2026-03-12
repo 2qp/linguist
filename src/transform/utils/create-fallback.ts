@@ -1,4 +1,5 @@
 import { normalizeName } from "./normalize-name";
+import { createStatementPaths } from "./statement/create-statement-paths";
 import { join } from "@utils/join";
 
 import type { Config } from "@/types/config.types";
@@ -47,8 +48,10 @@ const createFallback = <
 
 	const norm = normalizeName(name);
 
+	const paths = createStatementPaths(config);
+
 	const typeImports = [
-		`import type { ${join(types, ", " as const)}, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}";`,
+		`import type { ${join(types, ", " as const)}, FallbackForUnknownKeys } from "${paths.common}";`,
 		`\n\n`,
 	] as const;
 

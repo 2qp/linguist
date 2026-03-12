@@ -15,16 +15,19 @@ type TypeGeneratorConfig = {
 	secondary: SecondaryOptions;
 
 	//
-	paths: Paths;
-	aliases: Paths;
 	out: Out;
 	options: Options;
 	naming: NamingConfig;
 };
 
+type InternalFile = { name: string; ext: string };
+
+type InternalDir = { rel: string; alias: string };
+
+type InteralOutDef = { file: InternalFile; dir: InternalDir };
+
 type Out = {
-	fileName: string;
-	fileNameNoExt: string;
+	common: InteralOutDef;
 };
 
 type Options = {};
@@ -32,13 +35,6 @@ type Options = {};
 type SecondaryOptions = {
 	enabled: boolean;
 } & Pick<TypeGeneratorConfig, "allowFlexibleTypes" | "useReadonlyArrays">;
-
-type Paths = {
-	/**
-	 * common types folder
-	 */
-	outputDir: string;
-};
 
 type FieldType = {
 	readonly field: string;
@@ -57,4 +53,4 @@ type TypeGenConfigFile = {
 	type: TypeGeneratorConfig;
 };
 
-export type { FieldType, TypeGeneratorConfig as TypeGenConfig, TypeGenConfigFile };
+export type { FieldType, InteralOutDef, TypeGeneratorConfig as TypeGenConfig, TypeGenConfigFile };

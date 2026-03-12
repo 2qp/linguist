@@ -1,6 +1,7 @@
 import { createFallback } from "@/transform/utils/create-fallback";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
+import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
 import type { Languages } from "@/types/generated.types";
 import type { Entries } from "@/types/utility.types";
@@ -43,9 +44,9 @@ const emitIndexById: IndexEmitterType = ({ languages, config }): string => {
 			return ` import { ${norm.varName} } from "${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}";` as const;
 		});
 
-	const manualTypeImports = [
-		`import type { Language, FallbackForUnknownKeys } from "${config.type.aliases.outputDir}/${config.type.out.fileNameNoExt}";`,
-	];
+	const paths = createStatementPaths(config);
+
+	const manualTypeImports = [`import type { Language, FallbackForUnknownKeys } from "${paths.common}";`];
 
 	const typeImports = (Object.entries(languages) as Entries<Languages>).map(([name]) => {
 		const norm = normalizeName(name);
