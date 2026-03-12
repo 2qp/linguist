@@ -11,7 +11,7 @@ const emitLazyIndexByExtension: IndexEmitterType = ({ languages, config }): stri
 	//
 
 	//
-	const extensionMap = buildMap({ source: languages, left: "extensions", right: "name" });
+	const extensionMap = buildMap({ source: languages, left: "extensions", right: "name", kind: "set" });
 
 	const allUniqueNames = [...new Set([...extensionMap.values()].flatMap((set) => [...set]))];
 
@@ -67,9 +67,10 @@ const emitLazyIndexByExtension: IndexEmitterType = ({ languages, config }): stri
 
 	const [var_stmt, var_export_stmt] = var_builder.value(`{\n${entries}\n}`).asConst().type(norm.typeName).build();
 
-	const [type_stmt, type_export_stmt] = var_builder
-		.type(norm.typeName)
-		.def(`{\n${typeEntries}\n}`)
+	const [type_stmt, type_export_stmt] = builder
+		.type()
+		.alias(norm.typeName)
+		.exp(`{ \n${typeEntries}\n }`)
 		.wrap("FallbackForUnknownKeys<() => Promise<$>>")
 		.types(["Language[]", "undefined"], [])
 		.build();
