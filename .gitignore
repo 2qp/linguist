@@ -12,7 +12,7 @@ coverage
 dist
 
 # Generated
-generated
+src/generated
 
 # Debug
 npm-debug.log*
