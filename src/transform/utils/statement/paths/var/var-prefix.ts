@@ -4,6 +4,7 @@ import {
 	createExport,
 	createExportType,
 	createType,
+	createTypeofType,
 	extendType,
 	getWrapped,
 	wrapAsConst,
@@ -58,6 +59,10 @@ const asValueBuilder =
 							] as const,
 					}),
 				}),
+			}),
+
+			typeof: <const TTypeName extends Primitive>(typeName: TTypeName) => ({
+				build: () => [createTypeofType(typeName)(varName), createExportType(typeName)] as const,
 			}),
 		}),
 	});
