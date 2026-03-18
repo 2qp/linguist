@@ -2,12 +2,17 @@ import { join } from "@utils/join";
 import { safeReplacer } from "@utils/safe-replacer";
 
 import type { Primitive } from "@/types/gen.types";
-import type { Wrapper } from "@/types/statement.types";
+import type { Separator, Wrapper } from "@/types/statement.types";
 
-const getWrapped = <const TSource extends string[], TWrapper extends Wrapper>(
+const getWrapped = <
+	const TSource extends string[],
+	const TWrapper extends Wrapper = "$",
+	const TSeparator extends Separator = " | ",
+>(
 	input: TSource,
 	wrapper: TWrapper = "$" as TWrapper,
-) => safeReplacer(wrapper, "$" as const, join(input, " | "));
+	separator: TSeparator = " | " as TSeparator,
+) => safeReplacer(wrapper, "$" as const, join(input, separator));
 
 const wrapAsConst = <const T extends Primitive>(str: T) => `${str} as const;` as const;
 

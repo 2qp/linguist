@@ -5,10 +5,16 @@ type Wrapper =
 	| "ReadonlyArray<$>"
 	| "Partial<$>"
 	| "ReadonlyArray<Partial<$>>"
+	| "FallbackForUnknownKeys<ReadonlyArray<$>>"
 	| "FallbackForUnknownKeys<$>"
 	| "FallbackForUnknownKeys<() => Promise<$>>"
+	| "() => Promise.all([ $ ])"
+	| "() => Promise<[$]>"
+	| "$[number]"
 	| "($)"
 	| "$";
+
+type Separator = " | " | ", ";
 
 type TypeRef =
 	| LanguagePropertyTypeName
@@ -28,4 +34,12 @@ type VarPrefixAsValueWrapTypesCustomParams<TName extends Primitive, TValue exten
 	value: TValue;
 };
 
-export type { VarPrefixAsValueWrapTypesCustomParams as CustomParams, From, ImportableType, SL, TypeRef, Wrapper };
+export type {
+	VarPrefixAsValueWrapTypesCustomParams as CustomParams,
+	From,
+	ImportableType,
+	Separator,
+	SL,
+	TypeRef,
+	Wrapper,
+};
