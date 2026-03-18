@@ -1,0 +1,39 @@
+import { addType, createConst, createExport, wrapAsConst } from "@/transform/utils/statement/statement-builder-utils";
+
+import type { Primitive } from "@/types/gen.types";
+
+const recordBuilder =
+	<const TName extends Primitive>(varName: TName) =>
+	//
+	() => ({
+		from: () => ({
+			//
+
+			tuple: <const TValue extends ReadonlyArray<Primitive>>(value: TValue) => ({
+				build: () => [createConst(varName, `{ ${value.join("\n")} }`, ";"), createExport(varName)] as const,
+
+				type: <const TTypeName extends Primitive>(typeName: TTypeName) => ({
+					build: () =>
+						[addType(typeName)(createConst(varName, `{ ${value.join("\n")} }`, ";")), createExport(varName)] as const,
+				}),
+
+				asConst: () => ({
+					build: () =>
+						[wrapAsConst(createConst(varName, `{ ${value.join("\n")} }`, "")), createExport(varName)] as const,
+					type: <const TTypeName extends Primitive>(typeName: TTypeName) => ({
+						build: () =>
+							[
+								addType(typeName)(wrapAsConst(createConst(varName, `{ ${value.join("\n")} }`, ""))),
+								createExport(varName),
+							] as const,
+					}),
+				}),
+			}),
+		}),
+	});
+
+const arr = ["1", "2", "3"];
+
+const x = recordBuilder("VAR")().from().tuple(arr).build();
+
+export { recordBuilder };

@@ -1,4 +1,5 @@
 import { prefixBuilder } from "./var-prefix";
+import { recordBuilder } from "./var-record";
 import { valueBuilder } from "./var-value";
 import { createExportType, createTypeofType } from "@/transform/utils/statement/statement-builder-utils";
 
@@ -6,6 +7,8 @@ import type { Primitive } from "@/types/gen.types";
 
 const varBuilder = <const TName extends Primitive>(varName: TName) => ({
 	value: valueBuilder(varName),
+
+	record: recordBuilder(varName),
 
 	typeof: <const TTypeName extends Primitive>(_varName: TTypeName) => ({
 		build: () => [createTypeofType(_varName)(varName), createExportType(_varName)] as const,
