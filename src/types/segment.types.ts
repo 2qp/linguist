@@ -58,7 +58,7 @@ type RequiredValue<V> = Exclude<V, undefined>;
 type ObjectLiteralString<
 	T extends Record<string, unknown>,
 	TOptions extends { partial: boolean },
-> = `{${JoinUnion<{ [K in keyof T & string]: `${K}${TOptions["partial"] extends true ? "?" : ""}:${TypeLabel<RequiredValue<T[K]>>}, ` }[keyof T & string]>}}`;
+> = `{ ${JoinUnion<{ [K in keyof T & string]: `${K}${TOptions["partial"] extends true ? "?" : ""}:${TypeLabel<RequiredValue<T[K]>>}, ` }[keyof T & string]>} }`;
 
 type SegmentDefRecord<
 	T extends Record<string, unknown>[][],
