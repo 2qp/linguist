@@ -19,21 +19,39 @@ const typeBuilder = () => ({
 			build: () => [createType(typeName)(ref), createExportType(typeName)] as const,
 		}),
 
-		exp: <const TExpression extends `{ ${Primitive} }`>(exp: TExpression) => ({
-			wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
-				types: <const TStrict extends TypeRef[], const TLoose extends string[]>(...args: SL<TStrict, TLoose>) => ({
-					build: () =>
-						[
-							extendTypeDef("")(getWrapped([...args[0], ...args[1]], wrapper))(createType(typeName)(exp)),
-							createExportType(typeName),
-						] as const,
+		exp: () => ({
+			from: () => ({
+				record: <const TExpression extends `{ ${Primitive} }`>(exp: TExpression) => ({
+					wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
+						types: <const TStrict extends TypeRef[], const TLoose extends string[]>(...args: SL<TStrict, TLoose>) => ({
+							build: () =>
+								[
+									extendTypeDef("")(getWrapped([...args[0], ...args[1]], wrapper))(createType(typeName)(exp)),
+									createExportType(typeName),
+								] as const,
+						}),
+					}),
+				}),
+
+				tuple: <const TExpressions extends ReadonlyArray<Primitive>>(exp: TExpressions) => ({
+					wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
+						types: <const TStrict extends TypeRef[], const TLoose extends string[]>(...args: SL<TStrict, TLoose>) => ({
+							build: () =>
+								[
+									extendTypeDef("")(getWrapped([...args[0], ...args[1]], wrapper))(
+										createType(typeName)(`{ ${exp.join("\n")} }`),
+									),
+									createExportType(typeName),
+								] as const,
+						}),
+					}),
 				}),
 			}),
 		}),
 	}),
 
 	exp: () => ({
-		object: () => ({
+		record: () => ({
 			from: () => ({
 				tuple: <const T extends readonly (readonly [K, unknown, unknown])[], const K extends string | number>(
 					pairs: T,
@@ -42,7 +60,7 @@ const typeBuilder = () => ({
 						`{ ${join(
 							pairs.map(([key, value, isOptional]) => `${key}${isOptional ? "?" : ""}: ${value}` as const),
 							", ",
-						)} }` as const as RecordToLiteral<{ [K in T[number][0]]: T[number][1] }, { partial: false }>,
+						)} }` as const as RecordToLiteral<{ [K in T[number][0] as `${K}`]: T[number][1] }, { partial: false }>,
 				}),
 			}),
 		}),
