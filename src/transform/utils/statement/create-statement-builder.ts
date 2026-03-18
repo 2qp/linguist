@@ -1,3 +1,4 @@
+import { commonBuilder } from "./paths/common/common";
 import { importBuilder } from "./paths/import/import";
 import { typeBuilder } from "./paths/type/type";
 import { varBuilder } from "./paths/var/var";
@@ -23,6 +24,8 @@ const createStatementBuilder = () => {
 		var: varBuilder,
 
 		type: typeBuilder,
+
+		common: commonBuilder,
 	};
 
 	return builder;
