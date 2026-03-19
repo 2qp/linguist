@@ -16,7 +16,7 @@ type CreateFieldSetOverloaded = {
 		params: CreateFieldSetParams<T> & WithPhase<"transform">,
 	): Set<TField>;
 
-	<T extends Record<string, unknown>>(params: CreateFieldSetParams<T> & Partial<WithPhase<"transform">>): Set<Field>;
+	<T extends Record<string, unknown>>(params: CreateFieldSetParams<T> & Partial<WithPhase<"generate">>): Set<Field>;
 };
 
 /**
