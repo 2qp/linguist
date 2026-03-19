@@ -3,7 +3,10 @@ import { isNullish } from "@utils/guards";
 import type { Config } from "@/types/config.types";
 import type { HomogeneousArray } from "@/types/utility.types";
 
-type CreateValueArrayParams<TSource extends Record<string, unknown>, TField extends keyof TSource[keyof TSource]> = {
+type CreateUniqueFieldValuesParams<
+	TSource extends Record<string, unknown>,
+	TField extends keyof TSource[keyof TSource],
+> = {
 	source: TSource;
 	field: TField;
 	config: Config;
@@ -16,13 +19,13 @@ type CreateValueArrayParams<TSource extends Record<string, unknown>, TField exte
 // 	params: CreateValueArrayParams<TSource, TField>,
 // ) => HomogeneousArray<TSource, TField>;
 
-const createValueArray = <
+const createUniqueFieldValues = <
 	const TSource extends Record<string, unknown>,
 	const TField extends keyof TSource[keyof TSource],
 >({
 	source,
 	field,
-}: CreateValueArrayParams<TSource, TField>): HomogeneousArray<TSource, TField> => {
+}: CreateUniqueFieldValuesParams<TSource, TField>): HomogeneousArray<TSource, TField> => {
 	//
 
 	const values = new Set();
@@ -52,5 +55,5 @@ const createValueArray = <
 	return [...values] as HomogeneousArray<TSource, TField>;
 };
 
-export { createValueArray };
-export type { CreateValueArrayParams };
+export { createUniqueFieldValues };
+export type { CreateUniqueFieldValuesParams };

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { configLoader } from "@/infra/loaders/config-loader";
-import { createValueArray } from "@/transform/utils/create-value-array";
+import { createUniqueFieldValues } from "@/transform/utils/create-unique-field-values";
 
 describe("createValueArray", async () => {
 	///
@@ -17,7 +17,7 @@ describe("createValueArray", async () => {
 			},
 		};
 
-		const result = createValueArray({ source, field: "field", config });
+		const result = createUniqueFieldValues({ source, field: "field", config });
 
 		expect(result).toEqual([1, 2, 3, 4]);
 	});
@@ -35,7 +35,7 @@ describe("createValueArray", async () => {
 			},
 		};
 
-		const result = createValueArray({ source, field: "field", config });
+		const result = createUniqueFieldValues({ source, field: "field", config });
 
 		expect(result).toHaveLength(0);
 	});
@@ -47,7 +47,7 @@ describe("createValueArray", async () => {
 			},
 		};
 
-		const result = createValueArray({ source, field: "field", config });
+		const result = createUniqueFieldValues({ source, field: "field", config });
 
 		expect(result).toEqual([1, "a", 2]);
 	});

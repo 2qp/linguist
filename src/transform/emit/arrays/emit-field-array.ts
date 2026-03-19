@@ -3,7 +3,7 @@ import { createSegmentNames } from "@core/create-segment-names";
 import { createSecondaryName } from "@gen/utils/misc/create-secondary-name";
 import { chunkArray } from "@utils/chunk-array";
 import { join } from "@utils/join";
-import { createValueArray } from "@/transform/utils/create-value-array";
+import { createUniqueFieldValues } from "@/transform/utils/create-unique-field-values";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
 import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
@@ -13,7 +13,7 @@ import type { ArrayEmitterFn, ArrayFieldEmitterOptions } from "./types";
 const emitFieldArray: ArrayEmitterFn<ArrayFieldEmitterOptions> = ({ config, languages, options, name }) => {
 	//
 
-	const arr = createValueArray({ config, source: languages, field: options.field });
+	const arr = createUniqueFieldValues({ config, source: languages, field: options.field });
 
 	if (!arr) throw new Error(`unable to emit array of ${name}`);
 
@@ -38,7 +38,7 @@ const emitFieldArray: ArrayEmitterFn<ArrayFieldEmitterOptions> = ({ config, lang
 	const norm = normalizeName(name);
 	const norm_relax = normalizeName(`${name}_relax`);
 
-	const typeImports = builder.import().types([], [type, type_relax]).from(paths, "common").build();
+	const typeImports = builder.import().types([], [type, type_relax]).from(paths.common).build();
 
 	const var_builder = builder.var(norm.varName).prefix("_");
 	const var_prefixed_builder = var_builder
