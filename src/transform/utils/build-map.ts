@@ -41,7 +41,7 @@ const buildMap = <
 	const TLeft extends KeysOfUnion<TSource[keyof TSource]>,
 	const TRight extends KeysOfUnion<TSource[keyof TSource]>,
 	const TProperties extends KeysOfUnion<TSource[keyof TSource]>[],
-	const TVariant extends BuildVariant = "primitive",
+	const TVariant extends BuildVariant,
 >(
 	params: Params<TSource, TVariant, TLeft, TRight, TProperties> & ParamBase<TSource>,
 ): BuildReturn<TSource, K, TLeft, TRight, TProperties, TVariant> => {
