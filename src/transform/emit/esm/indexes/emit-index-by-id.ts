@@ -1,86 +1,91 @@
-import { createFallback } from "@/transform/utils/create-fallback";
+import { buildMap } from "@/transform/utils/build-map";
 import { normalizeName } from "@/transform/utils/normalize-name";
-import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
+import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
 import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
-import type { Languages } from "@/types/generated.types";
-import type { Entries } from "@/types/utility.types";
 import type { IndexEmitterType } from "./types";
 
 const emitIndexById: IndexEmitterType = ({ languages, config }): string => {
 	//
 
-	const result = (Object.entries(languages) as Entries<Languages>).map(([name, language]) => {
+	const map = buildMap({ kind: "primitive", source: languages, key: "language_id", value: "name" });
+
+	const builder = createStatementBuilder();
+
+	const output = [...map].map(([lid, name]) => {
 		//
 
 		const norm = normalizeName(name);
 
-		const entry = `  "${language.language_id}": ${norm.varName},` as const;
+		const langData = languages[name];
+		const type = langData.type;
 
-		return entry;
+		const obj = builder.common().record().key(lid).value(norm.varName).build();
+		const typeObj = builder.common().record().key(lid).value(norm.typeName).build();
 
-		//
+		const valueImports = builder
+			.import()
+			.values([norm.varName])
+			.from(config.data.paths.typesDir, "/", type, "/", norm.fileName)
+			.build();
+
+		const typeImports = builder
+			.import()
+			.types([], [norm.typeName])
+			.from(config.data.paths.typesDir, "/", type, "/", norm.fileName)
+			.build();
+
+		return { obj, typeObj, valueImports, typeImports };
 	});
 
-	const types = (Object.entries(languages) as Entries<Languages>).map(([name, language]) => {
-		//
-
-		const norm = normalizeName(name);
-
-		const entry = `  "${language.language_id}": ${norm.typeName},` as const;
-
-		return entry;
-
-		//
-	});
-
-	const imports = (Object.entries(languages) as Entries<Languages>)
-		.filter((lang) => lang[1].language_id !== undefined)
-		.map(([name]) => {
-			const norm = normalizeName(name);
-			const langData = languages[name];
-			const type = langData?.type || "programming";
-
-			return ` import { ${norm.varName} } from "${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}";` as const;
-		});
+	const entries = output.map((item) => item.obj);
+	const valueImports = output.map((item) => item.valueImports);
+	const typeImports = output.map((item) => item.typeImports);
+	const typeObj = output.map((item) => item.typeObj);
 
 	const paths = createStatementPaths(config);
 
-	const manualTypeImports = [`import type { Language, FallbackForUnknownKeys } from "${paths.common}";`];
-
-	const typeImports = (Object.entries(languages) as Entries<Languages>).map(([name]) => {
-		const norm = normalizeName(name);
-		const langData = languages[name];
-		const type = langData?.type || "programming";
-		return ` import type { ${norm.typeName} } from "${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}";`;
-	});
-
-	const joinedResult = result.join("\n");
-	const joinedImports = imports.join("\n");
-	const joinedTypeImports = typeImports.join("\n");
-	const joinedManualTypeImports = manualTypeImports.join("\n");
-	const joinedTypeEntries = types.join("\n");
+	const externalTypeImports = builder
+		.import()
+		.types(["Language", "FallbackForUnknownKeys"], [])
+		.from(paths.common)
+		.build();
 
 	const obj = "by Id" as const;
 
-	const fallback = createFallback({ config, name: obj, falls: ["Language", "undefined"], types: ["Language"] });
+	const norm = normalizeName(obj);
+
+	const [var_stmt, var_export_stmt] = builder
+		.var(norm.varName)
+		.record()
+		.from()
+		.tuple(entries)
+		.asConst()
+		.type(norm.typeName)
+		.build();
+
+	const [type_stmt, type_export_stmt] = builder
+		.type()
+		.alias(norm.typeName)
+		.exp()
+		.from()
+		.tuple(typeObj)
+		.wrap("FallbackForUnknownKeys<$>")
+		.types(["Language", "undefined"], [])
+		.build();
 
 	// later with ts compiler api
 	return [
-		`${joinedImports}`,
-		"\n\n",
-		`${joinedTypeImports}`,
-		"\n\n",
-		`${joinedManualTypeImports}`,
-		"\n\n",
-		`const ${fallback.norm.varName} : ${fallback.norm.typeName} = {\n${joinedResult}\n} as const;`,
-		"\n\n",
-		`type ${fallback.norm.typeName} = {\n${joinedTypeEntries}\n} & ${fallback.fall};\n`,
-		"\n\n",
-		`export { ${fallback.norm.varName} };\n`,
-		`export type { ${fallback.norm.typeName} };`,
-		"\n",
-	].join("");
+		valueImports.join("\n"),
+		typeImports.join("\n"),
+		externalTypeImports,
+
+		var_stmt,
+		type_stmt,
+
+		var_export_stmt,
+		type_export_stmt,
+	].join("\n\n");
 };
 
 export { emitIndexById };
