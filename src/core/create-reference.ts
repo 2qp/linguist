@@ -33,13 +33,13 @@ const createReference: CreateReference = ({ source, config }) => {
 			throw new Error(`key collision detected: "${uid} : ${existingField}"`);
 		}
 
-		const existingUid = fieldToUid.get(name as Field);
+		const existingUid = fieldToUid.get(name);
 		if (existingUid) {
 			throw new Error(`key collision detected: "${name} : ${existingUid}"`);
 		}
 
-		fieldToUid.set(name as Field, uid);
-		uidToField.set(uid, name as Field);
+		fieldToUid.set(name, uid);
+		uidToField.set(uid, name);
 	}
 
 	return { uidToField, fieldToUid };
