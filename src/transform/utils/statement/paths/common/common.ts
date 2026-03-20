@@ -1,4 +1,4 @@
-import { getWrapped } from "../../statement-builder-utils";
+import { getWrapped } from "@/transform/utils/statement/statement-builder-utils";
 
 import type { Primitive } from "@/types/gen.types";
 import type { Separator, Wrapper } from "@/types/statement.types";
@@ -16,7 +16,11 @@ const commonBuilder = () => ({
 				wrapper: TWrapper,
 				separator: TSeparator = ", " as TSeparator,
 			) => ({
-				value: <const TValue extends string[]>(value: TValue) => ({
+				value: <const TValue extends string>(value: TValue) => ({
+					build: () => `"${key}": ${getWrapped([value], wrapper, separator)},` as const,
+				}),
+
+				values: <const TValue extends string[]>(value: TValue) => ({
 					build: () => `"${key}": ${getWrapped(value, wrapper, separator)},` as const,
 				}),
 			}),
@@ -37,7 +41,15 @@ const commonBuilder = () => ({
 				wrapper: TWrapper,
 				separator: TSeparator = ", " as TSeparator,
 			) => ({
-				value: <const TValue extends string[]>(value: TValue) => ({
+				value: <const TValue extends string>(value: TValue) => ({
+					build: () => [key, getWrapped([value], wrapper, separator)] as const,
+
+					trailing: <const TTrailing extends unknown[]>(...args: TTrailing) => ({
+						build: () => [key, getWrapped([value], wrapper, separator), ...args] as const,
+					}),
+				}),
+
+				values: <const TValue extends string[]>(value: TValue) => ({
 					build: () => [key, getWrapped(value, wrapper, separator)] as const,
 
 					trailing: <const TTrailing extends unknown[]>(...args: TTrailing) => ({
