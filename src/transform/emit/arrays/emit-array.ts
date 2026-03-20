@@ -40,6 +40,7 @@ const emitArray: ArrayEmitterFn<ArrayEmitterOptions> = ({ name, config, language
 
 		const var_builder = builder.var(norm.varName).prefix("_");
 
+		// could use .common().tuple().key(item)
 		const types = params.options.properties
 			.map((item) => [item, stats.get(item)?.type, stats.get(item)?.isOptional] as const)
 			.filter((i): i is [keyof Language, string, boolean] => i[0] != null && i[1] != null);
@@ -50,10 +51,10 @@ const emitArray: ArrayEmitterFn<ArrayEmitterOptions> = ({ name, config, language
 				[],
 				types.map((item) => item[1]),
 			)
-			.from(paths, "common")
+			.from(paths.common)
 			.build();
 
-		const objTypes = builder.type().exp().object().from().tuple(types).build();
+		const objTypes = builder.type().exp().record().from().tuple(types).build();
 
 		const [prefixed_stmt, prefixed_stmt_export] = var_builder.value(obj).asConst().build();
 
