@@ -37,6 +37,14 @@ type:
         rel: "src/generated/types/common"
         alias: "@/generated/types/common"
 
+    usage:
+      file:
+        name: "usage-types.generated"
+        ext: ".ts"
+      dir:
+        rel: "src/generated/types/usage"
+        alias: "@/generated/types/usage"
+
 
   naming:
     language: "Language"

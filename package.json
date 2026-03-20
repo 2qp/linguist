@@ -15,6 +15,7 @@
 				"default": "./dist/data/*.cjs"
 			}
 		},
+
 		"./getters": {
 			"import": {
 				"types": "./dist/getters/index.d.ts",
@@ -25,6 +26,7 @@
 				"default": "./dist/getters/index.cjs"
 			}
 		},
+
 		".": {
 			"import": {
 				"types": "./dist/types/common/index.d.ts",
@@ -34,13 +36,24 @@
 				"types": "./dist/types/common/index.d.cts",
 				"default": "./dist/types/common/index.cjs"
 			}
+		},
+
+		"./usage": {
+			"import": {
+				"types": "./dist/types/usage/index.d.ts",
+				"default": "./dist/types/usage/index.js"
+			},
+			"require": {
+				"types": "./dist/types/usage/index.d.cts",
+				"default": "./dist/types/usage/index.cjs"
+			}
 		}
 	},
 	"files": [
 		"dist"
 	],
 	"scripts": {
-		"test": "vitest",
+		"test": "vitest --typecheck",
 		"clean": "rimraf dist src/generated",
 		"build": "pnpm run clean && pnpm run generate && tsup",
 		"dev": "tsup --watch",

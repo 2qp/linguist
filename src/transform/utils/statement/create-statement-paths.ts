@@ -6,9 +6,12 @@ type StmtPathRecord = Record<keyof TypeGenConfig["out"], string>;
 const createStatementPaths = (config: Config) => {
 	//
 
-	const { dir, file } = config.type.out.common;
+	const { common, usage } = config.type.out;
 
-	const map = { common: `${dir.alias}/${file.name}` as const } as const satisfies StmtPathRecord;
+	const map = {
+		common: `${common.dir.alias}/${common.file.name}` as const,
+		usage: `${usage.dir.alias}/${usage.file.name}` as const,
+	} as const satisfies StmtPathRecord;
 
 	return map;
 };

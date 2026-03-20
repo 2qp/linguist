@@ -28,6 +28,7 @@ type InteralOutDef = { file: InternalFile; dir: InternalDir };
 
 type Out = {
 	common: InteralOutDef;
+	usage: InteralOutDef;
 };
 
 type Options = {};

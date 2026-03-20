@@ -1,4 +1,5 @@
 import { createDynamicTypes } from "./creators/create-dynamic-types";
+import { createUsageTypes } from "./creators/create-usage-types";
 import { createOutFilesMeta } from "@/transform/utils/create-out-files-meta";
 
 import type { Generator } from "./types";
@@ -11,7 +12,7 @@ const generateTypes: GenerateTypes = async (params) => {
 	try {
 		const { common } = createOutFilesMeta(params.config);
 
-		await Promise.all([createDynamicTypes(params)]);
+		await Promise.all([createDynamicTypes(params), createUsageTypes(params)]);
 
 		// mmmaybe use `ora spinner`
 		console.info(`Types generated to: ${common.config.dir.rel}\n`);

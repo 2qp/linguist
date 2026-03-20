@@ -14,10 +14,11 @@ type OutFilesRecord = Record<keyof TypeGenConfig["out"], OutFileMeta>;
 const createOutFilesMeta = (config: Config): OutFilesRecord => {
 	//
 
-	const { common } = config.type.out;
+	const { common, usage } = config.type.out;
 
 	const map = {
 		common: { path: join(resolvePath(common.dir.rel), `${common.file.name}${common.file.ext}`), config: common },
+		usage: { path: join(resolvePath(usage.dir.rel), `${usage.file.name}${usage.file.ext}`), config: usage },
 	} as const satisfies OutFilesRecord;
 
 	return map;
