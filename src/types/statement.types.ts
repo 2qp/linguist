@@ -10,7 +10,10 @@ type Wrapper =
 	| "FallbackForUnknownKeys<() => Promise<$>>"
 	| "() => Promise.all([ $ ])"
 	| "() => Promise<[$]>"
+	| "() => Promise<$>"
+	| "() => $"
 	| "$[number]"
+	| "[$]"
 	| "($)"
 	| "$";
 
