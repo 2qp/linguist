@@ -6,7 +6,7 @@ import { writeFile } from "@utils/write-file";
 import type { Config } from "@/types/config.types";
 import type { Languages, Type } from "@/types/generated.types";
 
-type CreateCategoriesParams = { grouped: Record<Type, Partial<Languages>>; config: Config };
+type CreateCategoriesParams = { grouped: Record<Type, Languages>; config: Config };
 
 type CreateCategoriesType = (params: CreateCategoriesParams) => Promise<void>;
 
