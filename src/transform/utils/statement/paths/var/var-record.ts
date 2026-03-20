@@ -32,8 +32,4 @@ const recordBuilder =
 		}),
 	});
 
-const arr = ["1", "2", "3"];
-
-const x = recordBuilder("VAR")().from().tuple(arr).build();
-
 export { recordBuilder };
