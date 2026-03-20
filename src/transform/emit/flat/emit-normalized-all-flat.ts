@@ -1,12 +1,16 @@
-import stringify from "safe-stable-stringify";
-import { createFallback } from "@/transform/utils/create-fallback";
+import { stringify } from "safe-stable-stringify";
 import { normalizeName } from "@/transform/utils/normalize-name";
+import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
+import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
 import type { Language, LanguageName } from "@/types/generated.types";
 import type { FlatEmitterType } from "./types";
 
 const emitNormalizedAllFlat: FlatEmitterType = ({ config, languages }) => {
 	//
+
+	const builder = createStatementBuilder();
+	const paths = createStatementPaths(config);
 
 	const normalized: Record<string, Language> = {};
 	const seenKeys = new Set<string>();
@@ -30,30 +34,48 @@ const emitNormalizedAllFlat: FlatEmitterType = ({ config, languages }) => {
 		const value = languages[key];
 		if (!value) continue;
 
-		const nameAttachedValue = { ...value, name: key };
-
 		seenKeys.add(normalizedKey);
-		normalized[normalizedKey] = nameAttachedValue;
+		normalized[normalizedKey] = value;
 	}
 
 	const content = stringify(normalized, null, 2);
 
 	const name = "normalized All" as const;
 
-	const fallback = createFallback({ config, name, falls: ["Language", "undefined"], types: ["Language"] });
+	const norm = normalizeName(name);
+
+	const externalTypeImports = builder
+		.import()
+		.types(["Language", "FallbackForUnknownKeys"], [])
+		.from(paths.common)
+		.build();
+
+	const [_var_stmt, _var_stmt_export] = builder.var(norm.varName).prefix("_").value(content).asConst().build();
+
+	const [var_stmt, var_stmt_export] = builder
+		.var(norm.varName)
+		.prefix("_")
+		.typeof()
+		.wrap("FallbackForUnknownKeys<$>")
+		.types(["Language", "undefined"], [])
+		.build();
+
+	const [type_stmt, type_stmt_export] = builder.var(norm.varName).typeof(norm.typeName).build();
 
 	const statements = (
 		[
-			fallback.typeImports.join(""),
-			`const _${fallback.norm.varName} = ${content} as const;`,
-			"\n\n",
-			fallback.varStatement,
-			"\n\n",
-			fallback.typeStatement,
-			"\n\n",
-			fallback.exportStatement.join(""),
+			externalTypeImports,
+
+			_var_stmt,
+			var_stmt,
+
+			type_stmt,
+
+			_var_stmt_export,
+			var_stmt_export,
+			type_stmt_export,
 		] as const
-	).join("");
+	).join("\n\n");
 
 	return statements;
 };
