@@ -1,121 +1,100 @@
-import { createFallback } from "@/transform/utils/create-fallback";
+import { buildMap } from "@/transform/utils/build-map";
 import { normalizeName } from "@/transform/utils/normalize-name";
-import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
+import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
 import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
-import type { Extensions, LanguageName } from "@/types/generated.types";
 import type { IndexEmitterType } from "./types";
 
 const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string => {
 	//
 
-	//
-	const buildExtensionMap = () => {
-		// mmm instead of reducer + spread | 0.842ms, 0.535ms
+	const map = buildMap({ kind: "set", source: languages, left: "extensions", right: "name" });
+	const builder = createStatementBuilder();
 
-		const extensionMap = new Map<Extensions[number], Set<LanguageName>>();
-
-		for (const languageName of Object.keys(languages) as LanguageName[]) {
-			if (!languageName) continue;
-
-			const languageData = languages[languageName];
-
-			const extensions = languageData?.extensions;
-
-			if (!extensions) continue;
-
-			for (const extension of extensions) {
-				// extensionMap.get(extension)?.add(languageName) || extensionMap.set(extension, new Set([languageName]));
-
-				const exist = extensionMap.get(extension);
-				if (!exist) {
-					extensionMap.set(extension, new Set([languageName]));
-					continue;
-				}
-
-				extensionMap.set(extension, new Set(exist).add(languageName));
-			}
-		}
-
-		return extensionMap;
-	};
-
-	const extensionMap = buildExtensionMap();
-
-	const allUniqueNames = [...new Set([...extensionMap.values()].flatMap((set) => [...set]))];
-
-	const result = [...extensionMap.entries()].flatMap(([ext, nameSet]) => {
+	const result = [...map].map(([ext, nameSet]) => {
 		//
 
-		const vars = [...nameSet]
-			.map((name) => {
-				const norm = normalizeName(name);
-				return `${norm.varName}`;
-			})
-			.join(",");
+		const processed = [...nameSet].map((name) => {
+			const { varName, typeName, ...norm } = normalizeName(name);
 
-		return `  "${ext}": [${[vars]}],` as const;
+			const language = languages[name];
+			const type = language.type;
+
+			const valueImports = builder
+				.import()
+				.values([varName])
+				.from(config.data.paths.typesDir, "/", type, "/", norm.fileName)
+				.build();
+
+			const typeImports = builder
+				.import()
+				.types([], [typeName])
+				.from(config.data.paths.typesDir, "/", type, "/", norm.fileName)
+				.build();
+
+			return { varName, typeName, valueImports, typeImports };
+		});
+
+		const varNames = processed.map((item) => item.varName);
+		const typeNames = processed.map((item) => item.typeName);
+		const valueImports = processed.map((item) => item.valueImports);
+		const typeImports = processed.map((item) => item.typeImports);
+
+		const vars = builder.common().record().key(ext).wrap("[$]").values(varNames).build();
+		const types = builder.common().record().key(ext).wrap("[$]").values(typeNames).build();
+
+		return { vars, types, valueImports, typeImports };
 
 		//
 	});
 
-	const types = [...extensionMap.entries()].flatMap(([ext, nameSet]) => {
-		//
+	const entries = result.map((item) => item.vars);
+	const typeEntries = result.map((item) => item.types);
 
-		const vars = [...nameSet]
-			.map((name) => {
-				const norm = normalizeName(name);
-				return `${norm.typeName}`;
-			})
-			.join(",");
-
-		return `  "${ext}": [${[vars]}],` as const;
-
-		//
-	});
-
-	const entries = result.join("\n");
-	const typeEntries = types.join("\n");
-
-	const imports = allUniqueNames
-		.map((name) => {
-			const norm = normalizeName(name);
-			const langData = languages[name];
-			const type = langData?.type || "programming";
-			return ` import { ${norm.varName} } from "${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}";`;
-		})
-		.join("\n");
+	const valueImports = [...new Set(result.flatMap((item) => item.valueImports))];
+	const typeImports = [...new Set(result.flatMap((item) => item.typeImports))];
 
 	const paths = createStatementPaths(config);
 
-	const manualTypeImports = [`import type { Language, FallbackForUnknownKeys } from "${paths.common}";`].join("\n");
-
-	const typeImports = allUniqueNames
-		.map((name) => {
-			const norm = normalizeName(name);
-			const langData = languages[name];
-			const type = langData?.type || "programming";
-			return ` import type { ${norm.typeName} } from "${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}";`;
-		})
-		.join("\n");
+	const manualTypeImports = builder
+		.import()
+		.types(["Language", "FallbackForUnknownKeys"], [])
+		.from(paths.common)
+		.build();
 
 	const obj = "by Extension" as const;
+	const norm = normalizeName(obj);
 
-	const fallback = createFallback({ config, name: obj, falls: ["Language[]", "undefined"], types: ["Language"] });
+	const [var_stmt, var_stmt_export] = builder
+		.var(norm.varName)
+		.record()
+		.from()
+		.tuple(entries)
+		.asConst()
+		.type(norm.typeName)
+		.build();
+
+	const [type_stmt, type_stmt_export] = builder
+		.type()
+		.alias(norm.typeName)
+		.exp()
+		.from()
+		.tuple(typeEntries)
+		.wrap("FallbackForUnknownKeys<$>")
+		.types(["Language[]", "undefined"], [])
+		.build();
 
 	return [
-		`${imports}`,
-		"\n\n",
-		`${typeImports}`,
-		"\n\n",
-		`${manualTypeImports}`,
-		"\n\n",
-		`const ${fallback.norm.varName} : ${fallback.norm.typeName} = {\n${entries}\n} as const;`,
-		"\n\n",
-		`type ${fallback.norm.typeName} = {\n${typeEntries}\n} & ${fallback.fall};\n\n`,
-		`export { ${fallback.norm.varName} };\n`,
-		`export type { ${fallback.norm.typeName} };`,
-	].join("");
+		valueImports.join("\n"),
+		typeImports.join("\n"),
+		manualTypeImports,
+
+		var_stmt,
+		type_stmt,
+
+		var_stmt_export,
+		type_stmt_export,
+	].join("\n\n");
 };
 
 export { emitIndexByExtension };

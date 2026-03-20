@@ -1,7 +1,6 @@
 import { join } from "@utils/join";
 import { buildMap } from "@/transform/utils/build-map";
 import { normalizeName } from "@/transform/utils/normalize-name";
-import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
 import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
 import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
@@ -11,72 +10,87 @@ const emitLazyIndexByExtension: IndexEmitterType = ({ languages, config }): stri
 	//
 
 	//
-	const extensionMap = buildMap({ source: languages, left: "extensions", right: "name", kind: "set" });
+	const map = buildMap({ source: languages, left: "extensions", right: "name", kind: "set" });
 
-	const allUniqueNames = [...new Set([...extensionMap.values()].flatMap((set) => [...set]))];
+	const builder = createStatementBuilder();
 
-	const entries = [...extensionMap.entries()]
-		.map(([ext, nameSet]) => {
-			const importStatements = [...nameSet]
-				.map((name) => {
-					const norm = normalizeName(name);
-					const langData = languages[name];
-					const type = langData?.type || "programming";
-					return `    import('${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}').then(({ ${norm.varName} }) => ${norm.varName})` as const;
-				})
-				.join(",\n");
+	const result = [...map].map(([ext, nameSet]) => {
+		//
 
-			return `  "${ext}": () => Promise.all([\n${importStatements}\n  ]),` as const;
-		})
-		.join("\n");
+		const processed = [...nameSet].map((name) => {
+			//
 
-	const types = [...extensionMap.entries()].map(([ext, nameSet]) => {
-		const importStatements = [...nameSet]
-			.map((name) => {
-				const norm = normalizeName(name);
-				return `${norm.typeName}` as const;
-			})
-			.join(", ");
+			const language = languages[name];
+			const type = language.type;
 
-		return `  "${ext}": () => Promise<[${importStatements}]>,`;
+			const { varName, typeName, ...norm } = normalizeName(name);
+
+			const valueImports = builder
+				.import()
+				.lazy()
+				.values()
+				.from([config.data.paths.typesDir, "/", type, "/", norm.fileName])
+				.then_(varName)
+				.build();
+
+			const typeImports = builder
+				.import()
+				.types([], [typeName])
+				.from(config.data.paths.typesDir, "/", type, "/", norm.fileName)
+				.build();
+
+			return { typeName, valueImports, typeImports };
+		});
+
+		const typeNames = processed.map((item) => item.typeName);
+		const valueImports_ = processed.map((item) => item.valueImports);
+		const typeImports = processed.map((item) => item.typeImports);
+
+		const types = builder.common().record().key(ext).wrap("() => Promise<[$]>").values(typeNames).build();
+
+		const vars = builder.common().record().key(ext).wrap("() => Promise.all([ $ ])").values(valueImports_).build();
+
+		return { vars, types, typeImports };
+
+		//
 	});
 
-	const typeImports = allUniqueNames.map((name) => {
-		const norm = normalizeName(name);
-		const langData = languages[name];
-		const type = langData?.type || "programming";
-		return ` import type { ${norm.typeName} } from "${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}";` as const;
-	});
-
-	const typeEntries = types.join("\n");
-	const typeImportsEntries = typeImports.join("\n");
+	const vars = result.map((item) => item.vars);
+	const types = result.map((item) => item.types);
+	const typeImports = [...new Set(result.flatMap((item) => item.typeImports))];
 
 	const obj = "lazy By Extension" as const;
 
-	const builder = createStatementBuilder();
 	const norm = normalizeName(obj);
 	const paths = createStatementPaths(config);
-
-	const var_builder = builder.var(norm.varName);
 
 	const externalTypeImports = builder
 		.import()
 		.types(["Language", "FallbackForUnknownKeys"], [])
-		.from(paths, "common")
+		.from(paths.common)
 		.build();
 
-	const [var_stmt, var_export_stmt] = var_builder.value(`{\n${entries}\n}`).asConst().type(norm.typeName).build();
+	const [var_stmt, var_export_stmt] = builder
+		.var(norm.varName)
+		.record()
+		.from()
+		.tuple(vars)
+		.asConst()
+		.type(norm.typeName)
+		.build();
 
 	const [type_stmt, type_export_stmt] = builder
 		.type()
 		.alias(norm.typeName)
-		.exp(`{ \n${typeEntries}\n }`)
+		.exp()
+		.from()
+		.tuple(types)
 		.wrap("FallbackForUnknownKeys<() => Promise<$>>")
 		.types(["Language[]", "undefined"], [])
 		.build();
 
 	const out = [
-		typeImportsEntries,
+		typeImports.join("\n"),
 		externalTypeImports,
 		//
 		var_stmt,

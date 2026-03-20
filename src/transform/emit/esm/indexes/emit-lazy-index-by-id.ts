@@ -1,68 +1,89 @@
-import { createFallback } from "@/transform/utils/create-fallback";
+import { buildMap } from "@/transform/utils/build-map";
 import { normalizeName } from "@/transform/utils/normalize-name";
-import { removeTrailingSlash } from "@/transform/utils/remove-trailing-slash";
+import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
 import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
-import type { Languages } from "@/types/generated.types";
-import type { Entries } from "@/types/utility.types";
 import type { IndexEmitterType } from "./types";
 
 const emitLazyIndexById: IndexEmitterType = ({ languages, config }): string => {
 	//
 
-	const entries = (Object.entries(languages) as Entries<Languages>)
-		.filter((lang) => lang[1].language_id !== undefined)
-		.map(([name, data]) => {
-			const norm = normalizeName(name);
-			const langData = languages[name];
-			const type = langData?.type || "programming";
+	const map = buildMap({ kind: "primitive", source: languages, key: "language_id", value: "name" });
 
-			return `  ${data.language_id}: () => import('${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}').then(({ ${norm.varName} }) => ${norm.varName}),` as const;
-		});
+	const builder = createStatementBuilder();
 
-	const typeImports = (Object.entries(languages) as Entries<Languages>).map(([name]) => {
+	const output = [...map].map(([lid, name]) => {
+		//
+
 		const norm = normalizeName(name);
+
 		const langData = languages[name];
-		const type = langData?.type || "programming";
-		return ` import type { ${norm.typeName} } from "${removeTrailingSlash(config.data.paths.typesDir)}/${type}/${norm.fileName}";`;
+		const type = langData.type;
+
+		const lazyValue = builder
+			.import()
+			.lazy()
+			.values()
+			.from([config.data.paths.typesDir, "/", type, "/", norm.fileName])
+			.then_(norm.varName)
+			.build();
+
+		const typeImports = builder
+			.import()
+			.types([], [norm.typeName])
+			.from(config.data.paths.typesDir, "/", type, "/", norm.fileName)
+			.build();
+
+		const types = builder.common().record().key(lid).wrap("() => Promise<$>").value(norm.typeName).build();
+		const vars = builder.common().record().key(lid).wrap("() => $").value(lazyValue).build();
+
+		return { types, vars, typeImports };
 	});
 
-	const types = (Object.entries(languages) as Entries<Languages>).map(([name, language]) => {
-		//
-
-		const norm = normalizeName(name);
-
-		const entry = `  "${language.language_id}": () => Promise<${norm.typeName}>,` as const;
-
-		return entry;
-
-		//
-	});
-
-	const paths = createStatementPaths(config);
-
-	const manualTypeImports = [`import type { Language, FallbackForUnknownKeys } from "${paths.common}";` as const];
-
-	const joinedTypeImports = typeImports.join("\n");
-	const joinedManualTypeImports = manualTypeImports.join("\n");
-	const joinedTypeEntries = types.join("\n");
+	const vars = output.map((item) => item.vars);
+	const types = output.map((item) => item.types);
+	const typeImports = output.map((item) => item.typeImports);
 
 	const obj = "lazy By Id" as const;
+	const norm = normalizeName(obj);
+	const paths = createStatementPaths(config);
 
-	const fallback = createFallback({ config, name: obj, falls: ["Language", "undefined"], types: ["Language"] });
+	const externalTypeImports = builder
+		.import()
+		.types(["Language", "FallbackForUnknownKeys"], [])
+		.from(paths.common)
+		.build();
+
+	const [var_stmt, var_export_stmt] = builder
+		.var(norm.varName)
+		.record()
+		.from()
+		.tuple(vars)
+		.asConst()
+		.type(norm.typeName)
+		.build();
+
+	const [type_stmt, type_export_stmt] = builder
+		.type()
+		.alias(norm.typeName)
+		.exp()
+		.from()
+		.tuple(types)
+		.wrap("FallbackForUnknownKeys<() => Promise<$>>")
+		.types(["Language", "undefined"], [])
+		.build();
 
 	// later with ts compiler api
 	return [
-		`${joinedTypeImports}`,
-		"\n\n",
-		`${joinedManualTypeImports}`,
-		"\n\n",
-		`const ${fallback.norm.varName} : ${fallback.norm.typeName} = {\n${entries.join("\n")}\n} as const;\n\n` as const,
-		"\n",
-		`type ${fallback.norm.typeName} = {\n${joinedTypeEntries}\n} & ${fallback.asyncFall};`,
-		"\n\n",
-		fallback.exportStatement.join(""),
-	].join("");
+		typeImports.join("\n"),
+		externalTypeImports,
+
+		var_stmt,
+		type_stmt,
+
+		var_export_stmt,
+		type_export_stmt,
+	].join("\n\n");
 };
 
 export { emitLazyIndexById };
