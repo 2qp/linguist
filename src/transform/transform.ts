@@ -49,7 +49,7 @@ const transform: Transform = async ({ config, source, stats: _stats }) => {
 
 	await createIndexes({ languages, config });
 
-	await createMaps({ languages, config });
+	await createMaps({ languages, config, stats });
 
 	await createFlats({ languages, config });
 

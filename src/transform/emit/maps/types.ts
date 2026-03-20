@@ -1,10 +1,21 @@
+import type { BuildParams } from "@/transform/utils/build-map";
+import type { NormalizedName } from "@/transform/utils/normalize-name";
 import type { Config } from "@/types/config.types";
-import type { Languages } from "@/types/generated.types";
+import type { ProcessedFieldAnalysisArray } from "@/types/field.types";
+import type { Language, Languages } from "@/types/generated.types";
 
-type MapEmitterParams = { languages: Languages | Readonly<Languages>; config: Config };
+type MapEmitterParams<TOptions> = {
+	languages: Languages;
+	config: Config;
+	options: TOptions;
+	name: string;
+	stats: ProcessedFieldAnalysisArray<keyof Language>;
+};
 
-type MapEmitterType = (params: MapEmitterParams) => string;
+type MapEmitterType<TOptions> = (params: MapEmitterParams<TOptions>) => { content: string; norm: NormalizedName };
 
-type MapEmitter = { name: string; emitter: MapEmitterType };
+type MapEmitter<TOptions> = { name: string; emitter: MapEmitterType<TOptions>; options: TOptions };
 
-export type { MapEmitter, MapEmitterParams, MapEmitterType };
+type MapEmitterOptions = {} & BuildParams<Languages>;
+
+export type { MapEmitter, MapEmitterOptions, MapEmitterParams, MapEmitterType };
