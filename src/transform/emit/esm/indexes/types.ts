@@ -1,7 +1,7 @@
 import type { Config } from "@/types/config.types";
 import type { Languages } from "@/types/generated.types";
 
-type IndexEmitterParams = { languages: Languages | Readonly<Languages>; config: Config };
+type IndexEmitterParams = { languages: Languages; config: Config };
 
 type IndexEmitterType = (params: IndexEmitterParams) => string;
 
