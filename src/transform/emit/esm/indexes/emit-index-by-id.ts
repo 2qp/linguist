@@ -1,3 +1,4 @@
+import { LANG_DICTIONARY } from "@/constants/commons";
 import { buildMap } from "@/transform/utils/build-map";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
@@ -45,11 +46,7 @@ const emitIndexById: IndexEmitterType = ({ languages, config }): string => {
 
 	const paths = createStatementPaths(config);
 
-	const externalTypeImports = builder
-		.import()
-		.types(["Language", "FallbackForUnknownKeys"], [])
-		.from(paths.common)
-		.build();
+	const externalTypeImports = builder.import().types(LANG_DICTIONARY, []).from(paths.common).build();
 
 	const obj = "by Id" as const;
 

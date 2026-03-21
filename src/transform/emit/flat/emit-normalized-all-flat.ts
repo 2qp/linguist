@@ -1,4 +1,5 @@
 import { stringify } from "safe-stable-stringify";
+import { LANG_DICTIONARY } from "@/constants/commons";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
 import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
@@ -44,11 +45,7 @@ const emitNormalizedAllFlat: FlatEmitterType = ({ config, languages }) => {
 
 	const norm = normalizeName(name);
 
-	const externalTypeImports = builder
-		.import()
-		.types(["Language", "FallbackForUnknownKeys"], [])
-		.from(paths.common)
-		.build();
+	const externalTypeImports = builder.import().types(LANG_DICTIONARY, []).from(paths.common).build();
 
 	const [_var_stmt, _var_stmt_export] = builder
 		.var(norm.varName)

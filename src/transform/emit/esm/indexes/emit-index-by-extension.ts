@@ -1,3 +1,4 @@
+import { LANG_DICTIONARY } from "@/constants/commons";
 import { buildMap } from "@/transform/utils/build-map";
 import { normalizeName } from "@/transform/utils/normalize-name";
 import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
@@ -56,11 +57,7 @@ const emitIndexByExtension: IndexEmitterType = ({ languages, config }): string =
 
 	const paths = createStatementPaths(config);
 
-	const manualTypeImports = builder
-		.import()
-		.types(["Language", "FallbackForUnknownKeys"], [])
-		.from(paths.common)
-		.build();
+	const manualTypeImports = builder.import().types(LANG_DICTIONARY, []).from(paths.common).build();
 
 	const obj = "by Extension" as const;
 	const norm = normalizeName(obj);
