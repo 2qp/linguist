@@ -1,4 +1,5 @@
 import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import { BASE_DIR, ROOT_DIR } from "@/constants/paths";
 
 const resolvePath = (...segments: string[]): string => {
@@ -6,7 +7,7 @@ const resolvePath = (...segments: string[]): string => {
 };
 
 const resolvePathURL = (...segments: string[]): URL => {
-	return new URL(`file://${resolvePath(...segments)}`);
+	return pathToFileURL(resolvePath(...segments));
 };
 
 //
@@ -15,7 +16,7 @@ const resolveSrcPath = (...segments: string[]): string => {
 };
 
 const resolveSrcPathURL = (...segments: string[]): URL => {
-	return new URL(`file://${resolveSrcPath(...segments)}`);
+	return pathToFileURL(resolveSrcPath(...segments));
 };
 
 export { resolvePath, resolvePathURL, resolveSrcPath, resolveSrcPathURL };
