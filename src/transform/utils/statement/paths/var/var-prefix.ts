@@ -76,6 +76,14 @@ const valueBuilder =
 		asConst: () => ({
 			build: () =>
 				[wrapAsConst(createConst(`${prefix}${varName}`, value, "")), createExport(`${prefix}${varName}`)] as const,
+
+			wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
+				build: () =>
+					[
+						wrapAsConst(createConst(`${prefix}${varName}`, getWrapped([`${value}`], wrapper, ", "), "")),
+						createExport(`${prefix}${varName}`),
+					] as const,
+			}),
 		}),
 
 		type: <const TTypeName extends Primitive>(typeName: TTypeName) => ({
