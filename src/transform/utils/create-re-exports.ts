@@ -1,9 +1,27 @@
 import { mkdir, stat, writeFile } from "node:fs/promises";
-import { basename, dirname, extname, join, relative, resolve } from "node:path";
+import { basename, dirname, extname, join, normalize, relative, resolve } from "node:path";
 import { glob } from "glob";
-import { createProgram, ModuleKind, ModuleResolutionKind, ScriptTarget, SymbolFlags } from "typescript";
+import {
+	createPrinter,
+	createProgram,
+	EmitHint,
+	isInterfaceDeclaration,
+	isTypeAliasDeclaration,
+	ModuleKind,
+	ModuleResolutionKind,
+	NewLineKind,
+	ScriptTarget,
+	SymbolFlags,
+} from "typescript";
 
-import type { Program, SourceFile, Symbol as TsSymbol, TypeChecker } from "typescript";
+import type {
+	InterfaceDeclaration,
+	Program,
+	SourceFile,
+	Symbol as TsSymbol,
+	TypeAliasDeclaration,
+	TypeChecker,
+} from "typescript";
 
 type ReExportConfig = {
 	outputDir?: string;
@@ -295,6 +313,62 @@ const generateSingleFileExports = async (
 	await writeExportFile(outputFilePath, exportLines, config);
 };
 
+const findTypeDeclaration = (
+	sourceFile: SourceFile,
+	typeName: string,
+	checker: TypeChecker,
+): TypeAliasDeclaration | InterfaceDeclaration | null => {
+	//
+
+	const symbols = checker.getSymbolsInScope(
+		sourceFile,
+		SymbolFlags.Type | SymbolFlags.TypeAlias | SymbolFlags.Interface,
+	);
+
+	const symbol = symbols.find((s) => s.name === typeName);
+
+	if (symbol?.declarations) {
+		for (const decl of symbol.declarations) {
+			if (isTypeAliasDeclaration(decl) || isInterfaceDeclaration(decl)) {
+				return decl;
+			}
+		}
+	}
+
+	return null;
+};
+
+const getTypeAsString = async (filePath: string, typeName: string, config: ReExportConfig): Promise<string | null> => {
+	//
+
+	const sourceFiles = await resolveSourceFiles(config);
+
+	const program = await createTypeScriptProgram(sourceFiles);
+
+	const sourceFile = program.getSourceFiles().find((sf) => {
+		//
+
+		const normalizedFileName = normalize(sf.fileName);
+		const normalizedFilePath = normalize(filePath);
+
+		return normalizedFileName === normalizedFilePath || normalizedFileName.endsWith(normalizedFilePath);
+	});
+
+	if (!sourceFile) return null;
+
+	const checker = program.getTypeChecker();
+
+	const typeDeclaration = findTypeDeclaration(sourceFile, typeName, checker);
+
+	if (!typeDeclaration) return null;
+
+	const printer = createPrinter({ newLine: NewLineKind.LineFeed, removeComments: false });
+
+	const result = printer.printNode(EmitHint.Unspecified, typeDeclaration, sourceFile);
+
+	return result;
+};
+
 type CreateReExportsParams = ReExportConfig;
 
 type CreateReExportsType = (params: CreateReExportsParams) => Promise<void>;
@@ -318,7 +392,7 @@ const createReExports: CreateReExportsType = async (config) => {
 	await generateSingleFileExports(program, checker, sourceFiles, config);
 };
 
-export { createReExports };
+export { createReExports, getTypeAsString };
 export type { CreateReExportsParams, CreateReExportsType, ReExportConfig };
 
 //
