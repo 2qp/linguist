@@ -22,7 +22,14 @@ const emitJSONFlat: FlatEmitterType = ({ languages, config }) => {
 		.from(paths.common)
 		.build();
 
-	const [_var_stmt, _var_stmt_export] = builder.var(norm.varName).prefix("_").value(content).asConst().build();
+	const [_var_stmt, _var_stmt_export] = builder
+		.var(norm.varName)
+		.prefix("_")
+		.expr()
+		.from()
+		.value(content)
+		.asConst()
+		.build();
 
 	const [var_stmt, var_stmt_export] = builder
 		.var(norm.varName)

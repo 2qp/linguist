@@ -31,8 +31,6 @@ const emitArray: ArrayEmitterFn<ArrayEmitterOptions> = ({ name, config, language
 
 		const names = segmentNames.map((seg) => `...${seg}` as const);
 
-		const obj = `[${join(names, ", ")}]` as const;
-
 		const segments = join(segmentDefs, "\n");
 
 		const builder = createStatementBuilder();
@@ -56,7 +54,15 @@ const emitArray: ArrayEmitterFn<ArrayEmitterOptions> = ({ name, config, language
 
 		const objTypes = builder.type().exp().record().from().tuple(types).build();
 
-		const [prefixed_stmt, prefixed_stmt_export] = var_builder.value(obj).asConst().build();
+		const [prefixed_stmt, prefixed_stmt_export] = builder
+			.var(norm.varName)
+			.prefix("_")
+			.expr()
+			.from()
+			.tuple(names)
+			.asConst()
+			.wrap("[$]")
+			.build();
 
 		const [prefixed_as_value_stmt, prefixed_as_value_export] = var_builder
 			.asValue()

@@ -23,7 +23,14 @@ const emitMap: MapEmitterType<MapEmitterOptions> = ({ name, languages, options, 
 	const builder = createStatementBuilder();
 	const paths = createStatementPaths(config);
 
-	const [prefixed_stmt, prefixed_stmt_export] = builder.var(norm.varName).prefix("_").value(json).asConst().build();
+	const [prefixed_stmt, prefixed_stmt_export] = builder
+		.var(norm.varName)
+		.prefix("_")
+		.expr()
+		.from()
+		.value(json)
+		.asConst()
+		.build();
 
 	//
 	if (options.kind === "set") {

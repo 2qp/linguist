@@ -27,8 +27,6 @@ const emitFieldArray: ArrayEmitterFn<ArrayFieldEmitterOptions> = ({ config, lang
 
 	const names = segmentNames.map((seg) => `...${seg}` as const);
 
-	const obj = `[${join(names, ", ")}]` as const;
-
 	const type = options.stats.type;
 
 	const type_relax = createSecondaryName({ config, name: options.stats.type });
@@ -46,7 +44,7 @@ const emitFieldArray: ArrayEmitterFn<ArrayFieldEmitterOptions> = ({ config, lang
 		.type()
 		.wrap(options.stats.isArray ? "$" : "ReadonlyArray<$>");
 
-	const [prefixed_stmt, prefixed_stmt_export] = var_builder.value(obj).asConst().build();
+	const [prefixed_stmt, prefixed_stmt_export] = var_builder.expr().from().tuple(names).asConst().build();
 
 	const [prefixed_as_value_stmt, prefixed_as_value_export] = var_prefixed_builder.types([], [type]).build();
 
