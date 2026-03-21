@@ -1,3 +1,4 @@
+import { join } from "@utils/join";
 import {
 	addType,
 	createConst,
@@ -19,7 +20,7 @@ const prefixBuilder =
 	<const TPrefix extends string>(prefix: TPrefix) => ({
 		asValue: asValueBuilder(varName)(prefix),
 
-		value: valueBuilder(varName)(prefix),
+		expr: exprBuilder(varName)(prefix),
 
 		type: <const TTypeName extends Primitive>(typeName: TTypeName) => ({
 			build: () => [createType(typeName)(`${prefix}${varName}`), createExportType(typeName)] as const,
@@ -67,6 +68,16 @@ const asValueBuilder =
 		}),
 	});
 
+const exprBuilder =
+	<const TName extends Primitive>(varName: TName) =>
+	<const TPrefix extends string>(prefix: TPrefix) =>
+	() => ({
+		from: () => ({
+			value: valueBuilder(varName)(prefix),
+			tuple: tupleBuilder(varName)(prefix),
+		}),
+	});
+
 const valueBuilder =
 	<const TName extends Primitive>(varName: TName) =>
 	<const TPrefix extends string>(prefix: TPrefix) =>
@@ -90,6 +101,38 @@ const valueBuilder =
 			build: () =>
 				[
 					addType(typeName)(createConst(`${prefix}${varName}`, value, ";")),
+					createExport(`${prefix}${varName}`),
+				] as const,
+		}),
+	});
+
+const tupleBuilder =
+	<const TName extends Primitive>(varName: TName) =>
+	<const TPrefix extends string>(prefix: TPrefix) =>
+	<const TValue extends ReadonlyArray<string>>(values: TValue) => ({
+		build: () =>
+			[createConst(`${prefix}${varName}`, join(values, ", "), ";"), createExport(`${prefix}${varName}`)] as const,
+
+		asConst: () => ({
+			build: () =>
+				[
+					wrapAsConst(createConst(`${prefix}${varName}`, join(values, ", "), "")),
+					createExport(`${prefix}${varName}`),
+				] as const,
+
+			wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
+				build: () =>
+					[
+						wrapAsConst(createConst(`${prefix}${varName}`, getWrapped(values, wrapper, ", "), "")),
+						createExport(`${prefix}${varName}`),
+					] as const,
+			}),
+		}),
+
+		type: <const TTypeName extends Primitive>(typeName: TTypeName) => ({
+			build: () =>
+				[
+					addType(typeName)(createConst(`${prefix}${varName}`, join(values, ", "), ";")),
 					createExport(`${prefix}${varName}`),
 				] as const,
 		}),

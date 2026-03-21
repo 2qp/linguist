@@ -5,7 +5,7 @@ import type { Primitive } from "@/types/gen.types";
 import type { Separator, Wrapper } from "@/types/statement.types";
 
 const getWrapped = <
-	const TSource extends string[],
+	const TSource extends ReadonlyArray<string>,
 	const TWrapper extends Wrapper = "$",
 	const TSeparator extends Separator = " | ",
 >(
