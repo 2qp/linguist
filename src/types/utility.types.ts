@@ -48,9 +48,29 @@ type DeepPartialObject<T> = {
 	[K in keyof T]?: DeepPartial<T[K]>;
 };
 
+type ExplicitDictionary<T> = {
+	[K in string & {}]: T;
+};
+
+/**
+ * dictionary type that accepts any string key.
+ *
+ * useful as a fallback type for objects with unknown or dynamic keys.
+ *
+ * evolved from `FallbackForUnknownKeys`.
+ *
+ * @example
+ * type Config = {
+ *   knownSetting: string;
+ * } & Dictionary<unknown>;
+ */
+type Dictionary<T> = Record<string & {}, T>;
+
 export type {
 	DeepPartial,
+	Dictionary,
 	Entries,
+	ExplicitDictionary,
 	ExtractArrayElement,
 	ExtractExplicit,
 	ExtractIndexSignature,
