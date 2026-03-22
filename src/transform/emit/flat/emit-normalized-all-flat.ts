@@ -60,7 +60,7 @@ const emitNormalizedAllFlat: FlatEmitterType = ({ config, languages }) => {
 		.var(norm.varName)
 		.prefix("_")
 		.typeof()
-		.wrap("FallbackForUnknownKeys<$>")
+		.wrap("Dictionary<$>")
 		.types(["Language", "undefined"], [])
 		.build();
 

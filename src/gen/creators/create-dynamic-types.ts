@@ -11,7 +11,7 @@ import type { Creator } from "./types";
 const createDynamicTypes: Creator = async (params) => {
 	//
 
-	const typesOutput = generateDynamicTypes(params);
+	const typesOutput = await generateDynamicTypes(params);
 
 	const { common } = createOutFilesMeta(params.config);
 

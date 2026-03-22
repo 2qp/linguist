@@ -66,7 +66,7 @@ const emitLazyIndexById: IndexEmitterType = ({ languages, config }): string => {
 		.exp()
 		.from()
 		.tuple(types)
-		.wrap("FallbackForUnknownKeys<() => Promise<$>>")
+		.wrap("Dictionary<() => Promise<$>>")
 		.types(["Language", "undefined"], [])
 		.build();
 

@@ -32,7 +32,7 @@ const emitJSONFlat: FlatEmitterType = ({ languages, config }) => {
 		.var(norm.varName)
 		.prefix("_")
 		.typeof()
-		.wrap("FallbackForUnknownKeys<$>")
+		.wrap("Dictionary<$>")
 		.types(["Language", "undefined"], [])
 		.build();
 

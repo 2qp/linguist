@@ -46,7 +46,7 @@ const emitMap: MapEmitterType<MapEmitterOptions> = ({ name, languages, options, 
 
 		if (!stat || !type) throw new Error("stats or type is null");
 
-		const imports = builder.import().types(["FallbackForUnknownKeys"], []).from(paths.common).build();
+		const imports = builder.import().types(["Dictionary"], []).from(paths.common).build();
 
 		const imports_usage = builder.import().types([], [type]).from(paths.usage).build();
 
@@ -55,7 +55,7 @@ const emitMap: MapEmitterType<MapEmitterOptions> = ({ name, languages, options, 
 			.prefix("_")
 			.typeof()
 			// .wrap(stat.isArray ? "FallbackForUnknownKeys<$>" : "$[number]")
-			.wrap("FallbackForUnknownKeys<$>")
+			.wrap("Dictionary<$>")
 			.types([], [type])
 			.build();
 
@@ -83,13 +83,13 @@ const emitMap: MapEmitterType<MapEmitterOptions> = ({ name, languages, options, 
 
 		const { type } = _stat;
 
-		const imports = builder.import().types(["FallbackForUnknownKeys"], [type]).from(paths.common).build();
+		const imports = builder.import().types(["Dictionary"], [type]).from(paths.common).build();
 
 		const [stmt, stmt_export] = builder
 			.var(norm.varName)
 			.prefix("_")
 			.typeof()
-			.wrap("FallbackForUnknownKeys<$>")
+			.wrap("Dictionary<$>")
 			.types([], [type])
 			.build();
 

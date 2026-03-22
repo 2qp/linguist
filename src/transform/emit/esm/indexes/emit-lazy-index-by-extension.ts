@@ -82,7 +82,7 @@ const emitLazyIndexByExtension: IndexEmitterType = ({ languages, config }): stri
 		.exp()
 		.from()
 		.tuple(types)
-		.wrap("FallbackForUnknownKeys<() => Promise<$>>")
+		.wrap("Dictionary<() => Promise<$>>")
 		.types(["Language[]", "undefined"], [])
 		.build();
 

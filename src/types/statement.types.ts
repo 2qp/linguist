@@ -1,13 +1,15 @@
 import type { Primitive } from "./gen.types";
 import type { LanguagePropertyTypeName } from "./generated.types";
 
+type Dictionary = "Dictionary";
+
 type Wrapper =
 	| "ReadonlyArray<$>"
 	| "Partial<$>"
 	| "ReadonlyArray<Partial<$>>"
-	| "FallbackForUnknownKeys<ReadonlyArray<$>>"
-	| "FallbackForUnknownKeys<$>"
-	| "FallbackForUnknownKeys<() => Promise<$>>"
+	| `${Dictionary}<ReadonlyArray<$>>`
+	| `${Dictionary}<$>`
+	| `${Dictionary}<() => Promise<$>>`
 	| "() => Promise.all([ $ ])"
 	| "() => Promise<[$]>"
 	| "() => Promise<$>"
@@ -25,7 +27,7 @@ type TypeRef =
 	| `ReadonlyArray<${LanguagePropertyTypeName}>`
 	| `undefined`;
 
-type ImportableType = LanguagePropertyTypeName | `FallbackForUnknownKeys`;
+type ImportableType = LanguagePropertyTypeName | Dictionary;
 
 type SL<T, U> = [strict: T, loose: U];
 

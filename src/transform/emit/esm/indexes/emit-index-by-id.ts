@@ -67,7 +67,7 @@ const emitIndexById: IndexEmitterType = ({ languages, config }): string => {
 		.exp()
 		.from()
 		.tuple(typeObj)
-		.wrap("FallbackForUnknownKeys<$>")
+		.wrap("Dictionary<$>")
 		.types(["Language", "undefined"], [])
 		.build();
 

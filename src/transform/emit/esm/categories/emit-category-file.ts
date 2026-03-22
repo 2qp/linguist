@@ -78,7 +78,7 @@ const emitCategoryFile: EmitCategoryFileType = ({ config, languages, category })
 		.exp()
 		.from()
 		.tuple(types)
-		.wrap("FallbackForUnknownKeys<$>")
+		.wrap("Dictionary<$>")
 		.types(["Language", "undefined"], [])
 		.build();
 

@@ -10,9 +10,9 @@ import { emitUtilityTypes } from "@/emit/emit-utility-types";
 
 import type { Generator } from "./types";
 
-type GenerateDynamicTypes = Generator<string>;
+type GenerateDynamicTypes = Generator<Promise<string>>;
 
-const generateDynamicTypes: GenerateDynamicTypes = ({ config, ...params }) => {
+const generateDynamicTypes: GenerateDynamicTypes = async ({ config, ...params }) => {
 	//
 
 	//
@@ -28,7 +28,7 @@ const generateDynamicTypes: GenerateDynamicTypes = ({ config, ...params }) => {
 
 	const output_language_type = emitLanguageType({ config, ...params });
 
-	const output_utility_types = emitUtilityTypes(name);
+	const output_utility_types = await emitUtilityTypes(name);
 
 	const output_typesafe_accessors = emitTypeSafeAccessors(name);
 	// const output_validation_helpers = emitValidationHelpers(LANGUAGE_NAME);
