@@ -1,82 +1,168 @@
-import { isNullish } from "@utils/guards";
+import { getUsageName } from "@gen/usage/get-usage-name";
+import { stringify } from "safe-stable-stringify";
+import { buildMap } from "@/transform/utils/build-map";
+import { normalizeName } from "@/transform/utils/normalize-name";
+import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
+import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
-import type { Language, LanguageName, Languages } from "@/types/generated.types";
-import type { Entries } from "@/types/utility.types";
+import type { Language } from "@/types/generated.types";
+import type { MapEmitterOptions, MapEmitterType } from "../maps/types";
 
-type EmitManifestConfig =
-	| {
-			data: keyof Language;
-			key: keyof Language | "name";
-			set: keyof Language | "name";
-
-			isCustom?: false;
-	  }
-	| {
-			data: keyof Language;
-			key: keyof Language | "name";
-			set: keyof Language | "name";
-
-			isCustom: true;
-			custom: Partial<{ [key in keyof Language | "name" | (string & {})]: keyof Language | "name" }>;
-	  };
-
-type EmitManifestParams = { languages: Languages | Readonly<Languages>; config: EmitManifestConfig };
-
-type EmitManifestType = (params: EmitManifestParams) => Map<unknown, unknown> | undefined;
-
-const emitManifest: EmitManifestType = ({ config, languages }) => {
+const emitManifest: MapEmitterType<MapEmitterOptions> = ({ name, languages, options, config, stats: _stats }) => {
 	//
 
-	// will do more narrowing later..
-	// in `EmitManifestConfig` some keys should be optional, depends on the output structure..
+	const stats = new Map(_stats);
 
-	// tried to do `key` discriminated via `data: keyof Language`..
-	// having issues with extending `Language[data]` to see whether its an array or not; due to (readonly ((string & {}) | literals)[]
+	const norm = normalizeName(name);
 
-	const map = new Map<unknown, unknown | Set<unknown>>();
+	const map = buildMap({ source: languages, ...options });
 
-	for (const languageName of Object.keys(languages) as LanguageName[]) {
-		if (!languageName) continue;
+	const obj = Object.fromEntries(map);
 
-		const languageData = languages[languageName];
+	const json = stringify(obj, (_k, v) => (v instanceof Set ? [...v] : v), 2) || "";
 
-		const key = config.key === "name" ? languageName : languageData?.[config.key];
-		const set = config.set === "name" ? languageName : languageData?.[config.set];
-		const data = languageData?.[config.data];
+	const builder = createStatementBuilder();
+	const paths = createStatementPaths(config);
 
-		const createCustom = (): Record<string, string | undefined> | undefined => {
-			if (!config.isCustom) return;
-			if (!config.custom) return;
+	const [prefixed_stmt, prefixed_stmt_export] = builder
+		.var(norm.varName)
+		.prefix("_")
+		.expr()
+		.from()
+		.value(json)
+		.asConst()
+		.build();
 
-			const result = (Object.entries(config.custom) as Entries<typeof config.custom>)
-				.filter((item): item is [string, keyof Language | "name"] => item?.[0] !== undefined && item?.[1] !== undefined)
-				.map(([que, val]) => [que, val === "name" ? languageName : languageData?.[val]]);
+	//
+	if (options.kind === "set") {
+		//
 
-			return Object.fromEntries(result);
-		};
+		const field = getUsageName({ left: options.right, right: options.left });
 
-		const payload = config.isCustom ? createCustom() : data;
+		const type = normalizeName(field).typeName;
 
-		if (isNullish(data)) continue;
+		const stat = stats.get(options.right);
 
-		if (!Array.isArray(data) || config.isCustom) {
-			map.set(key, payload);
-			continue;
-		}
+		//
 
-		for (const extension of data) {
-			const exist = map.get(extension);
-			if (isNullish(exist)) {
-				map.set(extension, new Set([set]));
-				continue;
-			}
+		if (!stat || !type) throw new Error("stats or type is null");
 
-			if (exist instanceof Set) map.set(extension, new Set(exist).add(set));
-		}
+		const imports = builder.import().types(["Dictionary"], []).from(paths.common).build();
+
+		const imports_usage = builder.import().types([], [type]).from(paths.usage).build();
+
+		const [stmt, stmt_export] = builder
+			.var(norm.varName)
+			.prefix("_")
+			.typeof()
+			// .wrap(stat.isArray ? "FallbackForUnknownKeys<$>" : "$[number]")
+			.wrap("Dictionary<$>")
+			.types([], [type])
+			.build();
+
+		const [type_stmt, type_stmt_export] = builder.var(norm.varName).typeof(norm.typeName).build();
+
+		const content = [
+			[imports, imports_usage].join("\n"),
+			prefixed_stmt,
+			stmt,
+			type_stmt,
+			prefixed_stmt_export,
+			stmt_export,
+			type_stmt_export,
+		].join("\n\n");
+
+		return { content, norm };
 	}
 
-	return map;
+	//
+	if (options.kind === "primitive") {
+		//
+
+		const _stat = stats.get(options.value);
+		if (!_stat) throw new Error("stat is null");
+
+		const { type } = _stat;
+
+		const imports = builder.import().types(["Dictionary"], [type]).from(paths.common).build();
+
+		const [stmt, stmt_export] = builder
+			.var(norm.varName)
+			.prefix("_")
+			.typeof()
+			.wrap("Dictionary<$>")
+			.types([], [type])
+			.build();
+
+		const [type_stmt, type_stmt_export] = builder.var(norm.varName).typeof(norm.typeName).build();
+
+		const content = [imports, prefixed_stmt, stmt, type_stmt, prefixed_stmt_export, stmt_export, type_stmt_export].join(
+			"\n\n",
+		);
+
+		return { content, norm };
+	}
+
+	//
+	if (options.kind === "custom") {
+		//
+
+		const builder = createStatementBuilder();
+		const paths = createStatementPaths(config);
+
+		const var_builder = builder.var(norm.varName).prefix("_");
+
+		// could use .common().tuple().key(item)
+		const types = options.properties
+			.map((item) => [item, stats.get(item)?.type, stats.get(item)?.isOptional] as const)
+			.filter((i): i is [keyof Language, string, boolean] => i[0] != null && i[1] != null);
+
+		const typeImports = builder
+			.import()
+			.types(
+				["Dictionary"],
+				types.map((item) => item[1]),
+			)
+			.from(paths.common)
+			.build();
+
+		const objTypes = builder.type().exp().record().from().tuple(types).build();
+
+		const [prefixed_as_value_stmt, prefixed_as_value_export] = var_builder
+			.typeof()
+			.wrap("Dictionary<$>")
+			.types([], [objTypes])
+			.build();
+
+		const [prefixed_as_value_stmt_type, prefixed_as_value_stmt_type_export] = var_builder
+			.asValue()
+			.type()
+			.typeof(norm.typeName)
+			.build();
+
+		const content = [
+			typeImports,
+			"",
+
+			"",
+			prefixed_stmt,
+			"",
+			prefixed_as_value_stmt,
+			"",
+			prefixed_as_value_stmt_type,
+
+			"",
+			prefixed_stmt_export,
+			"",
+			prefixed_as_value_export,
+			"",
+			prefixed_as_value_stmt_type_export,
+		].join("\n");
+
+		return { content, norm };
+	}
+
+	return { content: "", norm };
 };
 
 export { emitManifest };
-export type { EmitManifestConfig, EmitManifestParams, EmitManifestType };

@@ -53,7 +53,7 @@ const transform: Transform = async ({ config, source, stats: _stats }) => {
 
 	await createFlats({ languages, config });
 
-	await createManifests({ languages, config });
+	await createManifests({ languages, config, stats });
 
 	await createArrays({ languages, config, stats });
 
