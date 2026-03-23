@@ -9,7 +9,7 @@ import { yamlLoader } from "@/infra/loaders/yaml-loader";
 import type { BuildInfo } from "@/types/build.types";
 
 type HasRemoteYamlOrConfigChangedReturnType =
-	| { changed: true; build: Omit<BuildInfo, "generatedAt"> }
+	| { changed: true; build: Omit<BuildInfo, "generated_at"> }
 	| { changed: false };
 
 type HasRemoteYamlOrConfigChangedType = () => Promise<HasRemoteYamlOrConfigChangedReturnType>;
