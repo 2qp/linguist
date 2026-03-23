@@ -3,6 +3,10 @@ import { createFallback } from "@/transform/utils/create-fallback";
 import type { Extensions, LanguageName } from "@/types/generated.types";
 import type { MapEmitterType } from "./types";
 
+/**
+ * @deprecated
+ */
+// @ts-expect-error
 const emitExtToLangMap: MapEmitterType = ({ languages, config }): string => {
 	//
 

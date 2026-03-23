@@ -4,6 +4,10 @@ import { createFallback } from "@/transform/utils/create-fallback";
 import type { LanguageName, Type } from "@/types/generated.types";
 import type { MapEmitterType } from "./types";
 
+/**
+ * @deprecated
+ */
+// @ts-expect-error
 const emitLanguageToCategory: MapEmitterType = ({ languages, config }): string => {
 	//
 

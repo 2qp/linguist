@@ -4,6 +4,10 @@ import { createFallback } from "@/transform/utils/create-fallback";
 import type { Filenames, LanguageName } from "@/types/generated.types";
 import type { MapEmitterType } from "./types";
 
+/**
+ * @deprecated
+ */
+// @ts-expect-error
 const emitFileNameToLanguage: MapEmitterType = ({ languages, config }): string => {
 	//
 
