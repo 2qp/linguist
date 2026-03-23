@@ -44,7 +44,7 @@ const emitFieldArray: ArrayEmitterFn<ArrayFieldEmitterOptions> = ({ config, lang
 		.type()
 		.wrap(options.stats.isArray ? "$" : "ReadonlyArray<$>");
 
-	const [prefixed_stmt, prefixed_stmt_export] = var_builder.expr().from().tuple(names).asConst().build();
+	const [prefixed_stmt, prefixed_stmt_export] = var_builder.expr().from().tuple(names).asConst().wrap("[$]").build();
 
 	const [prefixed_as_value_stmt, prefixed_as_value_export] = var_prefixed_builder.types([], [type]).build();
 
