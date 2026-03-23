@@ -23,6 +23,10 @@ type GenerateLanguageNameTypeType = <T extends Primitive, TName extends string, 
 	params: GenerateLanguageNameTypeParams<T, TName, TBase>,
 ) => GeneratedDefs<T, TName, TBase>;
 
+/**
+ * @deprecated
+ */
+// @ts-expect-error
 const generateLanguageNameType: GenerateLanguageNameTypeType = ({ languageNames, typeName, config, baseType }) => {
 	//
 
