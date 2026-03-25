@@ -11,6 +11,28 @@ type Change = {
 	type: ChangeType;
 };
 
+const isJsonObjectOrArray = (str: string = ""): boolean => {
+	try {
+		const parsed = JSON.parse(str);
+		return typeof parsed === "object" && parsed !== null;
+	} catch {
+		return false;
+	}
+};
+
+const wrap = (c: string = "") => {
+	//
+
+	const json = isJsonObjectOrArray(c);
+
+	if (json)
+		return `\`\`\`json
+${c}
+\`\`\``;
+
+	return `\`${c}\``;
+};
+
 const formatDiff = (changes: Change[]): string[] => {
 	//
 
@@ -33,23 +55,25 @@ const formatDiff = (changes: Change[]): string[] => {
 	for (const context of sortedContexts) {
 		const contextChanges = grouped.get(context);
 
-		output.push(`## ${context}`);
+		output.push(`#### ${context}`);
 
 		for (const c of contextChanges ?? []) {
 			const subPath = c.path.includes(".") ? c.path.substring(c.path.indexOf(".") + 1) : "";
 
 			const p = subPath ? `"${subPath}"` : "root";
-			const indent = "  ";
+			const indent = "- ";
 
 			switch (c.type) {
 				case "ADDED":
-					output.push(`${indent}[+] ADDED   : ${p} -> ${stringify(c.value)}`);
+					output.push(`${indent}[+] ADDED   : ${p} -> \n${wrap(stringify(c.value))}`);
 					break;
 				case "REMOVED":
-					output.push(`${indent}[-] REMOVED : ${p} -> (was ${stringify(c.value)})`);
+					output.push(`${indent}[-] REMOVED : ${p} -> (was \n${wrap(stringify(c.value))})`);
 					break;
 				case "UPDATED":
-					output.push(`${indent}[*] CHANGED : ${p} from ${stringify(c.oldValue)} to ${stringify(c.newValue)}`);
+					output.push(
+						`${indent}[*] CHANGED : ${p} from \n${wrap(stringify(c.oldValue))} to \n${wrap(stringify(c.newValue))}`,
+					);
 					break;
 			}
 		}
