@@ -18,7 +18,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const paths = createStatementPaths(dummyStmtPaths as Config);
 				const builder = createStatementBuilder();
 
-				const stmt_empty = builder.import().types([], []).from(paths, "common").build();
+				const stmt_empty = builder.import().types([], []).from(paths.common).build();
 
 				expectTypeOf(stmt_empty).toEqualTypeOf<`import type {  } from "${string}/${string}";`>();
 			});
@@ -27,11 +27,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const paths = createStatementPaths(dummyStmtPaths as Config);
 				const builder = createStatementBuilder();
 
-				const stmt_filled = builder
-					.import()
-					.types(["AceMode", "TmScopeRelax"], ["Custom"])
-					.from(paths, "common")
-					.build();
+				const stmt_filled = builder.import().types(["AceMode", "TmScopeRelax"], ["Custom"]).from(paths.common).build();
 
 				expectTypeOf(
 					stmt_filled,
@@ -43,7 +39,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const builder = createStatementBuilder();
 
 				const type: string = "...";
-				const stmt_dynamic = builder.import().types(["AceMode", "TmScopeRelax"], [type]).from(paths, "common").build();
+				const stmt_dynamic = builder.import().types(["AceMode", "TmScopeRelax"], [type]).from(paths.common).build();
 
 				expectTypeOf(
 					stmt_dynamic,
@@ -58,7 +54,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_empty = builder.import().values([]).from(paths, "common").build();
+				const stmt_empty = builder.import().values([]).from(paths.common).build();
 
 				expectTypeOf(stmt_empty).toEqualTypeOf<`import {  } from "${string}/${string}";`>();
 			});
@@ -67,7 +63,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_filled_one = builder.import().values(["all"]).from(paths, "common").build();
+				const stmt_filled_one = builder.import().values(["all"]).from(paths.common).build();
 
 				expectTypeOf(stmt_filled_one).toEqualTypeOf<`import { all } from "${string}/${string}";`>();
 			});
@@ -76,7 +72,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_filled = builder.import().values(["ace_mode_array", "index_by_id"]).from(paths, "common").build();
+				const stmt_filled = builder.import().values(["ace_mode_array", "index_by_id"]).from(paths.common).build();
 
 				expectTypeOf(stmt_filled).toEqualTypeOf<`import { ace_mode_array, index_by_id } from "${string}/${string}";`>();
 			});
@@ -86,7 +82,7 @@ describe("createStatementBuilder-template literal types", async () => {
 				const builder = createStatementBuilder();
 
 				const value: string = "...";
-				const stmt_dynamic_one = builder.import().values([value]).from(paths, "common").build();
+				const stmt_dynamic_one = builder.import().values([value]).from(paths.common).build();
 
 				expectTypeOf(stmt_dynamic_one).toEqualTypeOf<`import { ${string} } from "${string}/${string}";`>();
 			});
@@ -96,9 +92,59 @@ describe("createStatementBuilder-template literal types", async () => {
 				const builder = createStatementBuilder();
 
 				const value: string = "...";
-				const stmt_dynamic = builder.import().values([value, value]).from(paths, "common").build();
+				const stmt_dynamic = builder.import().values([value, value]).from(paths.common).build();
 
 				expectTypeOf(stmt_dynamic).toEqualTypeOf<`import { ${string}, ${string} } from "${string}/${string}";`>();
+			});
+		});
+
+		describe("import lazy way", () => {
+			describe("values", () => {
+				//
+
+				it("infers `from`, `then_` resolution", () => {
+					const builder = createStatementBuilder();
+
+					const varName = `VAR_NAME`;
+					const fileName = `FILE_NAME`;
+
+					type VarName = `VAR_NAME`;
+					type FileName = `FILE_NAME`;
+
+					const import_stmt = builder
+						.import()
+						.lazy()
+						.values()
+						.from([dummyStmtPaths.data.paths.typesDir, "/", "TYPE", "/", fileName])
+						.then_(varName)
+						.build();
+
+					expectTypeOf(
+						import_stmt,
+					).toEqualTypeOf<`import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName})`>();
+				});
+
+				it("infers `widened` `from`, `then_` resolution", () => {
+					const builder = createStatementBuilder();
+
+					const varName: string = `...`;
+					const fileName: string = `...`;
+
+					type VarName = string;
+					type FileName = string;
+
+					const import_stmt = builder
+						.import()
+						.lazy()
+						.values()
+						.from([dummyStmtPaths.data.paths.typesDir, "/", "TYPE", "/", fileName])
+						.then_(varName)
+						.build();
+
+					expectTypeOf(
+						import_stmt,
+					).toEqualTypeOf<`import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName})`>();
+				});
 			});
 		});
 	});
@@ -516,91 +562,343 @@ describe("createStatementBuilder-template literal types", async () => {
 				});
 			});
 
-			describe("value way", () => {
+			describe("expression way", () => {
 				//
 
-				it("infers template literal with value, prefixed var name and its export", () => {
-					const builder = createStatementBuilder();
+				describe("value builder", () => {
+					//
 
-					const [stmt, stmt_export] = builder.var("VAR_NAME").prefix("PREFIX_").value("VALUE").build();
+					it("infers template literal with value, prefixed var name and its export", () => {
+						const builder = createStatementBuilder();
 
-					expectTypeOf(stmt).toEqualTypeOf<`const PREFIX_VAR_NAME = VALUE;`>();
-					expectTypeOf(stmt_export).toEqualTypeOf<`export { PREFIX_VAR_NAME };`>();
+						const [stmt, stmt_export] = builder.var("VAR_NAME").prefix("PREFIX_").expr().from().value("VALUE").build();
+
+						expectTypeOf(stmt).toEqualTypeOf<`const PREFIX_VAR_NAME = VALUE;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { PREFIX_VAR_NAME };`>();
+					});
+
+					it("infers widened template literal placeholders for value, prefix, var name, export", () => {
+						const builder = createStatementBuilder();
+
+						const varName: string = "...";
+						const prefix: string = "...";
+						const value: string = "...";
+
+						const [stmt, stmt_export] = builder.var(varName).prefix(prefix).expr().from().value(value).build();
+
+						expectTypeOf(stmt).toEqualTypeOf<`const ${string}${string} = ${string};`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${string}${string} };`>();
+					});
+
+					it("infers template literal for var name, prefix, string value as const and export", () => {
+						const builder = createStatementBuilder();
+
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = `"VALUE"`;
+
+						type VarName = "VAR_NAME";
+						type Prefix = "PREFIX_";
+						type Value = `"VALUE"`;
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.value(value)
+							.asConst()
+							.build();
+
+						expectTypeOf(stmt).toEqualTypeOf<`const ${Prefix}${VarName} = ${Value} as const;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${Prefix}${VarName} };`>();
+					});
+
+					it("infers widened template literal placeholders for var name, prefix, string value as const and export", () => {
+						const builder = createStatementBuilder();
+
+						const varName: string = "...";
+						const prefix: string = "...";
+						const value: string = `"..."`;
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.value(value)
+							.asConst()
+							.build();
+
+						expectTypeOf(stmt).toEqualTypeOf<`const ${string}${string} = ${string} as const;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${string}${string} };`>();
+					});
+
+					it("infers template literal for var name, prefix, wrapped string value as const and export", () => {
+						const builder = createStatementBuilder();
+
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = `"VALUE"`;
+
+						type VarName = "VAR_NAME";
+						type Prefix = "PREFIX_";
+						type Value = `"VALUE"`;
+						type WrappedValue = `() => Promise<${Value}>`;
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.value(value)
+							.asConst()
+							.wrap("() => Promise<$>")
+							.build();
+
+						expectTypeOf(stmt).toEqualTypeOf<`const ${Prefix}${VarName} = ${WrappedValue} as const;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${Prefix}${VarName} };`>();
+					});
+
+					it("infers widened template literal placeholders for var name, prefix, wrapped string value as const and export", () => {
+						const builder = createStatementBuilder();
+
+						const varName: string = "...";
+						const prefix: string = "...";
+						const value: string = `"..."`;
+
+						type WrappedValue = `() => Promise.all([ ${typeof value} ])`;
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.value(value)
+							.asConst()
+							.wrap("() => Promise.all([ $ ])")
+							.build();
+
+						expectTypeOf(stmt).toEqualTypeOf<`const ${string}${string} = ${WrappedValue} as const;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${string}${string} };`>();
+					});
+
+					it("infers template literal for var name, prefix, value with type annotation and export", () => {
+						const builder = createStatementBuilder();
+
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = "VALUE";
+						const type = "SomeType";
+
+						type VarName = "VAR_NAME";
+						type Prefix = "PREFIX_";
+						type TypeName = "SomeType";
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.value(value)
+							.type(type)
+							.build();
+
+						expectTypeOf(stmt).toEqualTypeOf<`const ${Prefix}${VarName}: ${TypeName} = VALUE;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${Prefix}${VarName} };`>();
+					});
+
+					it("infers widened template literal palceholders for var name, prefix, value with type annotation and export", () => {
+						const builder = createStatementBuilder();
+
+						const varName: string = "VAR_NAME";
+						const prefix: string = "PREFIX_";
+						const value: number = 5;
+						const type: string = "SomeType";
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.value(value)
+							.type(type)
+							.build();
+
+						expectTypeOf(stmt).toEqualTypeOf<`const ${string}${string}: ${string} = ${number};`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${string}${string} };`>();
+					});
 				});
 
-				it("infers widened template literal placeholders for value, prefix, var name, export", () => {
-					const builder = createStatementBuilder();
+				describe("tuple builder", () => {
+					//
 
-					const varName: string = "...";
-					const prefix: string = "...";
-					const value: string = "...";
+					it("infers template literal with value, prefixed var name and its export [single element tuple]", () => {
+						const builder = createStatementBuilder();
 
-					const [stmt, stmt_export] = builder.var(varName).prefix(prefix).value(value).build();
+						const [stmt, stmt_export] = builder
+							.var("VAR_NAME")
+							.prefix("PREFIX_")
+							.expr()
+							.from()
+							.tuple(["VALUE"])
+							.build();
 
-					expectTypeOf(stmt).toEqualTypeOf<`const ${string}${string} = ${string};`>();
-					expectTypeOf(stmt_export).toEqualTypeOf<`export { ${string}${string} };`>();
-				});
+						expectTypeOf(stmt).toEqualTypeOf<`const PREFIX_VAR_NAME = VALUE;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { PREFIX_VAR_NAME };`>();
+					});
 
-				it("infers template literal for var name, prefix, string value as const and export", () => {
-					const builder = createStatementBuilder();
+					it("infers widened template literal placeholders for value, prefix, var name, export [single element tuple]", () => {
+						const builder = createStatementBuilder();
 
-					const varName = "VAR_NAME";
-					const prefix = "PREFIX_";
-					const value = `"VALUE"`;
+						const varName: string = "...";
+						const prefix: string = "...";
+						const value: string = "...";
 
-					type VarName = "VAR_NAME";
-					type Prefix = "PREFIX_";
-					type Value = `"VALUE"`;
+						const [stmt, stmt_export] = builder.var(varName).prefix(prefix).expr().from().tuple([value]).build();
 
-					const [stmt, stmt_export] = builder.var(varName).prefix(prefix).value(value).asConst().build();
+						expectTypeOf(stmt).toEqualTypeOf<`const ${string}${string} = ${string};`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${string}${string} };`>();
+					});
 
-					expectTypeOf(stmt).toEqualTypeOf<`const ${Prefix}${VarName} = ${Value} as const;`>();
-					expectTypeOf(stmt_export).toEqualTypeOf<`export { ${Prefix}${VarName} };`>();
-				});
+					it("infers template literal for var name, prefix, string value as const and export [single element tuple]", () => {
+						const builder = createStatementBuilder();
 
-				it("infers widened template literal placeholders for var name, prefix, string value as const and export", () => {
-					const builder = createStatementBuilder();
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = `"VALUE"`;
 
-					const varName: string = "...";
-					const prefix: string = "...";
-					const value: string = `"..."`;
+						type VarName = "VAR_NAME";
+						type Prefix = "PREFIX_";
+						type Value = `"VALUE"`;
 
-					const [stmt, stmt_export] = builder.var(varName).prefix(prefix).value(value).asConst().build();
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.tuple([value])
+							.asConst()
+							.build();
 
-					expectTypeOf(stmt).toEqualTypeOf<`const ${string}${string} = ${string} as const;`>();
-					expectTypeOf(stmt_export).toEqualTypeOf<`export { ${string}${string} };`>();
-				});
+						expectTypeOf(stmt).toEqualTypeOf<`const ${Prefix}${VarName} = ${Value} as const;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${Prefix}${VarName} };`>();
+					});
 
-				it("infers template literal for var name, prefix, value with type annotation and export", () => {
-					const builder = createStatementBuilder();
+					it("infers widened template literal placeholders for var name, prefix, string value as const and export [single element tuple]", () => {
+						const builder = createStatementBuilder();
 
-					const varName = "VAR_NAME";
-					const prefix = "PREFIX_";
-					const value = "VALUE";
-					const type = "SomeType";
+						const varName: string = "...";
+						const prefix: string = "...";
+						const value: string = `"..."`;
 
-					type VarName = "VAR_NAME";
-					type Prefix = "PREFIX_";
-					type TypeName = "SomeType";
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.tuple([value])
+							.asConst()
+							.build();
 
-					const [stmt, stmt_export] = builder.var(varName).prefix(prefix).value(value).type(type).build();
+						expectTypeOf(stmt).toEqualTypeOf<`const ${string}${string} = ${string} as const;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${string}${string} };`>();
+					});
 
-					expectTypeOf(stmt).toEqualTypeOf<`const ${Prefix}${VarName}: ${TypeName} = VALUE;`>();
-					expectTypeOf(stmt_export).toEqualTypeOf<`export { ${Prefix}${VarName} };`>();
-				});
+					it("infers template literal for var name, prefix, wrapped string value as const and export", () => {
+						const builder = createStatementBuilder();
 
-				it("infers widened template literal palceholders for var name, prefix, value with type annotation and export", () => {
-					const builder = createStatementBuilder();
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = [`"VALUE_1"`, `"VALUE_2"`, "1"] as const;
 
-					const varName: string = "VAR_NAME";
-					const prefix: string = "PREFIX_";
-					const value: number = 5;
-					const type: string = "SomeType";
+						type VarName = "VAR_NAME";
+						type Prefix = "PREFIX_";
+						type Value = `"VALUE_1", "VALUE_2", 1`;
+						type WrappedValue = `() => Promise<${Value}>`;
 
-					const [stmt, stmt_export] = builder.var(varName).prefix(prefix).value(value).type(type).build();
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.tuple(value)
+							.asConst()
+							.wrap("() => Promise<$>")
+							.build();
 
-					expectTypeOf(stmt).toEqualTypeOf<`const ${string}${string}: ${string} = ${number};`>();
-					expectTypeOf(stmt_export).toEqualTypeOf<`export { ${string}${string} };`>();
+						expectTypeOf(stmt).toEqualTypeOf<`const ${Prefix}${VarName} = ${WrappedValue} as const;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${Prefix}${VarName} };`>();
+					});
+
+					it("infers widened template literal placeholders for var name, prefix, wrapped string value as const and export", () => {
+						const builder = createStatementBuilder();
+
+						const varName: string = "...";
+						const prefix: string = "...";
+						const value: [string, string, string] = ["", "", ""];
+
+						type WrappedValue = `() => Promise.all([ ${string}, ${string}, ${string} ])`;
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.tuple(value)
+							.asConst()
+							.wrap("() => Promise.all([ $ ])")
+							.build();
+
+						expectTypeOf(stmt).toEqualTypeOf<`const ${string}${string} = ${WrappedValue} as const;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${string}${string} };`>();
+					});
+
+					it("infers template literal for var name, prefix, value with type annotation and export [single element tuple]", () => {
+						const builder = createStatementBuilder();
+
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = "VALUE";
+						const type = "SomeType";
+
+						type VarName = "VAR_NAME";
+						type Prefix = "PREFIX_";
+						type TypeName = "SomeType";
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.tuple([value])
+							.type(type)
+							.build();
+
+						expectTypeOf(stmt).toEqualTypeOf<`const ${Prefix}${VarName}: ${TypeName} = VALUE;`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${Prefix}${VarName} };`>();
+					});
+
+					it("infers widened template literal palceholders for var name, prefix, value with type annotation and export [single element tuple]", () => {
+						const builder = createStatementBuilder();
+
+						const varName: string = "VAR_NAME";
+						const prefix: string = "PREFIX_";
+						const value: number = 5;
+						const type: string = "SomeType";
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.tuple([`${value}`])
+							.type(type)
+							.build();
+
+						expectTypeOf(stmt).toEqualTypeOf<`const ${string}${string}: ${string} = ${number};`>();
+						expectTypeOf(stmt_export).toEqualTypeOf<`export { ${string}${string} };`>();
+					});
 				});
 			});
 
@@ -729,6 +1027,74 @@ describe("createStatementBuilder-template literal types", async () => {
 				});
 			});
 		});
+
+		describe("record way", () => {
+			//
+
+			it("infers a record with `varName` and defined `tuple`", () => {
+				//
+
+				const builder = createStatementBuilder();
+
+				const varName = "VAR_NAME";
+
+				type VarName = "VAR_NAME";
+
+				const [stmt, stmt_export] = builder.var(varName).record().from().tuple(["1"]).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<`const ${VarName} = { ${string} };`>();
+				expectTypeOf(stmt_export).toEqualTypeOf<`export { ${VarName} };`>();
+			});
+
+			it("infers a type annotated record with `varName` and defined `tuple`", () => {
+				//
+
+				const builder = createStatementBuilder();
+
+				const varName = `VAR_NAME`;
+				const typeName = `SomeType`;
+
+				type VarName = `VAR_NAME`;
+				type TypeName = `SomeType`;
+
+				const [stmt, stmt_export] = builder.var(varName).record().from().tuple([]).type(typeName).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<`const ${VarName}: ${TypeName} = { ${string} };`>();
+				expectTypeOf(stmt_export).toEqualTypeOf<`export { ${VarName} };`>();
+			});
+
+			it("infers a readonly record with `varName` and defined `tuple`", () => {
+				//
+
+				const builder = createStatementBuilder();
+
+				const varName = `VAR_NAME`;
+
+				type VarName = `VAR_NAME`;
+
+				const [stmt, stmt_export] = builder.var(varName).record().from().tuple([]).asConst().build();
+
+				expectTypeOf(stmt).toEqualTypeOf<`const ${VarName} = { ${string} } as const;`>();
+				expectTypeOf(stmt_export).toEqualTypeOf<`export { ${VarName} };`>();
+			});
+
+			it("infers a annotated readonly record with `varName` and defined `tuple`", () => {
+				//
+
+				const builder = createStatementBuilder();
+
+				const varName = `VAR_NAME`;
+				const typeName = `SomeType`;
+
+				type VarName = `VAR_NAME`;
+				type TypeName = `SomeType`;
+
+				const [stmt, stmt_export] = builder.var(varName).record().from().tuple([]).asConst().type(typeName).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<`const ${VarName}: ${TypeName} = { ${string} } as const;`>();
+				expectTypeOf(stmt_export).toEqualTypeOf<`export { ${VarName} };`>();
+			});
+		});
 	});
 
 	describe("type way", () => {
@@ -770,14 +1136,14 @@ describe("createStatementBuilder-template literal types", async () => {
 			const [stmt, stmt_export] = builder
 				.type()
 				.alias(typeName)
-				.exp(exp)
-				.wrap("FallbackForUnknownKeys<() => Promise<$>>")
+				.exp()
+				.from()
+				.record(exp)
+				.wrap("Dictionary<() => Promise<$>>")
 				.types(["AceMode"], [])
 				.build();
 
-			expectTypeOf(
-				stmt,
-			).toEqualTypeOf<`type SomeType = { key: value } &  FallbackForUnknownKeys<() => Promise<AceMode>>;`>();
+			expectTypeOf(stmt).toEqualTypeOf<`type SomeType = { key: value } &  Dictionary<() => Promise<AceMode>>;`>();
 			expectTypeOf(stmt_export).toEqualTypeOf<`export type { SomeType };`>();
 		});
 
@@ -791,15 +1157,464 @@ describe("createStatementBuilder-template literal types", async () => {
 			const [stmt, stmt_export] = builder
 				.type()
 				.alias(typeName)
-				.exp(exp)
-				.wrap("FallbackForUnknownKeys<() => Promise<$>>")
+				.exp()
+				.from()
+				.record(exp)
+				.wrap("Dictionary<() => Promise<$>>")
 				.types(["AceMode"], [type])
 				.build();
 
 			expectTypeOf(
 				stmt,
-			).toEqualTypeOf<`type ${string} = { ${string} } &  FallbackForUnknownKeys<() => Promise<AceMode | ${string}>>;`>();
+			).toEqualTypeOf<`type ${string} = { ${string} } &  Dictionary<() => Promise<AceMode | ${string}>>;`>();
 			expectTypeOf(stmt_export).toEqualTypeOf<`export type { ${string} };`>();
+		});
+
+		it("infers tuple type name and wrapped type expression", () => {
+			const builder = createStatementBuilder();
+
+			const typeName = "SomeType";
+
+			const element1 = `"0": "value",`;
+			const element2 = `"1": "value",`;
+
+			const tuple = [element1, element2] as const;
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("Dictionary<() => Promise<$>>")
+				.types(["AceMode"], [])
+				.build();
+
+			expectTypeOf(stmt).toEqualTypeOf<`type SomeType = { ${string} } &  Dictionary<() => Promise<AceMode>>;`>();
+			expectTypeOf(stmt_export).toEqualTypeOf<`export type { SomeType };`>();
+		});
+	});
+
+	describe("common way", () => {
+		describe("record", () => {
+			//
+
+			it("infers record syntax with key and value", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const value = `VALUE`;
+
+				type Key = `"KEY"`;
+				type Value = `VALUE`;
+
+				const stmt = builder.common().record().key(key).value(value).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<`${Key}: ${Value},`>();
+			});
+
+			it("infers `widened` record syntax with key and value", () => {
+				const builder = createStatementBuilder();
+
+				const key: string = `...`;
+				const value: number = 5;
+
+				type Key = `"${string}"`;
+				type Value = number;
+
+				const stmt = builder.common().record().key(key).value(value).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<`${Key}: ${Value},`>();
+			});
+
+			it("infers wrapped record value in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const varName = `VAR_NAME`;
+				const fileName = `FILE_NAME`;
+
+				type Key = `"KEY"`;
+				type VarName = `VAR_NAME`;
+				type FileName = `FILE_NAME`;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().record().key(key).wrap("() => Promise.all([ $ ])").value(import_stmt).build();
+
+				expectTypeOf(
+					stmt,
+				).toEqualTypeOf<`${Key}: () => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ]),`>();
+			});
+
+			it("infers `widened` wrapped record value in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key: string = `...`;
+				const varName: string = `...`;
+				const fileName: string = `...`;
+
+				type Key = `"${string}"`;
+				type VarName = `${string}`;
+				type FileName = `${string}`;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().record().key(key).wrap("() => Promise.all([ $ ])").value(import_stmt).build();
+
+				expectTypeOf(
+					stmt,
+				).toEqualTypeOf<`${Key}: () => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ]),`>();
+			});
+
+			it("infers wrapped record values in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const varName = `VAR_NAME`;
+				const fileName = `FILE_NAME`;
+
+				type Key = `"KEY"`;
+				type VarName = `VAR_NAME`;
+				type FileName = `FILE_NAME`;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().record().key(key).wrap("() => Promise.all([ $ ])").values([import_stmt]).build();
+
+				expectTypeOf(
+					stmt,
+				).toEqualTypeOf<`${Key}: () => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ]),`>();
+			});
+
+			it("infers `widened` wrapped record values in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key: string = `...`;
+				const varName: string = `...`;
+				const fileName: string = `...`;
+
+				type Key = `"${string}"`;
+				type VarName = `${string}`;
+				type FileName = `${string}`;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().record().key(key).wrap("() => Promise.all([ $ ])").values([import_stmt]).build();
+
+				expectTypeOf(
+					stmt,
+				).toEqualTypeOf<`${Key}: () => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ]),`>();
+			});
+		});
+
+		describe("tuple", () => {
+			//
+
+			it("infers tuple syntax with key and value", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const varName = `VAR_NAME`;
+
+				type Key = `KEY`;
+				type VarName = `VAR_NAME`;
+
+				const stmt = builder.common().tuple().key(key).value(varName).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<readonly [Key, VarName]>();
+			});
+
+			it("infers `widened` tuple syntax with key and value", () => {
+				const builder = createStatementBuilder();
+
+				const key: string = `...`;
+				const value: number = 5;
+
+				type Key = string;
+				type Value = number;
+
+				const stmt = builder.common().tuple().key(key).value(value).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<readonly [Key, Value]>();
+			});
+
+			it("infers wrapped tuple value in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const varName = `VAR_NAME`;
+				const fileName = `FILE_NAME`;
+
+				type Key = `KEY`;
+				type VarName = `VAR_NAME`;
+				type FileName = `FILE_NAME`;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().tuple().key(key).wrap("() => Promise.all([ $ ])").value(import_stmt).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<
+					readonly [
+						Key,
+						`() => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ])`,
+					]
+				>();
+			});
+
+			it("infers `widened` wrapped tuple value in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key: string = `...`;
+				const varName: string = `...`;
+				const fileName: string = `...`;
+
+				type Key = string;
+				type VarName = string;
+				type FileName = string;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().tuple().key(key).wrap("() => Promise.all([ $ ])").value(import_stmt).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<
+					readonly [
+						Key,
+						`() => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ])`,
+					]
+				>();
+			});
+
+			it("infers wrapped tuple values in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const varName = `VAR_NAME`;
+				const fileName = `FILE_NAME`;
+
+				type Key = `KEY`;
+				type VarName = `VAR_NAME`;
+				type FileName = `FILE_NAME`;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().tuple().key(key).wrap("() => Promise.all([ $ ])").values([import_stmt]).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<
+					readonly [
+						Key,
+						`() => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ])`,
+					]
+				>();
+			});
+
+			it("infers `widened` wrapped tuple values in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key: string = `...`;
+				const varName: string = `...`;
+				const fileName: string = `...`;
+
+				type Key = string;
+				type VarName = string;
+				type FileName = string;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().tuple().key(key).wrap("() => Promise.all([ $ ])").values([import_stmt]).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<
+					readonly [
+						Key,
+						`() => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ])`,
+					]
+				>();
+			});
+
+			// trailing
+
+			it("infers with trailing false in tuple", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const varName = `VAR_NAME`;
+
+				type Key = `KEY`;
+				type VarName = `VAR_NAME`;
+
+				const stmt = builder.common().tuple().key(key).value(varName).trailing(false).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<readonly [Key, VarName, false]>();
+			});
+
+			it("infers with `widened` trailing false in tuple", () => {
+				const builder = createStatementBuilder();
+
+				const key: string = `...`;
+				const value: string = `...`;
+				const trailing: boolean = Boolean();
+
+				type Key = string;
+				type Value = string;
+				type Trailing = boolean;
+
+				const stmt = builder.common().tuple().key(key).value(value).trailing(trailing).build();
+
+				expectTypeOf(stmt).toEqualTypeOf<readonly [Key, Value, Trailing]>();
+			});
+
+			it("infers with trailing `21` in tuple next to wrapped value", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const varName = `VAR_NAME`;
+				const fileName = `FILE_NAME`;
+
+				type Key = `KEY`;
+				type VarName = `VAR_NAME`;
+				type FileName = `FILE_NAME`;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder
+					.common()
+					.tuple()
+					.key(key)
+					.wrap("() => Promise.all([ $ ])")
+					.value(import_stmt)
+					.trailing(21)
+					.build();
+
+				expectTypeOf(stmt).toEqualTypeOf<
+					readonly [
+						Key,
+						`() => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ])`,
+						21,
+					]
+				>();
+			});
+
+			it("infers with `widened` trailing `21` in tuple next to wrapped value", () => {
+				const builder = createStatementBuilder();
+
+				const key: string = `...`;
+				const varName: string = `...`;
+				const fileName: string = `...`;
+				const trailing: number = 5;
+
+				type Key = string;
+				type VarName = string;
+				type FileName = string;
+				type Trailing = number;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder
+					.common()
+					.tuple()
+					.key(key)
+					.wrap("() => Promise.all([ $ ])")
+					.value(import_stmt)
+					.trailing(trailing)
+					.build();
+
+				expectTypeOf(stmt).toEqualTypeOf<
+					readonly [
+						Key,
+						`() => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ])`,
+						Trailing,
+					]
+				>();
+			});
+
+			//
+			it("infers with trailing `21` in tuple next to wrapped values", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const varName = `VAR_NAME`;
+				const fileName = `FILE_NAME`;
+
+				type Key = `KEY`;
+				type VarName = `VAR_NAME`;
+				type FileName = `FILE_NAME`;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder
+					.common()
+					.tuple()
+					.key(key)
+					.wrap("() => Promise.all([ $ ])")
+					.values([import_stmt])
+					.trailing(21)
+					.build();
+
+				expectTypeOf(stmt).toEqualTypeOf<
+					readonly [
+						Key,
+						`() => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ])`,
+						21,
+					]
+				>();
+			});
+
+			it("infers with `widened` trailing `21` in tuple next to wrapped values", () => {
+				const builder = createStatementBuilder();
+
+				const key: string = `...`;
+				const varName: string = `...`;
+				const fileName: string = `...`;
+				const trailing: number = 5;
+
+				type Key = string;
+				type VarName = string;
+				type FileName = string;
+				type Trailing = number;
+
+				const dir: string = "";
+
+				const import_stmt = `import('${dir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder
+					.common()
+					.tuple()
+					.key(key)
+					.wrap("() => Promise.all([ $ ])")
+					.values([import_stmt])
+					.trailing(trailing)
+					.build();
+
+				expectTypeOf(stmt).toEqualTypeOf<
+					readonly [
+						Key,
+						`() => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ])`,
+						Trailing,
+					]
+				>();
+			});
 		});
 	});
 });

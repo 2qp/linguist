@@ -18,7 +18,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths as Config);
 				const builder = createStatementBuilder();
 
-				const stmt = builder.import().types([], []).from(paths, "common").build();
+				const stmt = builder.import().types([], []).from(paths.common).build();
 
 				expect(stmt).toContain("import");
 				expect(stmt).toContain("type");
@@ -31,7 +31,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths as Config);
 				const builder = createStatementBuilder();
 
-				const stmt = builder.import().types(["AceMode", "TmScopeRelax"], ["Custom"]).from(paths, "common").build();
+				const stmt = builder.import().types(["AceMode", "TmScopeRelax"], ["Custom"]).from(paths.common).build();
 
 				expect(stmt).toContain("AceMode");
 				expect(stmt).toContain("TmScopeRelax");
@@ -43,7 +43,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths as Config);
 				const builder = createStatementBuilder();
 
-				const stmt_empty = builder.import().types([], []).from(paths, "common").build();
+				const stmt_empty = builder.import().types([], []).from(paths.common).build();
 
 				expect(stmt_empty).toEqual(`import type {  } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -52,11 +52,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths as Config);
 				const builder = createStatementBuilder();
 
-				const stmt_filled = builder
-					.import()
-					.types(["AceMode", "TmScopeRelax"], ["Custom"])
-					.from(paths, "common")
-					.build();
+				const stmt_filled = builder.import().types(["AceMode", "TmScopeRelax"], ["Custom"]).from(paths.common).build();
 
 				expect(stmt_filled).toEqual(`import type { AceMode, TmScopeRelax, Custom } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -66,7 +62,7 @@ describe("createStatementBuilder", async () => {
 				const builder = createStatementBuilder();
 
 				const type: string = "SomeType";
-				const stmt_dynamic = builder.import().types(["AceMode", "TmScopeRelax"], [type]).from(paths, "common").build();
+				const stmt_dynamic = builder.import().types(["AceMode", "TmScopeRelax"], [type]).from(paths.common).build();
 
 				expect(stmt_dynamic).toEqual(`import type { AceMode, TmScopeRelax, ${type} } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -79,7 +75,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_empty = builder.import().values([]).from(paths, "common").build();
+				const stmt_empty = builder.import().values([]).from(paths.common).build();
 
 				expect(stmt_empty).toEqual(`import {  } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -88,7 +84,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_filled_one = builder.import().values(["all"]).from(paths, "common").build();
+				const stmt_filled_one = builder.import().values(["all"]).from(paths.common).build();
 
 				expect(stmt_filled_one).toEqual(`import { all } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -97,7 +93,7 @@ describe("createStatementBuilder", async () => {
 				const paths = createStatementPaths(dummyStmtPaths);
 				const builder = createStatementBuilder();
 
-				const stmt_filled = builder.import().values(["ace_mode_array", "index_by_id"]).from(paths, "common").build();
+				const stmt_filled = builder.import().values(["ace_mode_array", "index_by_id"]).from(paths.common).build();
 
 				expect(stmt_filled).toEqual(`import { ace_mode_array, index_by_id } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -107,7 +103,7 @@ describe("createStatementBuilder", async () => {
 				const builder = createStatementBuilder();
 
 				const value: string = "something";
-				const stmt_dynamic_one = builder.import().values([value]).from(paths, "common").build();
+				const stmt_dynamic_one = builder.import().values([value]).from(paths.common).build();
 
 				expect(stmt_dynamic_one).toEqual(`import { ${value} } from "OUT_DIR/FILE_NO_EXT";`);
 			});
@@ -119,9 +115,35 @@ describe("createStatementBuilder", async () => {
 				const value: string = "something";
 				const value2: string = "something_else";
 
-				const stmt_dynamic = builder.import().values([value, value2]).from(paths, "common").build();
+				const stmt_dynamic = builder.import().values([value, value2]).from(paths.common).build();
 
 				expect(stmt_dynamic).toEqual(`import { ${value}, ${value2} } from "OUT_DIR/FILE_NO_EXT";`);
+			});
+		});
+
+		describe("import lazy way", () => {
+			describe("values", () => {
+				//
+
+				it("emits with `from`, `then_` resolution", () => {
+					const builder = createStatementBuilder();
+
+					const varName = "VAR_NAME";
+					const fileName = "FILE_NAME";
+
+					const import_stmt = builder
+						.import()
+						.lazy()
+						.values()
+						.from([dummyStmtPaths.data.paths.typesDir, "/", "TYPE", "/", fileName])
+						.then_(varName)
+						.build();
+
+					const _varName = `VAR_NAME`;
+					const _fileName = `FILE_NAME`;
+
+					expect(import_stmt).toEqual(`import('TYPES_DIR/TYPE/${_fileName}').then(({ ${_varName} }) => ${_varName})`);
+				});
 			});
 		});
 	});
@@ -535,70 +557,237 @@ describe("createStatementBuilder", async () => {
 				});
 			});
 
-			describe("value way", () => {
+			describe("expression way", () => {
 				//
 
-				it("emits with value, prefixed var name and its export", () => {
-					const builder = createStatementBuilder();
+				describe("value builder", () => {
+					//
 
-					const [stmt, stmt_export] = builder.var("VAR_NAME").prefix("PREFIX_").value("VALUE").build();
+					it("emits with value, prefixed var name and its export", () => {
+						const builder = createStatementBuilder();
 
-					expect(stmt).toEqual(`const PREFIX_VAR_NAME = VALUE;`);
-					expect(stmt_export).toEqual(`export { PREFIX_VAR_NAME };`);
+						const [stmt, stmt_export] = builder.var("VAR_NAME").prefix("PREFIX_").expr().from().value("VALUE").build();
+
+						expect(stmt).toEqual(`const PREFIX_VAR_NAME = VALUE;`);
+						expect(stmt_export).toEqual(`export { PREFIX_VAR_NAME };`);
+					});
+
+					it("emits with dynamic value, prefix, var name, export", () => {
+						const builder = createStatementBuilder();
+
+						const varName: string = "VAR_NAME";
+						const prefix: string = "PREFIX_";
+						const value: string = `"VALUE"`;
+
+						const [stmt, stmt_export] = builder.var(varName).prefix(prefix).expr().from().value(value).build();
+
+						expect(stmt).toEqual(`const ${prefix}${varName} = ${value};`);
+						expect(stmt_export).toEqual(`export { ${prefix}${varName} };`);
+					});
+
+					it("emits with var name, prefix, string value as const and export", () => {
+						const builder = createStatementBuilder();
+
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = `"VALUE"`;
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.value(value)
+							.asConst()
+							.build();
+
+						expect(stmt).toEqual(`const ${prefix}${varName} = ${value} as const;`);
+						expect(stmt_export).toEqual(`export { ${prefix}${varName} };`);
+					});
+
+					it("emits with var name, prefix, wrapped string value as const and export", () => {
+						const builder = createStatementBuilder();
+
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = `"VALUE"`;
+
+						const wrapped = `ReadonlyArray<${value}>`;
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.value(value)
+							.asConst()
+							.wrap("ReadonlyArray<$>")
+							.build();
+
+						expect(stmt).toEqual(`const ${prefix}${varName} = ${wrapped} as const;`);
+						expect(stmt_export).toEqual(`export { ${prefix}${varName} };`);
+					});
+
+					it("emits with var name, prefix, value with type annotation and export", () => {
+						const builder = createStatementBuilder();
+
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = "VALUE";
+						const type = "SomeType";
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.value(value)
+							.type(type)
+							.build();
+
+						expect(stmt).toEqual(`const PREFIX_VAR_NAME: SomeType = VALUE;`);
+						expect(stmt_export).toEqual(`export { PREFIX_VAR_NAME };`);
+					});
+
+					it("emits with dynamic var name, prefix, value with type annotation and export", () => {
+						const builder = createStatementBuilder();
+
+						const varName: string = "VAR_NAME";
+						const prefix: string = "PREFIX_";
+						const value: number = 5;
+						const type: string = "SomeType";
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.value(value)
+							.type(type)
+							.build();
+
+						expect(stmt).toEqual(`const ${prefix}${varName}: ${type} = ${value};`);
+						expect(stmt_export).toEqual(`export { ${prefix}${varName} };`);
+					});
 				});
 
-				it("emits with dynamic value, prefix, var name, export", () => {
-					const builder = createStatementBuilder();
+				describe("tuple builder", () => {
+					//
 
-					const varName: string = "VAR_NAME";
-					const prefix: string = "PREFIX_";
-					const value: string = `"VALUE"`;
+					it("emits with value, prefixed var name and its export [single element tuple]", () => {
+						const builder = createStatementBuilder();
 
-					const [stmt, stmt_export] = builder.var(varName).prefix(prefix).value(value).build();
+						const [stmt, stmt_export] = builder
+							.var("VAR_NAME")
+							.prefix("PREFIX_")
+							.expr()
+							.from()
+							.tuple(["VALUE"])
+							.build();
 
-					expect(stmt).toEqual(`const ${prefix}${varName} = ${value};`);
-					expect(stmt_export).toEqual(`export { ${prefix}${varName} };`);
-				});
+						expect(stmt).toEqual(`const PREFIX_VAR_NAME = VALUE;`);
+						expect(stmt_export).toEqual(`export { PREFIX_VAR_NAME };`);
+					});
 
-				it("emits with var name, prefix, string value as const and export", () => {
-					const builder = createStatementBuilder();
+					it("emits with dynamic value, prefix, var name, export [single element tuple]", () => {
+						const builder = createStatementBuilder();
 
-					const varName = "VAR_NAME";
-					const prefix = "PREFIX_";
-					const value = `"VALUE"`;
+						const varName: string = "VAR_NAME";
+						const prefix: string = "PREFIX_";
+						const value: string = `"VALUE"`;
 
-					const [stmt, stmt_export] = builder.var(varName).prefix(prefix).value(value).asConst().build();
+						const [stmt, stmt_export] = builder.var(varName).prefix(prefix).expr().from().tuple([value]).build();
 
-					expect(stmt).toEqual(`const ${prefix}${varName} = ${value} as const;`);
-					expect(stmt_export).toEqual(`export { ${prefix}${varName} };`);
-				});
+						expect(stmt).toEqual(`const ${prefix}${varName} = ${value};`);
+						expect(stmt_export).toEqual(`export { ${prefix}${varName} };`);
+					});
 
-				it("emits with var name, prefix, value with type annotation and export", () => {
-					const builder = createStatementBuilder();
+					it("emits with var name, prefix, string value as const and export [single element tuple]", () => {
+						const builder = createStatementBuilder();
 
-					const varName = "VAR_NAME";
-					const prefix = "PREFIX_";
-					const value = "VALUE";
-					const type = "SomeType";
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = `"VALUE"`;
 
-					const [stmt, stmt_export] = builder.var(varName).prefix(prefix).value(value).type(type).build();
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.tuple([value])
+							.asConst()
+							.build();
 
-					expect(stmt).toEqual(`const PREFIX_VAR_NAME: SomeType = VALUE;`);
-					expect(stmt_export).toEqual(`export { PREFIX_VAR_NAME };`);
-				});
+						expect(stmt).toEqual(`const ${prefix}${varName} = ${value} as const;`);
+						expect(stmt_export).toEqual(`export { ${prefix}${varName} };`);
+					});
 
-				it("emits with dynamic var name, prefix, value with type annotation and export", () => {
-					const builder = createStatementBuilder();
+					it("emits with var name, prefix, wrapped string value as const and export ", () => {
+						const builder = createStatementBuilder();
 
-					const varName: string = "VAR_NAME";
-					const prefix: string = "PREFIX_";
-					const value: number = 5;
-					const type: string = "SomeType";
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = [`"VALUE_1"`, `"VALUE_2"`, `"VALUE_3"`] as const;
 
-					const [stmt, stmt_export] = builder.var(varName).prefix(prefix).value(value).type(type).build();
+						const expected = `"VALUE_1", "VALUE_2", "VALUE_3"`;
 
-					expect(stmt).toEqual(`const ${prefix}${varName}: ${type} = ${value};`);
-					expect(stmt_export).toEqual(`export { ${prefix}${varName} };`);
+						const wrapped = `ReadonlyArray<${expected}>`;
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.tuple(value)
+							.asConst()
+							.wrap("ReadonlyArray<$>")
+							.build();
+
+						expect(stmt).toEqual(`const ${prefix}${varName} = ${wrapped} as const;`);
+						expect(stmt_export).toEqual(`export { ${prefix}${varName} };`);
+					});
+
+					it("emits with var name, prefix, value with type annotation and export [single element tuple]", () => {
+						const builder = createStatementBuilder();
+
+						const varName = "VAR_NAME";
+						const prefix = "PREFIX_";
+						const value = "VALUE";
+						const type = "SomeType";
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.tuple([value])
+							.type(type)
+							.build();
+
+						expect(stmt).toEqual(`const PREFIX_VAR_NAME: SomeType = VALUE;`);
+						expect(stmt_export).toEqual(`export { PREFIX_VAR_NAME };`);
+					});
+
+					it("emits with dynamic var name, prefix, value with type annotation and export [single element tuple]", () => {
+						const builder = createStatementBuilder();
+
+						const varName: string = "VAR_NAME";
+						const prefix: string = "PREFIX_";
+						const value: number = 5;
+						const type: string = "SomeType";
+
+						const [stmt, stmt_export] = builder
+							.var(varName)
+							.prefix(prefix)
+							.expr()
+							.from()
+							.tuple([`${value}`])
+							.type(type)
+							.build();
+
+						expect(stmt).toEqual(`const ${prefix}${varName}: ${type} = ${value};`);
+						expect(stmt_export).toEqual(`export { ${prefix}${varName} };`);
+					});
 				});
 			});
 
@@ -711,6 +900,88 @@ describe("createStatementBuilder", async () => {
 				});
 			});
 		});
+
+		describe("record way", () => {
+			//
+
+			it("emits a record with `varName` and defined `tuple`", () => {
+				//
+
+				const builder = createStatementBuilder();
+
+				const varName = "VAR_NAME";
+
+				const element1 = `"0": "value",`;
+				const element2 = `"1": "value",`;
+				const tuple = [element1, element2] as const;
+
+				const [stmt, stmt_export] = builder.var(varName).record().from().tuple(tuple).build();
+
+				const _record = `{ "0": "value",\n"1": "value", }`;
+
+				expect(stmt).toEqual(`const ${varName} = ${_record};`);
+				expect(stmt_export).toEqual(`export { ${varName} };`);
+			});
+
+			it("emits a type annotated record with `varName` and defined `tuple`", () => {
+				//
+
+				const builder = createStatementBuilder();
+
+				const varName = "VAR_NAME";
+				const typeName = "SomeType";
+
+				const element1 = `"0": "value",`;
+				const element2 = `"1": 5,`;
+				const tuple = [element1, element2] as const;
+
+				const [stmt, stmt_export] = builder.var(varName).record().from().tuple(tuple).type(typeName).build();
+
+				const _record = `{ "0": "value",\n"1": 5, }`;
+
+				expect(stmt).toEqual(`const ${varName}: ${typeName} = ${_record};`);
+				expect(stmt_export).toEqual(`export { ${varName} };`);
+			});
+
+			it("emits a readonly record with `varName` and defined `tuple`", () => {
+				//
+
+				const builder = createStatementBuilder();
+
+				const varName = "VAR_NAME";
+
+				const element1 = `"0": "value",`;
+				const element2 = `"1": true,`;
+				const tuple = [element1, element2] as const;
+
+				const [stmt, stmt_export] = builder.var(varName).record().from().tuple(tuple).asConst().build();
+
+				const _record = `{ "0": "value",\n"1": true, }`;
+
+				expect(stmt).toEqual(`const ${varName} = ${_record} as const;`);
+				expect(stmt_export).toEqual(`export { ${varName} };`);
+			});
+
+			it("emits a annotated readonly record with `varName` and defined `tuple`", () => {
+				//
+
+				const builder = createStatementBuilder();
+
+				const varName = "VAR_NAME";
+				const typeName = "SomeType";
+
+				const element1 = `"0": "value",`;
+				const element2 = `"1": true,`;
+				const tuple = [element1, element2] as const;
+
+				const [stmt, stmt_export] = builder.var(varName).record().from().tuple(tuple).asConst().type(typeName).build();
+
+				const _record = `{ "0": "value",\n"1": true, }`;
+
+				expect(stmt).toEqual(`const ${varName}: ${typeName} = ${_record} as const;`);
+				expect(stmt_export).toEqual(`export { ${varName} };`);
+			});
+		});
 	});
 
 	describe("type way", () => {
@@ -728,7 +999,7 @@ describe("createStatementBuilder", async () => {
 			expect(stmt_export).toEqual(`export type { ${typeName} };`);
 		});
 
-		it("emits with type name and wrapped type expression", () => {
+		it("emits with record type name and wrapped type expression", () => {
 			const builder = createStatementBuilder();
 
 			const typeName = "SomeType";
@@ -737,16 +1008,18 @@ describe("createStatementBuilder", async () => {
 			const [stmt, stmt_export] = builder
 				.type()
 				.alias(typeName)
-				.exp(exp)
-				.wrap("FallbackForUnknownKeys<() => Promise<$>>")
+				.exp()
+				.from()
+				.record(exp)
+				.wrap("Dictionary<() => Promise<$>>")
 				.types(["AceMode"], [])
 				.build();
 
-			expect(stmt).toEqual(`type SomeType = { key: value } &  FallbackForUnknownKeys<() => Promise<AceMode>>;`);
+			expect(stmt).toEqual(`type SomeType = { key: value } &  Dictionary<() => Promise<AceMode>>;`);
 			expect(stmt_export).toEqual(`export type { SomeType };`);
 		});
 
-		it("emits with type name, type expression and wrapped static and dynamic types", () => {
+		it("emits with record type name, type expression and wrapped static and dynamic types", () => {
 			const builder = createStatementBuilder();
 
 			const typeName: string = "SomeType";
@@ -756,13 +1029,274 @@ describe("createStatementBuilder", async () => {
 			const [stmt, stmt_export] = builder
 				.type()
 				.alias(typeName)
-				.exp(exp)
-				.wrap("FallbackForUnknownKeys<() => Promise<$>>")
+				.exp()
+				.from()
+				.record(exp)
+				.wrap("Dictionary<() => Promise<$>>")
 				.types(["AceMode"], [type])
 				.build();
 
-			expect(stmt).toEqual(`type ${typeName} = ${exp} &  FallbackForUnknownKeys<() => Promise<AceMode | ${type}>>;`);
+			expect(stmt).toEqual(`type ${typeName} = ${exp} &  Dictionary<() => Promise<AceMode | ${type}>>;`);
 			expect(stmt_export).toEqual(`export type { ${typeName} };`);
+		});
+
+		it("emits with tuple type name and wrapped type expression", () => {
+			const builder = createStatementBuilder();
+
+			const typeName = "SomeType";
+
+			const element1 = `"0": "value",`;
+			const element2 = `"1": "value",`;
+
+			const tuple = [element1, element2] as const;
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("Dictionary<() => Promise<$>>")
+				.types(["AceMode"], [])
+				.build();
+
+			const expected = `"0": "value",\n"1": "value",` as const;
+
+			expect(stmt).toEqual(`type SomeType = { ${expected} } &  Dictionary<() => Promise<AceMode>>;`);
+			expect(stmt_export).toEqual(`export type { SomeType };`);
+		});
+
+		it("emits with tuple type name, type expression and wrapped static and dynamic types", () => {
+			const builder = createStatementBuilder();
+
+			const typeName: string = "SomeType";
+			const type: string = "SomeCustomType";
+
+			const element1: `"${string}": "${string}",` = `"0": "value",`;
+			const element2: `"${string}": "${string}",` = `"1": "value",`;
+
+			const tuple = [element1, element2];
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("Dictionary<() => Promise<$>>")
+				.types(["AceMode"], [type])
+				.build();
+
+			const expected = `"0": "value",\n"1": "value",` as const;
+
+			expect(stmt).toEqual(`type ${typeName} = { ${expected} } &  Dictionary<() => Promise<AceMode | ${type}>>;`);
+			expect(stmt_export).toEqual(`export type { ${typeName} };`);
+		});
+	});
+
+	describe("common way", () => {
+		//
+
+		describe("record", () => {
+			//
+
+			it("emits record syntax with key and value", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const value = `VALUE`;
+
+				const stmt = builder.common().record().key(key).value(value).build();
+
+				const _key = `"KEY"`;
+				const _value = `VALUE`;
+
+				expect(stmt).toEqual(`${_key}: ${_value},`);
+			});
+
+			it("emits wrapped record value in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key = "KEY";
+				const varName = "VAR_NAME";
+				const fileName = "FILE_NAME";
+
+				const import_stmt =
+					`import('${dummyStmtPaths.data.paths.typesDir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().record().key(key).wrap("() => Promise.all([ $ ])").value(import_stmt).build();
+
+				const _key = `"KEY"`;
+				const _varName = `VAR_NAME`;
+				const _fileName = `FILE_NAME`;
+
+				expect(stmt).toEqual(
+					`${_key}: () => Promise.all([ import('TYPES_DIR/TYPE/${_fileName}').then(({ ${_varName} }) => ${_varName}) ]),`,
+				);
+			});
+
+			it("emits wrapped record values in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key = "KEY";
+				const varName = "VAR_NAME";
+				const fileName = "FILE_NAME";
+
+				const import_stmt =
+					`import('${dummyStmtPaths.data.paths.typesDir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().record().key(key).wrap("() => Promise.all([ $ ])").values([import_stmt]).build();
+
+				const _key = `"KEY"`;
+				const _varName = `VAR_NAME`;
+				const _fileName = `FILE_NAME`;
+
+				expect(stmt).toEqual(
+					`${_key}: () => Promise.all([ import('TYPES_DIR/TYPE/${_fileName}').then(({ ${_varName} }) => ${_varName}) ]),`,
+				);
+			});
+		});
+
+		describe("tuple", () => {
+			//
+
+			it("emits tuple syntax with key and value", () => {
+				const builder = createStatementBuilder();
+
+				const key = "KEY";
+				const value = 5;
+
+				const stmt = builder.common().tuple().key(key).value(value).build();
+
+				const _key = "KEY";
+				const _value = 5;
+
+				expect(stmt).toEqual([_key, _value]);
+			});
+
+			it("emits wrapped tuple value in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key = "KEY";
+				const varName = "VAR_NAME";
+				const fileName = "FILE_NAME";
+
+				const import_stmt =
+					`import('${dummyStmtPaths.data.paths.typesDir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().tuple().key(key).wrap("() => Promise.all([ $ ])").value(import_stmt).build();
+
+				const _key = "KEY";
+				const _varName = "VAR_NAME";
+				const _fileName = "FILE_NAME";
+
+				expect(stmt).toEqual([
+					_key,
+					`() => Promise.all([ import('TYPES_DIR/TYPE/${_fileName}').then(({ ${_varName} }) => ${_varName}) ])`,
+				]);
+			});
+
+			it("emits wrapped tuple values in Promise.all", () => {
+				const builder = createStatementBuilder();
+
+				const key = "KEY";
+				const varName = "VAR_NAME";
+				const fileName = "FILE_NAME";
+
+				const import_stmt =
+					`import('${dummyStmtPaths.data.paths.typesDir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder.common().tuple().key(key).wrap("() => Promise.all([ $ ])").values([import_stmt]).build();
+
+				const _key = "KEY";
+				const _varName = "VAR_NAME";
+				const _fileName = "FILE_NAME";
+
+				expect(stmt).toEqual([
+					_key,
+					`() => Promise.all([ import('TYPES_DIR/TYPE/${_fileName}').then(({ ${_varName} }) => ${_varName}) ])`,
+				]);
+			});
+
+			// trailing
+
+			it("emits with trailing false in tuple", () => {
+				const builder = createStatementBuilder();
+
+				const key = "KEY";
+				const value = `VALUE`;
+
+				const stmt = builder.common().tuple().key(key).value(value).trailing(false).build();
+
+				const _key = "KEY";
+				const _value = `VALUE`;
+
+				expect(stmt).toEqual([_key, _value, false]);
+			});
+
+			it("emits with trailing `21` in tuple next to wrapped value", () => {
+				const builder = createStatementBuilder();
+
+				const key = "KEY";
+				const varName = "VAR_NAME";
+				const fileName = "FILE_NAME";
+				const trailing = 21;
+
+				const import_stmt =
+					`import('${dummyStmtPaths.data.paths.typesDir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder
+					.common()
+					.tuple()
+					.key(key)
+					.wrap("() => Promise.all([ $ ])")
+					.value(import_stmt)
+					.trailing(trailing)
+					.build();
+
+				const _key = "KEY";
+				const _varName = "VAR_NAME";
+				const _fileName = "FILE_NAME";
+				const _trailing = 21;
+
+				expect(stmt).toEqual([
+					_key,
+					`() => Promise.all([ import('TYPES_DIR/TYPE/${_fileName}').then(({ ${_varName} }) => ${_varName}) ])`,
+					_trailing,
+				]);
+			});
+
+			it("emits with trailing `21` in tuple next to wrapped values", () => {
+				const builder = createStatementBuilder();
+
+				const key = "KEY";
+				const varName = "VAR_NAME";
+				const fileName = "FILE_NAME";
+				const trailing = 21;
+
+				const import_stmt =
+					`import('${dummyStmtPaths.data.paths.typesDir}/TYPE/${fileName}').then(({ ${varName} }) => ${varName})` as const;
+
+				const stmt = builder
+					.common()
+					.tuple()
+					.key(key)
+					.wrap("() => Promise.all([ $ ])")
+					.values([import_stmt])
+					.trailing(trailing)
+					.build();
+
+				const _key = "KEY";
+				const _varName = "VAR_NAME";
+				const _fileName = "FILE_NAME";
+				const _trailing = 21;
+
+				expect(stmt).toEqual([
+					_key,
+					`() => Promise.all([ import('TYPES_DIR/TYPE/${_fileName}').then(({ ${_varName} }) => ${_varName}) ])`,
+					_trailing,
+				]);
+			});
 		});
 	});
 });
