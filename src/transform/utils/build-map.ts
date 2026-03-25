@@ -1,6 +1,6 @@
 import { isEmpty, isNullish } from "@utils/guards";
 
-import type { ExtractArrayElement, KeysOfUnion, ValueFromUnion, ValueFromUnionByKey } from "@/types/utility.types";
+import type { ElementOf, KeysOfUnion, ValueFromUnion, ValueFromUnionByKey } from "@/types/utility.types";
 
 type BuildVariant = "primitive" | "set" | "custom";
 
@@ -28,11 +28,11 @@ type BuildReturn<
 	TProperties extends KeysOfUnion<TSource[keyof TSource]>[],
 	TVariant extends BuildVariant,
 > = TVariant extends "set"
-	? Map<ExtractArrayElement<TSource[K][TLeft]>, Set<TSource[K][TRight]>>
+	? Map<ElementOf<TSource[K][TLeft]>, Set<TSource[K][TRight]>>
 	: TVariant extends "custom"
-		? Map<ExtractArrayElement<TSource[K][TLeft]>, { [Key in TProperties[number]]: ValueFromUnion<TSource[K], Key> }[]>
+		? Map<ElementOf<TSource[K][TLeft]>, { [Key in TProperties[number]]: ValueFromUnion<TSource[K], Key> }[]>
 		: TVariant extends "primitive"
-			? Map<ExtractArrayElement<TSource[K][TLeft]>, ValueFromUnionByKey<TSource[keyof TSource], TRight>>
+			? Map<ElementOf<TSource[K][TLeft]>, ValueFromUnionByKey<TSource[keyof TSource], TRight>>
 			: undefined;
 
 const buildMap = <
@@ -53,7 +53,7 @@ const buildMap = <
 		const left = params.left;
 		const right = params.right;
 
-		const map = new Map<ExtractArrayElement<TSource[K][TLeft]>, Set<TSource[K][TRight]>>();
+		const map = new Map<ElementOf<TSource[K][TLeft]>, Set<TSource[K][TRight]>>();
 
 		for (const name of Object.keys(source) as K[]) {
 			if (!name) continue;
@@ -72,7 +72,7 @@ const buildMap = <
 
 				if (isNullish(item)) continue;
 
-				const keyItem = item as ExtractArrayElement<TSource[K][TLeft]>;
+				const keyItem = item as ElementOf<TSource[K][TLeft]>;
 				const exist = map.get(keyItem);
 
 				if (isNullish(exist)) {
@@ -105,7 +105,7 @@ const buildMap = <
 		const props = params.properties;
 
 		const map = new Map<
-			ExtractArrayElement<TSource[K][TLeft]>,
+			ElementOf<TSource[K][TLeft]>,
 			{ [Key in TProperties[number]]: ValueFromUnion<TSource[K], Key> }[]
 		>();
 
@@ -127,7 +127,7 @@ const buildMap = <
 			if (isValueEmpty) continue;
 
 			if (!Array.isArray(key)) {
-				map.set(key as ExtractArrayElement<TSource[K][TLeft]>, value);
+				map.set(key as ElementOf<TSource[K][TLeft]>, value);
 				continue;
 			}
 
@@ -136,7 +136,7 @@ const buildMap = <
 
 				if (isNullish(item)) continue;
 
-				const keyItem = item as ExtractArrayElement<TSource[K][TLeft]>;
+				const keyItem = item as ElementOf<TSource[K][TLeft]>;
 
 				const exist = map.get(keyItem);
 
@@ -168,7 +168,7 @@ const buildMap = <
 		const left = params.key;
 		const right = params.value;
 
-		const map = new Map<ExtractArrayElement<TSource[K][TLeft]>, TSource[K][TRight]>();
+		const map = new Map<ElementOf<TSource[K][TLeft]>, TSource[K][TRight]>();
 
 		for (const name of Object.keys(source) as K[]) {
 			if (!name) continue;
@@ -183,7 +183,7 @@ const buildMap = <
 			if (isNullish(value)) continue;
 			if (Array.isArray(key)) continue;
 
-			map.set(key as ExtractArrayElement<TSource[K][TLeft]>, value);
+			map.set(key as ElementOf<TSource[K][TLeft]>, value);
 		}
 		return map as BuildReturn<TSource, K, TLeft, TRight, TProperties, TVariant>;
 	}

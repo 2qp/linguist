@@ -22,9 +22,16 @@ type ValueFromUnion<T, K extends PropertyKey> = T extends unknown ? (K extends k
 
 type ValueFromUnionByKey<T, K extends KeysOfUnion<T>> = T extends unknown ? (K extends keyof T ? T[K] : never) : never;
 
+type NonNullableValueFromUnion<T, K extends PropertyKey> = NonNullable<ValueFromUnion<T, K>>;
+
+type NonNullableValueFromUnionByKey<T, K extends KeysOfUnion<T>> = NonNullable<ValueFromUnionByKey<T, K>>;
+
 type NonUndefined<T> = T extends undefined ? never : T;
 
-type ExtractArrayElement<T> = T extends readonly (infer U)[] ? U : T;
+type NonNullableElementOf<T> =
+	NonNullable<T> extends ReadonlyArray<infer U> ? NonNullable<U> & {} : NonNullable<T> & {};
+
+type ElementOf<T> = T extends ReadonlyArray<infer U> ? U : T;
 
 type ExtractSetElement<T> = T extends Set<infer U> ? U : T;
 
@@ -69,15 +76,18 @@ type Dictionary<T> = Record<string & {}, T>;
 export type {
 	DeepPartial,
 	Dictionary,
+	ElementOf,
 	Entries,
 	ExplicitDictionary,
-	ExtractArrayElement,
 	ExtractExplicit,
 	ExtractIndexSignature,
 	ExtractSetElement,
 	HomogeneousArray,
 	KeysOfUnion,
 	LooseToStrict,
+	NonNullableElementOf,
+	NonNullableValueFromUnion,
+	NonNullableValueFromUnionByKey,
 	NonUndefined,
 	Prettify,
 	ValueFromUnion,
