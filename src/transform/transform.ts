@@ -45,22 +45,24 @@ const transform: Transform = async ({ config, source, stats: _stats }) => {
 		await createLanguageFiles({ languages: typeLanguages, type, config });
 	}
 
-	await createCategories({ config, grouped });
+	await Promise.all([
+		createCategories({ config, grouped }),
 
-	await createIndexes({ languages, config });
+		createIndexes({ languages, config }),
 
-	await createMaps({ languages, config, stats });
+		createMaps({ languages, config, stats }),
 
-	await createFlats({ languages, config });
+		createFlats({ languages, config }),
 
-	await createManifests({ languages, config, stats });
+		createManifests({ languages, config, stats }),
 
-	await createArrays({ languages, config, stats });
+		createArrays({ languages, config, stats }),
 
-	await createReExports({
-		sourceDir: config.data.sourcePaths.gettersDir,
-		outputFile: join(config.data.paths.gettersDir, "index.ts"),
-	});
+		createReExports({
+			sourceDir: config.data.sourcePaths.gettersDir,
+			outputFile: join(config.data.paths.gettersDir, "index.ts"),
+		}),
+	]);
 };
 
 export { transform };
