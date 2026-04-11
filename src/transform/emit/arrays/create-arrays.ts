@@ -8,12 +8,13 @@ import { writeFile } from "@utils/write-file";
 import type { Config } from "@/types/config.types";
 import type { ProcessedFieldAnalysisArray } from "@/types/field.types";
 import type { Language, Languages } from "@/types/generated.types";
+import type { KeyOf } from "@/types/utility.types";
 import type { ArrayEmitter, ArrayEmitterOptions, ArrayFieldEmitterOptions } from "./types";
 
 type CreateArraysParams = {
 	languages: Languages;
 	config: Config;
-	stats: ProcessedFieldAnalysisArray<keyof Language>;
+	stats: ProcessedFieldAnalysisArray<KeyOf<Language>>;
 };
 
 type CreateArrays = (params: CreateArraysParams) => Promise<void>;

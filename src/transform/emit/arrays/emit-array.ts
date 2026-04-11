@@ -8,6 +8,7 @@ import { createStatementBuilder } from "@/transform/utils/statement/create-state
 import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
 import type { Language } from "@/types/generated.types";
+import type { KeyOf } from "@/types/utility.types";
 import type { ArrayEmitterFn, ArrayEmitterOptions } from "./types";
 
 const emitArray: ArrayEmitterFn<ArrayEmitterOptions> = ({ name, config, languages, stats: _stats, ...params }) => {
@@ -21,7 +22,7 @@ const emitArray: ArrayEmitterFn<ArrayEmitterOptions> = ({ name, config, language
 		//
 
 		const map = buildMap({ source: languages, ...params.options });
-		const arr = map.values().toArray().flat();
+		const arr = [...map.values()].flat();
 
 		const chunks = chunkArray(arr, 20);
 
@@ -41,7 +42,7 @@ const emitArray: ArrayEmitterFn<ArrayEmitterOptions> = ({ name, config, language
 		// could use .common().tuple().key(item)
 		const types = params.options.properties
 			.map((item) => [item, stats.get(item)?.type, stats.get(item)?.isOptional] as const)
-			.filter((i): i is [keyof Language, string, boolean] => i[0] != null && i[1] != null);
+			.filter((i): i is [KeyOf<Language>, string, boolean] => i[0] != null && i[1] != null);
 
 		const typeImports = builder
 			.import()

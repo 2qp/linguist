@@ -6,6 +6,7 @@ import { createStatementBuilder } from "@/transform/utils/statement/create-state
 import { createStatementPaths } from "@/transform/utils/statement/create-statement-paths";
 
 import type { Language } from "@/types/generated.types";
+import type { KeyOf } from "@/types/utility.types";
 import type { MapEmitterOptions, MapEmitterType } from "../maps/types";
 
 const emitManifest: MapEmitterType<MapEmitterOptions> = ({ name, languages, options, config, stats: _stats }) => {
@@ -115,7 +116,7 @@ const emitManifest: MapEmitterType<MapEmitterOptions> = ({ name, languages, opti
 		// could use .common().tuple().key(item)
 		const types = options.properties
 			.map((item) => [item, stats.get(item)?.type, stats.get(item)?.isOptional] as const)
-			.filter((i): i is [keyof Language, string, boolean] => i[0] != null && i[1] != null);
+			.filter((i): i is [KeyOf<Language>, string, boolean] => i[0] != null && i[1] != null);
 
 		const typeImports = builder
 			.import()

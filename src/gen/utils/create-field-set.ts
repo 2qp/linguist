@@ -1,6 +1,7 @@
 import type { Field } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
 import type { WithPhase } from "@/types/phantom.types";
+import type { KeyOf } from "@/types/utility.types";
 
 type CreateFieldSetParams<T = Record<string, unknown>> = {
 	source: T;
@@ -12,7 +13,7 @@ type CreateFieldSet = <T extends Record<string, unknown>, TField extends keyof T
 ) => Set<TField | Field>;
 
 type CreateFieldSetOverloaded = {
-	<T extends Record<string, unknown>, TField extends keyof T[keyof T]>(
+	<T extends Record<string, unknown>, TField extends KeyOf<T[keyof T]>>(
 		params: CreateFieldSetParams<T> & WithPhase<"transform">,
 	): Set<TField>;
 

@@ -16,6 +16,7 @@ import type { ProcessedFieldAnalysisArray } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 import type { Language, Languages } from "@/types/generated.types";
 import type { LanguageData } from "@/types/lang.types";
+import type { KeyOf } from "@/types/utility.types";
 
 type TransformParams<TField extends string = Field, TUnique extends Primitive = Primitive> = {
 	config: Config;
@@ -29,7 +30,7 @@ const transform: Transform = async ({ config, source, stats: _stats }) => {
 	//
 
 	const languages = source as unknown as Languages;
-	const stats = _stats as unknown as ProcessedFieldAnalysisArray<keyof Language, Primitive>;
+	const stats = _stats as unknown as ProcessedFieldAnalysisArray<KeyOf<Language>, Primitive>;
 
 	const { outputDir } = config.data.paths;
 

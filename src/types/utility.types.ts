@@ -73,6 +73,8 @@ type ExplicitDictionary<T> = {
  */
 type Dictionary<T> = Record<string & {}, T>;
 
+type KeyOf<T> = Extract<keyof T, string>;
+
 export type {
 	DeepPartial,
 	Dictionary,
@@ -83,6 +85,7 @@ export type {
 	ExtractIndexSignature,
 	ExtractSetElement,
 	HomogeneousArray,
+	KeyOf,
 	KeysOfUnion,
 	LooseToStrict,
 	NonNullableElementOf,
