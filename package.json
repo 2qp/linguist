@@ -1,7 +1,7 @@
 {
 	"name": "linguist-map",
-	"version": "0.0.1",
-	"description": "Linguist languages.yml data",
+	"version": "0.0.0",
+	"description": "Linguist `languages.yml` data",
 	"type": "module",
 	"sideEffects": false,
 	"exports": {
@@ -15,7 +15,6 @@
 				"default": "./dist/data/*.cjs"
 			}
 		},
-
 		"./getters": {
 			"import": {
 				"types": "./dist/getters/index.d.ts",
@@ -26,7 +25,6 @@
 				"default": "./dist/getters/index.cjs"
 			}
 		},
-
 		".": {
 			"import": {
 				"types": "./dist/types/common/index.d.ts",
@@ -37,7 +35,6 @@
 				"default": "./dist/types/common/index.cjs"
 			}
 		},
-
 		"./usage": {
 			"import": {
 				"types": "./dist/types/usage/index.d.ts",
@@ -49,8 +46,11 @@
 			}
 		}
 	},
+
 	"files": [
-		"dist"
+		"dist",
+		"README.md",
+		"LICENSE"
 	],
 	"scripts": {
 		"test": "vitest --typecheck",
@@ -58,7 +58,18 @@
 		"build": "pnpm run clean && pnpm run generate && tsup",
 		"dev": "tsup --watch",
 		"generate": "rimraf src/generated && tsx ./src/entry/entry.ts",
-		"lint": "biome check --write"
+		"typecheck": "tsc --noEmit",
+		"lint": "biome check --write",
+
+		"test:upstream:guard": "vitest upstream.guard.test --run",
+		"test:core": "vitest --exclude=\"**/generated.test.ts\" --exclude=\"**/upstream.guard.test.ts\" --exclude=\"**/*.integrity.test.ts\" --run --typecheck",
+		"test:generated": "vitest generated --run --typecheck",
+
+		"on:guard:pass": "tsx ./src/scripts/on-guard-pass.ts",
+		"guard:generate": "pnpm run typecheck && pnpm run test:upstream:guard && pnpm run on:guard:pass && pnpm run generate",
+		"generate:build": "pnpm typecheck && pnpm test:upstream:guard && pnpm on:guard:pass && pnpm build",
+
+		"act:simulate": "act --artifact-server-path /tmp/artifacts --secret-file .secrets"
 	},
 	"keywords": [
 		"linguist",
@@ -78,7 +89,7 @@
 	"bugs": {
 		"url": "https://github.com/2qp/linguist-map/issues"
 	},
-	"license": "ISC",
+	"license": "MIT",
 	"packageManager": "pnpm@10.24.0",
 	"devDependencies": {
 		"@biomejs/biome": "^2.4.4",
