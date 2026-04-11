@@ -46,7 +46,6 @@
 			}
 		}
 	},
-
 	"files": [
 		"dist",
 		"README.md",
@@ -60,15 +59,12 @@
 		"generate": "rimraf src/generated && tsx ./src/entry/entry.ts",
 		"typecheck": "tsc --noEmit",
 		"lint": "biome check --write",
-
 		"test:upstream:guard": "vitest upstream.guard.test --run",
 		"test:core": "vitest --exclude=\"**/generated.test.ts\" --exclude=\"**/upstream.guard.test.ts\" --exclude=\"**/*.integrity.test.ts\" --run --typecheck",
 		"test:generated": "vitest generated --run --typecheck",
-
 		"on:guard:pass": "tsx ./src/scripts/on-guard-pass.ts",
 		"guard:generate": "pnpm run typecheck && pnpm run test:upstream:guard && pnpm run on:guard:pass && pnpm run generate",
 		"generate:build": "pnpm typecheck && pnpm test:upstream:guard && pnpm on:guard:pass && pnpm build",
-
 		"act:simulate": "act --artifact-server-path /tmp/artifacts --secret-file .secrets"
 	},
 	"keywords": [
@@ -92,9 +88,9 @@
 	"license": "MIT",
 	"packageManager": "pnpm@10.24.0",
 	"devDependencies": {
-		"@biomejs/biome": "^2.4.4",
+		"@biomejs/biome": "^2.4.11",
 		"@types/js-yaml": "^4.0.9",
-		"@types/node": "^25.3.2",
+		"@types/node": "^25.6.0",
 		"@typescript/native-preview": "7.0.0-dev.20260216.1",
 		"glob": "^13.0.6",
 		"js-yaml": "^4.1.1",
@@ -104,6 +100,6 @@
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",
 		"vite-tsconfig-paths": "^6.1.1",
-		"vitest": "^4.0.18"
+		"vitest": "^4.1.4"
 	}
 }
