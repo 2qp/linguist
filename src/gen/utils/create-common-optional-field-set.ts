@@ -74,4 +74,4 @@ const createCommonOptionalFieldSet: CreateCommonOptionalFieldSetOverloaded = ({
 };
 
 export { createCommonOptionalFieldSet };
-export type { CreateCommonOptionalFieldSetParams, CreateCommonOptionalFieldSet };
+export type { CreateCommonOptionalFieldSet, CreateCommonOptionalFieldSetParams };

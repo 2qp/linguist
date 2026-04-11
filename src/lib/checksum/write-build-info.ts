@@ -29,4 +29,4 @@ const writeBuildInfo: WriteBuildInfo = async ({ buffer, config, path = "./build-
 };
 
 export { writeBuildInfo };
-export type { WriteBuildInfoParams, WriteBuildInfo };
+export type { WriteBuildInfo, WriteBuildInfoParams };

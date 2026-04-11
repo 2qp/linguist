@@ -26,4 +26,4 @@ const createSegmentNames: CreateSegmentNames = ({ chunks, typeName }) => {
 };
 
 export { createSegmentNames };
-export type { CreateSegmentNamesParams, CreateSegmentNames };
+export type { CreateSegmentNames, CreateSegmentNamesParams };

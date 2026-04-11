@@ -67,6 +67,4 @@ type Generator<R = Promise<void>> = <
 	params: GeneratorParams<TSource, TField, TUnique>,
 ) => R;
 
-export type { Generator, GeneratorParams };
-
-export type { DefsGenerator, DefsGeneratorParams };
+export type { DefsGenerator, DefsGeneratorParams, Generator, GeneratorParams };

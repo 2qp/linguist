@@ -14,4 +14,4 @@ const getUsageName: GetUsageName = ({ left, right }) => {
 };
 
 export { getUsageName };
-export type { GetUsageNameParams, GetUsageName };
+export type { GetUsageName, GetUsageNameParams };

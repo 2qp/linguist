@@ -192,5 +192,4 @@ const buildMap = <
 };
 
 export { buildMap };
-
-export type { Params as BuildParams, BuildVariant };
+export type { BuildVariant, Params as BuildParams };

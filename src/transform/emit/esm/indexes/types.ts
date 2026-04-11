@@ -7,4 +7,4 @@ type IndexEmitterType = (params: IndexEmitterParams) => string;
 
 type IndexEmitter = { name: string; emitter: IndexEmitterType };
 
-export type { IndexEmitterType, IndexEmitter };
+export type { IndexEmitter, IndexEmitterType };

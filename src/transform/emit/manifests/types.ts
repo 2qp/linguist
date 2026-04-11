@@ -21,4 +21,4 @@ type ManifestEmitter<TOptions> = { name: string; emitter: ManifestEmitterType<TO
 
 type ManifestEmitterOptions = {} & BuildParams<Languages>;
 
-export type { ManifestEmitterParams, ManifestEmitterType, ManifestEmitter, ManifestEmitterOptions };
+export type { ManifestEmitter, ManifestEmitterOptions, ManifestEmitterParams, ManifestEmitterType };

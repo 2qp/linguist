@@ -30,4 +30,4 @@ type Emitter<R = string[]> = <
 	params: EmitterParams<TSource, TField, TUnique>,
 ) => R;
 
-export type { EmitterParams, Emitter };
+export type { Emitter, EmitterParams };

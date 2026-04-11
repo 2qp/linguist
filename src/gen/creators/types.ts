@@ -28,4 +28,4 @@ type Creator = <
 	params: CreatorParams<TSource, TField, TUnique>,
 ) => Promise<void>;
 
-export type { CreatorParams, Creator };
+export type { Creator, CreatorParams };

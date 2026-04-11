@@ -54,4 +54,4 @@ type TypeGenConfigFile = {
 	type: TypeGeneratorConfig;
 };
 
-export type { FieldType, InteralOutDef, TypeGeneratorConfig as TypeGenConfig, TypeGenConfigFile };
+export type { FieldType, InteralOutDef, TypeGenConfigFile, TypeGeneratorConfig as TypeGenConfig };

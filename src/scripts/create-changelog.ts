@@ -47,4 +47,4 @@ const createChangelog: CreateChangelog = async ({ upstreamBuffer, baselinePath, 
 };
 
 export { createChangelog };
-export type { CreateChangelogParams, CreateChangelog };
+export type { CreateChangelog, CreateChangelogParams };

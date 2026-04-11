@@ -50,4 +50,4 @@ const generateUsageTypes: GenerateUsageTypes = ({ config: base, source }) => {
 };
 
 export { generateUsageTypes };
-export type { GenerateUsageTypesParams, GenerateUsageTypes };
+export type { GenerateUsageTypes, GenerateUsageTypesParams };

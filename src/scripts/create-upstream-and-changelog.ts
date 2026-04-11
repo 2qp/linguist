@@ -27,4 +27,4 @@ const createUpstreamAndChangelog: CreateUpstreamAndChangelog = async () => {
 };
 
 export { createUpstreamAndChangelog };
-export type { CreateUpstreamAndChangelogParams, CreateUpstreamAndChangelog };
+export type { CreateUpstreamAndChangelog, CreateUpstreamAndChangelogParams };

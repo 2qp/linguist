@@ -47,7 +47,7 @@ const createFieldSet: CreateFieldSetOverloaded = ({ source }: CreateFieldSetPara
 };
 
 export { createFieldSet };
-export type { CreateFieldSetParams, CreateFieldSet };
+export type { CreateFieldSet, CreateFieldSetParams };
 
 const isRecord = (value: unknown): value is Record<string, unknown> => {
 	return typeof value === "object" && value !== null && !Array.isArray(value);

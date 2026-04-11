@@ -54,4 +54,4 @@ const createUsage: CreateUsage = ({ data, config }) => {
 };
 
 export { createUsage };
-export type { CreateUsageParams, CreateUsage };
+export type { CreateUsage, CreateUsageParams };

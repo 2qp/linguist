@@ -40,11 +40,11 @@ type VarPrefixAsValueWrapTypesCustomParams<TName extends Primitive, TValue exten
 };
 
 export type {
-	VarPrefixAsValueWrapTypesCustomParams as CustomParams,
 	From,
 	ImportableType,
 	Separator,
 	SL,
 	TypeRef,
+	VarPrefixAsValueWrapTypesCustomParams as CustomParams,
 	Wrapper,
 };

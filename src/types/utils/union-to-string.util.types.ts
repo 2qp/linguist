@@ -49,4 +49,4 @@ type TupleToString<
 
 type UnionToString<T, MaxItems extends number = 20> = T extends unknown[] ? TupleToString<T, MaxItems> : never;
 
-export type { UnionToString, UnionToChunksResult, UnionToChunks };
+export type { UnionToChunks, UnionToChunksResult, UnionToString };

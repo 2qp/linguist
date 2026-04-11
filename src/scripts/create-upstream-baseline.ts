@@ -19,4 +19,4 @@ const createUpstreamBaseline: CreateUpstreamBaseline = async ({ upstreamBuffer, 
 };
 
 export { createUpstreamBaseline };
-export type { CreateUpstreamBaselineParams, CreateUpstreamBaseline };
+export type { CreateUpstreamBaseline, CreateUpstreamBaselineParams };
