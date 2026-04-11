@@ -12,9 +12,7 @@ const emitLanguagePropertyTypeName: EmitLanguagePropertyTypeName = ({ config, fi
 
 	const existing = [`"${config.type.naming.language}"`] as const;
 
-	const typesAr = types
-		.keys()
-		.toArray()
+	const typesAr = [...types.keys()]
 		.flatMap(
 			(type) =>
 				[`"${types.get(type)?.type}"`, `"${createSecondaryName({ name: types.get(type)?.type, config })}"`] as const,
