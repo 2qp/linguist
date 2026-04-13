@@ -23,15 +23,16 @@ const createMaps: CreateMapsType = async ({ config, languages, stats }) => {
 	await ensureDir(indexesDir);
 
 	const mapEmitters: MapEmitter<MapEmitterOptions>[] = [
-		{ name: "ext-to-lang", emitter: emitMap, options: { kind: "set", left: "extensions", right: "name" } },
-		{ name: "filename-to-lang", emitter: emitMap, options: { kind: "set", left: "filenames", right: "name" } },
-		{ name: "interpreter-to-lang", emitter: emitMap, options: { kind: "set", left: "interpreters", right: "name" } },
+		{ name: "extension-to-name", emitter: emitMap, options: { kind: "set", left: "extensions", right: "name" } },
+		{ name: "filename-to-name", emitter: emitMap, options: { kind: "set", left: "filenames", right: "name" } },
+		{ name: "interpreter-to-name", emitter: emitMap, options: { kind: "set", left: "interpreters", right: "name" } },
 		{
 			name: "language-id-to-name",
 			options: { kind: "primitive", key: "language_id", value: "name" },
 			emitter: emitMap,
 		},
-		{ name: "language-name-to-type", emitter: emitMap, options: { kind: "primitive", key: "name", value: "type" } },
+		{ name: "name-to-type", emitter: emitMap, options: { kind: "primitive", key: "name", value: "type" } },
+		{ name: "extension-to-type", emitter: emitMap, options: { kind: "set", left: "extensions", right: "type" } },
 	];
 
 	await Promise.all(
