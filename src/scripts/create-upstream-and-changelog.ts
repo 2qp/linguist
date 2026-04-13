@@ -1,6 +1,5 @@
 import { createChangelog } from "./create-changelog";
 import { createUpstreamBaseline } from "./create-upstream-baseline";
-import { join } from "node:path";
 import { getFile } from "@services/fetch/get-file";
 import { configLoader } from "@/infra/loaders/config-loader";
 
@@ -18,9 +17,7 @@ const createUpstreamAndChangelog: CreateUpstreamAndChangelog = async () => {
 
 	const baselinePath = `./tests/fixtures/upstream.baseline.yml`;
 	const changelogPath = "./changelog.md";
-
-	const runnerTemp = process.env.RUNNER_TEMP || ".";
-	const tempChangelogPath = join(runnerTemp, "changelog.tmp.md");
+	const tempChangelogPath = "./changelog.tmp.md";
 
 	await createChangelog({ upstreamBuffer, baselinePath, changelogPath, tempChangelogPath });
 	await createUpstreamBaseline({ upstreamBuffer, baselinePath });
