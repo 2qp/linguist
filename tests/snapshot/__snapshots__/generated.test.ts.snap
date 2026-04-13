@@ -83521,11 +83521,11 @@ export { languages };
 export type { Languages };"
 `;
 
-exports[`generated files > data > maps > ext-to-lang > matches snapshot 1`] = `
+exports[`generated files > data > maps > extension-to-name > matches snapshot 1`] = `
 "import type { Dictionary } from "@/generated/types/common/language-types.generated";
 import type { NamesWithExtensions } from "@/generated/types/usage/usage-types.generated";
 
-const _ext_to_lang = {
+const _extension_to_name = {
   ".1": [
     "Roff",
     "Roff Manpage"
@@ -88124,22 +88124,4450 @@ const _ext_to_lang = {
   ]
 } as const;
 
-const ext_to_lang: typeof _ext_to_lang & Dictionary<NamesWithExtensions> = _ext_to_lang;
+const extension_to_name: typeof _extension_to_name & Dictionary<NamesWithExtensions> = _extension_to_name;
 
-type ExtToLang = typeof ext_to_lang;
+type ExtensionToName = typeof extension_to_name;
 
-export { _ext_to_lang };
+export { _extension_to_name };
 
-export { ext_to_lang };
+export { extension_to_name };
 
-export type { ExtToLang };"
+export type { ExtensionToName };"
 `;
 
-exports[`generated files > data > maps > filename-to-lang > matches snapshot 1`] = `
+exports[`generated files > data > maps > extension-to-type > matches snapshot 1`] = `
+"import type { Dictionary } from "@/generated/types/common/language-types.generated";
+import type { TypesWithExtensions } from "@/generated/types/usage/usage-types.generated";
+
+const _extension_to_type = {
+  ".1": [
+    "markup"
+  ],
+  ".1in": [
+    "markup"
+  ],
+  ".1m": [
+    "markup"
+  ],
+  ".1x": [
+    "markup"
+  ],
+  ".2": [
+    "markup"
+  ],
+  ".2da": [
+    "data"
+  ],
+  ".3": [
+    "markup"
+  ],
+  ".3in": [
+    "markup"
+  ],
+  ".3m": [
+    "markup"
+  ],
+  ".3p": [
+    "markup"
+  ],
+  ".3pm": [
+    "markup"
+  ],
+  ".3qt": [
+    "markup"
+  ],
+  ".3x": [
+    "markup"
+  ],
+  ".4": [
+    "markup"
+  ],
+  ".4DForm": [
+    "data"
+  ],
+  ".4DProject": [
+    "data"
+  ],
+  ".4dm": [
+    "programming"
+  ],
+  ".4gl": [
+    "programming"
+  ],
+  ".4th": [
+    "programming"
+  ],
+  ".5": [
+    "markup"
+  ],
+  ".6": [
+    "markup"
+  ],
+  ".6pl": [
+    "programming"
+  ],
+  ".6pm": [
+    "programming"
+  ],
+  ".7": [
+    "markup"
+  ],
+  ".8": [
+    "markup"
+  ],
+  ".8xp": [
+    "programming"
+  ],
+  ".8xp.txt": [
+    "programming"
+  ],
+  ".9": [
+    "markup"
+  ],
+  ".Dsr": [
+    "programming"
+  ],
+  ".JSON-tmLanguage": [
+    "data"
+  ],
+  ".OutJob": [
+    "data"
+  ],
+  ".PcbDoc": [
+    "data"
+  ],
+  ".PrjPCB": [
+    "data"
+  ],
+  ".SchDoc": [
+    "data"
+  ],
+  ".TextGrid": [
+    "data"
+  ],
+  "._coffee": [
+    "programming"
+  ],
+  "._js": [
+    "programming"
+  ],
+  "._ls": [
+    "programming"
+  ],
+  ".a51": [
+    "programming"
+  ],
+  ".abap": [
+    "programming"
+  ],
+  ".abnf": [
+    "data"
+  ],
+  ".action": [
+    "data"
+  ],
+  ".ada": [
+    "programming"
+  ],
+  ".adb": [
+    "programming"
+  ],
+  ".adml": [
+    "data"
+  ],
+  ".admx": [
+    "data"
+  ],
+  ".ado": [
+    "programming"
+  ],
+  ".adoc": [
+    "prose"
+  ],
+  ".adp": [
+    "programming"
+  ],
+  ".ads": [
+    "programming"
+  ],
+  ".afm": [
+    "data"
+  ],
+  ".agc": [
+    "programming"
+  ],
+  ".agda": [
+    "programming"
+  ],
+  ".ahk": [
+    "programming"
+  ],
+  ".ahkl": [
+    "programming"
+  ],
+  ".aidl": [
+    "programming"
+  ],
+  ".aj": [
+    "programming"
+  ],
+  ".ak": [
+    "programming"
+  ],
+  ".al": [
+    "programming"
+  ],
+  ".alg": [
+    "programming"
+  ],
+  ".als": [
+    "programming"
+  ],
+  ".ampl": [
+    "programming"
+  ],
+  ".angelscript": [
+    "programming"
+  ],
+  ".anim": [
+    "data"
+  ],
+  ".ant": [
+    "data"
+  ],
+  ".antlers.html": [
+    "markup"
+  ],
+  ".antlers.php": [
+    "markup"
+  ],
+  ".antlers.xml": [
+    "markup"
+  ],
+  ".apacheconf": [
+    "data"
+  ],
+  ".apex": [
+    "programming"
+  ],
+  ".apib": [
+    "markup"
+  ],
+  ".apl": [
+    "programming"
+  ],
+  ".app": [
+    "programming"
+  ],
+  ".app.src": [
+    "programming"
+  ],
+  ".applescript": [
+    "programming"
+  ],
+  ".arc": [
+    "programming"
+  ],
+  ".arpa": [
+    "data"
+  ],
+  ".arr": [
+    "programming"
+  ],
+  ".as": [
+    "programming"
+  ],
+  ".asax": [
+    "programming"
+  ],
+  ".asc": [
+    "programming",
+    "prose",
+    "data"
+  ],
+  ".asciidoc": [
+    "prose"
+  ],
+  ".ascx": [
+    "programming"
+  ],
+  ".asd": [
+    "programming"
+  ],
+  ".asddls": [
+    "programming"
+  ],
+  ".ash": [
+    "programming"
+  ],
+  ".ashx": [
+    "programming"
+  ],
+  ".asl": [
+    "programming"
+  ],
+  ".asm": [
+    "programming"
+  ],
+  ".asmx": [
+    "programming"
+  ],
+  ".asn": [
+    "data"
+  ],
+  ".asn1": [
+    "data"
+  ],
+  ".asp": [
+    "programming"
+  ],
+  ".aspx": [
+    "programming"
+  ],
+  ".asset": [
+    "data"
+  ],
+  ".astro": [
+    "markup"
+  ],
+  ".asy": [
+    "programming",
+    "data"
+  ],
+  ".au3": [
+    "programming"
+  ],
+  ".aug": [
+    "programming"
+  ],
+  ".auk": [
+    "programming"
+  ],
+  ".aux": [
+    "markup"
+  ],
+  ".avdl": [
+    "data"
+  ],
+  ".avsc": [
+    "data"
+  ],
+  ".aw": [
+    "programming"
+  ],
+  ".awk": [
+    "programming"
+  ],
+  ".axaml": [
+    "data"
+  ],
+  ".axd": [
+    "programming"
+  ],
+  ".axi": [
+    "programming"
+  ],
+  ".axi.erb": [
+    "programming"
+  ],
+  ".axml": [
+    "data"
+  ],
+  ".axs": [
+    "programming"
+  ],
+  ".axs.erb": [
+    "programming"
+  ],
+  ".b": [
+    "programming"
+  ],
+  ".bal": [
+    "programming"
+  ],
+  ".bas": [
+    "programming"
+  ],
+  ".bash": [
+    "programming"
+  ],
+  ".bat": [
+    "programming"
+  ],
+  ".bats": [
+    "programming"
+  ],
+  ".bb": [
+    "programming"
+  ],
+  ".bbappend": [
+    "programming"
+  ],
+  ".bbclass": [
+    "programming"
+  ],
+  ".bbx": [
+    "markup"
+  ],
+  ".bdf": [
+    "data"
+  ],
+  ".bdy": [
+    "programming"
+  ],
+  ".be": [
+    "programming"
+  ],
+  ".befunge": [
+    "programming"
+  ],
+  ".bf": [
+    "programming"
+  ],
+  ".bi": [
+    "programming"
+  ],
+  ".bib": [
+    "markup"
+  ],
+  ".bibtex": [
+    "markup"
+  ],
+  ".bicep": [
+    "programming"
+  ],
+  ".bicepparam": [
+    "programming"
+  ],
+  ".bison": [
+    "programming"
+  ],
+  ".blade": [
+    "markup"
+  ],
+  ".blade.php": [
+    "markup"
+  ],
+  ".bmx": [
+    "programming"
+  ],
+  ".bones": [
+    "programming"
+  ],
+  ".boo": [
+    "programming"
+  ],
+  ".boot": [
+    "programming"
+  ],
+  ".bpl": [
+    "programming"
+  ],
+  ".bqn": [
+    "programming"
+  ],
+  ".brd": [
+    "data"
+  ],
+  ".bro": [
+    "programming"
+  ],
+  ".brs": [
+    "programming"
+  ],
+  ".bru": [
+    "markup"
+  ],
+  ".bs": [
+    "markup",
+    "programming"
+  ],
+  ".bsl": [
+    "programming"
+  ],
+  ".bst": [
+    "programming",
+    "data"
+  ],
+  ".bsv": [
+    "programming"
+  ],
+  ".builder": [
+    "programming"
+  ],
+  ".builds": [
+    "data"
+  ],
+  ".bzl": [
+    "programming"
+  ],
+  ".c": [
+    "programming"
+  ],
+  ".c++": [
+    "programming"
+  ],
+  ".c++-objdump": [
+    "data"
+  ],
+  ".c++objdump": [
+    "data"
+  ],
+  ".c-objdump": [
+    "data"
+  ],
+  ".c3": [
+    "programming"
+  ],
+  ".cabal": [
+    "data"
+  ],
+  ".caddyfile": [
+    "data"
+  ],
+  ".cairo": [
+    "programming"
+  ],
+  ".cake": [
+    "programming"
+  ],
+  ".capnp": [
+    "programming"
+  ],
+  ".carbon": [
+    "programming"
+  ],
+  ".cats": [
+    "programming"
+  ],
+  ".cbl": [
+    "programming"
+  ],
+  ".cbx": [
+    "markup"
+  ],
+  ".cc": [
+    "programming"
+  ],
+  ".ccp": [
+    "programming"
+  ],
+  ".ccproj": [
+    "data"
+  ],
+  ".ccxml": [
+    "data"
+  ],
+  ".cdc": [
+    "programming"
+  ],
+  ".cdf": [
+    "programming"
+  ],
+  ".cds": [
+    "programming"
+  ],
+  ".ceylon": [
+    "programming"
+  ],
+  ".cfc": [
+    "programming"
+  ],
+  ".cfg": [
+    "data"
+  ],
+  ".cfm": [
+    "programming"
+  ],
+  ".cfml": [
+    "programming"
+  ],
+  ".cgi": [
+    "programming"
+  ],
+  ".cginc": [
+    "programming"
+  ],
+  ".ch": [
+    "programming"
+  ],
+  ".chem": [
+    "markup"
+  ],
+  ".chpl": [
+    "programming"
+  ],
+  ".chs": [
+    "programming"
+  ],
+  ".cil": [
+    "data"
+  ],
+  ".circom": [
+    "programming"
+  ],
+  ".cirru": [
+    "programming"
+  ],
+  ".cj": [
+    "programming"
+  ],
+  ".cjs": [
+    "programming"
+  ],
+  ".cjsx": [
+    "programming"
+  ],
+  ".ck": [
+    "programming"
+  ],
+  ".cl": [
+    "programming"
+  ],
+  ".cl2": [
+    "programming"
+  ],
+  ".clar": [
+    "programming"
+  ],
+  ".click": [
+    "programming"
+  ],
+  ".clixml": [
+    "data"
+  ],
+  ".clj": [
+    "programming"
+  ],
+  ".cljc": [
+    "programming"
+  ],
+  ".cljs": [
+    "programming"
+  ],
+  ".cljs.hl": [
+    "programming"
+  ],
+  ".cljscm": [
+    "programming"
+  ],
+  ".cljx": [
+    "programming"
+  ],
+  ".clp": [
+    "programming"
+  ],
+  ".cls": [
+    "programming",
+    "markup"
+  ],
+  ".clue": [
+    "programming"
+  ],
+  ".clw": [
+    "programming"
+  ],
+  ".cmake": [
+    "programming"
+  ],
+  ".cmake.in": [
+    "programming"
+  ],
+  ".cmd": [
+    "programming"
+  ],
+  ".cmp": [
+    "data"
+  ],
+  ".cnc": [
+    "programming"
+  ],
+  ".cnf": [
+    "data"
+  ],
+  ".cob": [
+    "programming"
+  ],
+  ".cobol": [
+    "programming"
+  ],
+  ".cocci": [
+    "programming"
+  ],
+  ".code-snippets": [
+    "data"
+  ],
+  ".code-workspace": [
+    "data"
+  ],
+  ".coffee": [
+    "programming"
+  ],
+  ".coffee.md": [
+    "programming"
+  ],
+  ".com": [
+    "programming"
+  ],
+  ".command": [
+    "programming"
+  ],
+  ".conll": [
+    "data"
+  ],
+  ".conllu": [
+    "data"
+  ],
+  ".containerfile": [
+    "programming"
+  ],
+  ".cook": [
+    "markup"
+  ],
+  ".coq": [
+    "programming"
+  ],
+  ".cp": [
+    "programming"
+  ],
+  ".cpp": [
+    "programming"
+  ],
+  ".cpp-objdump": [
+    "data"
+  ],
+  ".cppm": [
+    "programming"
+  ],
+  ".cppobjdump": [
+    "data"
+  ],
+  ".cproject": [
+    "data"
+  ],
+  ".cps": [
+    "programming"
+  ],
+  ".cpy": [
+    "programming"
+  ],
+  ".cql": [
+    "programming"
+  ],
+  ".cr": [
+    "programming"
+  ],
+  ".crc32": [
+    "data"
+  ],
+  ".creole": [
+    "prose"
+  ],
+  ".cs": [
+    "programming"
+  ],
+  ".cs.pp": [
+    "programming"
+  ],
+  ".csc": [
+    "programming"
+  ],
+  ".cscfg": [
+    "data"
+  ],
+  ".csd": [
+    "programming"
+  ],
+  ".csdef": [
+    "data"
+  ],
+  ".csh": [
+    "programming"
+  ],
+  ".cshtml": [
+    "markup"
+  ],
+  ".csl": [
+    "data"
+  ],
+  ".cson": [
+    "data"
+  ],
+  ".csproj": [
+    "data"
+  ],
+  ".css": [
+    "markup"
+  ],
+  ".csv": [
+    "data"
+  ],
+  ".csx": [
+    "programming"
+  ],
+  ".ct": [
+    "data"
+  ],
+  ".ctl": [
+    "programming"
+  ],
+  ".ctp": [
+    "programming"
+  ],
+  ".cts": [
+    "programming"
+  ],
+  ".cu": [
+    "programming"
+  ],
+  ".cue": [
+    "programming",
+    "data"
+  ],
+  ".cuh": [
+    "programming"
+  ],
+  ".curry": [
+    "programming"
+  ],
+  ".cw": [
+    "programming"
+  ],
+  ".cwl": [
+    "programming"
+  ],
+  ".cxx": [
+    "programming"
+  ],
+  ".cxx-objdump": [
+    "data"
+  ],
+  ".cy": [
+    "programming"
+  ],
+  ".cylc": [
+    "data"
+  ],
+  ".cyp": [
+    "programming"
+  ],
+  ".cypher": [
+    "programming"
+  ],
+  ".d": [
+    "programming"
+  ],
+  ".d-objdump": [
+    "data"
+  ],
+  ".d2": [
+    "markup"
+  ],
+  ".dae": [
+    "data"
+  ],
+  ".darcspatch": [
+    "data"
+  ],
+  ".dart": [
+    "programming"
+  ],
+  ".das": [
+    "programming"
+  ],
+  ".dats": [
+    "programming"
+  ],
+  ".db2": [
+    "programming"
+  ],
+  ".dcl": [
+    "programming"
+  ],
+  ".ddl": [
+    "programming",
+    "data"
+  ],
+  ".decls": [
+    "programming"
+  ],
+  ".depproj": [
+    "data"
+  ],
+  ".desktop": [
+    "data"
+  ],
+  ".desktop.in": [
+    "data"
+  ],
+  ".dfm": [
+    "programming"
+  ],
+  ".dfy": [
+    "programming"
+  ],
+  ".dhall": [
+    "programming"
+  ],
+  ".di": [
+    "programming"
+  ],
+  ".diff": [
+    "data"
+  ],
+  ".dircolors": [
+    "data"
+  ],
+  ".dita": [
+    "data"
+  ],
+  ".ditamap": [
+    "data"
+  ],
+  ".ditaval": [
+    "data"
+  ],
+  ".djs": [
+    "programming"
+  ],
+  ".dll.config": [
+    "data"
+  ],
+  ".dlm": [
+    "programming"
+  ],
+  ".dm": [
+    "programming"
+  ],
+  ".do": [
+    "programming"
+  ],
+  ".dockerfile": [
+    "programming"
+  ],
+  ".dof": [
+    "data"
+  ],
+  ".doh": [
+    "programming"
+  ],
+  ".dot": [
+    "data"
+  ],
+  ".dotsettings": [
+    "data"
+  ],
+  ".dpatch": [
+    "data"
+  ],
+  ".dpr": [
+    "programming"
+  ],
+  ".druby": [
+    "programming"
+  ],
+  ".dsc": [
+    "data",
+    "programming"
+  ],
+  ".dsl": [
+    "programming"
+  ],
+  ".dsp": [
+    "programming",
+    "data"
+  ],
+  ".dtx": [
+    "markup"
+  ],
+  ".duby": [
+    "programming"
+  ],
+  ".dwl": [
+    "programming"
+  ],
+  ".dyalog": [
+    "programming"
+  ],
+  ".dyl": [
+    "programming"
+  ],
+  ".dylan": [
+    "programming"
+  ],
+  ".dzn": [
+    "data"
+  ],
+  ".e": [
+    "programming"
+  ],
+  ".eam.fs": [
+    "data"
+  ],
+  ".eb": [
+    "data"
+  ],
+  ".ebnf": [
+    "data"
+  ],
+  ".ebuild": [
+    "programming"
+  ],
+  ".ec": [
+    "programming"
+  ],
+  ".ecl": [
+    "programming"
+  ],
+  ".eclass": [
+    "programming"
+  ],
+  ".eclxml": [
+    "programming"
+  ],
+  ".ecr": [
+    "markup"
+  ],
+  ".ect": [
+    "markup"
+  ],
+  ".edc": [
+    "data"
+  ],
+  ".edge": [
+    "markup"
+  ],
+  ".edgeql": [
+    "programming"
+  ],
+  ".editorconfig": [
+    "data"
+  ],
+  ".edn": [
+    "data"
+  ],
+  ".eh": [
+    "programming"
+  ],
+  ".ejs": [
+    "markup"
+  ],
+  ".ejs.t": [
+    "markup"
+  ],
+  ".el": [
+    "programming"
+  ],
+  ".eliom": [
+    "programming"
+  ],
+  ".eliomi": [
+    "programming"
+  ],
+  ".elm": [
+    "programming"
+  ],
+  ".elv": [
+    "programming"
+  ],
+  ".em": [
+    "programming"
+  ],
+  ".emacs": [
+    "programming"
+  ],
+  ".emacs.desktop": [
+    "programming"
+  ],
+  ".emberscript": [
+    "programming"
+  ],
+  ".eml": [
+    "data"
+  ],
+  ".env": [
+    "data"
+  ],
+  ".epj": [
+    "data"
+  ],
+  ".eps": [
+    "markup"
+  ],
+  ".epsi": [
+    "markup"
+  ],
+  ".eq": [
+    "programming"
+  ],
+  ".erb": [
+    "markup"
+  ],
+  ".erb.deface": [
+    "markup"
+  ],
+  ".erl": [
+    "programming"
+  ],
+  ".es": [
+    "programming"
+  ],
+  ".es6": [
+    "programming"
+  ],
+  ".escript": [
+    "programming"
+  ],
+  ".esdl": [
+    "programming"
+  ],
+  ".ex": [
+    "programming"
+  ],
+  ".exs": [
+    "programming"
+  ],
+  ".eye": [
+    "programming"
+  ],
+  ".f": [
+    "programming"
+  ],
+  ".f03": [
+    "programming"
+  ],
+  ".f08": [
+    "programming"
+  ],
+  ".f77": [
+    "programming"
+  ],
+  ".f90": [
+    "programming"
+  ],
+  ".f95": [
+    "programming"
+  ],
+  ".factor": [
+    "programming"
+  ],
+  ".fan": [
+    "programming"
+  ],
+  ".fancypack": [
+    "programming"
+  ],
+  ".fbs": [
+    "data"
+  ],
+  ".fcgi": [
+    "programming"
+  ],
+  ".fea": [
+    "data"
+  ],
+  ".feature": [
+    "programming"
+  ],
+  ".filters": [
+    "data"
+  ],
+  ".fir": [
+    "programming"
+  ],
+  ".fish": [
+    "programming"
+  ],
+  ".flex": [
+    "programming"
+  ],
+  ".flf": [
+    "data"
+  ],
+  ".flix": [
+    "programming"
+  ],
+  ".flux": [
+    "programming"
+  ],
+  ".fnc": [
+    "programming"
+  ],
+  ".fnl": [
+    "programming"
+  ],
+  ".for": [
+    "data",
+    "programming"
+  ],
+  ".forth": [
+    "programming"
+  ],
+  ".fp": [
+    "programming"
+  ],
+  ".fpp": [
+    "programming"
+  ],
+  ".fr": [
+    "programming",
+    "prose"
+  ],
+  ".frag": [
+    "programming"
+  ],
+  ".frg": [
+    "programming"
+  ],
+  ".frm": [
+    "data",
+    "programming"
+  ],
+  ".frt": [
+    "programming"
+  ],
+  ".fs": [
+    "programming"
+  ],
+  ".fsh": [
+    "programming"
+  ],
+  ".fshader": [
+    "programming"
+  ],
+  ".fsi": [
+    "programming"
+  ],
+  ".fsproj": [
+    "data"
+  ],
+  ".fst": [
+    "programming"
+  ],
+  ".fsti": [
+    "programming"
+  ],
+  ".fsx": [
+    "programming"
+  ],
+  ".fth": [
+    "programming"
+  ],
+  ".ftl": [
+    "programming"
+  ],
+  ".ftlh": [
+    "programming"
+  ],
+  ".fun": [
+    "programming"
+  ],
+  ".fut": [
+    "programming"
+  ],
+  ".fx": [
+    "programming"
+  ],
+  ".fxh": [
+    "programming"
+  ],
+  ".fxml": [
+    "data"
+  ],
+  ".fy": [
+    "programming"
+  ],
+  ".g": [
+    "programming"
+  ],
+  ".g4": [
+    "programming"
+  ],
+  ".gaml": [
+    "programming"
+  ],
+  ".gap": [
+    "programming"
+  ],
+  ".gawk": [
+    "programming"
+  ],
+  ".gbl": [
+    "data"
+  ],
+  ".gbo": [
+    "data"
+  ],
+  ".gbp": [
+    "data"
+  ],
+  ".gbr": [
+    "data"
+  ],
+  ".gbs": [
+    "data"
+  ],
+  ".gco": [
+    "programming"
+  ],
+  ".gcode": [
+    "programming"
+  ],
+  ".gd": [
+    "programming"
+  ],
+  ".gdb": [
+    "programming"
+  ],
+  ".gdbinit": [
+    "programming"
+  ],
+  ".gdnlib": [
+    "data"
+  ],
+  ".gdns": [
+    "data"
+  ],
+  ".gdshader": [
+    "programming"
+  ],
+  ".gdshaderinc": [
+    "programming"
+  ],
+  ".ged": [
+    "data"
+  ],
+  ".gemspec": [
+    "programming"
+  ],
+  ".geo": [
+    "programming"
+  ],
+  ".geojson": [
+    "data"
+  ],
+  ".geom": [
+    "programming"
+  ],
+  ".gf": [
+    "programming"
+  ],
+  ".gi": [
+    "programming"
+  ],
+  ".gitconfig": [
+    "data"
+  ],
+  ".gitignore": [
+    "data"
+  ],
+  ".gjs": [
+    "programming"
+  ],
+  ".gko": [
+    "data"
+  ],
+  ".glade": [
+    "data"
+  ],
+  ".gleam": [
+    "programming"
+  ],
+  ".glf": [
+    "programming"
+  ],
+  ".glsl": [
+    "programming"
+  ],
+  ".glslf": [
+    "programming"
+  ],
+  ".glslv": [
+    "programming"
+  ],
+  ".gltf": [
+    "data"
+  ],
+  ".glyphs": [
+    "data"
+  ],
+  ".gmi": [
+    "prose"
+  ],
+  ".gml": [
+    "programming",
+    "data"
+  ],
+  ".gms": [
+    "programming"
+  ],
+  ".gmx": [
+    "data"
+  ],
+  ".gn": [
+    "data"
+  ],
+  ".gni": [
+    "data"
+  ],
+  ".gnu": [
+    "programming"
+  ],
+  ".gnuplot": [
+    "programming"
+  ],
+  ".go": [
+    "programming"
+  ],
+  ".god": [
+    "programming"
+  ],
+  ".gohtml": [
+    "markup"
+  ],
+  ".golo": [
+    "programming"
+  ],
+  ".gotmpl": [
+    "markup"
+  ],
+  ".gp": [
+    "programming"
+  ],
+  ".gpb": [
+    "data"
+  ],
+  ".gpt": [
+    "data"
+  ],
+  ".gpx": [
+    "data"
+  ],
+  ".gql": [
+    "data"
+  ],
+  ".grace": [
+    "programming"
+  ],
+  ".gradle": [
+    "data"
+  ],
+  ".gradle.kts": [
+    "data"
+  ],
+  ".graphql": [
+    "data"
+  ],
+  ".graphqls": [
+    "data"
+  ],
+  ".groovy": [
+    "programming"
+  ],
+  ".grt": [
+    "programming"
+  ],
+  ".grxml": [
+    "data"
+  ],
+  ".gs": [
+    "programming"
+  ],
+  ".gsc": [
+    "programming"
+  ],
+  ".gsh": [
+    "programming"
+  ],
+  ".gshader": [
+    "programming"
+  ],
+  ".gsp": [
+    "programming"
+  ],
+  ".gst": [
+    "programming",
+    "data"
+  ],
+  ".gsx": [
+    "programming"
+  ],
+  ".gtl": [
+    "data"
+  ],
+  ".gto": [
+    "data"
+  ],
+  ".gtp": [
+    "data"
+  ],
+  ".gtpl": [
+    "programming"
+  ],
+  ".gts": [
+    "data",
+    "programming"
+  ],
+  ".gv": [
+    "data"
+  ],
+  ".gvy": [
+    "programming"
+  ],
+  ".gyp": [
+    "programming"
+  ],
+  ".gypi": [
+    "programming"
+  ],
+  ".h": [
+    "programming"
+  ],
+  ".h++": [
+    "programming"
+  ],
+  ".h.in": [
+    "programming"
+  ],
+  ".ha": [
+    "programming"
+  ],
+  ".hack": [
+    "programming"
+  ],
+  ".haml": [
+    "markup"
+  ],
+  ".haml.deface": [
+    "markup"
+  ],
+  ".handlebars": [
+    "markup"
+  ],
+  ".har": [
+    "data"
+  ],
+  ".hats": [
+    "programming"
+  ],
+  ".hb": [
+    "programming"
+  ],
+  ".hbs": [
+    "markup"
+  ],
+  ".hc": [
+    "programming"
+  ],
+  ".hcl": [
+    "programming"
+  ],
+  ".heex": [
+    "markup"
+  ],
+  ".hh": [
+    "programming"
+  ],
+  ".hhi": [
+    "programming"
+  ],
+  ".hic": [
+    "programming"
+  ],
+  ".hip": [
+    "programming"
+  ],
+  ".hlean": [
+    "programming"
+  ],
+  ".hlsl": [
+    "programming"
+  ],
+  ".hlsli": [
+    "programming"
+  ],
+  ".hocon": [
+    "data"
+  ],
+  ".hoon": [
+    "programming"
+  ],
+  ".hpp": [
+    "programming"
+  ],
+  ".hqf": [
+    "programming"
+  ],
+  ".hql": [
+    "programming"
+  ],
+  ".hrl": [
+    "programming"
+  ],
+  ".hs": [
+    "programming"
+  ],
+  ".hs-boot": [
+    "programming"
+  ],
+  ".hsc": [
+    "programming"
+  ],
+  ".hta": [
+    "markup"
+  ],
+  ".htm": [
+    "markup"
+  ],
+  ".html": [
+    "markup"
+  ],
+  ".html.eex": [
+    "markup"
+  ],
+  ".html.hl": [
+    "markup"
+  ],
+  ".html.tmpl": [
+    "markup"
+  ],
+  ".http": [
+    "data"
+  ],
+  ".hurl": [
+    "programming"
+  ],
+  ".hx": [
+    "programming"
+  ],
+  ".hxml": [
+    "data"
+  ],
+  ".hxsl": [
+    "programming"
+  ],
+  ".hxx": [
+    "programming"
+  ],
+  ".hy": [
+    "programming"
+  ],
+  ".hzp": [
+    "data"
+  ],
+  ".i": [
+    "programming"
+  ],
+  ".i3": [
+    "programming"
+  ],
+  ".i7x": [
+    "programming"
+  ],
+  ".ical": [
+    "data"
+  ],
+  ".ice": [
+    "data",
+    "programming"
+  ],
+  ".iced": [
+    "programming"
+  ],
+  ".icl": [
+    "programming"
+  ],
+  ".icls": [
+    "data"
+  ],
+  ".ics": [
+    "data"
+  ],
+  ".idc": [
+    "programming"
+  ],
+  ".idr": [
+    "programming"
+  ],
+  ".ig": [
+    "programming"
+  ],
+  ".ihlp": [
+    "programming"
+  ],
+  ".ijm": [
+    "programming"
+  ],
+  ".ijs": [
+    "programming"
+  ],
+  ".ik": [
+    "programming"
+  ],
+  ".ily": [
+    "programming"
+  ],
+  ".imba": [
+    "programming"
+  ],
+  ".iml": [
+    "data"
+  ],
+  ".inc": [
+    "programming",
+    "markup",
+    "data"
+  ],
+  ".ini": [
+    "data"
+  ],
+  ".ink": [
+    "programming"
+  ],
+  ".inl": [
+    "programming"
+  ],
+  ".ino": [
+    "programming"
+  ],
+  ".ins": [
+    "markup"
+  ],
+  ".intr": [
+    "programming"
+  ],
+  ".io": [
+    "programming"
+  ],
+  ".iol": [
+    "programming"
+  ],
+  ".ipf": [
+    "programming"
+  ],
+  ".ipp": [
+    "programming"
+  ],
+  ".ipynb": [
+    "markup"
+  ],
+  ".irclog": [
+    "data"
+  ],
+  ".isl": [
+    "programming"
+  ],
+  ".ispc": [
+    "programming"
+  ],
+  ".iss": [
+    "programming"
+  ],
+  ".iuml": [
+    "data"
+  ],
+  ".ivy": [
+    "data"
+  ],
+  ".ixx": [
+    "programming"
+  ],
+  ".j": [
+    "programming"
+  ],
+  ".j2": [
+    "markup"
+  ],
+  ".jac": [
+    "programming"
+  ],
+  ".jade": [
+    "markup"
+  ],
+  ".jai": [
+    "programming"
+  ],
+  ".jake": [
+    "programming"
+  ],
+  ".janet": [
+    "programming"
+  ],
+  ".jav": [
+    "programming"
+  ],
+  ".java": [
+    "programming"
+  ],
+  ".javascript": [
+    "programming"
+  ],
+  ".jbuilder": [
+    "programming"
+  ],
+  ".jcl": [
+    "programming"
+  ],
+  ".jelly": [
+    "data"
+  ],
+  ".jflex": [
+    "programming"
+  ],
+  ".jinja": [
+    "markup"
+  ],
+  ".jinja2": [
+    "markup"
+  ],
+  ".jison": [
+    "programming"
+  ],
+  ".jisonlex": [
+    "programming"
+  ],
+  ".jl": [
+    "programming"
+  ],
+  ".jq": [
+    "programming"
+  ],
+  ".js": [
+    "programming"
+  ],
+  ".js.erb": [
+    "programming"
+  ],
+  ".jsb": [
+    "programming"
+  ],
+  ".jscad": [
+    "programming"
+  ],
+  ".jsfl": [
+    "programming"
+  ],
+  ".jsh": [
+    "programming"
+  ],
+  ".jslib": [
+    "programming"
+  ],
+  ".jsm": [
+    "programming"
+  ],
+  ".json": [
+    "data"
+  ],
+  ".json.example": [
+    "data"
+  ],
+  ".json5": [
+    "data"
+  ],
+  ".jsonc": [
+    "data"
+  ],
+  ".jsonl": [
+    "data"
+  ],
+  ".jsonld": [
+    "data"
+  ],
+  ".jsonnet": [
+    "programming"
+  ],
+  ".jsp": [
+    "programming"
+  ],
+  ".jspre": [
+    "programming"
+  ],
+  ".jsproj": [
+    "data"
+  ],
+  ".jss": [
+    "programming"
+  ],
+  ".jst": [
+    "markup"
+  ],
+  ".jsx": [
+    "programming"
+  ],
+  ".jte": [
+    "programming"
+  ],
+  ".just": [
+    "programming"
+  ],
+  ".k": [
+    "programming"
+  ],
+  ".kak": [
+    "programming"
+  ],
+  ".kdl": [
+    "data"
+  ],
+  ".kicad_mod": [
+    "data"
+  ],
+  ".kicad_pcb": [
+    "data"
+  ],
+  ".kicad_sch": [
+    "data"
+  ],
+  ".kicad_sym": [
+    "data"
+  ],
+  ".kicad_wks": [
+    "data"
+  ],
+  ".kid": [
+    "programming"
+  ],
+  ".kit": [
+    "markup"
+  ],
+  ".kk": [
+    "programming"
+  ],
+  ".kml": [
+    "data"
+  ],
+  ".kojo": [
+    "programming"
+  ],
+  ".kql": [
+    "data"
+  ],
+  ".krl": [
+    "programming"
+  ],
+  ".ks": [
+    "programming",
+    "data"
+  ],
+  ".ksh": [
+    "programming"
+  ],
+  ".ksy": [
+    "programming"
+  ],
+  ".kt": [
+    "programming"
+  ],
+  ".ktm": [
+    "programming"
+  ],
+  ".kts": [
+    "programming"
+  ],
+  ".kv": [
+    "markup"
+  ],
+  ".l": [
+    "programming",
+    "markup"
+  ],
+  ".lagda": [
+    "programming"
+  ],
+  ".langium": [
+    "programming"
+  ],
+  ".lark": [
+    "data"
+  ],
+  ".las": [
+    "programming"
+  ],
+  ".lasso": [
+    "programming"
+  ],
+  ".lasso8": [
+    "programming"
+  ],
+  ".lasso9": [
+    "programming"
+  ],
+  ".latte": [
+    "markup"
+  ],
+  ".launch": [
+    "data"
+  ],
+  ".lbx": [
+    "markup"
+  ],
+  ".ld": [
+    "programming"
+  ],
+  ".lds": [
+    "programming"
+  ],
+  ".lean": [
+    "programming"
+  ],
+  ".leex": [
+    "markup"
+  ],
+  ".lektorproject": [
+    "data"
+  ],
+  ".leo": [
+    "programming"
+  ],
+  ".less": [
+    "markup"
+  ],
+  ".lex": [
+    "programming"
+  ],
+  ".lfe": [
+    "programming"
+  ],
+  ".lgt": [
+    "programming"
+  ],
+  ".lhs": [
+    "programming"
+  ],
+  ".libsonnet": [
+    "programming"
+  ],
+  ".lid": [
+    "programming"
+  ],
+  ".lidr": [
+    "programming"
+  ],
+  ".ligo": [
+    "programming"
+  ],
+  ".linq": [
+    "programming"
+  ],
+  ".liq": [
+    "programming"
+  ],
+  ".liquid": [
+    "markup"
+  ],
+  ".lisp": [
+    "programming"
+  ],
+  ".litcoffee": [
+    "programming"
+  ],
+  ".livecodescript": [
+    "programming"
+  ],
+  ".livemd": [
+    "prose"
+  ],
+  ".lkml": [
+    "programming"
+  ],
+  ".ll": [
+    "programming"
+  ],
+  ".lmi": [
+    "programming"
+  ],
+  ".logtalk": [
+    "programming"
+  ],
+  ".lol": [
+    "programming"
+  ],
+  ".lookml": [
+    "programming"
+  ],
+  ".lp": [
+    "programming"
+  ],
+  ".lpr": [
+    "programming"
+  ],
+  ".ls": [
+    "programming"
+  ],
+  ".lsl": [
+    "programming"
+  ],
+  ".lslp": [
+    "programming"
+  ],
+  ".lsp": [
+    "programming"
+  ],
+  ".ltx": [
+    "markup"
+  ],
+  ".lua": [
+    "programming"
+  ],
+  ".luau": [
+    "programming"
+  ],
+  ".lvclass": [
+    "programming"
+  ],
+  ".lvlib": [
+    "programming"
+  ],
+  ".lvproj": [
+    "programming"
+  ],
+  ".ly": [
+    "programming"
+  ],
+  ".m": [
+    "programming"
+  ],
+  ".m2": [
+    "programming"
+  ],
+  ".m3": [
+    "programming"
+  ],
+  ".m3u": [
+    "data"
+  ],
+  ".m3u8": [
+    "data"
+  ],
+  ".m4": [
+    "programming"
+  ],
+  ".ma": [
+    "programming"
+  ],
+  ".mak": [
+    "programming"
+  ],
+  ".make": [
+    "programming"
+  ],
+  ".makefile": [
+    "programming"
+  ],
+  ".mako": [
+    "programming"
+  ],
+  ".man": [
+    "markup"
+  ],
+  ".mao": [
+    "programming"
+  ],
+  ".markdown": [
+    "prose"
+  ],
+  ".marko": [
+    "markup"
+  ],
+  ".mask": [
+    "markup",
+    "data"
+  ],
+  ".mat": [
+    "data"
+  ],
+  ".mata": [
+    "programming"
+  ],
+  ".matah": [
+    "programming"
+  ],
+  ".mathematica": [
+    "programming"
+  ],
+  ".matlab": [
+    "programming"
+  ],
+  ".mawk": [
+    "programming"
+  ],
+  ".maxhelp": [
+    "programming"
+  ],
+  ".maxpat": [
+    "programming"
+  ],
+  ".maxproj": [
+    "programming"
+  ],
+  ".mbox": [
+    "data"
+  ],
+  ".mbt": [
+    "programming"
+  ],
+  ".mc": [
+    "programming",
+    "data"
+  ],
+  ".mcfunction": [
+    "programming"
+  ],
+  ".mch": [
+    "programming"
+  ],
+  ".mcmeta": [
+    "data"
+  ],
+  ".mcr": [
+    "programming"
+  ],
+  ".md": [
+    "programming",
+    "prose"
+  ],
+  ".md2": [
+    "data"
+  ],
+  ".md4": [
+    "data"
+  ],
+  ".md5": [
+    "data"
+  ],
+  ".mdoc": [
+    "markup"
+  ],
+  ".mdown": [
+    "prose"
+  ],
+  ".mdpolicy": [
+    "data"
+  ],
+  ".mdwn": [
+    "prose"
+  ],
+  ".mdx": [
+    "markup"
+  ],
+  ".me": [
+    "markup"
+  ],
+  ".mediawiki": [
+    "prose"
+  ],
+  ".mermaid": [
+    "markup"
+  ],
+  ".meta": [
+    "data"
+  ],
+  ".metal": [
+    "programming"
+  ],
+  ".metta": [
+    "programming"
+  ],
+  ".mg": [
+    "programming"
+  ],
+  ".minid": [
+    "programming"
+  ],
+  ".mint": [
+    "programming"
+  ],
+  ".mir": [
+    "data"
+  ],
+  ".mirah": [
+    "programming"
+  ],
+  ".mjml": [
+    "data"
+  ],
+  ".mjs": [
+    "programming"
+  ],
+  ".mk": [
+    "programming"
+  ],
+  ".mkd": [
+    "prose"
+  ],
+  ".mkdn": [
+    "prose"
+  ],
+  ".mkdown": [
+    "prose"
+  ],
+  ".mkfile": [
+    "programming"
+  ],
+  ".mkii": [
+    "markup"
+  ],
+  ".mkiv": [
+    "markup"
+  ],
+  ".mkvi": [
+    "markup"
+  ],
+  ".ml": [
+    "programming"
+  ],
+  ".ml4": [
+    "programming"
+  ],
+  ".mli": [
+    "programming"
+  ],
+  ".mligo": [
+    "programming"
+  ],
+  ".mlir": [
+    "programming"
+  ],
+  ".mll": [
+    "programming"
+  ],
+  ".mly": [
+    "programming"
+  ],
+  ".mm": [
+    "programming",
+    "data"
+  ],
+  ".mmd": [
+    "markup"
+  ],
+  ".mmk": [
+    "programming"
+  ],
+  ".mms": [
+    "programming"
+  ],
+  ".mo": [
+    "programming"
+  ],
+  ".mod": [
+    "programming",
+    "data"
+  ],
+  ".mojo": [
+    "programming",
+    "data"
+  ],
+  ".monkey": [
+    "programming"
+  ],
+  ".monkey2": [
+    "programming"
+  ],
+  ".moo": [
+    "programming"
+  ],
+  ".moon": [
+    "programming"
+  ],
+  ".move": [
+    "programming"
+  ],
+  ".mpl": [
+    "programming"
+  ],
+  ".mps": [
+    "programming"
+  ],
+  ".mq4": [
+    "programming"
+  ],
+  ".mq5": [
+    "programming"
+  ],
+  ".mqh": [
+    "programming"
+  ],
+  ".mrc": [
+    "programming"
+  ],
+  ".ms": [
+    "programming",
+    "markup"
+  ],
+  ".msd": [
+    "programming"
+  ],
+  ".msg": [
+    "programming",
+    "data"
+  ],
+  ".mspec": [
+    "programming"
+  ],
+  ".mss": [
+    "programming"
+  ],
+  ".mt": [
+    "programming"
+  ],
+  ".mtl": [
+    "data"
+  ],
+  ".mtml": [
+    "markup"
+  ],
+  ".mts": [
+    "programming"
+  ],
+  ".mu": [
+    "programming"
+  ],
+  ".mud": [
+    "programming"
+  ],
+  ".muf": [
+    "programming"
+  ],
+  ".mumps": [
+    "programming"
+  ],
+  ".muse": [
+    "prose"
+  ],
+  ".mustache": [
+    "markup"
+  ],
+  ".mxml": [
+    "data"
+  ],
+  ".mxt": [
+    "programming"
+  ],
+  ".mysql": [
+    "data"
+  ],
+  ".myt": [
+    "programming"
+  ],
+  ".mzn": [
+    "programming"
+  ],
+  ".n": [
+    "programming",
+    "markup"
+  ],
+  ".nanorc": [
+    "data"
+  ],
+  ".nas": [
+    "programming"
+  ],
+  ".nasl": [
+    "programming"
+  ],
+  ".nasm": [
+    "programming"
+  ],
+  ".natvis": [
+    "data"
+  ],
+  ".nawk": [
+    "programming"
+  ],
+  ".nb": [
+    "prose",
+    "programming"
+  ],
+  ".nbp": [
+    "programming"
+  ],
+  ".nc": [
+    "programming"
+  ],
+  ".ncl": [
+    "data",
+    "programming",
+    "prose"
+  ],
+  ".ndproj": [
+    "data"
+  ],
+  ".ne": [
+    "programming"
+  ],
+  ".nearley": [
+    "programming"
+  ],
+  ".ned": [
+    "programming"
+  ],
+  ".neon": [
+    "data"
+  ],
+  ".nf": [
+    "programming"
+  ],
+  ".nginx": [
+    "data"
+  ],
+  ".nginxconf": [
+    "data"
+  ],
+  ".ni": [
+    "programming"
+  ],
+  ".nim": [
+    "programming"
+  ],
+  ".nim.cfg": [
+    "programming"
+  ],
+  ".nimble": [
+    "programming"
+  ],
+  ".nimrod": [
+    "programming"
+  ],
+  ".nims": [
+    "programming"
+  ],
+  ".ninja": [
+    "data"
+  ],
+  ".nit": [
+    "programming"
+  ],
+  ".nix": [
+    "programming"
+  ],
+  ".njk": [
+    "markup"
+  ],
+  ".njs": [
+    "programming"
+  ],
+  ".nl": [
+    "data",
+    "programming"
+  ],
+  ".nlogo": [
+    "programming"
+  ],
+  ".no": [
+    "prose"
+  ],
+  ".nomad": [
+    "programming"
+  ],
+  ".nproj": [
+    "data"
+  ],
+  ".nqp": [
+    "programming"
+  ],
+  ".nr": [
+    "programming",
+    "markup"
+  ],
+  ".nse": [
+    "programming"
+  ],
+  ".nsh": [
+    "programming"
+  ],
+  ".nsi": [
+    "programming"
+  ],
+  ".nss": [
+    "programming"
+  ],
+  ".nu": [
+    "programming"
+  ],
+  ".numpy": [
+    "programming"
+  ],
+  ".numpyw": [
+    "programming"
+  ],
+  ".numsc": [
+    "programming"
+  ],
+  ".nuspec": [
+    "data"
+  ],
+  ".nut": [
+    "programming"
+  ],
+  ".ny": [
+    "programming"
+  ],
+  ".ob2": [
+    "programming"
+  ],
+  ".obj": [
+    "data"
+  ],
+  ".objdump": [
+    "data"
+  ],
+  ".odd": [
+    "data"
+  ],
+  ".odin": [
+    "data",
+    "programming"
+  ],
+  ".ol": [
+    "programming"
+  ],
+  ".omgrofl": [
+    "programming"
+  ],
+  ".ooc": [
+    "programming"
+  ],
+  ".opa": [
+    "programming"
+  ],
+  ".opal": [
+    "programming"
+  ],
+  ".opencl": [
+    "programming"
+  ],
+  ".orc": [
+    "programming"
+  ],
+  ".org": [
+    "prose"
+  ],
+  ".os": [
+    "programming"
+  ],
+  ".osm": [
+    "data"
+  ],
+  ".overpassql": [
+    "programming"
+  ],
+  ".owl": [
+    "data"
+  ],
+  ".ox": [
+    "programming"
+  ],
+  ".oxh": [
+    "programming"
+  ],
+  ".oxo": [
+    "programming"
+  ],
+  ".oxygene": [
+    "programming"
+  ],
+  ".oz": [
+    "programming"
+  ],
+  ".p": [
+    "programming"
+  ],
+  ".p4": [
+    "programming"
+  ],
+  ".p6": [
+    "programming"
+  ],
+  ".p6l": [
+    "programming"
+  ],
+  ".p6m": [
+    "programming"
+  ],
+  ".p8": [
+    "programming"
+  ],
+  ".pac": [
+    "programming"
+  ],
+  ".pact": [
+    "programming"
+  ],
+  ".pan": [
+    "programming"
+  ],
+  ".parrot": [
+    "programming"
+  ],
+  ".pas": [
+    "programming"
+  ],
+  ".pascal": [
+    "programming"
+  ],
+  ".pasm": [
+    "programming"
+  ],
+  ".pat": [
+    "programming"
+  ],
+  ".patch": [
+    "data"
+  ],
+  ".pb": [
+    "programming"
+  ],
+  ".pbi": [
+    "programming"
+  ],
+  ".pbt": [
+    "programming",
+    "data"
+  ],
+  ".pbtxt": [
+    "data"
+  ],
+  ".pck": [
+    "programming"
+  ],
+  ".pcss": [
+    "markup"
+  ],
+  ".pd": [
+    "data"
+  ],
+  ".pd_lua": [
+    "programming"
+  ],
+  ".pddl": [
+    "programming"
+  ],
+  ".pde": [
+    "programming"
+  ],
+  ".peggy": [
+    "programming"
+  ],
+  ".pegjs": [
+    "programming"
+  ],
+  ".pep": [
+    "programming"
+  ],
+  ".per": [
+    "markup"
+  ],
+  ".perl": [
+    "programming"
+  ],
+  ".pfa": [
+    "markup"
+  ],
+  ".pgsql": [
+    "programming"
+  ],
+  ".ph": [
+    "programming"
+  ],
+  ".php": [
+    "programming"
+  ],
+  ".php3": [
+    "programming"
+  ],
+  ".php4": [
+    "programming"
+  ],
+  ".php5": [
+    "programming"
+  ],
+  ".phps": [
+    "programming"
+  ],
+  ".phpt": [
+    "programming"
+  ],
+  ".phtml": [
+    "markup"
+  ],
+  ".pic": [
+    "markup"
+  ],
+  ".pig": [
+    "programming"
+  ],
+  ".pike": [
+    "programming"
+  ],
+  ".pir": [
+    "programming"
+  ],
+  ".pkb": [
+    "programming"
+  ],
+  ".pkgproj": [
+    "data"
+  ],
+  ".pkl": [
+    "data",
+    "programming"
+  ],
+  ".pks": [
+    "programming"
+  ],
+  ".pl": [
+    "programming"
+  ],
+  ".pl6": [
+    "programming"
+  ],
+  ".plantuml": [
+    "data"
+  ],
+  ".plb": [
+    "programming"
+  ],
+  ".plist": [
+    "data"
+  ],
+  ".plot": [
+    "programming"
+  ],
+  ".pls": [
+    "programming"
+  ],
+  ".plsql": [
+    "programming"
+  ],
+  ".plt": [
+    "programming"
+  ],
+  ".pluginspec": [
+    "programming",
+    "data"
+  ],
+  ".plx": [
+    "programming"
+  ],
+  ".pm": [
+    "programming",
+    "data"
+  ],
+  ".pm6": [
+    "programming"
+  ],
+  ".pml": [
+    "programming"
+  ],
+  ".pmod": [
+    "programming"
+  ],
+  ".po": [
+    "prose"
+  ],
+  ".pod": [
+    "prose"
+  ],
+  ".pod6": [
+    "prose"
+  ],
+  ".podsl": [
+    "programming"
+  ],
+  ".podspec": [
+    "programming"
+  ],
+  ".pogo": [
+    "programming"
+  ],
+  ".polar": [
+    "programming"
+  ],
+  ".pony": [
+    "programming"
+  ],
+  ".por": [
+    "programming"
+  ],
+  ".postcss": [
+    "markup"
+  ],
+  ".pot": [
+    "prose"
+  ],
+  ".pov": [
+    "programming"
+  ],
+  ".pp": [
+    "programming"
+  ],
+  ".pprx": [
+    "programming"
+  ],
+  ".praat": [
+    "programming"
+  ],
+  ".prawn": [
+    "programming"
+  ],
+  ".prc": [
+    "programming",
+    "data"
+  ],
+  ".prefab": [
+    "data"
+  ],
+  ".prefs": [
+    "data"
+  ],
+  ".prg": [
+    "programming"
+  ],
+  ".pri": [
+    "programming"
+  ],
+  ".prisma": [
+    "data"
+  ],
+  ".pro": [
+    "programming",
+    "data"
+  ],
+  ".proj": [
+    "data"
+  ],
+  ".prolog": [
+    "programming"
+  ],
+  ".properties": [
+    "data"
+  ],
+  ".props": [
+    "data"
+  ],
+  ".proto": [
+    "data"
+  ],
+  ".prw": [
+    "programming"
+  ],
+  ".ps": [
+    "markup"
+  ],
+  ".ps1": [
+    "programming"
+  ],
+  ".ps1xml": [
+    "data"
+  ],
+  ".psc": [
+    "programming"
+  ],
+  ".psc1": [
+    "data"
+  ],
+  ".psd1": [
+    "programming"
+  ],
+  ".psgi": [
+    "programming"
+  ],
+  ".psm1": [
+    "programming"
+  ],
+  ".pt": [
+    "data"
+  ],
+  ".pub": [
+    "data"
+  ],
+  ".pubxml": [
+    "data"
+  ],
+  ".pug": [
+    "markup"
+  ],
+  ".puml": [
+    "data"
+  ],
+  ".purs": [
+    "programming"
+  ],
+  ".pwn": [
+    "programming"
+  ],
+  ".pxd": [
+    "programming"
+  ],
+  ".pxi": [
+    "programming"
+  ],
+  ".py": [
+    "programming"
+  ],
+  ".py3": [
+    "programming"
+  ],
+  ".pyde": [
+    "programming"
+  ],
+  ".pyi": [
+    "programming"
+  ],
+  ".pyp": [
+    "programming"
+  ],
+  ".pyt": [
+    "programming"
+  ],
+  ".pytb": [
+    "data"
+  ],
+  ".pyw": [
+    "programming"
+  ],
+  ".pyx": [
+    "programming"
+  ],
+  ".q": [
+    "programming"
+  ],
+  ".qasm": [
+    "programming"
+  ],
+  ".qbs": [
+    "programming"
+  ],
+  ".qc": [
+    "programming"
+  ],
+  ".qhelp": [
+    "data"
+  ],
+  ".ql": [
+    "programming"
+  ],
+  ".qll": [
+    "programming"
+  ],
+  ".qmd": [
+    "prose"
+  ],
+  ".qml": [
+    "programming"
+  ],
+  ".qs": [
+    "programming"
+  ],
+  ".r": [
+    "programming"
+  ],
+  ".r2": [
+    "programming"
+  ],
+  ".r3": [
+    "programming"
+  ],
+  ".rabl": [
+    "programming"
+  ],
+  ".rake": [
+    "programming"
+  ],
+  ".raku": [
+    "programming"
+  ],
+  ".rakumod": [
+    "programming"
+  ],
+  ".raml": [
+    "markup"
+  ],
+  ".rascript": [
+    "programming"
+  ],
+  ".raw": [
+    "data"
+  ],
+  ".razor": [
+    "markup"
+  ],
+  ".rb": [
+    "programming"
+  ],
+  ".rbbas": [
+    "programming"
+  ],
+  ".rbfrm": [
+    "programming"
+  ],
+  ".rbi": [
+    "programming"
+  ],
+  ".rbmnu": [
+    "programming"
+  ],
+  ".rbres": [
+    "programming"
+  ],
+  ".rbs": [
+    "data"
+  ],
+  ".rbtbar": [
+    "programming"
+  ],
+  ".rbuild": [
+    "programming"
+  ],
+  ".rbuistate": [
+    "programming"
+  ],
+  ".rbw": [
+    "programming"
+  ],
+  ".rbx": [
+    "programming"
+  ],
+  ".rbxs": [
+    "programming"
+  ],
+  ".rchit": [
+    "programming"
+  ],
+  ".rd": [
+    "programming"
+  ],
+  ".rdf": [
+    "data"
+  ],
+  ".rdoc": [
+    "prose"
+  ],
+  ".re": [
+    "programming"
+  ],
+  ".reb": [
+    "programming"
+  ],
+  ".rebol": [
+    "programming"
+  ],
+  ".red": [
+    "programming"
+  ],
+  ".reds": [
+    "programming"
+  ],
+  ".reek": [
+    "data"
+  ],
+  ".reg": [
+    "data"
+  ],
+  ".regex": [
+    "data"
+  ],
+  ".regexp": [
+    "data"
+  ],
+  ".rego": [
+    "programming"
+  ],
+  ".rei": [
+    "programming"
+  ],
+  ".religo": [
+    "programming"
+  ],
+  ".res": [
+    "programming",
+    "data"
+  ],
+  ".resi": [
+    "programming"
+  ],
+  ".resource": [
+    "programming"
+  ],
+  ".rest": [
+    "prose"
+  ],
+  ".rest.txt": [
+    "prose"
+  ],
+  ".resx": [
+    "data"
+  ],
+  ".rex": [
+    "programming"
+  ],
+  ".rexx": [
+    "programming"
+  ],
+  ".rg": [
+    "programming"
+  ],
+  ".rhtml": [
+    "markup"
+  ],
+  ".ring": [
+    "programming"
+  ],
+  ".riot": [
+    "markup"
+  ],
+  ".rkt": [
+    "programming"
+  ],
+  ".rktd": [
+    "programming"
+  ],
+  ".rktl": [
+    "programming"
+  ],
+  ".rl": [
+    "programming"
+  ],
+  ".rmd": [
+    "prose"
+  ],
+  ".rmiss": [
+    "programming"
+  ],
+  ".rnh": [
+    "markup"
+  ],
+  ".rno": [
+    "markup"
+  ],
+  ".rnw": [
+    "prose"
+  ],
+  ".robot": [
+    "programming"
+  ],
+  ".roc": [
+    "programming"
+  ],
+  ".rockspec": [
+    "programming"
+  ],
+  ".roff": [
+    "markup"
+  ],
+  ".ron": [
+    "data"
+  ],
+  ".ronn": [
+    "prose"
+  ],
+  ".rpgle": [
+    "programming"
+  ],
+  ".rpy": [
+    "programming"
+  ],
+  ".rq": [
+    "data"
+  ],
+  ".rs": [
+    "programming",
+    "data"
+  ],
+  ".rs.in": [
+    "programming"
+  ],
+  ".rsc": [
+    "programming"
+  ],
+  ".rsh": [
+    "programming"
+  ],
+  ".rss": [
+    "data"
+  ],
+  ".rst": [
+    "prose"
+  ],
+  ".rst.txt": [
+    "prose"
+  ],
+  ".rsx": [
+    "programming"
+  ],
+  ".rtf": [
+    "markup"
+  ],
+  ".ru": [
+    "programming"
+  ],
+  ".ruby": [
+    "programming"
+  ],
+  ".rviz": [
+    "data"
+  ],
+  ".s": [
+    "programming"
+  ],
+  ".sage": [
+    "programming"
+  ],
+  ".sagews": [
+    "programming"
+  ],
+  ".sail": [
+    "programming"
+  ],
+  ".sarif": [
+    "data"
+  ],
+  ".sas": [
+    "programming"
+  ],
+  ".sass": [
+    "markup"
+  ],
+  ".sats": [
+    "programming"
+  ],
+  ".sbatch": [
+    "programming"
+  ],
+  ".sbt": [
+    "programming"
+  ],
+  ".sc": [
+    "programming"
+  ],
+  ".scad": [
+    "programming"
+  ],
+  ".scala": [
+    "programming"
+  ],
+  ".scaml": [
+    "markup"
+  ],
+  ".scd": [
+    "prose",
+    "programming"
+  ],
+  ".sce": [
+    "programming"
+  ],
+  ".scenic": [
+    "programming"
+  ],
+  ".sch": [
+    "data",
+    "programming"
+  ],
+  ".sci": [
+    "programming"
+  ],
+  ".scm": [
+    "programming"
+  ],
+  ".sco": [
+    "programming"
+  ],
+  ".scpt": [
+    "programming"
+  ],
+  ".scrbl": [
+    "programming"
+  ],
+  ".scss": [
+    "markup"
+  ],
+  ".scxml": [
+    "data"
+  ],
+  ".sdc": [
+    "programming"
+  ],
+  ".sed": [
+    "programming"
+  ],
+  ".self": [
+    "programming"
+  ],
+  ".service": [
+    "data"
+  ],
+  ".sexp": [
+    "programming"
+  ],
+  ".sfd": [
+    "data"
+  ],
+  ".sfproj": [
+    "data"
+  ],
+  ".sfv": [
+    "data"
+  ],
+  ".sh": [
+    "programming"
+  ],
+  ".sh-session": [
+    "programming"
+  ],
+  ".sh.in": [
+    "programming"
+  ],
+  ".sha1": [
+    "data"
+  ],
+  ".sha2": [
+    "data"
+  ],
+  ".sha224": [
+    "data"
+  ],
+  ".sha256": [
+    "data"
+  ],
+  ".sha256sum": [
+    "data"
+  ],
+  ".sha3": [
+    "data"
+  ],
+  ".sha384": [
+    "data"
+  ],
+  ".sha512": [
+    "data"
+  ],
+  ".shader": [
+    "programming"
+  ],
+  ".shen": [
+    "programming"
+  ],
+  ".shproj": [
+    "data"
+  ],
+  ".sieve": [
+    "programming"
+  ],
+  ".sig": [
+    "programming"
+  ],
+  ".sj": [
+    "programming"
+  ],
+  ".sjs": [
+    "programming"
+  ],
+  ".sl": [
+    "programming"
+  ],
+  ".slang": [
+    "programming"
+  ],
+  ".sld": [
+    "programming"
+  ],
+  ".slim": [
+    "markup"
+  ],
+  ".slint": [
+    "markup"
+  ],
+  ".sln": [
+    "data"
+  ],
+  ".slnx": [
+    "data"
+  ],
+  ".sls": [
+    "programming"
+  ],
+  ".slurm": [
+    "programming"
+  ],
+  ".sma": [
+    "programming"
+  ],
+  ".smali": [
+    "programming"
+  ],
+  ".smithy": [
+    "programming"
+  ],
+  ".smk": [
+    "programming"
+  ],
+  ".sml": [
+    "programming"
+  ],
+  ".smt": [
+    "programming"
+  ],
+  ".smt2": [
+    "programming"
+  ],
+  ".snakefile": [
+    "programming"
+  ],
+  ".snap": [
+    "data"
+  ],
+  ".snip": [
+    "markup"
+  ],
+  ".snippet": [
+    "markup"
+  ],
+  ".snippets": [
+    "markup"
+  ],
+  ".sol": [
+    "data",
+    "programming"
+  ],
+  ".soy": [
+    "markup"
+  ],
+  ".sp": [
+    "programming"
+  ],
+  ".sparql": [
+    "data"
+  ],
+  ".spc": [
+    "programming"
+  ],
+  ".spec": [
+    "programming",
+    "data"
+  ],
+  ".spin": [
+    "programming"
+  ],
+  ".sps": [
+    "programming"
+  ],
+  ".sqf": [
+    "programming"
+  ],
+  ".sql": [
+    "programming",
+    "data"
+  ],
+  ".sqlrpgle": [
+    "programming"
+  ],
+  ".sra": [
+    "programming"
+  ],
+  ".srdf": [
+    "data"
+  ],
+  ".srt": [
+    "markup",
+    "data"
+  ],
+  ".sru": [
+    "programming"
+  ],
+  ".srv": [
+    "data"
+  ],
+  ".srw": [
+    "programming"
+  ],
+  ".ss": [
+    "programming"
+  ],
+  ".ssjs": [
+    "programming"
+  ],
+  ".sss": [
+    "markup"
+  ],
+  ".st": [
+    "programming",
+    "markup"
+  ],
+  ".stTheme": [
+    "data"
+  ],
+  ".stan": [
+    "programming"
+  ],
+  ".star": [
+    "data",
+    "programming"
+  ],
+  ".sthlp": [
+    "programming"
+  ],
+  ".stl": [
+    "data"
+  ],
+  ".ston": [
+    "data"
+  ],
+  ".story": [
+    "programming"
+  ],
+  ".storyboard": [
+    "data"
+  ],
+  ".sty": [
+    "markup"
+  ],
+  ".styl": [
+    "markup"
+  ],
+  ".sublime-build": [
+    "data"
+  ],
+  ".sublime-color-scheme": [
+    "data"
+  ],
+  ".sublime-commands": [
+    "data"
+  ],
+  ".sublime-completions": [
+    "data"
+  ],
+  ".sublime-keymap": [
+    "data"
+  ],
+  ".sublime-macro": [
+    "data"
+  ],
+  ".sublime-menu": [
+    "data"
+  ],
+  ".sublime-mousemap": [
+    "data"
+  ],
+  ".sublime-project": [
+    "data"
+  ],
+  ".sublime-settings": [
+    "data"
+  ],
+  ".sublime-snippet": [
+    "data"
+  ],
+  ".sublime-syntax": [
+    "data"
+  ],
+  ".sublime-theme": [
+    "data"
+  ],
+  ".sublime-workspace": [
+    "data"
+  ],
+  ".sublime_metrics": [
+    "data"
+  ],
+  ".sublime_session": [
+    "data"
+  ],
+  ".surql": [
+    "programming"
+  ],
+  ".sv": [
+    "programming"
+  ],
+  ".svelte": [
+    "markup"
+  ],
+  ".svg": [
+    "data"
+  ],
+  ".svh": [
+    "programming"
+  ],
+  ".svx": [
+    "data",
+    "markup"
+  ],
+  ".sw": [
+    "programming",
+    "data"
+  ],
+  ".swg": [
+    "programming"
+  ],
+  ".swift": [
+    "programming"
+  ],
+  ".swig": [
+    "programming"
+  ],
+  ".syntax": [
+    "data"
+  ],
+  ".t": [
+    "programming"
+  ],
+  ".tab": [
+    "data"
+  ],
+  ".tac": [
+    "programming"
+  ],
+  ".tact": [
+    "data",
+    "programming"
+  ],
+  ".tag": [
+    "programming"
+  ],
+  ".talon": [
+    "programming"
+  ],
+  ".targets": [
+    "data"
+  ],
+  ".tcc": [
+    "programming"
+  ],
+  ".tcl": [
+    "programming"
+  ],
+  ".tcl.in": [
+    "programming"
+  ],
+  ".tcsh": [
+    "programming"
+  ],
+  ".te": [
+    "data"
+  ],
+  ".tea": [
+    "markup"
+  ],
+  ".templ": [
+    "markup"
+  ],
+  ".tesc": [
+    "programming"
+  ],
+  ".tese": [
+    "programming"
+  ],
+  ".tex": [
+    "markup"
+  ],
+  ".texi": [
+    "prose"
+  ],
+  ".texinfo": [
+    "prose"
+  ],
+  ".textile": [
+    "prose"
+  ],
+  ".textproto": [
+    "data"
+  ],
+  ".tf": [
+    "programming"
+  ],
+  ".tfstate": [
+    "data"
+  ],
+  ".tfstate.backup": [
+    "data"
+  ],
+  ".tftpl": [
+    "markup"
+  ],
+  ".tfvars": [
+    "programming"
+  ],
+  ".thor": [
+    "programming"
+  ],
+  ".thrift": [
+    "programming"
+  ],
+  ".thy": [
+    "programming"
+  ],
+  ".tl": [
+    "programming",
+    "data"
+  ],
+  ".tla": [
+    "programming"
+  ],
+  ".tlv": [
+    "programming"
+  ],
+  ".tm": [
+    "programming"
+  ],
+  ".tmCommand": [
+    "data"
+  ],
+  ".tmLanguage": [
+    "data"
+  ],
+  ".tmPreferences": [
+    "data"
+  ],
+  ".tmSnippet": [
+    "data"
+  ],
+  ".tmTheme": [
+    "data"
+  ],
+  ".tmac": [
+    "markup"
+  ],
+  ".tmdl": [
+    "data"
+  ],
+  ".tml": [
+    "data"
+  ],
+  ".tmpl": [
+    "markup"
+  ],
+  ".tmux": [
+    "programming"
+  ],
+  ".toc": [
+    "markup",
+    "data"
+  ],
+  ".tofu": [
+    "programming"
+  ],
+  ".toit": [
+    "programming"
+  ],
+  ".toml": [
+    "data"
+  ],
+  ".toml.example": [
+    "data"
+  ],
+  ".tool": [
+    "programming"
+  ],
+  ".topojson": [
+    "data"
+  ],
+  ".tpb": [
+    "programming"
+  ],
+  ".tpl": [
+    "markup",
+    "programming"
+  ],
+  ".tpp": [
+    "programming"
+  ],
+  ".tps": [
+    "programming"
+  ],
+  ".tres": [
+    "data"
+  ],
+  ".trg": [
+    "programming"
+  ],
+  ".trigger": [
+    "programming"
+  ],
+  ".ts": [
+    "programming",
+    "data"
+  ],
+  ".tscn": [
+    "data"
+  ],
+  ".tsconfig.json": [
+    "data"
+  ],
+  ".tsp": [
+    "data",
+    "programming"
+  ],
+  ".tst": [
+    "programming"
+  ],
+  ".tsv": [
+    "data"
+  ],
+  ".tsx": [
+    "programming",
+    "data"
+  ],
+  ".ttl": [
+    "data"
+  ],
+  ".tu": [
+    "programming"
+  ],
+  ".twig": [
+    "markup"
+  ],
+  ".txi": [
+    "prose"
+  ],
+  ".txl": [
+    "programming"
+  ],
+  ".txt": [
+    "data",
+    "prose"
+  ],
+  ".txtpb": [
+    "data"
+  ],
+  ".txx": [
+    "programming"
+  ],
+  ".typ": [
+    "programming",
+    "data"
+  ],
+  ".uc": [
+    "programming"
+  ],
+  ".udf": [
+    "data"
+  ],
+  ".udo": [
+    "programming"
+  ],
+  ".ui": [
+    "data"
+  ],
+  ".unity": [
+    "data"
+  ],
+  ".uno": [
+    "programming"
+  ],
+  ".upc": [
+    "programming"
+  ],
+  ".uplc": [
+    "programming"
+  ],
+  ".ur": [
+    "programming"
+  ],
+  ".urdf": [
+    "data"
+  ],
+  ".url": [
+    "data"
+  ],
+  ".urs": [
+    "programming"
+  ],
+  ".ux": [
+    "data"
+  ],
+  ".v": [
+    "programming"
+  ],
+  ".vala": [
+    "programming"
+  ],
+  ".vapi": [
+    "programming"
+  ],
+  ".vark": [
+    "programming"
+  ],
+  ".vb": [
+    "programming"
+  ],
+  ".vba": [
+    "programming"
+  ],
+  ".vbhtml": [
+    "programming"
+  ],
+  ".vbproj": [
+    "data"
+  ],
+  ".vbs": [
+    "programming"
+  ],
+  ".vcf": [
+    "data"
+  ],
+  ".vcl": [
+    "programming"
+  ],
+  ".vcxproj": [
+    "data"
+  ],
+  ".vdf": [
+    "data"
+  ],
+  ".veo": [
+    "programming"
+  ],
+  ".vert": [
+    "programming"
+  ],
+  ".vh": [
+    "programming"
+  ],
+  ".vhd": [
+    "programming"
+  ],
+  ".vhdl": [
+    "programming"
+  ],
+  ".vhf": [
+    "programming"
+  ],
+  ".vhi": [
+    "programming"
+  ],
+  ".vho": [
+    "programming"
+  ],
+  ".vhost": [
+    "data"
+  ],
+  ".vhs": [
+    "programming"
+  ],
+  ".vht": [
+    "programming"
+  ],
+  ".vhw": [
+    "programming"
+  ],
+  ".vim": [
+    "programming"
+  ],
+  ".vimrc": [
+    "programming"
+  ],
+  ".viw": [
+    "data"
+  ],
+  ".vmb": [
+    "programming"
+  ],
+  ".volt": [
+    "programming"
+  ],
+  ".vrx": [
+    "programming"
+  ],
+  ".vs": [
+    "programming"
+  ],
+  ".vsh": [
+    "programming"
+  ],
+  ".vshader": [
+    "programming"
+  ],
+  ".vsixmanifest": [
+    "data"
+  ],
+  ".vssettings": [
+    "data"
+  ],
+  ".vstemplate": [
+    "data"
+  ],
+  ".vtl": [
+    "markup"
+  ],
+  ".vto": [
+    "markup"
+  ],
+  ".vtt": [
+    "data"
+  ],
+  ".vue": [
+    "markup"
+  ],
+  ".vw": [
+    "programming"
+  ],
+  ".vxml": [
+    "data"
+  ],
+  ".vy": [
+    "programming"
+  ],
+  ".w": [
+    "programming"
+  ],
+  ".wast": [
+    "programming"
+  ],
+  ".wat": [
+    "programming"
+  ],
+  ".watchr": [
+    "programming"
+  ],
+  ".wdl": [
+    "programming"
+  ],
+  ".webapp": [
+    "data"
+  ],
+  ".webidl": [
+    "programming"
+  ],
+  ".webmanifest": [
+    "data"
+  ],
+  ".weechatlog": [
+    "data"
+  ],
+  ".wgsl": [
+    "programming"
+  ],
+  ".whiley": [
+    "programming"
+  ],
+  ".wiki": [
+    "prose"
+  ],
+  ".wikitext": [
+    "prose"
+  ],
+  ".wisp": [
+    "programming"
+  ],
+  ".wit": [
+    "data"
+  ],
+  ".wixproj": [
+    "data"
+  ],
+  ".wl": [
+    "programming"
+  ],
+  ".wlk": [
+    "programming"
+  ],
+  ".wls": [
+    "programming"
+  ],
+  ".wlt": [
+    "programming"
+  ],
+  ".wlua": [
+    "programming"
+  ],
+  ".workbook": [
+    "prose"
+  ],
+  ".workflow": [
+    "programming",
+    "data"
+  ],
+  ".wren": [
+    "programming"
+  ],
+  ".ws": [
+    "programming"
+  ],
+  ".wsdl": [
+    "data"
+  ],
+  ".wsf": [
+    "data"
+  ],
+  ".wsgi": [
+    "programming"
+  ],
+  ".wxi": [
+    "data"
+  ],
+  ".wxl": [
+    "data"
+  ],
+  ".wxs": [
+    "data"
+  ],
+  ".x": [
+    "data",
+    "programming"
+  ],
+  ".x10": [
+    "programming"
+  ],
+  ".x3d": [
+    "data"
+  ],
+  ".x68": [
+    "programming"
+  ],
+  ".xacro": [
+    "data"
+  ],
+  ".xaml": [
+    "data"
+  ],
+  ".xbm": [
+    "data"
+  ],
+  ".xc": [
+    "programming"
+  ],
+  ".xdc": [
+    "programming"
+  ],
+  ".xht": [
+    "markup"
+  ],
+  ".xhtml": [
+    "markup"
+  ],
+  ".xi": [
+    "programming"
+  ],
+  ".xib": [
+    "data"
+  ],
+  ".xlf": [
+    "data"
+  ],
+  ".xliff": [
+    "data"
+  ],
+  ".xm": [
+    "programming"
+  ],
+  ".xmi": [
+    "data"
+  ],
+  ".xml": [
+    "data"
+  ],
+  ".xml.dist": [
+    "data"
+  ],
+  ".xmp": [
+    "data"
+  ],
+  ".xojo_code": [
+    "programming"
+  ],
+  ".xojo_menu": [
+    "programming"
+  ],
+  ".xojo_report": [
+    "programming"
+  ],
+  ".xojo_script": [
+    "programming"
+  ],
+  ".xojo_toolbar": [
+    "programming"
+  ],
+  ".xojo_window": [
+    "programming"
+  ],
+  ".xpl": [
+    "programming"
+  ],
+  ".xpm": [
+    "data"
+  ],
+  ".xproc": [
+    "programming"
+  ],
+  ".xproj": [
+    "data"
+  ],
+  ".xpy": [
+    "programming"
+  ],
+  ".xq": [
+    "programming"
+  ],
+  ".xql": [
+    "programming"
+  ],
+  ".xqm": [
+    "programming"
+  ],
+  ".xquery": [
+    "programming"
+  ],
+  ".xqy": [
+    "programming"
+  ],
+  ".xrl": [
+    "programming"
+  ],
+  ".xs": [
+    "programming"
+  ],
+  ".xsd": [
+    "data"
+  ],
+  ".xsh": [
+    "programming"
+  ],
+  ".xsjs": [
+    "programming"
+  ],
+  ".xsjslib": [
+    "programming"
+  ],
+  ".xsl": [
+    "programming"
+  ],
+  ".xslt": [
+    "programming"
+  ],
+  ".xsp-config": [
+    "data"
+  ],
+  ".xsp.metadata": [
+    "data"
+  ],
+  ".xspec": [
+    "data"
+  ],
+  ".xtend": [
+    "programming"
+  ],
+  ".xul": [
+    "data"
+  ],
+  ".xzap": [
+    "programming"
+  ],
+  ".y": [
+    "programming"
+  ],
+  ".yacc": [
+    "programming"
+  ],
+  ".yaml": [
+    "data"
+  ],
+  ".yaml-tmlanguage": [
+    "data"
+  ],
+  ".yaml.sed": [
+    "data"
+  ],
+  ".yang": [
+    "data"
+  ],
+  ".yap": [
+    "programming"
+  ],
+  ".yar": [
+    "programming"
+  ],
+  ".yara": [
+    "programming"
+  ],
+  ".yasnippet": [
+    "markup"
+  ],
+  ".yml": [
+    "data"
+  ],
+  ".yml.mysql": [
+    "data"
+  ],
+  ".yrl": [
+    "programming"
+  ],
+  ".yul": [
+    "programming"
+  ],
+  ".yy": [
+    "data",
+    "programming"
+  ],
+  ".yyp": [
+    "data"
+  ],
+  ".z3": [
+    "programming"
+  ],
+  ".zap": [
+    "programming"
+  ],
+  ".zcml": [
+    "data"
+  ],
+  ".zeek": [
+    "programming"
+  ],
+  ".zep": [
+    "programming"
+  ],
+  ".zig": [
+    "programming"
+  ],
+  ".zig.zon": [
+    "programming"
+  ],
+  ".zil": [
+    "programming"
+  ],
+  ".zimpl": [
+    "programming"
+  ],
+  ".zmodel": [
+    "data"
+  ],
+  ".zmpl": [
+    "programming"
+  ],
+  ".zone": [
+    "data"
+  ],
+  ".zpl": [
+    "programming"
+  ],
+  ".zs": [
+    "programming"
+  ],
+  ".zsh": [
+    "programming"
+  ],
+  ".zsh-theme": [
+    "programming"
+  ]
+} as const;
+
+const extension_to_type: typeof _extension_to_type & Dictionary<TypesWithExtensions> = _extension_to_type;
+
+type ExtensionToType = typeof extension_to_type;
+
+export { _extension_to_type };
+
+export { extension_to_type };
+
+export type { ExtensionToType };"
+`;
+
+exports[`generated files > data > maps > filename-to-name > matches snapshot 1`] = `
 "import type { Dictionary } from "@/generated/types/common/language-types.generated";
 import type { NamesWithFilenames } from "@/generated/types/usage/usage-types.generated";
 
-const _filename_to_lang = {
+const _filename_to_name = {
   ".JUSTFILE": [
     "Just"
   ],
@@ -89341,22 +93769,22 @@ const _filename_to_lang = {
   ]
 } as const;
 
-const filename_to_lang: typeof _filename_to_lang & Dictionary<NamesWithFilenames> = _filename_to_lang;
+const filename_to_name: typeof _filename_to_name & Dictionary<NamesWithFilenames> = _filename_to_name;
 
-type FilenameToLang = typeof filename_to_lang;
+type FilenameToName = typeof filename_to_name;
 
-export { _filename_to_lang };
+export { _filename_to_name };
 
-export { filename_to_lang };
+export { filename_to_name };
 
-export type { FilenameToLang };"
+export type { FilenameToName };"
 `;
 
-exports[`generated files > data > maps > interpreter-to-lang > matches snapshot 1`] = `
+exports[`generated files > data > maps > interpreter-to-name > matches snapshot 1`] = `
 "import type { Dictionary } from "@/generated/types/common/language-types.generated";
 import type { NamesWithInterpreters } from "@/generated/types/usage/usage-types.generated";
 
-const _interpreter_to_lang = {
+const _interpreter_to_name = {
   "M2": [
     "Macaulay2"
   ],
@@ -89865,15 +94293,15 @@ const _interpreter_to_lang = {
   ]
 } as const;
 
-const interpreter_to_lang: typeof _interpreter_to_lang & Dictionary<NamesWithInterpreters> = _interpreter_to_lang;
+const interpreter_to_name: typeof _interpreter_to_name & Dictionary<NamesWithInterpreters> = _interpreter_to_name;
 
-type InterpreterToLang = typeof interpreter_to_lang;
+type InterpreterToName = typeof interpreter_to_name;
 
-export { _interpreter_to_lang };
+export { _interpreter_to_name };
 
-export { interpreter_to_lang };
+export { interpreter_to_name };
 
-export type { InterpreterToLang };"
+export type { InterpreterToName };"
 `;
 
 exports[`generated files > data > maps > language-id-to-name > matches snapshot 1`] = `
@@ -90697,10 +95125,10 @@ export { language_id_to_name };
 export type { LanguageIdToName };"
 `;
 
-exports[`generated files > data > maps > language-name-to-type > matches snapshot 1`] = `
+exports[`generated files > data > maps > name-to-type > matches snapshot 1`] = `
 "import type { Dictionary, Type } from "@/generated/types/common/language-types.generated";
 
-const _language_name_to_type = {
+const _name_to_type = {
   "1C Enterprise": "programming",
   "2-Dimensional Array": "data",
   "4D": "programming",
@@ -91507,15 +95935,15 @@ const _language_name_to_type = {
   "xBase": "programming"
 } as const;
 
-const language_name_to_type: typeof _language_name_to_type & Dictionary<Type> = _language_name_to_type;
+const name_to_type: typeof _name_to_type & Dictionary<Type> = _name_to_type;
 
-type LanguageNameToType = typeof language_name_to_type;
+type NameToType = typeof name_to_type;
 
-export { _language_name_to_type };
+export { _name_to_type };
 
-export { language_name_to_type };
+export { name_to_type };
 
-export type { LanguageNameToType };"
+export type { NameToType };"
 `;
 
 exports[`generated files > getters > index > matches snapshot 1`] = `
@@ -91527,6 +95955,12 @@ export { getLazyOne } from "../../transform/accessors/get-lazy-one";
 export type { GetLazyOneType } from "../../transform/accessors/get-lazy-one";
 export { getLazyMany } from "../../transform/accessors/get-lazy-many";
 export type { GetLazyManyType } from "../../transform/accessors/get-lazy-many";
+"
+`;
+
+exports[`generated files > predicates > index > matches snapshot 1`] = `
+"export { isExtensionOfType } from "../../transform/predicates/is-extension-of-type";
+export type { IsExtensionOfType } from "../../transform/predicates/is-extension-of-type";
 "
 `;
 
@@ -92129,146 +96563,6 @@ const NAMES_WITH_TYPE_7 = ["Ignore List", "IGOR Pro", "ImageJ Macro", "Imba", "I
 const NAMES_WITH_TYPE_8 = ["KFramework", "KiCad Layout", "KiCad Legacy Layout", "KiCad Schematic", "Kickstart", "Kit", "Koka", "KoLmafia ASH", "Kotlin", "KRL", "Kusto", "kvlang", "LabVIEW", "Lambdapi", "Langium", "Lark", "Lasso", "Latte", "Lean", "Lean 4", "Leo", "Less", "Lex", "LFE", "LigoLANG", "LilyPond", "Limbo", "Linear Programming", "Linker Script", "Linux Kernel Module", "Liquid", "Liquidsoap", "Literate Agda", "Literate CoffeeScript", "Literate Haskell", "LiveCode Script", "LiveScript", "LLVM", "Logos", "Logtalk", "LOLCODE", "LookML", "LoomScript", "LSL", "LTspice Symbol", "Lua", "Luau", "M", "M3U", "M4"] as const;
 const NAMES_WITH_TYPE_9 = ["M4Sugar", "Macaulay2", "Makefile", "Mako", "Markdown", "Marko", "Mask", "Mathematical Programming System", "MATLAB", "Maven POM", "Max", "MAXScript", "mcfunction", "mdsvex", "MDX", "Mercury", "Mermaid", "Meson", "Metal", "MeTTa", "Microsoft Developer Studio Project", "Microsoft Visual Studio Solution", "MiniD", "MiniYAML", "MiniZinc", "MiniZinc Data", "Mint", "Mirah", "mIRC Script", "MLIR", "Modelica", "Modula-2", "Modula-3", "Module Management System", "Mojo", "Monkey", "Monkey C", "Moocode", "MoonBit", "MoonScript", "Motoko", "Motorola 68K Assembly", "Move", "MQL4", "MQL5", "MTML", "MUF", "mupad", "Muse", "Mustache"] as const;
 const NAMES_WITH_WRAP_1 = ["AsciiDoc", "Cooklang", "Creole", "Gemini", "Git Commit", "Inform 7", "Ink", "Leo", "Literate CoffeeScript", "Markdown", "mdsvex", "MDX", "Muse", "Org", "OverpassQL", "Pod", "Pod 6", "RDoc", "reStructuredText", "RMarkdown", "Roff", "Roff Manpage", "RUNOFF", "TeX", "Texinfo", "Text", "Textile", "WebVTT", "Wikitext"] as const;
-const TYPES_WITH_ACE_MODE_1 = ["1C Enterprise", "2-Dimensional Array", "4D", "ABAP", "ABAP CDS", "ABNF", "ActionScript", "Ada", "Adblock Filter List", "Adobe Font Metrics", "Agda", "AGS Script", "AIDL", "Aiken", "AL", "ALGOL", "Alloy", "Alpine Abuild", "Altium Designer", "AMPL", "AngelScript", "Answer Set Programming", "Ant Build System", "Antlers", "ANTLR", "ApacheConf", "Apex", "API Blueprint", "APL", "Apollo Guidance Computer", "AppleScript", "Arc", "AsciiDoc", "ASL", "ASN.1", "ASP.NET", "AspectJ", "Assembly", "Astro", "Asymptote", "ATS", "Augeas", "AutoHotkey", "AutoIt", "Avro IDL", "Awk", "B (Formal Method)", "B4X", "Ballerina", "BASIC"] as const;
-const TYPES_WITH_ACE_MODE_10 = ["Myghty", "nanorc", "Nasal", "NASL", "NCL", "Nearley", "Nemerle", "NEON", "nesC", "NetLinx", "NetLinx+ERB", "NetLogo", "NewLisp", "Nextflow", "Nginx", "Nickel", "Nim", "Ninja", "Nit", "Nix", "NL", "NMODL", "Noir", "NPM Config", "NSIS", "Nu", "NumPy", "Nunjucks", "Nushell", "NWScript", "OASv2-json", "OASv2-yaml", "OASv3-json", "OASv3-yaml", "Oberon", "ObjDump", "Object Data Instance Notation", "Objective-C", "Objective-C++", "Objective-J", "ObjectScript", "OCaml", "Odin", "Omgrofl", "OMNeT++ MSG", "OMNeT++ NED", "ooc", "Opa", "Opal", "Open Policy Agent"] as const;
-const TYPES_WITH_ACE_MODE_11 = ["OpenAPI Specification v2", "OpenAPI Specification v3", "OpenCL", "OpenEdge ABL", "OpenQASM", "OpenRC runscript", "OpenSCAD", "OpenStep Property List", "OpenType Feature File", "Option List", "Org", "OverpassQL", "Ox", "Oxygene", "Oz", "P4", "Pact", "Pan", "Papyrus", "Parrot", "Parrot Assembly", "Parrot Internal Representation", "Pascal", "Pawn", "PDDL", "PEG.js", "Pep8", "Perl", "PHP", "Pic", "Pickle", "PicoLisp", "PigLatin", "Pike", "Pip Requirements", "Pkl", "PlantUML", "PLpgSQL", "PLSQL", "Pod", "Pod 6", "PogoScript", "Polar", "Pony", "Portugol", "PostCSS", "PostScript", "POV-Ray SDL", "PowerBuilder", "PowerShell"] as const;
-const TYPES_WITH_ACE_MODE_12 = ["Praat", "Prisma", "Processing", "Procfile", "Proguard", "Prolog", "Promela", "Propeller Spin", "Protocol Buffer", "Protocol Buffer Text Format", "Public Key", "Pug", "Puppet", "Pure Data", "PureBasic", "PureScript", "Pyret", "Python", "Python console", "Python traceback", "q", "Q#", "QMake", "QML", "Qt Script", "Quake", "QuakeC", "QuickBASIC", "R", "Racket", "Ragel", "Raku", "RAML", "Rascal", "RAScript", "Raw token data", "RBS", "RDoc", "Readline Config", "REALbasic", "Reason", "ReasonLIGO", "Rebol", "Record Jar", "Red", "Redcode", "Redirect Rules", "Regular Expression", "Ren'Py", "RenderScript"] as const;
-const TYPES_WITH_ACE_MODE_13 = ["ReScript", "reStructuredText", "REXX", "Rez", "Rich Text Format", "Ring", "Riot", "RMarkdown", "RobotFramework", "robots.txt", "Roc", "Rocq Prover", "Roff", "Roff Manpage", "RON", "ROS Interface", "Rouge", "RouterOS Script", "RPC", "RPGLE", "RPM Spec", "Ruby", "RUNOFF", "Rust", "Sage", "Sail", "SaltStack", "SAS", "Sass", "Scala", "Scaml", "Scenic", "Scheme", "Scilab", "SCSS", "sed", "Self", "SELinux Policy", "ShaderLab", "Shell", "ShellCheck Config", "ShellSession", "Shen", "Sieve", "Simple File Verification", "Singularity", "Slang", "Slash", "Slice", "Slim"] as const;
-const TYPES_WITH_ACE_MODE_14 = ["Slint", "Smali", "Smalltalk", "Smarty", "Smithy", "SmPL", "SMT", "Snakemake", "Solidity", "Soong", "SourcePawn", "SPARQL", "Spline Font Database", "SQF", "SQL", "SQLPL", "Squirrel", "SRecode Template", "SSH Config", "Stan", "Standard ML", "STAR", "Starlark", "Stata", "STL", "STON", "StringTemplate", "Stylus", "SubRip Text", "SugarSS", "SuperCollider", "SurrealQL", "Survex data", "Svelte", "SVG", "Sway", "Sweave", "Swift", "SWIG", "SystemVerilog", "Tact", "Talon", "Tcl", "Tcsh", "Tea", "Teal", "templ", "Terra", "Terraform Template", "TeX"] as const;
-const TYPES_WITH_ACE_MODE_15 = ["Texinfo", "Text", "TextGrid", "Textile", "TextMate Properties", "Thrift", "TI Program", "TL-Verilog", "TLA", "TMDL", "Toit", "TOML", "Tor Config", "Tree-sitter Query", "TSPLIB data", "TSQL", "TSV", "TSX", "Turing", "Turtle", "Twig", "TXL", "Type Language", "TypeScript", "TypeSpec", "Typst", "Unified Parallel C", "Unity3D Asset", "Unix Assembly", "Uno", "UnrealScript", "Untyped Plutus Core", "UrWeb", "V", "Vala", "Valve Data Format", "VBA", "VBScript", "vCard", "VCL", "Velocity Template Language", "Vento", "Verilog", "VHDL", "Vim Help File", "Vim Script", "Vim Snippet", "Visual Basic .NET", "Visual Basic 6.0", "Volt"] as const;
-const TYPES_WITH_ACE_MODE_16 = ["Vue", "Vyper", "Wavefront Material", "Wavefront Object", "WDL", "Web Ontology Language", "WebAssembly", "WebAssembly Interface Type", "WebIDL", "WebVTT", "Wget Config", "WGSL", "Whiley", "Wikitext", "Win32 Message File", "Windows Registry Entries", "wisp", "Witcher Script", "Wolfram Language", "Wollok", "World of Warcraft Addon Data", "Wren", "X BitMap", "X Font Directory Index", "X PixMap", "X10", "xBase", "XC", "XCompose", "Xmake", "XML", "XML Property List", "Xojo", "Xonsh", "XPages", "XProc", "XQuery", "XS", "XSLT", "Xtend", "Yacc", "YAML", "YANG", "YARA", "YASnippet", "Yul", "ZAP", "Zeek", "ZenScript", "Zephir"] as const;
-const TYPES_WITH_ACE_MODE_17 = ["Zig", "ZIL", "Zimpl", "Zmodel"] as const;
-const TYPES_WITH_ACE_MODE_2 = ["Batchfile", "Beef", "Befunge", "Berry", "BibTeX", "BibTeX Style", "Bicep", "Bikeshed", "Bison", "BitBake", "Blade", "BlitzBasic", "BlitzMax", "Bluespec", "Bluespec BH", "Boo", "Boogie", "BQN", "Brainfuck", "BrighterScript", "Brightscript", "Browserslist", "Bru", "BuildStream", "C", "C-ObjDump", "C#", "C++", "C2hs Haskell", "C3", "Cabal Config", "Caddyfile", "Cadence", "Cairo", "Cairo Zero", "CameLIGO", "Cangjie", "CAP CDS", "Cap'n Proto", "Carbon", "CartoCSS", "Ceylon", "Chapel", "Charity", "Checksums", "ChucK", "CIL", "Circom", "Cirru", "Clarion"] as const;
-const TYPES_WITH_ACE_MODE_3 = ["Clarity", "Classic ASP", "Clean", "Click", "CLIPS", "Clojure", "Closure Templates", "Cloud Firestore Security Rules", "Clue", "CMake", "COBOL", "CODEOWNERS", "CodeQL", "CoffeeScript", "ColdFusion", "ColdFusion CFC", "COLLADA", "Common Lisp", "Common Workflow Language", "Component Pascal", "CoNLL-U", "Cooklang", "Cool", "Cpp-ObjDump", "CQL", "Creole", "crontab", "Crystal", "CSON", "Csound", "Csound Document", "Csound Score", "CSS", "CSV", "Cuda", "CUE", "Cue Sheet", "cURL Config", "Curry", "CWeb", "Cycript", "Cylc", "Cypher", "Cython", "D", "D-ObjDump", "D2", "Dafny", "Darcs Patch", "Dart"] as const;
-const TYPES_WITH_ACE_MODE_4 = ["Daslang", "DataWeave", "Debian Package Control File", "DenizenScript", "desktop", "Dhall", "Diff", "DIGITAL Command Language", "dircolors", "DirectX 3D File", "DM", "DNS Zone", "Dockerfile", "Dogescript", "Dotenv", "DTrace", "Dune", "Dylan", "E", "E-mail", "Eagle", "Earthly", "Easybuild", "EBNF", "eC", "Ecere Projects", "ECL", "ECLiPSe", "Ecmarkup", "Edge", "EdgeQL", "EditorConfig", "Edje Data Collection", "edn", "Eiffel", "EJS", "Elixir", "Elm", "Elvish", "Elvish Transcript", "Emacs Lisp", "EmberScript", "EQ", "Erlang", "Euphoria", "F*", "F#", "Factor", "Fancy", "Fantom"] as const;
-const TYPES_WITH_ACE_MODE_5 = ["Faust", "Fennel", "FIGlet Font", "Filebench WML", "Filterscript", "FIRRTL", "fish", "FlatBuffers", "Flix", "Fluent", "FLUX", "Formatted", "Forth", "Fortran", "Fortran Free Form", "FreeBASIC", "FreeMarker", "Frege", "Futhark", "G-code", "Game Maker Language", "GAML", "GAMS", "GAP", "GCC Machine Description", "GDB", "GDScript", "GDShader", "GEDCOM", "Gemfile.lock", "Gemini", "Genero 4gl", "Genero per", "Genie", "Genshi", "Gentoo Ebuild", "Gentoo Eclass", "Gerber Image", "Gettext Catalog", "Gherkin", "Git Attributes", "Git Commit", "Git Config", "Git Revision List", "Gleam", "Glimmer JS", "Glimmer TS", "GLSL", "Glyph", "Glyph Bitmap Distribution Format"] as const;
-const TYPES_WITH_ACE_MODE_6 = ["GN", "Gnuplot", "Go", "Go Checksums", "Go Module", "Go Template", "Go Workspace", "Godot Resource", "Golo", "Gosu", "Grace", "Gradle", "Gradle Kotlin DSL", "Grammatical Framework", "Graph Modeling Language", "GraphQL", "Graphviz (DOT)", "Groovy", "Groovy Server Pages", "GSC", "Hack", "Haml", "Handlebars", "HAProxy", "Harbour", "Hare", "Haskell", "Haxe", "HCL", "HIP", "HiveQL", "HLSL", "HOCON", "HolyC", "hoon", "Hosts File", "HTML", "HTML+ECR", "HTML+EEX", "HTML+ERB", "HTML+PHP", "HTML+Razor", "HTTP", "Hurl", "HXML", "Hy", "HyPhy", "iCalendar", "IDL", "Idris"] as const;
-const TYPES_WITH_ACE_MODE_7 = ["Ignore List", "IGOR Pro", "ImageJ Macro", "Imba", "Inform 7", "INI", "Ink", "Inno Setup", "Io", "Ioke", "IRC log", "Isabelle", "Isabelle ROOT", "ISPC", "J", "Jac", "Jai", "Janet", "JAR Manifest", "Jasmin", "Java", "Java Properties", "Java Server Pages", "Java Template Engine", "JavaScript", "JavaScript+ERB", "JCL", "Jest Snapshot", "JetBrains MPS", "JFlex", "Jinja", "Jison", "Jison Lex", "Jolie", "jq", "JSON", "JSON with Comments", "JSON5", "JSONiq", "JSONLD", "Jsonnet", "Julia", "Julia REPL", "Jupyter Notebook", "Just", "Kaitai Struct", "KakouneScript", "KCL", "KDL", "KerboScript"] as const;
-const TYPES_WITH_ACE_MODE_8 = ["KFramework", "KiCad Layout", "KiCad Legacy Layout", "KiCad Schematic", "Kickstart", "Kit", "Koka", "KoLmafia ASH", "Kotlin", "KRL", "Kusto", "kvlang", "LabVIEW", "Lambdapi", "Langium", "Lark", "Lasso", "Latte", "Lean", "Lean 4", "Leo", "Less", "Lex", "LFE", "LigoLANG", "LilyPond", "Limbo", "Linear Programming", "Linker Script", "Linux Kernel Module", "Liquid", "Liquidsoap", "Literate Agda", "Literate CoffeeScript", "Literate Haskell", "LiveCode Script", "LiveScript", "LLVM", "Logos", "Logtalk", "LOLCODE", "LookML", "LoomScript", "LSL", "LTspice Symbol", "Lua", "Luau", "M", "M3U", "M4"] as const;
-const TYPES_WITH_ACE_MODE_9 = ["M4Sugar", "Macaulay2", "Makefile", "Mako", "Markdown", "Marko", "Mask", "Mathematical Programming System", "MATLAB", "Maven POM", "Max", "MAXScript", "mcfunction", "mdsvex", "MDX", "Mercury", "Mermaid", "Meson", "Metal", "MeTTa", "Microsoft Developer Studio Project", "Microsoft Visual Studio Solution", "MiniD", "MiniYAML", "MiniZinc", "MiniZinc Data", "Mint", "Mirah", "mIRC Script", "MLIR", "Modelica", "Modula-2", "Modula-3", "Module Management System", "Mojo", "Monkey", "Monkey C", "Moocode", "MoonBit", "MoonScript", "Motoko", "Motorola 68K Assembly", "Move", "MQL4", "MQL5", "MTML", "MUF", "mupad", "Muse", "Mustache"] as const;
-const TYPES_WITH_ALIASES_1 = ["ActionScript", "Ada", "Adblock Filter List", "Adobe Font Metrics", "AGS Script", "Alpine Abuild", "Altium Designer", "ApacheConf", "AppleScript", "ASP.NET", "Assembly", "ATS", "AutoHotkey", "AutoIt", "B4X", "Batchfile", "Berry", "BlitzBasic", "BlitzMax", "Bluespec", "Bluespec BH", "C#", "C++", "C2hs Haskell", "Cabal Config", "Caddyfile", "CAP CDS", "CartoCSS", "Chapel", "Checksums", "Classic ASP", "Closure Templates", "CodeQL", "CoffeeScript", "ColdFusion", "ColdFusion CFC", "Common Lisp", "Common Workflow Language", "CoNLL-U", "Cpp-ObjDump", "crontab", "Csound", "Csound Document", "Csound Score", "cURL Config", "Cython", "D", "D2", "Darcs Patch", "Diff"] as const;
-const TYPES_WITH_ALIASES_2 = ["DIGITAL Command Language", "DM", "Dockerfile", "DTrace", "E-mail", "Earthly", "Ecmarkup", "EdgeQL", "EditorConfig", "Emacs Lisp", "F*", "F#", "FIGlet Font", "FreeBASIC", "FreeMarker", "Gemini", "Genshi", "Gerber Image", "Gettext Catalog", "Gherkin", "Git Attributes", "Git Commit", "Git Config", "Git Revision List", "Glimmer JS", "Glimmer TS", "Go", "Go Checksums", "Go Module", "Go Template", "Go Workspace", "Grammatical Framework", "Groovy Server Pages", "Handlebars", "HCL", "Hosts File", "HTML", "HTML+ECR", "HTML+EEX", "HTML+ERB", "HTML+Razor", "Hy", "iCalendar", "Ignore List", "IGOR Pro", "ImageJ Macro", "Inform 7", "INI", "IRC log", "Java Server Pages"] as const;
-const TYPES_WITH_ALIASES_3 = ["Java Template Engine", "JavaScript", "JetBrains MPS", "Jinja", "JSON", "JSON with Comments", "Jupyter Notebook", "Just", "Kaitai Struct", "KakouneScript", "KiCad Layout", "KiCad Schematic", "Lasso", "Lean 4", "Less", "Lex", "Literate CoffeeScript", "Literate Haskell", "LiveScript", "M", "M3U", "M4Sugar", "Macaulay2", "Makefile", "Markdown", "Marko", "MATLAB", "Max", "Mermaid", "Motorola 68K Assembly", "Muse", "NEON", "Nginx", "Nix", "Noir", "NPM Config", "Nu", "Nunjucks", "Nushell", "Objective-C", "Objective-C++", "Objective-J", "Odin", "OMNeT++ MSG", "OMNeT++ NED", "OpenAPI Specification v2", "OpenAPI Specification v3", "OpenEdge ABL", "OpenRC runscript", "OpenType Feature File"] as const;
-const TYPES_WITH_ALIASES_4 = ["Option List", "Parrot Assembly", "Parrot Internal Representation", "Pascal", "Perl", "PHP", "Pic", "PostScript", "POV-Ray SDL", "PowerShell", "Protocol Buffer", "Protocol Buffer Text Format", "Python", "Python console", "Q#", "QuickBASIC", "R", "Ragel", "Raku", "Raw token data", "Readline Config", "Red", "Redirect Rules", "Regular Expression", "Ren'Py", "reStructuredText", "REXX", "robots.txt", "Rocq Prover", "Roff", "ROS Interface", "RPC", "RPGLE", "RPM Spec", "Ruby", "Rust", "SaltStack", "SELinux Policy", "Shell", "ShellCheck Config", "ShellSession", "Simple File Verification", "Smalltalk", "SmPL", "Snakemake", "SourcePawn", "SSH Config", "Standard ML", "Starlark", "STL"] as const;
-const TYPES_WITH_ALIASES_5 = ["SurrealQL", "Tcl", "TeX", "Text", "TextMate Properties", "TMDL", "Tor Config", "Tree-sitter Query", "TSPLIB data", "TSV", "TSX", "Type Language", "TypeScript", "TypeSpec", "Typst", "Unix Assembly", "UrWeb", "V", "Valve Data Format", "VBA", "vCard", "Velocity Template Language", "Vim Help File", "Vim Script", "Vim Snippet", "Visual Basic .NET", "Visual Basic 6.0", "WDL", "WebAssembly", "WebAssembly Interface Type", "WebVTT", "Wget Config", "Wikitext", "Wolfram Language", "Wren", "X BitMap", "X PixMap", "X10", "xBase", "XML", "XSLT", "YAML", "YASnippet", "Zeek"] as const;
-const TYPES_WITH_CODEMIRROR_MIME_TYPE_1 = ["AGS Script", "ALGOL", "Alpine Abuild", "AngelScript", "Ant Build System", "Apex", "APL", "ASN.1", "ASP.NET", "Astro", "Asymptote", "B4X", "Beef", "BibTeX", "Bikeshed", "Bluespec", "Bluespec BH", "Brainfuck", "C", "C#", "C++", "C2hs Haskell", "C3", "Cabal Config", "CameLIGO", "Cangjie", "Carbon", "ChucK", "Clojure", "Closure Templates", "Cloud Firestore Security Rules", "CMake", "COBOL", "CoffeeScript", "COLLADA", "Common Lisp", "Common Workflow Language", "Component Pascal", "Crystal", "CSON", "CSS", "Cuda", "Cycript", "Cypher", "Cython", "D", "Dart", "DenizenScript", "Dhall", "Diff"] as const;
-const TYPES_WITH_CODEMIRROR_MIME_TYPE_2 = ["Dockerfile", "DTrace", "Dylan", "E-mail", "Eagle", "Easybuild", "EBNF", "Ecere Projects", "ECL", "Ecmarkup", "EditorConfig", "Edje Data Collection", "edn", "Eiffel", "EJS", "Elm", "Emacs Lisp", "EmberScript", "EQ", "Erlang", "F#", "Factor", "Forth", "Fortran", "Fortran Free Form", "FreeBASIC", "Game Maker Language", "GCC Machine Description", "Genshi", "Gentoo Ebuild", "Gentoo Eclass", "Gherkin", "Git Attributes", "Git Config", "Glyph", "GN", "Go", "Grammatical Framework", "Groovy", "Groovy Server Pages", "GSC", "Hack", "Haml", "Haskell", "Haxe", "HCL", "HIP", "HolyC", "HTML", "HTML+ECR"] as const;
-const TYPES_WITH_CODEMIRROR_MIME_TYPE_3 = ["HTML+EEX", "HTML+ERB", "HTML+PHP", "HTML+Razor", "HTTP", "HXML", "iCalendar", "IDL", "Ignore List", "INI", "IRC log", "ISPC", "Janet", "Java", "Java Properties", "Java Server Pages", "JavaScript", "JavaScript+ERB", "Jest Snapshot", "JetBrains MPS", "Jinja", "JSON", "JSON with Comments", "JSON5", "JSONiq", "JSONLD", "Julia", "Jupyter Notebook", "Kaitai Struct", "KDL", "KiCad Layout", "Kit", "Kotlin", "LabVIEW", "Lark", "Latte", "Less", "LFE", "LigoLANG", "Literate Haskell", "LiveScript", "LookML", "LTspice Symbol", "Lua", "Luau", "M", "Makefile", "Markdown", "Marko", "MATLAB"] as const;
-const TYPES_WITH_CODEMIRROR_MIME_TYPE_4 = ["Maven POM", "Max", "mdsvex", "MDX", "Metal", "MiniYAML", "Mirah", "Modelica", "Mojo", "Monkey C", "MTML", "MUF", "Mustache", "NetLogo", "NewLisp", "Nginx", "Noir", "NSIS", "Nu", "NumPy", "Nushell", "NWScript", "OASv2-json", "OASv2-yaml", "OASv3-json", "OASv3-yaml", "Objective-C", "Objective-C++", "OCaml", "OpenCL", "OpenRC runscript", "Option List", "Oz", "Pascal", "PEG.js", "Perl", "PHP", "Pic", "PigLatin", "PLpgSQL", "PLSQL", "Pod", "PowerShell", "Protocol Buffer", "Public Key", "Pug", "Puppet", "PureScript", "Python", "q"] as const;
-const TYPES_WITH_CODEMIRROR_MIME_TYPE_5 = ["Qt Script", "QuickBASIC", "R", "Raku", "RAML", "RBS", "Reason", "ReasonLIGO", "Record Jar", "ReScript", "reStructuredText", "RMarkdown", "Roff", "Roff Manpage", "Rouge", "RPM Spec", "Ruby", "Rust", "Sage", "SaltStack", "SAS", "Sass", "Scala", "Scheme", "SCSS", "Shell", "ShellCheck Config", "ShellSession", "Sieve", "Simple File Verification", "Slim", "Smalltalk", "Smarty", "Smithy", "Snakemake", "SPARQL", "SQL", "SQLPL", "Squirrel", "SRecode Template", "Standard ML", "Starlark", "StringTemplate", "Stylus", "Svelte", "SVG", "Sway", "Swift", "SWIG", "SystemVerilog"] as const;
-const TYPES_WITH_CODEMIRROR_MIME_TYPE_6 = ["Tcl", "Tcsh", "Teal", "Terra", "Terraform Template", "TeX", "Textile", "TextMate Properties", "TOML", "TSX", "Turtle", "Twig", "TypeScript", "Unified Parallel C", "Unity3D Asset", "Uno", "UnrealScript", "V", "VBA", "VBScript", "vCard", "Velocity Template Language", "Verilog", "VHDL", "Visual Basic .NET", "Visual Basic 6.0", "Volt", "Vue", "WebAssembly", "WebAssembly Interface Type", "WebIDL", "Win32 Message File", "Windows Registry Entries", "wisp", "Wolfram Language", "X BitMap", "X PixMap", "XC", "XML", "XML Property List", "Xonsh", "XPages", "XProc", "XQuery", "XS", "XSLT", "YAML"] as const;
-const TYPES_WITH_CODEMIRROR_MODE_1 = ["AGS Script", "ALGOL", "Alpine Abuild", "AngelScript", "Ant Build System", "Apex", "APL", "ASN.1", "ASP.NET", "Astro", "Asymptote", "B4X", "Beef", "BibTeX", "Bikeshed", "Bluespec", "Bluespec BH", "Brainfuck", "C", "C#", "C++", "C2hs Haskell", "C3", "Cabal Config", "CameLIGO", "Cangjie", "Carbon", "ChucK", "Clojure", "Closure Templates", "Cloud Firestore Security Rules", "CMake", "COBOL", "CoffeeScript", "COLLADA", "Common Lisp", "Common Workflow Language", "Component Pascal", "Crystal", "CSON", "CSS", "Cuda", "Cycript", "Cypher", "Cython", "D", "Dart", "DenizenScript", "Dhall", "Diff"] as const;
-const TYPES_WITH_CODEMIRROR_MODE_2 = ["Dockerfile", "DTrace", "Dylan", "E-mail", "Eagle", "Easybuild", "EBNF", "Ecere Projects", "ECL", "Ecmarkup", "EditorConfig", "Edje Data Collection", "edn", "Eiffel", "EJS", "Elm", "Emacs Lisp", "EmberScript", "EQ", "Erlang", "F#", "Factor", "Forth", "Fortran", "Fortran Free Form", "FreeBASIC", "Game Maker Language", "GCC Machine Description", "Genshi", "Gentoo Ebuild", "Gentoo Eclass", "Gherkin", "Git Attributes", "Git Config", "Glyph", "GN", "Go", "Grammatical Framework", "Groovy", "Groovy Server Pages", "GSC", "Hack", "Haml", "Haskell", "Haxe", "HCL", "HIP", "HolyC", "HTML", "HTML+ECR"] as const;
-const TYPES_WITH_CODEMIRROR_MODE_3 = ["HTML+EEX", "HTML+ERB", "HTML+PHP", "HTML+Razor", "HTTP", "HXML", "iCalendar", "IDL", "Ignore List", "INI", "IRC log", "ISPC", "Janet", "Java", "Java Properties", "Java Server Pages", "JavaScript", "JavaScript+ERB", "Jest Snapshot", "JetBrains MPS", "Jinja", "JSON", "JSON with Comments", "JSON5", "JSONiq", "JSONLD", "Julia", "Jupyter Notebook", "Kaitai Struct", "KDL", "KiCad Layout", "Kit", "Kotlin", "LabVIEW", "Lark", "Latte", "Less", "LFE", "LigoLANG", "Literate Haskell", "LiveScript", "LookML", "LTspice Symbol", "Lua", "Luau", "M", "Makefile", "Markdown", "Marko", "MATLAB"] as const;
-const TYPES_WITH_CODEMIRROR_MODE_4 = ["Maven POM", "Max", "mdsvex", "MDX", "Metal", "MiniYAML", "Mirah", "Modelica", "Mojo", "Monkey C", "MTML", "MUF", "Mustache", "NetLogo", "NewLisp", "Nginx", "Noir", "NSIS", "Nu", "NumPy", "Nushell", "NWScript", "OASv2-json", "OASv2-yaml", "OASv3-json", "OASv3-yaml", "Objective-C", "Objective-C++", "OCaml", "OpenCL", "OpenRC runscript", "Option List", "Oz", "Pascal", "PEG.js", "Perl", "PHP", "Pic", "PigLatin", "PLpgSQL", "PLSQL", "Pod", "PowerShell", "Protocol Buffer", "Public Key", "Pug", "Puppet", "PureScript", "Python", "q"] as const;
-const TYPES_WITH_CODEMIRROR_MODE_5 = ["Qt Script", "QuickBASIC", "R", "Raku", "RAML", "RBS", "Reason", "ReasonLIGO", "Record Jar", "ReScript", "reStructuredText", "RMarkdown", "Roff", "Roff Manpage", "Rouge", "RPM Spec", "Ruby", "Rust", "Sage", "SaltStack", "SAS", "Sass", "Scala", "Scheme", "SCSS", "Shell", "ShellCheck Config", "ShellSession", "Sieve", "Simple File Verification", "Slim", "Smalltalk", "Smarty", "Smithy", "Snakemake", "SPARQL", "SQL", "SQLPL", "Squirrel", "SRecode Template", "Standard ML", "Starlark", "StringTemplate", "Stylus", "Svelte", "SVG", "Sway", "Swift", "SWIG", "SystemVerilog"] as const;
-const TYPES_WITH_CODEMIRROR_MODE_6 = ["Tcl", "Tcsh", "Teal", "Terra", "Terraform Template", "TeX", "Textile", "TextMate Properties", "TOML", "TSX", "Turtle", "Twig", "TypeScript", "Unified Parallel C", "Unity3D Asset", "Uno", "UnrealScript", "V", "VBA", "VBScript", "vCard", "Velocity Template Language", "Verilog", "VHDL", "Visual Basic .NET", "Visual Basic 6.0", "Volt", "Vue", "WebAssembly", "WebAssembly Interface Type", "WebIDL", "Win32 Message File", "Windows Registry Entries", "wisp", "Wolfram Language", "X BitMap", "X PixMap", "XC", "XML", "XML Property List", "Xonsh", "XPages", "XProc", "XQuery", "XS", "XSLT", "YAML"] as const;
-const TYPES_WITH_COLOR_1 = ["1C Enterprise", "2-Dimensional Array", "4D", "ABAP", "ABAP CDS", "ActionScript", "Ada", "Adblock Filter List", "Adobe Font Metrics", "Agda", "AGS Script", "AIDL", "Aiken", "AL", "ALGOL", "Alloy", "Alpine Abuild", "Altium Designer", "AMPL", "AngelScript", "Answer Set Programming", "Ant Build System", "Antlers", "ANTLR", "ApacheConf", "Apex", "API Blueprint", "APL", "Apollo Guidance Computer", "AppleScript", "Arc", "AsciiDoc", "ASP.NET", "AspectJ", "Assembly", "Astro", "Asymptote", "ATS", "Augeas", "AutoHotkey", "AutoIt", "Avro IDL", "Awk", "B (Formal Method)", "B4X", "Ballerina", "BASIC", "Batchfile", "Beef", "Berry"] as const;
-const TYPES_WITH_COLOR_10 = ["PlantUML", "PLpgSQL", "PLSQL", "PogoScript", "Polar", "Portugol", "PostCSS", "PostScript", "POV-Ray SDL", "PowerBuilder", "PowerShell", "Praat", "Prisma", "Processing", "Procfile", "Prolog", "Promela", "Propeller Spin", "Pug", "Puppet", "PureBasic", "PureScript", "Pyret", "Python", "Python console", "Python traceback", "q", "Q#", "QML", "Qt Script", "Quake", "QuakeC", "QuickBASIC", "R", "Racket", "Ragel", "Raku", "RAML", "Rascal", "RAScript", "RBS", "RDoc", "Reason", "ReasonLIGO", "Rebol", "Record Jar", "Red", "Regular Expression", "Ren'Py", "ReScript"] as const;
-const TYPES_WITH_COLOR_11 = ["reStructuredText", "REXX", "Rez", "Ring", "Riot", "RMarkdown", "RobotFramework", "Roc", "Rocq Prover", "Roff", "Roff Manpage", "RON", "ROS Interface", "Rouge", "RouterOS Script", "RPGLE", "Ruby", "RUNOFF", "Rust", "Sail", "SaltStack", "SAS", "Sass", "Scala", "Scaml", "Scenic", "Scheme", "Scilab", "SCSS", "sed", "Self", "ShaderLab", "Shell", "ShellCheck Config", "Shen", "Simple File Verification", "Singularity", "Slang", "Slash", "Slice", "Slim", "Slint", "Smalltalk", "Smarty", "Smithy", "SmPL", "Snakemake", "Solidity", "SourcePawn", "SPARQL"] as const;
-const TYPES_WITH_COLOR_12 = ["SQF", "SQL", "SQLPL", "Squirrel", "SRecode Template", "Stan", "Standard ML", "Starlark", "Stata", "STL", "StringTemplate", "Stylus", "SubRip Text", "SugarSS", "SuperCollider", "SurrealQL", "Survex data", "Svelte", "SVG", "Sway", "Sweave", "Swift", "SystemVerilog", "Tact", "Talon", "Tcl", "Teal", "templ", "Terra", "Terraform Template", "TeX", "TextGrid", "Textile", "TextMate Properties", "Thrift", "TI Program", "TL-Verilog", "TLA", "TMDL", "Toit", "TOML", "Tor Config", "Tree-sitter Query", "TSQL", "TSV", "TSX", "Turing", "Twig", "TXL", "TypeScript"] as const;
-const TYPES_WITH_COLOR_13 = ["TypeSpec", "Typst", "Unified Parallel C", "Unity3D Asset", "Uno", "UnrealScript", "Untyped Plutus Core", "UrWeb", "V", "Vala", "Valve Data Format", "VBA", "VBScript", "vCard", "VCL", "Velocity Template Language", "Vento", "Verilog", "VHDL", "Vim Help File", "Vim Script", "Vim Snippet", "Visual Basic .NET", "Visual Basic 6.0", "Volt", "Vue", "Vyper", "WDL", "Web Ontology Language", "WebAssembly", "WebAssembly Interface Type", "WGSL", "Whiley", "Wikitext", "Windows Registry Entries", "wisp", "Witcher Script", "Wolfram Language", "Wollok", "World of Warcraft Addon Data", "Wren", "X10", "xBase", "XC", "Xmake", "XML", "XML Property List", "Xojo", "Xonsh", "XQuery"] as const;
-const TYPES_WITH_COLOR_14 = ["XSLT", "Xtend", "Yacc", "YAML", "YARA", "YASnippet", "Yul", "ZAP", "ZenScript", "Zephir", "Zig", "ZIL", "Zimpl", "Zmodel"] as const;
-const TYPES_WITH_COLOR_2 = ["BibTeX", "Bicep", "Bikeshed", "Bison", "BitBake", "Blade", "BlitzBasic", "BlitzMax", "Bluespec", "Bluespec BH", "Boo", "Boogie", "BQN", "Brainfuck", "BrighterScript", "Brightscript", "Browserslist", "Bru", "BuildStream", "C", "C#", "C++", "C3", "Cabal Config", "Caddyfile", "Cadence", "Cairo", "Cairo Zero", "CameLIGO", "Cangjie", "CAP CDS", "Cap'n Proto", "Carbon", "Ceylon", "Chapel", "ChucK", "Circom", "Cirru", "Clarion", "Clarity", "Classic ASP", "Clean", "Click", "CLIPS", "Clojure", "Closure Templates", "Cloud Firestore Security Rules", "Clue", "CMake", "CodeQL"] as const;
-const TYPES_WITH_COLOR_3 = ["CoffeeScript", "ColdFusion", "ColdFusion CFC", "COLLADA", "Common Lisp", "Common Workflow Language", "Component Pascal", "Cooklang", "CQL", "crontab", "Crystal", "CSON", "Csound", "Csound Document", "Csound Score", "CSS", "CSV", "Cuda", "CUE", "Curry", "CWeb", "Cylc", "Cypher", "Cython", "D", "D2", "Dafny", "Darcs Patch", "Dart", "Daslang", "DataWeave", "Debian Package Control File", "DenizenScript", "Dhall", "DirectX 3D File", "DM", "Dockerfile", "Dogescript", "Dotenv", "Dune", "Dylan", "E", "Earthly", "Easybuild", "eC", "Ecere Projects", "ECL", "ECLiPSe", "Ecmarkup", "Edge"] as const;
-const TYPES_WITH_COLOR_4 = ["EdgeQL", "EditorConfig", "Eiffel", "EJS", "Elixir", "Elm", "Elvish", "Elvish Transcript", "Emacs Lisp", "EmberScript", "EQ", "Erlang", "Euphoria", "F*", "F#", "Factor", "Fancy", "Fantom", "Faust", "Fennel", "FIGlet Font", "Filebench WML", "FIRRTL", "fish", "FlatBuffers", "Flix", "Fluent", "FLUX", "Forth", "Fortran", "Fortran Free Form", "FreeBASIC", "FreeMarker", "Frege", "Futhark", "G-code", "Game Maker Language", "GAML", "GAMS", "GAP", "GCC Machine Description", "GDScript", "GDShader", "GEDCOM", "Gemfile.lock", "Gemini", "Genero 4gl", "Genero per", "Genie", "Genshi"] as const;
-const TYPES_WITH_COLOR_5 = ["Gentoo Ebuild", "Gentoo Eclass", "Gerber Image", "Gherkin", "Git Attributes", "Git Commit", "Git Config", "Git Revision List", "Gleam", "Glimmer JS", "Glimmer TS", "GLSL", "Glyph", "Gnuplot", "Go", "Go Checksums", "Go Module", "Go Template", "Go Workspace", "Godot Resource", "Golo", "Gosu", "Grace", "Gradle", "Gradle Kotlin DSL", "Grammatical Framework", "GraphQL", "Graphviz (DOT)", "Groovy", "Groovy Server Pages", "GSC", "Hack", "Haml", "Handlebars", "HAProxy", "Harbour", "Hare", "Haskell", "Haxe", "HCL", "HIP", "HiveQL", "HLSL", "HOCON", "HolyC", "hoon", "Hosts File", "HTML", "HTML+ECR", "HTML+EEX"] as const;
-const TYPES_WITH_COLOR_6 = ["HTML+ERB", "HTML+PHP", "HTML+Razor", "HTTP", "Hurl", "HXML", "Hy", "iCalendar", "IDL", "Idris", "Ignore List", "IGOR Pro", "ImageJ Macro", "Imba", "INI", "Inno Setup", "Io", "Ioke", "Isabelle", "Isabelle ROOT", "ISPC", "J", "Jac", "Jai", "Janet", "JAR Manifest", "Jasmin", "Java", "Java Properties", "Java Server Pages", "Java Template Engine", "JavaScript", "JavaScript+ERB", "JCL", "Jest Snapshot", "JetBrains MPS", "JFlex", "Jinja", "Jison", "Jison Lex", "Jolie", "jq", "JSON", "JSON with Comments", "JSON5", "JSONiq", "JSONLD", "Jsonnet", "Julia", "Julia REPL"] as const;
-const TYPES_WITH_COLOR_7 = ["Jupyter Notebook", "Just", "Kaitai Struct", "KakouneScript", "KCL", "KDL", "KerboScript", "KFramework", "KiCad Layout", "KiCad Legacy Layout", "KiCad Schematic", "Koka", "KoLmafia ASH", "Kotlin", "KRL", "kvlang", "LabVIEW", "Lambdapi", "Langium", "Lark", "Lasso", "Latte", "Leo", "Less", "Lex", "LFE", "LigoLANG", "LilyPond", "Liquid", "Liquidsoap", "Literate Agda", "Literate CoffeeScript", "Literate Haskell", "LiveCode Script", "LiveScript", "LLVM", "Logtalk", "LOLCODE", "LookML", "LSL", "Lua", "Luau", "M3U", "Macaulay2", "Makefile", "Mako", "Markdown", "Marko", "Mask", "Mathematical Programming System"] as const;
-const TYPES_WITH_COLOR_8 = ["MATLAB", "Max", "MAXScript", "mcfunction", "mdsvex", "MDX", "Mercury", "Mermaid", "Meson", "Metal", "MeTTa", "MiniYAML", "MiniZinc", "Mint", "Mirah", "mIRC Script", "MLIR", "Modelica", "Modula-2", "Modula-3", "Mojo", "Monkey C", "MoonBit", "MoonScript", "Motoko", "Motorola 68K Assembly", "Move", "MQL4", "MQL5", "MTML", "mupad", "Mustache", "nanorc", "Nasal", "NCL", "Nearley", "Nemerle", "nesC", "NetLinx", "NetLinx+ERB", "NetLogo", "NewLisp", "Nextflow", "Nginx", "Nickel", "Nim", "Nit", "Nix", "NMODL", "Noir"] as const;
-const TYPES_WITH_COLOR_9 = ["NPM Config", "Nu", "NumPy", "Nunjucks", "Nushell", "NWScript", "OASv2-json", "OASv2-yaml", "OASv3-json", "OASv3-yaml", "Objective-C", "Objective-C++", "Objective-J", "ObjectScript", "OCaml", "Odin", "Omgrofl", "OMNeT++ MSG", "OMNeT++ NED", "ooc", "Opal", "Open Policy Agent", "OpenAPI Specification v2", "OpenAPI Specification v3", "OpenCL", "OpenEdge ABL", "OpenQASM", "OpenSCAD", "Option List", "Org", "OverpassQL", "Oxygene", "Oz", "P4", "Pact", "Pan", "Papyrus", "Parrot", "Pascal", "Pawn", "PDDL", "PEG.js", "Pep8", "Perl", "PHP", "PicoLisp", "PigLatin", "Pike", "Pip Requirements", "Pkl"] as const;
-const TYPES_WITH_EXTENSIONS_1 = ["1C Enterprise", "2-Dimensional Array", "4D", "ABAP", "ABAP CDS", "ABNF", "ActionScript", "Ada", "Adblock Filter List", "Adobe Font Metrics", "Agda", "AGS Script", "AIDL", "Aiken", "AL", "ALGOL", "Alloy", "Altium Designer", "AMPL", "AngelScript", "Answer Set Programming", "Antlers", "ANTLR", "ApacheConf", "Apex", "API Blueprint", "APL", "Apollo Guidance Computer", "AppleScript", "Arc", "AsciiDoc", "ASL", "ASN.1", "ASP.NET", "AspectJ", "Assembly", "Astro", "Asymptote", "ATS", "Augeas", "AutoHotkey", "AutoIt", "Avro IDL", "Awk", "B (Formal Method)", "B4X", "Ballerina", "BASIC", "Batchfile", "Beef"] as const;
-const TYPES_WITH_EXTENSIONS_10 = ["NSIS", "Nu", "NumPy", "Nunjucks", "Nushell", "NWScript", "OASv2-json", "OASv2-yaml", "OASv3-json", "OASv3-yaml", "Oberon", "ObjDump", "Object Data Instance Notation", "Objective-C", "Objective-C++", "Objective-J", "ObjectScript", "OCaml", "Odin", "Omgrofl", "OMNeT++ MSG", "OMNeT++ NED", "ooc", "Opa", "Opal", "Open Policy Agent", "OpenCL", "OpenEdge ABL", "OpenQASM", "OpenSCAD", "OpenStep Property List", "OpenType Feature File", "Org", "OverpassQL", "Ox", "Oxygene", "Oz", "P4", "Pact", "Pan", "Papyrus", "Parrot", "Parrot Assembly", "Parrot Internal Representation", "Pascal", "Pawn", "PDDL", "PEG.js", "Pep8", "Perl"] as const;
-const TYPES_WITH_EXTENSIONS_11 = ["PHP", "Pic", "Pickle", "PicoLisp", "PigLatin", "Pike", "Pkl", "PlantUML", "PLpgSQL", "PLSQL", "Pod", "Pod 6", "PogoScript", "Polar", "Pony", "Portugol", "PostCSS", "PostScript", "POV-Ray SDL", "PowerBuilder", "PowerShell", "Praat", "Prisma", "Processing", "Proguard", "Prolog", "Promela", "Propeller Spin", "Protocol Buffer", "Protocol Buffer Text Format", "Public Key", "Pug", "Puppet", "Pure Data", "PureBasic", "PureScript", "Pyret", "Python", "Python traceback", "q", "Q#", "QMake", "QML", "Qt Script", "QuakeC", "QuickBASIC", "R", "Racket", "Ragel", "Raku"] as const;
-const TYPES_WITH_EXTENSIONS_12 = ["RAML", "Rascal", "RAScript", "Raw token data", "RBS", "RDoc", "REALbasic", "Reason", "ReasonLIGO", "Rebol", "Red", "Redcode", "Regular Expression", "Ren'Py", "RenderScript", "ReScript", "reStructuredText", "REXX", "Rez", "Rich Text Format", "Ring", "Riot", "RMarkdown", "RobotFramework", "Roc", "Rocq Prover", "Roff", "Roff Manpage", "RON", "ROS Interface", "Rouge", "RouterOS Script", "RPC", "RPGLE", "RPM Spec", "Ruby", "RUNOFF", "Rust", "Sage", "Sail", "SaltStack", "SAS", "Sass", "Scala", "Scaml", "Scenic", "Scheme", "Scilab", "SCSS", "sed"] as const;
-const TYPES_WITH_EXTENSIONS_13 = ["Self", "SELinux Policy", "ShaderLab", "Shell", "ShellSession", "Shen", "Sieve", "Simple File Verification", "Slang", "Slash", "Slice", "Slim", "Slint", "Smali", "Smalltalk", "Smarty", "Smithy", "SmPL", "SMT", "Snakemake", "Solidity", "SourcePawn", "SPARQL", "Spline Font Database", "SQF", "SQL", "SQLPL", "Squirrel", "SRecode Template", "Stan", "Standard ML", "STAR", "Starlark", "Stata", "STL", "STON", "StringTemplate", "Stylus", "SubRip Text", "SugarSS", "SuperCollider", "SurrealQL", "Survex data", "Svelte", "SVG", "Sway", "Sweave", "Swift", "SWIG", "SystemVerilog"] as const;
-const TYPES_WITH_EXTENSIONS_14 = ["Tact", "Talon", "Tcl", "Tcsh", "Tea", "Teal", "templ", "Terra", "Terraform Template", "TeX", "Texinfo", "Text", "TextGrid", "Textile", "Thrift", "TI Program", "TL-Verilog", "TLA", "TMDL", "Toit", "TOML", "Tree-sitter Query", "TSPLIB data", "TSQL", "TSV", "TSX", "Turing", "Turtle", "Twig", "TXL", "Type Language", "TypeScript", "TypeSpec", "Typst", "Unified Parallel C", "Unity3D Asset", "Unix Assembly", "Uno", "UnrealScript", "Untyped Plutus Core", "UrWeb", "V", "Vala", "Valve Data Format", "VBA", "VBScript", "vCard", "VCL", "Velocity Template Language", "Vento"] as const;
-const TYPES_WITH_EXTENSIONS_15 = ["Verilog", "VHDL", "Vim Help File", "Vim Script", "Vim Snippet", "Visual Basic .NET", "Visual Basic 6.0", "Volt", "Vue", "Vyper", "Wavefront Material", "Wavefront Object", "WDL", "Web Ontology Language", "WebAssembly", "WebAssembly Interface Type", "WebIDL", "WebVTT", "WGSL", "Whiley", "Wikitext", "Win32 Message File", "Windows Registry Entries", "wisp", "Witcher Script", "Wolfram Language", "Wollok", "World of Warcraft Addon Data", "Wren", "X BitMap", "X PixMap", "X10", "xBase", "XC", "XML", "XML Property List", "Xojo", "Xonsh", "XPages", "XProc", "XQuery", "XS", "XSLT", "Xtend", "Yacc", "YAML", "YANG", "YARA", "YASnippet", "Yul"] as const;
-const TYPES_WITH_EXTENSIONS_16 = ["ZAP", "Zeek", "ZenScript", "Zephir", "Zig", "ZIL", "Zimpl", "Zmodel"] as const;
-const TYPES_WITH_EXTENSIONS_2 = ["Befunge", "Berry", "BibTeX", "BibTeX Style", "Bicep", "Bikeshed", "Bison", "BitBake", "Blade", "BlitzBasic", "BlitzMax", "Bluespec", "Bluespec BH", "Boo", "Boogie", "BQN", "Brainfuck", "BrighterScript", "Brightscript", "Bru", "BuildStream", "C", "C-ObjDump", "C#", "C++", "C2hs Haskell", "C3", "Cabal Config", "Caddyfile", "Cadence", "Cairo", "Cairo Zero", "CameLIGO", "Cangjie", "CAP CDS", "Cap'n Proto", "Carbon", "CartoCSS", "Ceylon", "Chapel", "Charity", "Checksums", "ChucK", "CIL", "Circom", "Cirru", "Clarion", "Clarity", "Classic ASP", "Clean"] as const;
-const TYPES_WITH_EXTENSIONS_3 = ["Click", "CLIPS", "Clojure", "Closure Templates", "Clue", "CMake", "COBOL", "CodeQL", "CoffeeScript", "ColdFusion", "ColdFusion CFC", "COLLADA", "Common Lisp", "Common Workflow Language", "Component Pascal", "CoNLL-U", "Cooklang", "Cool", "Cpp-ObjDump", "CQL", "Creole", "Crystal", "CSON", "Csound", "Csound Document", "Csound Score", "CSS", "CSV", "Cuda", "CUE", "Cue Sheet", "Curry", "CWeb", "Cycript", "Cylc", "Cypher", "Cython", "D", "D-ObjDump", "D2", "Dafny", "Darcs Patch", "Dart", "Daslang", "DataWeave", "Debian Package Control File", "DenizenScript", "desktop", "Dhall", "Diff"] as const;
-const TYPES_WITH_EXTENSIONS_4 = ["DIGITAL Command Language", "dircolors", "DirectX 3D File", "DM", "DNS Zone", "Dockerfile", "Dogescript", "Dotenv", "DTrace", "Dylan", "E", "E-mail", "Eagle", "Easybuild", "EBNF", "eC", "Ecere Projects", "ECL", "ECLiPSe", "Ecmarkup", "Edge", "EdgeQL", "EditorConfig", "Edje Data Collection", "edn", "Eiffel", "EJS", "Elixir", "Elm", "Elvish", "Emacs Lisp", "EmberScript", "EQ", "Erlang", "Euphoria", "F*", "F#", "Factor", "Fancy", "Fantom", "Faust", "Fennel", "FIGlet Font", "Filebench WML", "Filterscript", "FIRRTL", "fish", "FlatBuffers", "Flix", "Fluent"] as const;
-const TYPES_WITH_EXTENSIONS_5 = ["FLUX", "Formatted", "Forth", "Fortran", "Fortran Free Form", "FreeBASIC", "FreeMarker", "Frege", "Futhark", "G-code", "Game Maker Language", "GAML", "GAMS", "GAP", "GCC Machine Description", "GDB", "GDScript", "GDShader", "GEDCOM", "Gemini", "Genero 4gl", "Genero per", "Genie", "Genshi", "Gentoo Ebuild", "Gentoo Eclass", "Gerber Image", "Gettext Catalog", "Gherkin", "Git Config", "Gleam", "Glimmer JS", "Glimmer TS", "GLSL", "Glyph", "Glyph Bitmap Distribution Format", "GN", "Gnuplot", "Go", "Go Template", "Godot Resource", "Golo", "Gosu", "Grace", "Gradle", "Gradle Kotlin DSL", "Grammatical Framework", "Graph Modeling Language", "GraphQL", "Graphviz (DOT)"] as const;
-const TYPES_WITH_EXTENSIONS_6 = ["Groovy", "Groovy Server Pages", "GSC", "Hack", "Haml", "Handlebars", "HAProxy", "Harbour", "Hare", "Haskell", "Haxe", "HCL", "HIP", "HiveQL", "HLSL", "HOCON", "HolyC", "hoon", "HTML", "HTML+ECR", "HTML+EEX", "HTML+ERB", "HTML+PHP", "HTML+Razor", "HTTP", "Hurl", "HXML", "Hy", "HyPhy", "iCalendar", "IDL", "Idris", "Ignore List", "IGOR Pro", "ImageJ Macro", "Imba", "Inform 7", "INI", "Ink", "Inno Setup", "Io", "Ioke", "IRC log", "Isabelle", "ISPC", "J", "Jac", "Jai", "Janet", "Jasmin"] as const;
-const TYPES_WITH_EXTENSIONS_7 = ["Java", "Java Properties", "Java Server Pages", "Java Template Engine", "JavaScript", "JavaScript+ERB", "JCL", "Jest Snapshot", "JetBrains MPS", "JFlex", "Jinja", "Jison", "Jison Lex", "Jolie", "jq", "JSON", "JSON with Comments", "JSON5", "JSONiq", "JSONLD", "Jsonnet", "Julia", "Jupyter Notebook", "Just", "Kaitai Struct", "KakouneScript", "KCL", "KDL", "KerboScript", "KFramework", "KiCad Layout", "KiCad Legacy Layout", "KiCad Schematic", "Kickstart", "Kit", "Koka", "KoLmafia ASH", "Kotlin", "KRL", "Kusto", "kvlang", "LabVIEW", "Lambdapi", "Langium", "Lark", "Lasso", "Latte", "Lean", "Lean 4", "Leo"] as const;
-const TYPES_WITH_EXTENSIONS_8 = ["Less", "Lex", "LFE", "LigoLANG", "LilyPond", "Limbo", "Linear Programming", "Linker Script", "Linux Kernel Module", "Liquid", "Liquidsoap", "Literate Agda", "Literate CoffeeScript", "Literate Haskell", "LiveCode Script", "LiveScript", "LLVM", "Logos", "Logtalk", "LOLCODE", "LookML", "LoomScript", "LSL", "LTspice Symbol", "Lua", "Luau", "M", "M3U", "M4", "M4Sugar", "Macaulay2", "Makefile", "Mako", "Markdown", "Marko", "Mask", "Mathematical Programming System", "MATLAB", "Max", "MAXScript", "mcfunction", "mdsvex", "MDX", "Mercury", "Mermaid", "Metal", "MeTTa", "Microsoft Developer Studio Project", "Microsoft Visual Studio Solution", "MiniD"] as const;
-const TYPES_WITH_EXTENSIONS_9 = ["MiniYAML", "MiniZinc", "MiniZinc Data", "Mint", "Mirah", "mIRC Script", "MLIR", "Modelica", "Modula-2", "Modula-3", "Module Management System", "Mojo", "Monkey", "Monkey C", "Moocode", "MoonBit", "MoonScript", "Motoko", "Motorola 68K Assembly", "Move", "MQL4", "MQL5", "MTML", "MUF", "mupad", "Muse", "Mustache", "Myghty", "nanorc", "Nasal", "NASL", "NCL", "Nearley", "Nemerle", "NEON", "nesC", "NetLinx", "NetLinx+ERB", "NetLogo", "NewLisp", "Nextflow", "Nginx", "Nickel", "Nim", "Ninja", "Nit", "Nix", "NL", "NMODL", "Noir"] as const;
-const TYPES_WITH_FILENAMES_1 = ["Alpine Abuild", "Ant Build System", "ApacheConf", "Batchfile", "Browserslist", "Cabal Config", "Caddyfile", "Checksums", "Clojure", "Cloud Firestore Security Rules", "CMake", "CODEOWNERS", "CoffeeScript", "crontab", "cURL Config", "Cylc", "dircolors", "Dockerfile", "Dotenv", "Dune", "Earthly", "EditorConfig", "Elixir", "Emacs Lisp", "Erlang", "Factor", "Fancy", "Gemfile.lock", "Git Attributes", "Git Commit", "Git Config", "Git Revision List", "GN", "Go Checksums", "Go Module", "Go Template", "Go Workspace", "Godot Resource", "Groovy", "HAProxy", "HOCON", "Hosts File", "Ignore List", "INI", "Isabelle ROOT", "JAR Manifest", "JavaScript", "JSON", "JSON with Comments", "Jupyter Notebook"] as const;
-const TYPES_WITH_FILENAMES_2 = ["Just", "KakouneScript", "KCL", "KiCad Layout", "Lex", "Linker Script", "LiveScript", "Lua", "M4Sugar", "Makefile", "Markdown", "Maven POM", "Meson", "Module Management System", "nanorc", "Nextflow", "Nginx", "Nim", "NPM Config", "Nu", "Option List", "Perl", "PHP", "Pip Requirements", "Procfile", "Puppet", "Python", "Qt Script", "Quake", "R", "Readline Config", "Record Jar", "Redirect Rules", "robots.txt", "Roff", "Ruby", "SELinux Policy", "Shell", "ShellCheck Config", "Singularity", "Snakemake", "Soong", "SSH Config", "Starlark", "Tcl", "Text", "TextMate Properties", "TOML", "Tor Config", "Vim Script"] as const;
-const TYPES_WITH_FILENAMES_3 = ["Wget Config", "X Font Directory Index", "XCompose", "Xmake", "XML", "YAML"] as const;
-const TYPES_WITH_GROUP_1 = ["Alpine Abuild", "Apollo Guidance Computer", "BibTeX", "Bison", "Bluespec BH", "C2hs Haskell", "Cairo", "Cairo Zero", "CameLIGO", "ColdFusion CFC", "cURL Config", "Cylc", "Easybuild", "Ecere Projects", "ECLiPSe", "Ecmarkup", "EditorConfig", "Elvish Transcript", "Filterscript", "fish", "Fortran", "Fortran Free Form", "Gentoo Ebuild", "Gentoo Eclass", "Git Config", "Glimmer JS", "Glimmer TS", "Gradle Kotlin DSL", "Groovy Server Pages", "HTML+ECR", "HTML+EEX", "HTML+ERB", "HTML+PHP", "HTML+Razor", "Isabelle ROOT", "Java Server Pages", "Java Template Engine", "JavaScript+ERB", "JFlex", "Jison", "Jison Lex", "JSON with Comments", "Julia REPL", "Lean 4", "LigoLANG", "Literate Agda", "Literate CoffeeScript", "Literate Haskell", "M4Sugar", "Maven POM"] as const;
-const TYPES_WITH_GROUP_2 = ["Motorola 68K Assembly", "MUF", "nanorc", "NPM Config", "NumPy", "OASv2-json", "OASv2-yaml", "OASv3-json", "OASv3-yaml", "OpenCL", "OpenRC runscript", "Parrot Assembly", "Parrot Internal Representation", "Pic", "PostCSS", "Python console", "Python traceback", "RBS", "Readline Config", "ReasonLIGO", "Roff Manpage", "Simple File Verification", "Snakemake", "SSH Config", "STON", "Tcsh", "Terraform Template", "TSX", "Unified Parallel C", "Unix Assembly", "Wget Config", "X BitMap", "X PixMap", "XML Property List"] as const;
-const TYPES_WITH_INTERPRETERS_1 = ["AIDL", "Answer Set Programming", "APL", "AppleScript", "Asymptote", "Awk", "Boogie", "C", "Clojure", "CoffeeScript", "Common Lisp", "Common Workflow Language", "Crystal", "Dafny", "Dart", "DTrace", "E", "Elixir", "Elvish", "Erlang", "Euphoria", "Fennel", "fish", "Gerber Image", "GN", "Gnuplot", "Groovy", "Haskell", "Hy", "Io", "Ioke", "J", "Janet", "JavaScript", "Jolie", "jq", "Julia", "Koka", "LSL", "Lua", "Luau", "Macaulay2", "Makefile", "Mercury", "MoonScript", "NewLisp", "Nextflow", "Nu", "Nushell", "OCaml"] as const;
-const TYPES_WITH_INTERPRETERS_2 = ["OpenRC runscript", "Parrot Assembly", "Parrot Internal Representation", "Pascal", "Perl", "PHP", "PicoLisp", "Pike", "Pkl", "Pod", "Pod 6", "PowerShell", "Prolog", "Python", "QMake", "R", "Racket", "Raku", "ReScript", "REXX", "RouterOS Script", "Ruby", "Rust", "Scala", "Scenic", "Scheme", "sed", "Shell", "SMT", "SuperCollider", "Tcl", "Tcsh", "Teal", "Terra", "Texinfo", "TypeScript", "Wolfram Language"] as const;
-const TYPES_WITH_LANGUAGE_ID_1 = ["1C Enterprise", "2-Dimensional Array", "4D", "ABAP", "ABAP CDS", "ABNF", "ActionScript", "Ada", "Adblock Filter List", "Adobe Font Metrics", "Agda", "AGS Script", "AIDL", "Aiken", "AL", "ALGOL", "Alloy", "Alpine Abuild", "Altium Designer", "AMPL", "AngelScript", "Answer Set Programming", "Ant Build System", "Antlers", "ANTLR", "ApacheConf", "Apex", "API Blueprint", "APL", "Apollo Guidance Computer", "AppleScript", "Arc", "AsciiDoc", "ASL", "ASN.1", "ASP.NET", "AspectJ", "Assembly", "Astro", "Asymptote", "ATS", "Augeas", "AutoHotkey", "AutoIt", "Avro IDL", "Awk", "B (Formal Method)", "B4X", "Ballerina", "BASIC"] as const;
-const TYPES_WITH_LANGUAGE_ID_10 = ["Myghty", "nanorc", "Nasal", "NASL", "NCL", "Nearley", "Nemerle", "NEON", "nesC", "NetLinx", "NetLinx+ERB", "NetLogo", "NewLisp", "Nextflow", "Nginx", "Nickel", "Nim", "Ninja", "Nit", "Nix", "NL", "NMODL", "Noir", "NPM Config", "NSIS", "Nu", "NumPy", "Nunjucks", "Nushell", "NWScript", "OASv2-json", "OASv2-yaml", "OASv3-json", "OASv3-yaml", "Oberon", "ObjDump", "Object Data Instance Notation", "Objective-C", "Objective-C++", "Objective-J", "ObjectScript", "OCaml", "Odin", "Omgrofl", "OMNeT++ MSG", "OMNeT++ NED", "ooc", "Opa", "Opal", "Open Policy Agent"] as const;
-const TYPES_WITH_LANGUAGE_ID_11 = ["OpenAPI Specification v2", "OpenAPI Specification v3", "OpenCL", "OpenEdge ABL", "OpenQASM", "OpenRC runscript", "OpenSCAD", "OpenStep Property List", "OpenType Feature File", "Option List", "Org", "OverpassQL", "Ox", "Oxygene", "Oz", "P4", "Pact", "Pan", "Papyrus", "Parrot", "Parrot Assembly", "Parrot Internal Representation", "Pascal", "Pawn", "PDDL", "PEG.js", "Pep8", "Perl", "PHP", "Pic", "Pickle", "PicoLisp", "PigLatin", "Pike", "Pip Requirements", "Pkl", "PlantUML", "PLpgSQL", "PLSQL", "Pod", "Pod 6", "PogoScript", "Polar", "Pony", "Portugol", "PostCSS", "PostScript", "POV-Ray SDL", "PowerBuilder", "PowerShell"] as const;
-const TYPES_WITH_LANGUAGE_ID_12 = ["Praat", "Prisma", "Processing", "Procfile", "Proguard", "Prolog", "Promela", "Propeller Spin", "Protocol Buffer", "Protocol Buffer Text Format", "Public Key", "Pug", "Puppet", "Pure Data", "PureBasic", "PureScript", "Pyret", "Python", "Python console", "Python traceback", "q", "Q#", "QMake", "QML", "Qt Script", "Quake", "QuakeC", "QuickBASIC", "R", "Racket", "Ragel", "Raku", "RAML", "Rascal", "RAScript", "Raw token data", "RBS", "RDoc", "Readline Config", "REALbasic", "Reason", "ReasonLIGO", "Rebol", "Record Jar", "Red", "Redcode", "Redirect Rules", "Regular Expression", "Ren'Py", "RenderScript"] as const;
-const TYPES_WITH_LANGUAGE_ID_13 = ["ReScript", "reStructuredText", "REXX", "Rez", "Rich Text Format", "Ring", "Riot", "RMarkdown", "RobotFramework", "robots.txt", "Roc", "Rocq Prover", "Roff", "Roff Manpage", "RON", "ROS Interface", "Rouge", "RouterOS Script", "RPC", "RPGLE", "RPM Spec", "Ruby", "RUNOFF", "Rust", "Sage", "Sail", "SaltStack", "SAS", "Sass", "Scala", "Scaml", "Scenic", "Scheme", "Scilab", "SCSS", "sed", "Self", "SELinux Policy", "ShaderLab", "Shell", "ShellCheck Config", "ShellSession", "Shen", "Sieve", "Simple File Verification", "Singularity", "Slang", "Slash", "Slice", "Slim"] as const;
-const TYPES_WITH_LANGUAGE_ID_14 = ["Slint", "Smali", "Smalltalk", "Smarty", "Smithy", "SmPL", "SMT", "Snakemake", "Solidity", "Soong", "SourcePawn", "SPARQL", "Spline Font Database", "SQF", "SQL", "SQLPL", "Squirrel", "SRecode Template", "SSH Config", "Stan", "Standard ML", "STAR", "Starlark", "Stata", "STL", "STON", "StringTemplate", "Stylus", "SubRip Text", "SugarSS", "SuperCollider", "SurrealQL", "Survex data", "Svelte", "SVG", "Sway", "Sweave", "Swift", "SWIG", "SystemVerilog", "Tact", "Talon", "Tcl", "Tcsh", "Tea", "Teal", "templ", "Terra", "Terraform Template", "TeX"] as const;
-const TYPES_WITH_LANGUAGE_ID_15 = ["Texinfo", "Text", "TextGrid", "Textile", "TextMate Properties", "Thrift", "TI Program", "TL-Verilog", "TLA", "TMDL", "Toit", "TOML", "Tor Config", "Tree-sitter Query", "TSPLIB data", "TSQL", "TSV", "TSX", "Turing", "Turtle", "Twig", "TXL", "Type Language", "TypeScript", "TypeSpec", "Typst", "Unified Parallel C", "Unity3D Asset", "Unix Assembly", "Uno", "UnrealScript", "Untyped Plutus Core", "UrWeb", "V", "Vala", "Valve Data Format", "VBA", "VBScript", "vCard", "VCL", "Velocity Template Language", "Vento", "Verilog", "VHDL", "Vim Help File", "Vim Script", "Vim Snippet", "Visual Basic .NET", "Visual Basic 6.0", "Volt"] as const;
-const TYPES_WITH_LANGUAGE_ID_16 = ["Vue", "Vyper", "Wavefront Material", "Wavefront Object", "WDL", "Web Ontology Language", "WebAssembly", "WebAssembly Interface Type", "WebIDL", "WebVTT", "Wget Config", "WGSL", "Whiley", "Wikitext", "Win32 Message File", "Windows Registry Entries", "wisp", "Witcher Script", "Wolfram Language", "Wollok", "World of Warcraft Addon Data", "Wren", "X BitMap", "X Font Directory Index", "X PixMap", "X10", "xBase", "XC", "XCompose", "Xmake", "XML", "XML Property List", "Xojo", "Xonsh", "XPages", "XProc", "XQuery", "XS", "XSLT", "Xtend", "Yacc", "YAML", "YANG", "YARA", "YASnippet", "Yul", "ZAP", "Zeek", "ZenScript", "Zephir"] as const;
-const TYPES_WITH_LANGUAGE_ID_17 = ["Zig", "ZIL", "Zimpl", "Zmodel"] as const;
-const TYPES_WITH_LANGUAGE_ID_2 = ["Batchfile", "Beef", "Befunge", "Berry", "BibTeX", "BibTeX Style", "Bicep", "Bikeshed", "Bison", "BitBake", "Blade", "BlitzBasic", "BlitzMax", "Bluespec", "Bluespec BH", "Boo", "Boogie", "BQN", "Brainfuck", "BrighterScript", "Brightscript", "Browserslist", "Bru", "BuildStream", "C", "C-ObjDump", "C#", "C++", "C2hs Haskell", "C3", "Cabal Config", "Caddyfile", "Cadence", "Cairo", "Cairo Zero", "CameLIGO", "Cangjie", "CAP CDS", "Cap'n Proto", "Carbon", "CartoCSS", "Ceylon", "Chapel", "Charity", "Checksums", "ChucK", "CIL", "Circom", "Cirru", "Clarion"] as const;
-const TYPES_WITH_LANGUAGE_ID_3 = ["Clarity", "Classic ASP", "Clean", "Click", "CLIPS", "Clojure", "Closure Templates", "Cloud Firestore Security Rules", "Clue", "CMake", "COBOL", "CODEOWNERS", "CodeQL", "CoffeeScript", "ColdFusion", "ColdFusion CFC", "COLLADA", "Common Lisp", "Common Workflow Language", "Component Pascal", "CoNLL-U", "Cooklang", "Cool", "Cpp-ObjDump", "CQL", "Creole", "crontab", "Crystal", "CSON", "Csound", "Csound Document", "Csound Score", "CSS", "CSV", "Cuda", "CUE", "Cue Sheet", "cURL Config", "Curry", "CWeb", "Cycript", "Cylc", "Cypher", "Cython", "D", "D-ObjDump", "D2", "Dafny", "Darcs Patch", "Dart"] as const;
-const TYPES_WITH_LANGUAGE_ID_4 = ["Daslang", "DataWeave", "Debian Package Control File", "DenizenScript", "desktop", "Dhall", "Diff", "DIGITAL Command Language", "dircolors", "DirectX 3D File", "DM", "DNS Zone", "Dockerfile", "Dogescript", "Dotenv", "DTrace", "Dune", "Dylan", "E", "E-mail", "Eagle", "Earthly", "Easybuild", "EBNF", "eC", "Ecere Projects", "ECL", "ECLiPSe", "Ecmarkup", "Edge", "EdgeQL", "EditorConfig", "Edje Data Collection", "edn", "Eiffel", "EJS", "Elixir", "Elm", "Elvish", "Elvish Transcript", "Emacs Lisp", "EmberScript", "EQ", "Erlang", "Euphoria", "F*", "F#", "Factor", "Fancy", "Fantom"] as const;
-const TYPES_WITH_LANGUAGE_ID_5 = ["Faust", "Fennel", "FIGlet Font", "Filebench WML", "Filterscript", "FIRRTL", "fish", "FlatBuffers", "Flix", "Fluent", "FLUX", "Formatted", "Forth", "Fortran", "Fortran Free Form", "FreeBASIC", "FreeMarker", "Frege", "Futhark", "G-code", "Game Maker Language", "GAML", "GAMS", "GAP", "GCC Machine Description", "GDB", "GDScript", "GDShader", "GEDCOM", "Gemfile.lock", "Gemini", "Genero 4gl", "Genero per", "Genie", "Genshi", "Gentoo Ebuild", "Gentoo Eclass", "Gerber Image", "Gettext Catalog", "Gherkin", "Git Attributes", "Git Commit", "Git Config", "Git Revision List", "Gleam", "Glimmer JS", "Glimmer TS", "GLSL", "Glyph", "Glyph Bitmap Distribution Format"] as const;
-const TYPES_WITH_LANGUAGE_ID_6 = ["GN", "Gnuplot", "Go", "Go Checksums", "Go Module", "Go Template", "Go Workspace", "Godot Resource", "Golo", "Gosu", "Grace", "Gradle", "Gradle Kotlin DSL", "Grammatical Framework", "Graph Modeling Language", "GraphQL", "Graphviz (DOT)", "Groovy", "Groovy Server Pages", "GSC", "Hack", "Haml", "Handlebars", "HAProxy", "Harbour", "Hare", "Haskell", "Haxe", "HCL", "HIP", "HiveQL", "HLSL", "HOCON", "HolyC", "hoon", "Hosts File", "HTML", "HTML+ECR", "HTML+EEX", "HTML+ERB", "HTML+PHP", "HTML+Razor", "HTTP", "Hurl", "HXML", "Hy", "HyPhy", "iCalendar", "IDL", "Idris"] as const;
-const TYPES_WITH_LANGUAGE_ID_7 = ["Ignore List", "IGOR Pro", "ImageJ Macro", "Imba", "Inform 7", "INI", "Ink", "Inno Setup", "Io", "Ioke", "IRC log", "Isabelle", "Isabelle ROOT", "ISPC", "J", "Jac", "Jai", "Janet", "JAR Manifest", "Jasmin", "Java", "Java Properties", "Java Server Pages", "Java Template Engine", "JavaScript", "JavaScript+ERB", "JCL", "Jest Snapshot", "JetBrains MPS", "JFlex", "Jinja", "Jison", "Jison Lex", "Jolie", "jq", "JSON", "JSON with Comments", "JSON5", "JSONiq", "JSONLD", "Jsonnet", "Julia", "Julia REPL", "Jupyter Notebook", "Just", "Kaitai Struct", "KakouneScript", "KCL", "KDL", "KerboScript"] as const;
-const TYPES_WITH_LANGUAGE_ID_8 = ["KFramework", "KiCad Layout", "KiCad Legacy Layout", "KiCad Schematic", "Kickstart", "Kit", "Koka", "KoLmafia ASH", "Kotlin", "KRL", "Kusto", "kvlang", "LabVIEW", "Lambdapi", "Langium", "Lark", "Lasso", "Latte", "Lean", "Lean 4", "Leo", "Less", "Lex", "LFE", "LigoLANG", "LilyPond", "Limbo", "Linear Programming", "Linker Script", "Linux Kernel Module", "Liquid", "Liquidsoap", "Literate Agda", "Literate CoffeeScript", "Literate Haskell", "LiveCode Script", "LiveScript", "LLVM", "Logos", "Logtalk", "LOLCODE", "LookML", "LoomScript", "LSL", "LTspice Symbol", "Lua", "Luau", "M", "M3U", "M4"] as const;
-const TYPES_WITH_LANGUAGE_ID_9 = ["M4Sugar", "Macaulay2", "Makefile", "Mako", "Markdown", "Marko", "Mask", "Mathematical Programming System", "MATLAB", "Maven POM", "Max", "MAXScript", "mcfunction", "mdsvex", "MDX", "Mercury", "Mermaid", "Meson", "Metal", "MeTTa", "Microsoft Developer Studio Project", "Microsoft Visual Studio Solution", "MiniD", "MiniYAML", "MiniZinc", "MiniZinc Data", "Mint", "Mirah", "mIRC Script", "MLIR", "Modelica", "Modula-2", "Modula-3", "Module Management System", "Mojo", "Monkey", "Monkey C", "Moocode", "MoonBit", "MoonScript", "Motoko", "Motorola 68K Assembly", "Move", "MQL4", "MQL5", "MTML", "MUF", "mupad", "Muse", "Mustache"] as const;
-const TYPES_WITH_NAME_1 = ["1C Enterprise", "2-Dimensional Array", "4D", "ABAP", "ABAP CDS", "ABNF", "ActionScript", "Ada", "Adblock Filter List", "Adobe Font Metrics", "Agda", "AGS Script", "AIDL", "Aiken", "AL", "ALGOL", "Alloy", "Alpine Abuild", "Altium Designer", "AMPL", "AngelScript", "Answer Set Programming", "Ant Build System", "Antlers", "ANTLR", "ApacheConf", "Apex", "API Blueprint", "APL", "Apollo Guidance Computer", "AppleScript", "Arc", "AsciiDoc", "ASL", "ASN.1", "ASP.NET", "AspectJ", "Assembly", "Astro", "Asymptote", "ATS", "Augeas", "AutoHotkey", "AutoIt", "Avro IDL", "Awk", "B (Formal Method)", "B4X", "Ballerina", "BASIC"] as const;
-const TYPES_WITH_NAME_10 = ["Myghty", "nanorc", "Nasal", "NASL", "NCL", "Nearley", "Nemerle", "NEON", "nesC", "NetLinx", "NetLinx+ERB", "NetLogo", "NewLisp", "Nextflow", "Nginx", "Nickel", "Nim", "Ninja", "Nit", "Nix", "NL", "NMODL", "Noir", "NPM Config", "NSIS", "Nu", "NumPy", "Nunjucks", "Nushell", "NWScript", "OASv2-json", "OASv2-yaml", "OASv3-json", "OASv3-yaml", "Oberon", "ObjDump", "Object Data Instance Notation", "Objective-C", "Objective-C++", "Objective-J", "ObjectScript", "OCaml", "Odin", "Omgrofl", "OMNeT++ MSG", "OMNeT++ NED", "ooc", "Opa", "Opal", "Open Policy Agent"] as const;
-const TYPES_WITH_NAME_11 = ["OpenAPI Specification v2", "OpenAPI Specification v3", "OpenCL", "OpenEdge ABL", "OpenQASM", "OpenRC runscript", "OpenSCAD", "OpenStep Property List", "OpenType Feature File", "Option List", "Org", "OverpassQL", "Ox", "Oxygene", "Oz", "P4", "Pact", "Pan", "Papyrus", "Parrot", "Parrot Assembly", "Parrot Internal Representation", "Pascal", "Pawn", "PDDL", "PEG.js", "Pep8", "Perl", "PHP", "Pic", "Pickle", "PicoLisp", "PigLatin", "Pike", "Pip Requirements", "Pkl", "PlantUML", "PLpgSQL", "PLSQL", "Pod", "Pod 6", "PogoScript", "Polar", "Pony", "Portugol", "PostCSS", "PostScript", "POV-Ray SDL", "PowerBuilder", "PowerShell"] as const;
-const TYPES_WITH_NAME_12 = ["Praat", "Prisma", "Processing", "Procfile", "Proguard", "Prolog", "Promela", "Propeller Spin", "Protocol Buffer", "Protocol Buffer Text Format", "Public Key", "Pug", "Puppet", "Pure Data", "PureBasic", "PureScript", "Pyret", "Python", "Python console", "Python traceback", "q", "Q#", "QMake", "QML", "Qt Script", "Quake", "QuakeC", "QuickBASIC", "R", "Racket", "Ragel", "Raku", "RAML", "Rascal", "RAScript", "Raw token data", "RBS", "RDoc", "Readline Config", "REALbasic", "Reason", "ReasonLIGO", "Rebol", "Record Jar", "Red", "Redcode", "Redirect Rules", "Regular Expression", "Ren'Py", "RenderScript"] as const;
-const TYPES_WITH_NAME_13 = ["ReScript", "reStructuredText", "REXX", "Rez", "Rich Text Format", "Ring", "Riot", "RMarkdown", "RobotFramework", "robots.txt", "Roc", "Rocq Prover", "Roff", "Roff Manpage", "RON", "ROS Interface", "Rouge", "RouterOS Script", "RPC", "RPGLE", "RPM Spec", "Ruby", "RUNOFF", "Rust", "Sage", "Sail", "SaltStack", "SAS", "Sass", "Scala", "Scaml", "Scenic", "Scheme", "Scilab", "SCSS", "sed", "Self", "SELinux Policy", "ShaderLab", "Shell", "ShellCheck Config", "ShellSession", "Shen", "Sieve", "Simple File Verification", "Singularity", "Slang", "Slash", "Slice", "Slim"] as const;
-const TYPES_WITH_NAME_14 = ["Slint", "Smali", "Smalltalk", "Smarty", "Smithy", "SmPL", "SMT", "Snakemake", "Solidity", "Soong", "SourcePawn", "SPARQL", "Spline Font Database", "SQF", "SQL", "SQLPL", "Squirrel", "SRecode Template", "SSH Config", "Stan", "Standard ML", "STAR", "Starlark", "Stata", "STL", "STON", "StringTemplate", "Stylus", "SubRip Text", "SugarSS", "SuperCollider", "SurrealQL", "Survex data", "Svelte", "SVG", "Sway", "Sweave", "Swift", "SWIG", "SystemVerilog", "Tact", "Talon", "Tcl", "Tcsh", "Tea", "Teal", "templ", "Terra", "Terraform Template", "TeX"] as const;
-const TYPES_WITH_NAME_15 = ["Texinfo", "Text", "TextGrid", "Textile", "TextMate Properties", "Thrift", "TI Program", "TL-Verilog", "TLA", "TMDL", "Toit", "TOML", "Tor Config", "Tree-sitter Query", "TSPLIB data", "TSQL", "TSV", "TSX", "Turing", "Turtle", "Twig", "TXL", "Type Language", "TypeScript", "TypeSpec", "Typst", "Unified Parallel C", "Unity3D Asset", "Unix Assembly", "Uno", "UnrealScript", "Untyped Plutus Core", "UrWeb", "V", "Vala", "Valve Data Format", "VBA", "VBScript", "vCard", "VCL", "Velocity Template Language", "Vento", "Verilog", "VHDL", "Vim Help File", "Vim Script", "Vim Snippet", "Visual Basic .NET", "Visual Basic 6.0", "Volt"] as const;
-const TYPES_WITH_NAME_16 = ["Vue", "Vyper", "Wavefront Material", "Wavefront Object", "WDL", "Web Ontology Language", "WebAssembly", "WebAssembly Interface Type", "WebIDL", "WebVTT", "Wget Config", "WGSL", "Whiley", "Wikitext", "Win32 Message File", "Windows Registry Entries", "wisp", "Witcher Script", "Wolfram Language", "Wollok", "World of Warcraft Addon Data", "Wren", "X BitMap", "X Font Directory Index", "X PixMap", "X10", "xBase", "XC", "XCompose", "Xmake", "XML", "XML Property List", "Xojo", "Xonsh", "XPages", "XProc", "XQuery", "XS", "XSLT", "Xtend", "Yacc", "YAML", "YANG", "YARA", "YASnippet", "Yul", "ZAP", "Zeek", "ZenScript", "Zephir"] as const;
-const TYPES_WITH_NAME_17 = ["Zig", "ZIL", "Zimpl", "Zmodel"] as const;
-const TYPES_WITH_NAME_2 = ["Batchfile", "Beef", "Befunge", "Berry", "BibTeX", "BibTeX Style", "Bicep", "Bikeshed", "Bison", "BitBake", "Blade", "BlitzBasic", "BlitzMax", "Bluespec", "Bluespec BH", "Boo", "Boogie", "BQN", "Brainfuck", "BrighterScript", "Brightscript", "Browserslist", "Bru", "BuildStream", "C", "C-ObjDump", "C#", "C++", "C2hs Haskell", "C3", "Cabal Config", "Caddyfile", "Cadence", "Cairo", "Cairo Zero", "CameLIGO", "Cangjie", "CAP CDS", "Cap'n Proto", "Carbon", "CartoCSS", "Ceylon", "Chapel", "Charity", "Checksums", "ChucK", "CIL", "Circom", "Cirru", "Clarion"] as const;
-const TYPES_WITH_NAME_3 = ["Clarity", "Classic ASP", "Clean", "Click", "CLIPS", "Clojure", "Closure Templates", "Cloud Firestore Security Rules", "Clue", "CMake", "COBOL", "CODEOWNERS", "CodeQL", "CoffeeScript", "ColdFusion", "ColdFusion CFC", "COLLADA", "Common Lisp", "Common Workflow Language", "Component Pascal", "CoNLL-U", "Cooklang", "Cool", "Cpp-ObjDump", "CQL", "Creole", "crontab", "Crystal", "CSON", "Csound", "Csound Document", "Csound Score", "CSS", "CSV", "Cuda", "CUE", "Cue Sheet", "cURL Config", "Curry", "CWeb", "Cycript", "Cylc", "Cypher", "Cython", "D", "D-ObjDump", "D2", "Dafny", "Darcs Patch", "Dart"] as const;
-const TYPES_WITH_NAME_4 = ["Daslang", "DataWeave", "Debian Package Control File", "DenizenScript", "desktop", "Dhall", "Diff", "DIGITAL Command Language", "dircolors", "DirectX 3D File", "DM", "DNS Zone", "Dockerfile", "Dogescript", "Dotenv", "DTrace", "Dune", "Dylan", "E", "E-mail", "Eagle", "Earthly", "Easybuild", "EBNF", "eC", "Ecere Projects", "ECL", "ECLiPSe", "Ecmarkup", "Edge", "EdgeQL", "EditorConfig", "Edje Data Collection", "edn", "Eiffel", "EJS", "Elixir", "Elm", "Elvish", "Elvish Transcript", "Emacs Lisp", "EmberScript", "EQ", "Erlang", "Euphoria", "F*", "F#", "Factor", "Fancy", "Fantom"] as const;
-const TYPES_WITH_NAME_5 = ["Faust", "Fennel", "FIGlet Font", "Filebench WML", "Filterscript", "FIRRTL", "fish", "FlatBuffers", "Flix", "Fluent", "FLUX", "Formatted", "Forth", "Fortran", "Fortran Free Form", "FreeBASIC", "FreeMarker", "Frege", "Futhark", "G-code", "Game Maker Language", "GAML", "GAMS", "GAP", "GCC Machine Description", "GDB", "GDScript", "GDShader", "GEDCOM", "Gemfile.lock", "Gemini", "Genero 4gl", "Genero per", "Genie", "Genshi", "Gentoo Ebuild", "Gentoo Eclass", "Gerber Image", "Gettext Catalog", "Gherkin", "Git Attributes", "Git Commit", "Git Config", "Git Revision List", "Gleam", "Glimmer JS", "Glimmer TS", "GLSL", "Glyph", "Glyph Bitmap Distribution Format"] as const;
-const TYPES_WITH_NAME_6 = ["GN", "Gnuplot", "Go", "Go Checksums", "Go Module", "Go Template", "Go Workspace", "Godot Resource", "Golo", "Gosu", "Grace", "Gradle", "Gradle Kotlin DSL", "Grammatical Framework", "Graph Modeling Language", "GraphQL", "Graphviz (DOT)", "Groovy", "Groovy Server Pages", "GSC", "Hack", "Haml", "Handlebars", "HAProxy", "Harbour", "Hare", "Haskell", "Haxe", "HCL", "HIP", "HiveQL", "HLSL", "HOCON", "HolyC", "hoon", "Hosts File", "HTML", "HTML+ECR", "HTML+EEX", "HTML+ERB", "HTML+PHP", "HTML+Razor", "HTTP", "Hurl", "HXML", "Hy", "HyPhy", "iCalendar", "IDL", "Idris"] as const;
-const TYPES_WITH_NAME_7 = ["Ignore List", "IGOR Pro", "ImageJ Macro", "Imba", "Inform 7", "INI", "Ink", "Inno Setup", "Io", "Ioke", "IRC log", "Isabelle", "Isabelle ROOT", "ISPC", "J", "Jac", "Jai", "Janet", "JAR Manifest", "Jasmin", "Java", "Java Properties", "Java Server Pages", "Java Template Engine", "JavaScript", "JavaScript+ERB", "JCL", "Jest Snapshot", "JetBrains MPS", "JFlex", "Jinja", "Jison", "Jison Lex", "Jolie", "jq", "JSON", "JSON with Comments", "JSON5", "JSONiq", "JSONLD", "Jsonnet", "Julia", "Julia REPL", "Jupyter Notebook", "Just", "Kaitai Struct", "KakouneScript", "KCL", "KDL", "KerboScript"] as const;
-const TYPES_WITH_NAME_8 = ["KFramework", "KiCad Layout", "KiCad Legacy Layout", "KiCad Schematic", "Kickstart", "Kit", "Koka", "KoLmafia ASH", "Kotlin", "KRL", "Kusto", "kvlang", "LabVIEW", "Lambdapi", "Langium", "Lark", "Lasso", "Latte", "Lean", "Lean 4", "Leo", "Less", "Lex", "LFE", "LigoLANG", "LilyPond", "Limbo", "Linear Programming", "Linker Script", "Linux Kernel Module", "Liquid", "Liquidsoap", "Literate Agda", "Literate CoffeeScript", "Literate Haskell", "LiveCode Script", "LiveScript", "LLVM", "Logos", "Logtalk", "LOLCODE", "LookML", "LoomScript", "LSL", "LTspice Symbol", "Lua", "Luau", "M", "M3U", "M4"] as const;
-const TYPES_WITH_NAME_9 = ["M4Sugar", "Macaulay2", "Makefile", "Mako", "Markdown", "Marko", "Mask", "Mathematical Programming System", "MATLAB", "Maven POM", "Max", "MAXScript", "mcfunction", "mdsvex", "MDX", "Mercury", "Mermaid", "Meson", "Metal", "MeTTa", "Microsoft Developer Studio Project", "Microsoft Visual Studio Solution", "MiniD", "MiniYAML", "MiniZinc", "MiniZinc Data", "Mint", "Mirah", "mIRC Script", "MLIR", "Modelica", "Modula-2", "Modula-3", "Module Management System", "Mojo", "Monkey", "Monkey C", "Moocode", "MoonBit", "MoonScript", "Motoko", "Motorola 68K Assembly", "Move", "MQL4", "MQL5", "MTML", "MUF", "mupad", "Muse", "Mustache"] as const;
-const TYPES_WITH_TM_SCOPE_1 = ["1C Enterprise", "2-Dimensional Array", "4D", "ABAP", "ABAP CDS", "ABNF", "ActionScript", "Ada", "Adblock Filter List", "Adobe Font Metrics", "Agda", "AGS Script", "AIDL", "Aiken", "AL", "ALGOL", "Alloy", "Alpine Abuild", "Altium Designer", "AMPL", "AngelScript", "Answer Set Programming", "Ant Build System", "Antlers", "ANTLR", "ApacheConf", "Apex", "API Blueprint", "APL", "Apollo Guidance Computer", "AppleScript", "Arc", "AsciiDoc", "ASL", "ASN.1", "ASP.NET", "AspectJ", "Assembly", "Astro", "Asymptote", "ATS", "Augeas", "AutoHotkey", "AutoIt", "Avro IDL", "Awk", "B (Formal Method)", "B4X", "Ballerina", "BASIC"] as const;
-const TYPES_WITH_TM_SCOPE_10 = ["Myghty", "nanorc", "Nasal", "NASL", "NCL", "Nearley", "Nemerle", "NEON", "nesC", "NetLinx", "NetLinx+ERB", "NetLogo", "NewLisp", "Nextflow", "Nginx", "Nickel", "Nim", "Ninja", "Nit", "Nix", "NL", "NMODL", "Noir", "NPM Config", "NSIS", "Nu", "NumPy", "Nunjucks", "Nushell", "NWScript", "OASv2-json", "OASv2-yaml", "OASv3-json", "OASv3-yaml", "Oberon", "ObjDump", "Object Data Instance Notation", "Objective-C", "Objective-C++", "Objective-J", "ObjectScript", "OCaml", "Odin", "Omgrofl", "OMNeT++ MSG", "OMNeT++ NED", "ooc", "Opa", "Opal", "Open Policy Agent"] as const;
-const TYPES_WITH_TM_SCOPE_11 = ["OpenAPI Specification v2", "OpenAPI Specification v3", "OpenCL", "OpenEdge ABL", "OpenQASM", "OpenRC runscript", "OpenSCAD", "OpenStep Property List", "OpenType Feature File", "Option List", "Org", "OverpassQL", "Ox", "Oxygene", "Oz", "P4", "Pact", "Pan", "Papyrus", "Parrot", "Parrot Assembly", "Parrot Internal Representation", "Pascal", "Pawn", "PDDL", "PEG.js", "Pep8", "Perl", "PHP", "Pic", "Pickle", "PicoLisp", "PigLatin", "Pike", "Pip Requirements", "Pkl", "PlantUML", "PLpgSQL", "PLSQL", "Pod", "Pod 6", "PogoScript", "Polar", "Pony", "Portugol", "PostCSS", "PostScript", "POV-Ray SDL", "PowerBuilder", "PowerShell"] as const;
-const TYPES_WITH_TM_SCOPE_12 = ["Praat", "Prisma", "Processing", "Procfile", "Proguard", "Prolog", "Promela", "Propeller Spin", "Protocol Buffer", "Protocol Buffer Text Format", "Public Key", "Pug", "Puppet", "Pure Data", "PureBasic", "PureScript", "Pyret", "Python", "Python console", "Python traceback", "q", "Q#", "QMake", "QML", "Qt Script", "Quake", "QuakeC", "QuickBASIC", "R", "Racket", "Ragel", "Raku", "RAML", "Rascal", "RAScript", "Raw token data", "RBS", "RDoc", "Readline Config", "REALbasic", "Reason", "ReasonLIGO", "Rebol", "Record Jar", "Red", "Redcode", "Redirect Rules", "Regular Expression", "Ren'Py", "RenderScript"] as const;
-const TYPES_WITH_TM_SCOPE_13 = ["ReScript", "reStructuredText", "REXX", "Rez", "Rich Text Format", "Ring", "Riot", "RMarkdown", "RobotFramework", "robots.txt", "Roc", "Rocq Prover", "Roff", "Roff Manpage", "RON", "ROS Interface", "Rouge", "RouterOS Script", "RPC", "RPGLE", "RPM Spec", "Ruby", "RUNOFF", "Rust", "Sage", "Sail", "SaltStack", "SAS", "Sass", "Scala", "Scaml", "Scenic", "Scheme", "Scilab", "SCSS", "sed", "Self", "SELinux Policy", "ShaderLab", "Shell", "ShellCheck Config", "ShellSession", "Shen", "Sieve", "Simple File Verification", "Singularity", "Slang", "Slash", "Slice", "Slim"] as const;
-const TYPES_WITH_TM_SCOPE_14 = ["Slint", "Smali", "Smalltalk", "Smarty", "Smithy", "SmPL", "SMT", "Snakemake", "Solidity", "Soong", "SourcePawn", "SPARQL", "Spline Font Database", "SQF", "SQL", "SQLPL", "Squirrel", "SRecode Template", "SSH Config", "Stan", "Standard ML", "STAR", "Starlark", "Stata", "STL", "STON", "StringTemplate", "Stylus", "SubRip Text", "SugarSS", "SuperCollider", "SurrealQL", "Survex data", "Svelte", "SVG", "Sway", "Sweave", "Swift", "SWIG", "SystemVerilog", "Tact", "Talon", "Tcl", "Tcsh", "Tea", "Teal", "templ", "Terra", "Terraform Template", "TeX"] as const;
-const TYPES_WITH_TM_SCOPE_15 = ["Texinfo", "Text", "TextGrid", "Textile", "TextMate Properties", "Thrift", "TI Program", "TL-Verilog", "TLA", "TMDL", "Toit", "TOML", "Tor Config", "Tree-sitter Query", "TSPLIB data", "TSQL", "TSV", "TSX", "Turing", "Turtle", "Twig", "TXL", "Type Language", "TypeScript", "TypeSpec", "Typst", "Unified Parallel C", "Unity3D Asset", "Unix Assembly", "Uno", "UnrealScript", "Untyped Plutus Core", "UrWeb", "V", "Vala", "Valve Data Format", "VBA", "VBScript", "vCard", "VCL", "Velocity Template Language", "Vento", "Verilog", "VHDL", "Vim Help File", "Vim Script", "Vim Snippet", "Visual Basic .NET", "Visual Basic 6.0", "Volt"] as const;
-const TYPES_WITH_TM_SCOPE_16 = ["Vue", "Vyper", "Wavefront Material", "Wavefront Object", "WDL", "Web Ontology Language", "WebAssembly", "WebAssembly Interface Type", "WebIDL", "WebVTT", "Wget Config", "WGSL", "Whiley", "Wikitext", "Win32 Message File", "Windows Registry Entries", "wisp", "Witcher Script", "Wolfram Language", "Wollok", "World of Warcraft Addon Data", "Wren", "X BitMap", "X Font Directory Index", "X PixMap", "X10", "xBase", "XC", "XCompose", "Xmake", "XML", "XML Property List", "Xojo", "Xonsh", "XPages", "XProc", "XQuery", "XS", "XSLT", "Xtend", "Yacc", "YAML", "YANG", "YARA", "YASnippet", "Yul", "ZAP", "Zeek", "ZenScript", "Zephir"] as const;
-const TYPES_WITH_TM_SCOPE_17 = ["Zig", "ZIL", "Zimpl", "Zmodel"] as const;
-const TYPES_WITH_TM_SCOPE_2 = ["Batchfile", "Beef", "Befunge", "Berry", "BibTeX", "BibTeX Style", "Bicep", "Bikeshed", "Bison", "BitBake", "Blade", "BlitzBasic", "BlitzMax", "Bluespec", "Bluespec BH", "Boo", "Boogie", "BQN", "Brainfuck", "BrighterScript", "Brightscript", "Browserslist", "Bru", "BuildStream", "C", "C-ObjDump", "C#", "C++", "C2hs Haskell", "C3", "Cabal Config", "Caddyfile", "Cadence", "Cairo", "Cairo Zero", "CameLIGO", "Cangjie", "CAP CDS", "Cap'n Proto", "Carbon", "CartoCSS", "Ceylon", "Chapel", "Charity", "Checksums", "ChucK", "CIL", "Circom", "Cirru", "Clarion"] as const;
-const TYPES_WITH_TM_SCOPE_3 = ["Clarity", "Classic ASP", "Clean", "Click", "CLIPS", "Clojure", "Closure Templates", "Cloud Firestore Security Rules", "Clue", "CMake", "COBOL", "CODEOWNERS", "CodeQL", "CoffeeScript", "ColdFusion", "ColdFusion CFC", "COLLADA", "Common Lisp", "Common Workflow Language", "Component Pascal", "CoNLL-U", "Cooklang", "Cool", "Cpp-ObjDump", "CQL", "Creole", "crontab", "Crystal", "CSON", "Csound", "Csound Document", "Csound Score", "CSS", "CSV", "Cuda", "CUE", "Cue Sheet", "cURL Config", "Curry", "CWeb", "Cycript", "Cylc", "Cypher", "Cython", "D", "D-ObjDump", "D2", "Dafny", "Darcs Patch", "Dart"] as const;
-const TYPES_WITH_TM_SCOPE_4 = ["Daslang", "DataWeave", "Debian Package Control File", "DenizenScript", "desktop", "Dhall", "Diff", "DIGITAL Command Language", "dircolors", "DirectX 3D File", "DM", "DNS Zone", "Dockerfile", "Dogescript", "Dotenv", "DTrace", "Dune", "Dylan", "E", "E-mail", "Eagle", "Earthly", "Easybuild", "EBNF", "eC", "Ecere Projects", "ECL", "ECLiPSe", "Ecmarkup", "Edge", "EdgeQL", "EditorConfig", "Edje Data Collection", "edn", "Eiffel", "EJS", "Elixir", "Elm", "Elvish", "Elvish Transcript", "Emacs Lisp", "EmberScript", "EQ", "Erlang", "Euphoria", "F*", "F#", "Factor", "Fancy", "Fantom"] as const;
-const TYPES_WITH_TM_SCOPE_5 = ["Faust", "Fennel", "FIGlet Font", "Filebench WML", "Filterscript", "FIRRTL", "fish", "FlatBuffers", "Flix", "Fluent", "FLUX", "Formatted", "Forth", "Fortran", "Fortran Free Form", "FreeBASIC", "FreeMarker", "Frege", "Futhark", "G-code", "Game Maker Language", "GAML", "GAMS", "GAP", "GCC Machine Description", "GDB", "GDScript", "GDShader", "GEDCOM", "Gemfile.lock", "Gemini", "Genero 4gl", "Genero per", "Genie", "Genshi", "Gentoo Ebuild", "Gentoo Eclass", "Gerber Image", "Gettext Catalog", "Gherkin", "Git Attributes", "Git Commit", "Git Config", "Git Revision List", "Gleam", "Glimmer JS", "Glimmer TS", "GLSL", "Glyph", "Glyph Bitmap Distribution Format"] as const;
-const TYPES_WITH_TM_SCOPE_6 = ["GN", "Gnuplot", "Go", "Go Checksums", "Go Module", "Go Template", "Go Workspace", "Godot Resource", "Golo", "Gosu", "Grace", "Gradle", "Gradle Kotlin DSL", "Grammatical Framework", "Graph Modeling Language", "GraphQL", "Graphviz (DOT)", "Groovy", "Groovy Server Pages", "GSC", "Hack", "Haml", "Handlebars", "HAProxy", "Harbour", "Hare", "Haskell", "Haxe", "HCL", "HIP", "HiveQL", "HLSL", "HOCON", "HolyC", "hoon", "Hosts File", "HTML", "HTML+ECR", "HTML+EEX", "HTML+ERB", "HTML+PHP", "HTML+Razor", "HTTP", "Hurl", "HXML", "Hy", "HyPhy", "iCalendar", "IDL", "Idris"] as const;
-const TYPES_WITH_TM_SCOPE_7 = ["Ignore List", "IGOR Pro", "ImageJ Macro", "Imba", "Inform 7", "INI", "Ink", "Inno Setup", "Io", "Ioke", "IRC log", "Isabelle", "Isabelle ROOT", "ISPC", "J", "Jac", "Jai", "Janet", "JAR Manifest", "Jasmin", "Java", "Java Properties", "Java Server Pages", "Java Template Engine", "JavaScript", "JavaScript+ERB", "JCL", "Jest Snapshot", "JetBrains MPS", "JFlex", "Jinja", "Jison", "Jison Lex", "Jolie", "jq", "JSON", "JSON with Comments", "JSON5", "JSONiq", "JSONLD", "Jsonnet", "Julia", "Julia REPL", "Jupyter Notebook", "Just", "Kaitai Struct", "KakouneScript", "KCL", "KDL", "KerboScript"] as const;
-const TYPES_WITH_TM_SCOPE_8 = ["KFramework", "KiCad Layout", "KiCad Legacy Layout", "KiCad Schematic", "Kickstart", "Kit", "Koka", "KoLmafia ASH", "Kotlin", "KRL", "Kusto", "kvlang", "LabVIEW", "Lambdapi", "Langium", "Lark", "Lasso", "Latte", "Lean", "Lean 4", "Leo", "Less", "Lex", "LFE", "LigoLANG", "LilyPond", "Limbo", "Linear Programming", "Linker Script", "Linux Kernel Module", "Liquid", "Liquidsoap", "Literate Agda", "Literate CoffeeScript", "Literate Haskell", "LiveCode Script", "LiveScript", "LLVM", "Logos", "Logtalk", "LOLCODE", "LookML", "LoomScript", "LSL", "LTspice Symbol", "Lua", "Luau", "M", "M3U", "M4"] as const;
-const TYPES_WITH_TM_SCOPE_9 = ["M4Sugar", "Macaulay2", "Makefile", "Mako", "Markdown", "Marko", "Mask", "Mathematical Programming System", "MATLAB", "Maven POM", "Max", "MAXScript", "mcfunction", "mdsvex", "MDX", "Mercury", "Mermaid", "Meson", "Metal", "MeTTa", "Microsoft Developer Studio Project", "Microsoft Visual Studio Solution", "MiniD", "MiniYAML", "MiniZinc", "MiniZinc Data", "Mint", "Mirah", "mIRC Script", "MLIR", "Modelica", "Modula-2", "Modula-3", "Module Management System", "Mojo", "Monkey", "Monkey C", "Moocode", "MoonBit", "MoonScript", "Motoko", "Motorola 68K Assembly", "Move", "MQL4", "MQL5", "MTML", "MUF", "mupad", "Muse", "Mustache"] as const;
-const TYPES_WITH_TYPE_1 = ["1C Enterprise", "2-Dimensional Array", "4D", "ABAP", "ABAP CDS", "ABNF", "ActionScript", "Ada", "Adblock Filter List", "Adobe Font Metrics", "Agda", "AGS Script", "AIDL", "Aiken", "AL", "ALGOL", "Alloy", "Alpine Abuild", "Altium Designer", "AMPL", "AngelScript", "Answer Set Programming", "Ant Build System", "Antlers", "ANTLR", "ApacheConf", "Apex", "API Blueprint", "APL", "Apollo Guidance Computer", "AppleScript", "Arc", "AsciiDoc", "ASL", "ASN.1", "ASP.NET", "AspectJ", "Assembly", "Astro", "Asymptote", "ATS", "Augeas", "AutoHotkey", "AutoIt", "Avro IDL", "Awk", "B (Formal Method)", "B4X", "Ballerina", "BASIC"] as const;
-const TYPES_WITH_TYPE_10 = ["Myghty", "nanorc", "Nasal", "NASL", "NCL", "Nearley", "Nemerle", "NEON", "nesC", "NetLinx", "NetLinx+ERB", "NetLogo", "NewLisp", "Nextflow", "Nginx", "Nickel", "Nim", "Ninja", "Nit", "Nix", "NL", "NMODL", "Noir", "NPM Config", "NSIS", "Nu", "NumPy", "Nunjucks", "Nushell", "NWScript", "OASv2-json", "OASv2-yaml", "OASv3-json", "OASv3-yaml", "Oberon", "ObjDump", "Object Data Instance Notation", "Objective-C", "Objective-C++", "Objective-J", "ObjectScript", "OCaml", "Odin", "Omgrofl", "OMNeT++ MSG", "OMNeT++ NED", "ooc", "Opa", "Opal", "Open Policy Agent"] as const;
-const TYPES_WITH_TYPE_11 = ["OpenAPI Specification v2", "OpenAPI Specification v3", "OpenCL", "OpenEdge ABL", "OpenQASM", "OpenRC runscript", "OpenSCAD", "OpenStep Property List", "OpenType Feature File", "Option List", "Org", "OverpassQL", "Ox", "Oxygene", "Oz", "P4", "Pact", "Pan", "Papyrus", "Parrot", "Parrot Assembly", "Parrot Internal Representation", "Pascal", "Pawn", "PDDL", "PEG.js", "Pep8", "Perl", "PHP", "Pic", "Pickle", "PicoLisp", "PigLatin", "Pike", "Pip Requirements", "Pkl", "PlantUML", "PLpgSQL", "PLSQL", "Pod", "Pod 6", "PogoScript", "Polar", "Pony", "Portugol", "PostCSS", "PostScript", "POV-Ray SDL", "PowerBuilder", "PowerShell"] as const;
-const TYPES_WITH_TYPE_12 = ["Praat", "Prisma", "Processing", "Procfile", "Proguard", "Prolog", "Promela", "Propeller Spin", "Protocol Buffer", "Protocol Buffer Text Format", "Public Key", "Pug", "Puppet", "Pure Data", "PureBasic", "PureScript", "Pyret", "Python", "Python console", "Python traceback", "q", "Q#", "QMake", "QML", "Qt Script", "Quake", "QuakeC", "QuickBASIC", "R", "Racket", "Ragel", "Raku", "RAML", "Rascal", "RAScript", "Raw token data", "RBS", "RDoc", "Readline Config", "REALbasic", "Reason", "ReasonLIGO", "Rebol", "Record Jar", "Red", "Redcode", "Redirect Rules", "Regular Expression", "Ren'Py", "RenderScript"] as const;
-const TYPES_WITH_TYPE_13 = ["ReScript", "reStructuredText", "REXX", "Rez", "Rich Text Format", "Ring", "Riot", "RMarkdown", "RobotFramework", "robots.txt", "Roc", "Rocq Prover", "Roff", "Roff Manpage", "RON", "ROS Interface", "Rouge", "RouterOS Script", "RPC", "RPGLE", "RPM Spec", "Ruby", "RUNOFF", "Rust", "Sage", "Sail", "SaltStack", "SAS", "Sass", "Scala", "Scaml", "Scenic", "Scheme", "Scilab", "SCSS", "sed", "Self", "SELinux Policy", "ShaderLab", "Shell", "ShellCheck Config", "ShellSession", "Shen", "Sieve", "Simple File Verification", "Singularity", "Slang", "Slash", "Slice", "Slim"] as const;
-const TYPES_WITH_TYPE_14 = ["Slint", "Smali", "Smalltalk", "Smarty", "Smithy", "SmPL", "SMT", "Snakemake", "Solidity", "Soong", "SourcePawn", "SPARQL", "Spline Font Database", "SQF", "SQL", "SQLPL", "Squirrel", "SRecode Template", "SSH Config", "Stan", "Standard ML", "STAR", "Starlark", "Stata", "STL", "STON", "StringTemplate", "Stylus", "SubRip Text", "SugarSS", "SuperCollider", "SurrealQL", "Survex data", "Svelte", "SVG", "Sway", "Sweave", "Swift", "SWIG", "SystemVerilog", "Tact", "Talon", "Tcl", "Tcsh", "Tea", "Teal", "templ", "Terra", "Terraform Template", "TeX"] as const;
-const TYPES_WITH_TYPE_15 = ["Texinfo", "Text", "TextGrid", "Textile", "TextMate Properties", "Thrift", "TI Program", "TL-Verilog", "TLA", "TMDL", "Toit", "TOML", "Tor Config", "Tree-sitter Query", "TSPLIB data", "TSQL", "TSV", "TSX", "Turing", "Turtle", "Twig", "TXL", "Type Language", "TypeScript", "TypeSpec", "Typst", "Unified Parallel C", "Unity3D Asset", "Unix Assembly", "Uno", "UnrealScript", "Untyped Plutus Core", "UrWeb", "V", "Vala", "Valve Data Format", "VBA", "VBScript", "vCard", "VCL", "Velocity Template Language", "Vento", "Verilog", "VHDL", "Vim Help File", "Vim Script", "Vim Snippet", "Visual Basic .NET", "Visual Basic 6.0", "Volt"] as const;
-const TYPES_WITH_TYPE_16 = ["Vue", "Vyper", "Wavefront Material", "Wavefront Object", "WDL", "Web Ontology Language", "WebAssembly", "WebAssembly Interface Type", "WebIDL", "WebVTT", "Wget Config", "WGSL", "Whiley", "Wikitext", "Win32 Message File", "Windows Registry Entries", "wisp", "Witcher Script", "Wolfram Language", "Wollok", "World of Warcraft Addon Data", "Wren", "X BitMap", "X Font Directory Index", "X PixMap", "X10", "xBase", "XC", "XCompose", "Xmake", "XML", "XML Property List", "Xojo", "Xonsh", "XPages", "XProc", "XQuery", "XS", "XSLT", "Xtend", "Yacc", "YAML", "YANG", "YARA", "YASnippet", "Yul", "ZAP", "Zeek", "ZenScript", "Zephir"] as const;
-const TYPES_WITH_TYPE_17 = ["Zig", "ZIL", "Zimpl", "Zmodel"] as const;
-const TYPES_WITH_TYPE_2 = ["Batchfile", "Beef", "Befunge", "Berry", "BibTeX", "BibTeX Style", "Bicep", "Bikeshed", "Bison", "BitBake", "Blade", "BlitzBasic", "BlitzMax", "Bluespec", "Bluespec BH", "Boo", "Boogie", "BQN", "Brainfuck", "BrighterScript", "Brightscript", "Browserslist", "Bru", "BuildStream", "C", "C-ObjDump", "C#", "C++", "C2hs Haskell", "C3", "Cabal Config", "Caddyfile", "Cadence", "Cairo", "Cairo Zero", "CameLIGO", "Cangjie", "CAP CDS", "Cap'n Proto", "Carbon", "CartoCSS", "Ceylon", "Chapel", "Charity", "Checksums", "ChucK", "CIL", "Circom", "Cirru", "Clarion"] as const;
-const TYPES_WITH_TYPE_3 = ["Clarity", "Classic ASP", "Clean", "Click", "CLIPS", "Clojure", "Closure Templates", "Cloud Firestore Security Rules", "Clue", "CMake", "COBOL", "CODEOWNERS", "CodeQL", "CoffeeScript", "ColdFusion", "ColdFusion CFC", "COLLADA", "Common Lisp", "Common Workflow Language", "Component Pascal", "CoNLL-U", "Cooklang", "Cool", "Cpp-ObjDump", "CQL", "Creole", "crontab", "Crystal", "CSON", "Csound", "Csound Document", "Csound Score", "CSS", "CSV", "Cuda", "CUE", "Cue Sheet", "cURL Config", "Curry", "CWeb", "Cycript", "Cylc", "Cypher", "Cython", "D", "D-ObjDump", "D2", "Dafny", "Darcs Patch", "Dart"] as const;
-const TYPES_WITH_TYPE_4 = ["Daslang", "DataWeave", "Debian Package Control File", "DenizenScript", "desktop", "Dhall", "Diff", "DIGITAL Command Language", "dircolors", "DirectX 3D File", "DM", "DNS Zone", "Dockerfile", "Dogescript", "Dotenv", "DTrace", "Dune", "Dylan", "E", "E-mail", "Eagle", "Earthly", "Easybuild", "EBNF", "eC", "Ecere Projects", "ECL", "ECLiPSe", "Ecmarkup", "Edge", "EdgeQL", "EditorConfig", "Edje Data Collection", "edn", "Eiffel", "EJS", "Elixir", "Elm", "Elvish", "Elvish Transcript", "Emacs Lisp", "EmberScript", "EQ", "Erlang", "Euphoria", "F*", "F#", "Factor", "Fancy", "Fantom"] as const;
-const TYPES_WITH_TYPE_5 = ["Faust", "Fennel", "FIGlet Font", "Filebench WML", "Filterscript", "FIRRTL", "fish", "FlatBuffers", "Flix", "Fluent", "FLUX", "Formatted", "Forth", "Fortran", "Fortran Free Form", "FreeBASIC", "FreeMarker", "Frege", "Futhark", "G-code", "Game Maker Language", "GAML", "GAMS", "GAP", "GCC Machine Description", "GDB", "GDScript", "GDShader", "GEDCOM", "Gemfile.lock", "Gemini", "Genero 4gl", "Genero per", "Genie", "Genshi", "Gentoo Ebuild", "Gentoo Eclass", "Gerber Image", "Gettext Catalog", "Gherkin", "Git Attributes", "Git Commit", "Git Config", "Git Revision List", "Gleam", "Glimmer JS", "Glimmer TS", "GLSL", "Glyph", "Glyph Bitmap Distribution Format"] as const;
-const TYPES_WITH_TYPE_6 = ["GN", "Gnuplot", "Go", "Go Checksums", "Go Module", "Go Template", "Go Workspace", "Godot Resource", "Golo", "Gosu", "Grace", "Gradle", "Gradle Kotlin DSL", "Grammatical Framework", "Graph Modeling Language", "GraphQL", "Graphviz (DOT)", "Groovy", "Groovy Server Pages", "GSC", "Hack", "Haml", "Handlebars", "HAProxy", "Harbour", "Hare", "Haskell", "Haxe", "HCL", "HIP", "HiveQL", "HLSL", "HOCON", "HolyC", "hoon", "Hosts File", "HTML", "HTML+ECR", "HTML+EEX", "HTML+ERB", "HTML+PHP", "HTML+Razor", "HTTP", "Hurl", "HXML", "Hy", "HyPhy", "iCalendar", "IDL", "Idris"] as const;
-const TYPES_WITH_TYPE_7 = ["Ignore List", "IGOR Pro", "ImageJ Macro", "Imba", "Inform 7", "INI", "Ink", "Inno Setup", "Io", "Ioke", "IRC log", "Isabelle", "Isabelle ROOT", "ISPC", "J", "Jac", "Jai", "Janet", "JAR Manifest", "Jasmin", "Java", "Java Properties", "Java Server Pages", "Java Template Engine", "JavaScript", "JavaScript+ERB", "JCL", "Jest Snapshot", "JetBrains MPS", "JFlex", "Jinja", "Jison", "Jison Lex", "Jolie", "jq", "JSON", "JSON with Comments", "JSON5", "JSONiq", "JSONLD", "Jsonnet", "Julia", "Julia REPL", "Jupyter Notebook", "Just", "Kaitai Struct", "KakouneScript", "KCL", "KDL", "KerboScript"] as const;
-const TYPES_WITH_TYPE_8 = ["KFramework", "KiCad Layout", "KiCad Legacy Layout", "KiCad Schematic", "Kickstart", "Kit", "Koka", "KoLmafia ASH", "Kotlin", "KRL", "Kusto", "kvlang", "LabVIEW", "Lambdapi", "Langium", "Lark", "Lasso", "Latte", "Lean", "Lean 4", "Leo", "Less", "Lex", "LFE", "LigoLANG", "LilyPond", "Limbo", "Linear Programming", "Linker Script", "Linux Kernel Module", "Liquid", "Liquidsoap", "Literate Agda", "Literate CoffeeScript", "Literate Haskell", "LiveCode Script", "LiveScript", "LLVM", "Logos", "Logtalk", "LOLCODE", "LookML", "LoomScript", "LSL", "LTspice Symbol", "Lua", "Luau", "M", "M3U", "M4"] as const;
-const TYPES_WITH_TYPE_9 = ["M4Sugar", "Macaulay2", "Makefile", "Mako", "Markdown", "Marko", "Mask", "Mathematical Programming System", "MATLAB", "Maven POM", "Max", "MAXScript", "mcfunction", "mdsvex", "MDX", "Mercury", "Mermaid", "Meson", "Metal", "MeTTa", "Microsoft Developer Studio Project", "Microsoft Visual Studio Solution", "MiniD", "MiniYAML", "MiniZinc", "MiniZinc Data", "Mint", "Mirah", "mIRC Script", "MLIR", "Modelica", "Modula-2", "Modula-3", "Module Management System", "Mojo", "Monkey", "Monkey C", "Moocode", "MoonBit", "MoonScript", "Motoko", "Motorola 68K Assembly", "Move", "MQL4", "MQL5", "MTML", "MUF", "mupad", "Muse", "Mustache"] as const;
-const TYPES_WITH_WRAP_1 = ["AsciiDoc", "Cooklang", "Creole", "Gemini", "Git Commit", "Inform 7", "Ink", "Leo", "Literate CoffeeScript", "Markdown", "mdsvex", "MDX", "Muse", "Org", "OverpassQL", "Pod", "Pod 6", "RDoc", "reStructuredText", "RMarkdown", "Roff", "Roff Manpage", "RUNOFF", "TeX", "Texinfo", "Text", "Textile", "WebVTT", "Wikitext"] as const;
 
 
 export type LanguageIdsWithAceMode = readonly (typeof LANGUAGE_IDS_WITH_ACE_MODE_1[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_2[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_3[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_4[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_5[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_6[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_7[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_8[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_9[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_10[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_11[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_12[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_13[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_14[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_15[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_16[number] | typeof LANGUAGE_IDS_WITH_ACE_MODE_17[number])[];
@@ -92303,21 +96597,21 @@ export type NamesWithSearchable = readonly ("Gemfile.lock")[];
 export type NamesWithTmScope = readonly (typeof NAMES_WITH_TM_SCOPE_1[number] | typeof NAMES_WITH_TM_SCOPE_2[number] | typeof NAMES_WITH_TM_SCOPE_3[number] | typeof NAMES_WITH_TM_SCOPE_4[number] | typeof NAMES_WITH_TM_SCOPE_5[number] | typeof NAMES_WITH_TM_SCOPE_6[number] | typeof NAMES_WITH_TM_SCOPE_7[number] | typeof NAMES_WITH_TM_SCOPE_8[number] | typeof NAMES_WITH_TM_SCOPE_9[number] | typeof NAMES_WITH_TM_SCOPE_10[number] | typeof NAMES_WITH_TM_SCOPE_11[number] | typeof NAMES_WITH_TM_SCOPE_12[number] | typeof NAMES_WITH_TM_SCOPE_13[number] | typeof NAMES_WITH_TM_SCOPE_14[number] | typeof NAMES_WITH_TM_SCOPE_15[number] | typeof NAMES_WITH_TM_SCOPE_16[number] | typeof NAMES_WITH_TM_SCOPE_17[number])[];
 export type NamesWithType = readonly (typeof NAMES_WITH_TYPE_1[number] | typeof NAMES_WITH_TYPE_2[number] | typeof NAMES_WITH_TYPE_3[number] | typeof NAMES_WITH_TYPE_4[number] | typeof NAMES_WITH_TYPE_5[number] | typeof NAMES_WITH_TYPE_6[number] | typeof NAMES_WITH_TYPE_7[number] | typeof NAMES_WITH_TYPE_8[number] | typeof NAMES_WITH_TYPE_9[number] | typeof NAMES_WITH_TYPE_10[number] | typeof NAMES_WITH_TYPE_11[number] | typeof NAMES_WITH_TYPE_12[number] | typeof NAMES_WITH_TYPE_13[number] | typeof NAMES_WITH_TYPE_14[number] | typeof NAMES_WITH_TYPE_15[number] | typeof NAMES_WITH_TYPE_16[number] | typeof NAMES_WITH_TYPE_17[number])[];
 export type NamesWithWrap = readonly (typeof NAMES_WITH_WRAP_1[number])[];
-export type TypesWithAceMode = readonly (typeof TYPES_WITH_ACE_MODE_1[number] | typeof TYPES_WITH_ACE_MODE_2[number] | typeof TYPES_WITH_ACE_MODE_3[number] | typeof TYPES_WITH_ACE_MODE_4[number] | typeof TYPES_WITH_ACE_MODE_5[number] | typeof TYPES_WITH_ACE_MODE_6[number] | typeof TYPES_WITH_ACE_MODE_7[number] | typeof TYPES_WITH_ACE_MODE_8[number] | typeof TYPES_WITH_ACE_MODE_9[number] | typeof TYPES_WITH_ACE_MODE_10[number] | typeof TYPES_WITH_ACE_MODE_11[number] | typeof TYPES_WITH_ACE_MODE_12[number] | typeof TYPES_WITH_ACE_MODE_13[number] | typeof TYPES_WITH_ACE_MODE_14[number] | typeof TYPES_WITH_ACE_MODE_15[number] | typeof TYPES_WITH_ACE_MODE_16[number] | typeof TYPES_WITH_ACE_MODE_17[number])[];
-export type TypesWithAliases = readonly (typeof TYPES_WITH_ALIASES_1[number] | typeof TYPES_WITH_ALIASES_2[number] | typeof TYPES_WITH_ALIASES_3[number] | typeof TYPES_WITH_ALIASES_4[number] | typeof TYPES_WITH_ALIASES_5[number])[];
-export type TypesWithCodemirrorMimeType = readonly (typeof TYPES_WITH_CODEMIRROR_MIME_TYPE_1[number] | typeof TYPES_WITH_CODEMIRROR_MIME_TYPE_2[number] | typeof TYPES_WITH_CODEMIRROR_MIME_TYPE_3[number] | typeof TYPES_WITH_CODEMIRROR_MIME_TYPE_4[number] | typeof TYPES_WITH_CODEMIRROR_MIME_TYPE_5[number] | typeof TYPES_WITH_CODEMIRROR_MIME_TYPE_6[number])[];
-export type TypesWithCodemirrorMode = readonly (typeof TYPES_WITH_CODEMIRROR_MODE_1[number] | typeof TYPES_WITH_CODEMIRROR_MODE_2[number] | typeof TYPES_WITH_CODEMIRROR_MODE_3[number] | typeof TYPES_WITH_CODEMIRROR_MODE_4[number] | typeof TYPES_WITH_CODEMIRROR_MODE_5[number] | typeof TYPES_WITH_CODEMIRROR_MODE_6[number])[];
-export type TypesWithColor = readonly (typeof TYPES_WITH_COLOR_1[number] | typeof TYPES_WITH_COLOR_2[number] | typeof TYPES_WITH_COLOR_3[number] | typeof TYPES_WITH_COLOR_4[number] | typeof TYPES_WITH_COLOR_5[number] | typeof TYPES_WITH_COLOR_6[number] | typeof TYPES_WITH_COLOR_7[number] | typeof TYPES_WITH_COLOR_8[number] | typeof TYPES_WITH_COLOR_9[number] | typeof TYPES_WITH_COLOR_10[number] | typeof TYPES_WITH_COLOR_11[number] | typeof TYPES_WITH_COLOR_12[number] | typeof TYPES_WITH_COLOR_13[number] | typeof TYPES_WITH_COLOR_14[number])[];
-export type TypesWithExtensions = readonly (typeof TYPES_WITH_EXTENSIONS_1[number] | typeof TYPES_WITH_EXTENSIONS_2[number] | typeof TYPES_WITH_EXTENSIONS_3[number] | typeof TYPES_WITH_EXTENSIONS_4[number] | typeof TYPES_WITH_EXTENSIONS_5[number] | typeof TYPES_WITH_EXTENSIONS_6[number] | typeof TYPES_WITH_EXTENSIONS_7[number] | typeof TYPES_WITH_EXTENSIONS_8[number] | typeof TYPES_WITH_EXTENSIONS_9[number] | typeof TYPES_WITH_EXTENSIONS_10[number] | typeof TYPES_WITH_EXTENSIONS_11[number] | typeof TYPES_WITH_EXTENSIONS_12[number] | typeof TYPES_WITH_EXTENSIONS_13[number] | typeof TYPES_WITH_EXTENSIONS_14[number] | typeof TYPES_WITH_EXTENSIONS_15[number] | typeof TYPES_WITH_EXTENSIONS_16[number])[];
-export type TypesWithFilenames = readonly (typeof TYPES_WITH_FILENAMES_1[number] | typeof TYPES_WITH_FILENAMES_2[number] | typeof TYPES_WITH_FILENAMES_3[number])[];
-export type TypesWithFsName = readonly ("F*")[];
-export type TypesWithGroup = readonly (typeof TYPES_WITH_GROUP_1[number] | typeof TYPES_WITH_GROUP_2[number])[];
-export type TypesWithInterpreters = readonly (typeof TYPES_WITH_INTERPRETERS_1[number] | typeof TYPES_WITH_INTERPRETERS_2[number])[];
-export type TypesWithLanguageId = readonly (typeof TYPES_WITH_LANGUAGE_ID_1[number] | typeof TYPES_WITH_LANGUAGE_ID_2[number] | typeof TYPES_WITH_LANGUAGE_ID_3[number] | typeof TYPES_WITH_LANGUAGE_ID_4[number] | typeof TYPES_WITH_LANGUAGE_ID_5[number] | typeof TYPES_WITH_LANGUAGE_ID_6[number] | typeof TYPES_WITH_LANGUAGE_ID_7[number] | typeof TYPES_WITH_LANGUAGE_ID_8[number] | typeof TYPES_WITH_LANGUAGE_ID_9[number] | typeof TYPES_WITH_LANGUAGE_ID_10[number] | typeof TYPES_WITH_LANGUAGE_ID_11[number] | typeof TYPES_WITH_LANGUAGE_ID_12[number] | typeof TYPES_WITH_LANGUAGE_ID_13[number] | typeof TYPES_WITH_LANGUAGE_ID_14[number] | typeof TYPES_WITH_LANGUAGE_ID_15[number] | typeof TYPES_WITH_LANGUAGE_ID_16[number] | typeof TYPES_WITH_LANGUAGE_ID_17[number])[];
-export type TypesWithName = readonly (typeof TYPES_WITH_NAME_1[number] | typeof TYPES_WITH_NAME_2[number] | typeof TYPES_WITH_NAME_3[number] | typeof TYPES_WITH_NAME_4[number] | typeof TYPES_WITH_NAME_5[number] | typeof TYPES_WITH_NAME_6[number] | typeof TYPES_WITH_NAME_7[number] | typeof TYPES_WITH_NAME_8[number] | typeof TYPES_WITH_NAME_9[number] | typeof TYPES_WITH_NAME_10[number] | typeof TYPES_WITH_NAME_11[number] | typeof TYPES_WITH_NAME_12[number] | typeof TYPES_WITH_NAME_13[number] | typeof TYPES_WITH_NAME_14[number] | typeof TYPES_WITH_NAME_15[number] | typeof TYPES_WITH_NAME_16[number] | typeof TYPES_WITH_NAME_17[number])[];
-export type TypesWithSearchable = readonly ("Gemfile.lock")[];
-export type TypesWithTmScope = readonly (typeof TYPES_WITH_TM_SCOPE_1[number] | typeof TYPES_WITH_TM_SCOPE_2[number] | typeof TYPES_WITH_TM_SCOPE_3[number] | typeof TYPES_WITH_TM_SCOPE_4[number] | typeof TYPES_WITH_TM_SCOPE_5[number] | typeof TYPES_WITH_TM_SCOPE_6[number] | typeof TYPES_WITH_TM_SCOPE_7[number] | typeof TYPES_WITH_TM_SCOPE_8[number] | typeof TYPES_WITH_TM_SCOPE_9[number] | typeof TYPES_WITH_TM_SCOPE_10[number] | typeof TYPES_WITH_TM_SCOPE_11[number] | typeof TYPES_WITH_TM_SCOPE_12[number] | typeof TYPES_WITH_TM_SCOPE_13[number] | typeof TYPES_WITH_TM_SCOPE_14[number] | typeof TYPES_WITH_TM_SCOPE_15[number] | typeof TYPES_WITH_TM_SCOPE_16[number] | typeof TYPES_WITH_TM_SCOPE_17[number])[];
-export type TypesWithType = readonly (typeof TYPES_WITH_TYPE_1[number] | typeof TYPES_WITH_TYPE_2[number] | typeof TYPES_WITH_TYPE_3[number] | typeof TYPES_WITH_TYPE_4[number] | typeof TYPES_WITH_TYPE_5[number] | typeof TYPES_WITH_TYPE_6[number] | typeof TYPES_WITH_TYPE_7[number] | typeof TYPES_WITH_TYPE_8[number] | typeof TYPES_WITH_TYPE_9[number] | typeof TYPES_WITH_TYPE_10[number] | typeof TYPES_WITH_TYPE_11[number] | typeof TYPES_WITH_TYPE_12[number] | typeof TYPES_WITH_TYPE_13[number] | typeof TYPES_WITH_TYPE_14[number] | typeof TYPES_WITH_TYPE_15[number] | typeof TYPES_WITH_TYPE_16[number] | typeof TYPES_WITH_TYPE_17[number])[];
-export type TypesWithWrap = readonly (typeof TYPES_WITH_WRAP_1[number])[];
+export type TypesWithAceMode = readonly ("data" | "markup" | "programming" | "prose")[];
+export type TypesWithAliases = readonly ("data" | "markup" | "programming" | "prose")[];
+export type TypesWithCodemirrorMimeType = readonly ("data" | "markup" | "programming" | "prose")[];
+export type TypesWithCodemirrorMode = readonly ("data" | "markup" | "programming" | "prose")[];
+export type TypesWithColor = readonly ("data" | "markup" | "programming" | "prose")[];
+export type TypesWithExtensions = readonly ("data" | "markup" | "programming" | "prose")[];
+export type TypesWithFilenames = readonly ("data" | "markup" | "programming" | "prose")[];
+export type TypesWithFsName = readonly ("programming")[];
+export type TypesWithGroup = readonly ("data" | "markup" | "programming")[];
+export type TypesWithInterpreters = readonly ("data" | "programming" | "prose")[];
+export type TypesWithLanguageId = readonly ("data" | "markup" | "programming" | "prose")[];
+export type TypesWithName = readonly ("data" | "markup" | "programming" | "prose")[];
+export type TypesWithSearchable = readonly ("data")[];
+export type TypesWithTmScope = readonly ("data" | "markup" | "programming" | "prose")[];
+export type TypesWithType = readonly ("data" | "markup" | "programming" | "prose")[];
+export type TypesWithWrap = readonly ("data" | "markup" | "programming" | "prose")[];
 "
 `;
