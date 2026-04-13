@@ -44,7 +44,7 @@ const createUsage: CreateUsage = ({ data, config }) => {
 		const withStats = {
 			[language_id_with]: [...idsSet],
 			[name_with]: [...namesSet],
-			[type_with]: [...namesSet],
+			[type_with]: [...typeSet],
 		} as const;
 
 		return [field, withStats] as const;
