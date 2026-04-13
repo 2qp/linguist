@@ -8,10 +8,12 @@ type Paths = {
 	arraysDir: string;
 
 	gettersDir: string;
+	predicatesDir: string;
 };
 
 type SourcePaths = {
 	gettersDir: string;
+	predicatesDir: string;
 };
 
 type DataConfig = {

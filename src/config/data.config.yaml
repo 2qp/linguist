@@ -8,6 +8,8 @@ data:
     manifestsDir: "src/generated/data/manifests"
     arraysDir: "src/generated/data/arrays"
     gettersDir: "src/generated/getters/"
+    predicatesDir: "src/generated/predicates/"
 
   sourcePaths:
     gettersDir: "src/transform/accessors/"
+    predicatesDir: "src/transform/predicates/"

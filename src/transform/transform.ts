@@ -63,6 +63,11 @@ const transform: Transform = async ({ config, source, stats: _stats }) => {
 			sourceDir: config.data.sourcePaths.gettersDir,
 			outputFile: join(config.data.paths.gettersDir, "index.ts"),
 		}),
+
+		createReExports({
+			sourceDir: config.data.sourcePaths.predicatesDir,
+			outputFile: join(config.data.paths.predicatesDir, "index.ts"),
+		}),
 	]);
 };
 
