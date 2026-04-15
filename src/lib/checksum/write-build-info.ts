@@ -1,4 +1,4 @@
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { hashContent } from "@utils/hash-content";
 import { stringify } from "safe-stable-stringify";
 
@@ -25,7 +25,17 @@ const writeBuildInfo: WriteBuildInfo = async ({ buffer, config, path = "./build-
 		generated_at: new Date().toISOString(),
 	};
 
-	await writeFile(path, stringify(build, undefined, 2), "utf8");
+	const existingContent = await readFile(path, "utf8").catch(() => "{}");
+	const existingData: Partial<BuildInfo> = JSON.parse(existingContent);
+
+	const updatedBuildInfo = {
+		...existingData,
+		...build,
+		// created_at: existingData.created_at,
+		// history: [...(existingData.history || [])],
+	};
+
+	await writeFile(path, stringify(updatedBuildInfo, undefined, 2), "utf8");
 };
 
 export { writeBuildInfo };
