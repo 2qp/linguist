@@ -58,6 +58,8 @@ const DASH_REPLACEMENTS = {
 	"]": "-bracket-r",
 	"{": "-brace-l",
 	"}": "-brace-r",
+	".": "-",
+	_: "-",
 } as const satisfies Record<string, string>;
 
 const capitalize = (s: string): string => {
