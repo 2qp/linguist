@@ -65,9 +65,11 @@ const buildMap = <
 			const value = language[right];
 
 			if (isNullish(key)) continue;
-			if (!Array.isArray(key)) continue;
+			// if (!Array.isArray(key)) continue;
 
-			for (const item of key as TSource[K][TLeft][]) {
+			const keys = Array.isArray(key) ? key : [key];
+
+			for (const item of keys as TSource[K][TLeft][]) {
 				//
 
 				if (isNullish(item)) continue;
