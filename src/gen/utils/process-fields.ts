@@ -70,9 +70,11 @@ const processFields: ProcessFieldsType = ({
 	const usagePercent = ((stat.languagesUsing / meta.languageCount) * 100).toFixed(1);
 
 	const shouldGenerateType =
-		(stat.shouldBeLiteral || stat.shouldBeLiteralArray) &&
-		stat.languagesUsing >= config.type.minLanguagesForNamedType &&
-		parseFloat(usagePercent) >= config.type.minUsagePercent;
+		(_task === "usage" && config.type.usage.skip_should_generate_type === true) ||
+		//
+		((stat.shouldBeLiteral || stat.shouldBeLiteralArray) &&
+			stat.languagesUsing >= config.type.minLanguagesForNamedType &&
+			parseFloat(usagePercent) >= config.type.minUsagePercent);
 
 	if (!shouldGenerateType) {
 		return processFields({ stats: remainingFields, config, existing, existingNames, ref, meta, _role, _task });
