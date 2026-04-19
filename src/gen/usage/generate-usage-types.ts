@@ -17,13 +17,13 @@ type GenerateUsageTypesParams = {
 
 type GenerateUsageTypes = Generator<string>;
 
-const generateUsageTypes: GenerateUsageTypes = ({ config: base, source }) => {
+const generateUsageTypes: GenerateUsageTypes = ({ config: base, source, ...rest }) => {
 	//
 
 	const config = { ...base, type: { ...base.type, secondary: { ...base.type.secondary, enabled: false } } };
 
 	// MARK: USAGE
-	const usage = createUsage({ data: source, config });
+	const usage = createUsage({ source, config, ...rest });
 	const entries = Object.fromEntries(usage.entries());
 
 	const ref = createReference({ config, source: entries });
@@ -36,6 +36,7 @@ const generateUsageTypes: GenerateUsageTypes = ({ config: base, source }) => {
 		config,
 		ref: ref,
 		meta,
+		_task: "usage",
 	});
 
 	const output_usage_segments = emitSegmentSection(usageFields.allSegmentDefinitions);

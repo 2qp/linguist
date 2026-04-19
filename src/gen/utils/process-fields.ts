@@ -8,7 +8,7 @@ import type { Meta } from "@core/create-meta";
 import type { Ref } from "@core/create-reference";
 import type { Field, UID } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";
-import type { Role } from "@/types/core.types";
+import type { Role, Task } from "@/types/core.types";
 import type { FieldAnalysisArray, ProcessedFieldAnalysis, ProcessedFieldAnalysisArray } from "@/types/field.types";
 import type { Primitive } from "@/types/gen.types";
 import type { OutputDefs, OutputMap } from "@/types/output.types";
@@ -22,6 +22,7 @@ type ProcessFieldsParams<TField extends string = Field, TUnique extends Primitiv
 	ref?: Ref | undefined;
 	meta: Meta;
 	_role?: Role;
+	_task?: Task;
 };
 
 type Existing<TUnique extends Primitive = Primitive> = {
@@ -51,6 +52,7 @@ const processFields: ProcessFieldsType = ({
 		types: new Map<UID, OutputDefs<ExtractSetElement<(typeof stats)[0][1]["uniqueValues"]>>>(),
 	},
 	_role = "primary",
+	_task = "common",
 }) => {
 	//
 
@@ -73,7 +75,7 @@ const processFields: ProcessFieldsType = ({
 		parseFloat(usagePercent) >= config.type.minUsagePercent;
 
 	if (!shouldGenerateType) {
-		return processFields({ stats: remainingFields, config, existing, existingNames, ref, meta, _role });
+		return processFields({ stats: remainingFields, config, existing, existingNames, ref, meta, _role, _task });
 	}
 
 	const res = getMappedFieldOrType({ value: field, from: "field", to: "type", remapper: config.type.naming.fields });
@@ -113,6 +115,7 @@ const processFields: ProcessFieldsType = ({
 		meta,
 		ref,
 		_role,
+		_task,
 	});
 
 	return {
