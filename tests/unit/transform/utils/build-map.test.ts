@@ -100,6 +100,79 @@ describe("buildMap", async () => {
 			expect(result.get(1)).toEqual(new Set(["A"]));
 			expect(result.get(2)).toEqual(new Set(["B"]));
 		});
+
+		it("should handle left non-array and right array", () => {
+			const source = {
+				en: { key: 1, value: ["A", "B", "C"] },
+				fr: { key: 2, value: ["C", "D", "E"] },
+			} as const;
+
+			const result = buildMap({
+				source,
+				kind: "set",
+				left: "key",
+				right: "value",
+			});
+
+			expect(result.size).toBe(2);
+			expect(result.get(1)).toEqual(new Set(["A", "B", "C"]));
+			expect(result.get(2)).toEqual(new Set(["C", "D", "E"]));
+		});
+
+		it("should handle multiple same left non-arrays and right array", () => {
+			const source = {
+				en: { key: 1, value: ["A", "B", "C"] },
+				fr: { key: 1, value: ["C", "D", "E"] },
+			} as const;
+
+			const result = buildMap({
+				source,
+				kind: "set",
+				left: "key",
+				right: "value",
+			});
+
+			console.log(result);
+
+			expect(result.size).toBe(1);
+			expect(result.get(1)).toEqual(new Set(["A", "B", "C", "D", "E"]));
+		});
+
+		it("should handle arrays of both left and right", () => {
+			const source = {
+				en: { key: [1, 2, 3], value: ["A", "B", "C"] },
+				fr: { key: [2, 4], value: ["C", "D", "E"] },
+			} as const;
+
+			const result = buildMap({
+				source,
+				kind: "set",
+				left: "key",
+				right: "value",
+			});
+
+			expect(result.size).toBe(4);
+			expect(result.get(1)).toEqual(new Set(["A", "B", "C"]));
+			expect(result.get(2)).toEqual(new Set(["A", "B", "C", "D", "E"]));
+		});
+
+		it("should handle arrays of both left and right with skipped null/undefined values", () => {
+			const source = {
+				en: { key: [1, 2, 3, null], value: ["A", "B", "C", undefined] },
+				fr: { key: [2, 4, undefined], value: ["C", "D", "E", null] },
+			} as const;
+
+			const result = buildMap({
+				source,
+				kind: "set",
+				left: "key",
+				right: "value",
+			});
+
+			expect(result.size).toBe(4);
+			expect(result.get(1)).toEqual(new Set(["A", "B", "C"]));
+			expect(result.get(2)).toEqual(new Set(["A", "B", "C", "D", "E"]));
+		});
 	});
 
 	describe("custom kind", () => {
