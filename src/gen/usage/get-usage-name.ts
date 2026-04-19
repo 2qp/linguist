@@ -7,10 +7,10 @@ type GetUsageNameParams = {
 	right: KeyOf<Language> | Field;
 };
 
-type GetUsageName = (params: GetUsageNameParams) => `${(typeof params)["left"]}s_with_${(typeof params)["right"]}`;
+type GetUsageName = (params: GetUsageNameParams) => `${(typeof params)["left"]}_with_${(typeof params)["right"]}`;
 
 const getUsageName: GetUsageName = ({ left, right }) => {
-	return `${left}s_with_${right}`;
+	return `${left}_with_${right}`;
 };
 
 export { getUsageName };
