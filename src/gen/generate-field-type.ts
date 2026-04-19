@@ -67,7 +67,7 @@ const generateFieldType: GenerateFieldType = ({ stats, typeName, config }) => {
 		};
 	}
 
-	const elementType = "any" as const;
+	const elementType = "unknown" as const;
 
 	// mixed or object
 	// mmm will handle later / recursive
