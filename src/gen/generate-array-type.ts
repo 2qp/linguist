@@ -26,6 +26,28 @@ const generateArrayType: GenerateArrayType = ({ stats, config, typeName }) => {
 
 		const sortedValues = sortMixed([...stats.uniqueValues]);
 
+		if (stats.itemType === "boolean" || stats.itemType === "number") {
+			//
+
+			const sorted = sortedValues.map((items) => `${items}` as const);
+
+			const joinedLits = join(sorted, " | " as const);
+
+			const elementType = createElementType({
+				combined: joinedLits,
+				base: stats.itemType,
+				config,
+			});
+
+			const typeDef = getArrayTypeString({ elementType, readonly: config.type.useReadonlyArrays });
+
+			return {
+				typeDef,
+				segmentDefs: [],
+				type: stats.type,
+			};
+		}
+
 		const literals = sortedValues.map((values) => {
 			const template = `${values}` as const;
 
@@ -86,7 +108,7 @@ const generateArrayType: GenerateArrayType = ({ stats, config, typeName }) => {
 		};
 	}
 
-	const elementType = "any" as const;
+	const elementType = "unknown" as const;
 
 	const typeDef = getArrayTypeString({ elementType, readonly: config.type.useReadonlyArrays });
 
