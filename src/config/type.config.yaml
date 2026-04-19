@@ -28,6 +28,10 @@ type:
     useReadonlyArrays: true
 
   #
+  usage:
+    skip_should_generate_type: true            # processField
+
+  #
   out:
     common:
       file:

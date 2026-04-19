@@ -15,6 +15,9 @@ type TypeGeneratorConfig = {
 	secondary: SecondaryOptions;
 
 	//
+	usage: UsageOptions;
+
+	//
 	out: Out;
 	options: Options;
 	naming: NamingConfig;
@@ -36,6 +39,10 @@ type Options = {};
 type SecondaryOptions = {
 	enabled: boolean;
 } & Pick<TypeGeneratorConfig, "allowFlexibleTypes" | "useReadonlyArrays">;
+
+type UsageOptions = {
+	skip_should_generate_type: boolean;
+};
 
 type FieldType = {
 	readonly field: string;
