@@ -69,6 +69,9 @@ const buildMap = <
 
 			const keys = Array.isArray(key) ? key : [key];
 
+			const values = Array.isArray(value) ? value : [value];
+			const nonNullishValues = values.filter((v) => !isNullish(v)) as NonNullable<TSource[K]>[TRight][];
+
 			for (const item of keys as TSource[K][TLeft][]) {
 				//
 
@@ -77,24 +80,33 @@ const buildMap = <
 				const keyItem = item as ElementOf<TSource[K][TLeft]>;
 				const exist = map.get(keyItem);
 
+				// if (isNullish(exist)) {
+				// 	//
+
+				// 	if (isNullish(value)) {
+				// 		map.set(keyItem, new Set([]));
+				// 		continue;
+				// 	}
+
+				// 	map.set(keyItem, new Set([value]));
+				// 	continue;
+				// }
+
+				// if (isNullish(value)) {
+				// 	map.set(keyItem, new Set(exist));
+				// 	continue;
+				// }
+
+				// map.set(keyItem, new Set(exist).add(value));
+
 				if (isNullish(exist)) {
-					//
-
-					if (isNullish(value)) {
-						map.set(keyItem, new Set([]));
-						continue;
-					}
-
-					map.set(keyItem, new Set([value]));
+					map.set(keyItem, new Set(nonNullishValues));
 					continue;
 				}
 
-				if (isNullish(value)) {
-					map.set(keyItem, new Set(exist));
-					continue;
-				}
+				if (!nonNullishValues.length) continue;
 
-				map.set(keyItem, new Set(exist).add(value));
+				map.set(keyItem, new Set([...exist, ...nonNullishValues]));
 			}
 		}
 		return map as BuildReturn<TSource, K, TLeft, TRight, TProperties, TVariant>;
