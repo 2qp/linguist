@@ -1,3 +1,4 @@
+import { stringify } from "safe-stable-stringify";
 import { addType, createConst, createExport, wrapAsConst } from "@/transform/utils/statement/statement-builder-utils";
 
 import type { Primitive } from "@/types/gen.types";
@@ -27,6 +28,20 @@ const recordBuilder =
 								createExport(varName),
 							] as const,
 					}),
+				}),
+			}),
+
+			//
+			record: <const TValue extends Record<PropertyKey, unknown>>(value: TValue) => ({
+				build: () => [createConst(varName, `${stringify(value, null, 2)}`, ";"), createExport(varName)] as const,
+
+				// type:
+
+				asConst: () => ({
+					build: () =>
+						[wrapAsConst(createConst(varName, `${stringify(value, null, 2)}`, "")), createExport(varName)] as const,
+
+					// type:
 				}),
 			}),
 		}),
