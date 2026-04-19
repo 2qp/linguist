@@ -9,12 +9,12 @@ import type { LanguageData } from "@/types/lang.types";
 
 type CreatorParams<
 	TSource extends LanguageData = LanguageData,
-	TField extends string = Field,
+	// TField extends string = Field,
 	TUnique extends Primitive = Primitive,
 > = {
 	source: TSource;
-	stats: FieldAnalysisArray<TField, TUnique>;
-	fields: ProcessFieldsReturnType<TField, TUnique>;
+	stats: FieldAnalysisArray<Field, TUnique>;
+	fields: ProcessFieldsReturnType<Field, TUnique>;
 	config: Config;
 	ref: Ref;
 	meta: Meta;
@@ -22,10 +22,10 @@ type CreatorParams<
 
 type Creator = <
 	TSource extends LanguageData = LanguageData,
-	TField extends string = Field,
+	// TField extends string = Field,
 	TUnique extends Primitive = Primitive,
 >(
-	params: CreatorParams<TSource, TField, TUnique>,
+	params: CreatorParams<TSource, TUnique>,
 ) => Promise<void>;
 
 export type { Creator, CreatorParams };

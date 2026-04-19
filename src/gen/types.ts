@@ -48,23 +48,23 @@ type DefsGenerator<Config extends keyof DefsGeneratorParamsMap = "with_base"> = 
 
 type GeneratorParams<
 	TSource extends LanguageData = LanguageData,
-	TField extends string = Field,
+	// TField extends string = Field,
 	TUnique extends Primitive = Primitive,
 > = {
 	config: Config;
 	source: TSource;
 	ref: Ref;
 	meta: Meta;
-	stats: FieldAnalysisArray<TField, TUnique>;
-	fields: ProcessFieldsReturnType<TField, TUnique>;
+	stats: FieldAnalysisArray<Field, TUnique>;
+	fields: ProcessFieldsReturnType<Field, TUnique>;
 };
 
 type Generator<R = Promise<void>> = <
 	TSource extends LanguageData = LanguageData,
-	TField extends string = Field,
+	// TField extends string = Field,
 	TUnique extends Primitive = Primitive,
 >(
-	params: GeneratorParams<TSource, TField, TUnique>,
+	params: GeneratorParams<TSource, TUnique>,
 ) => R;
 
 export type { DefsGenerator, DefsGeneratorParams, Generator, GeneratorParams };
