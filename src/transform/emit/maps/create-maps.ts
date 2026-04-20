@@ -1,12 +1,12 @@
-import { emitMap } from "./emit-map";
+import { generateMapOptions } from "./generate-map-options";
 import { join } from "node:path";
+import { createFieldSet } from "@gen/utils/create-field-set";
 import { ensureDir } from "@utils/ensure-dir";
 import { writeFile } from "@utils/write-file";
 
 import type { Config } from "@/types/config.types";
 import type { ProcessedFieldAnalysisArray } from "@/types/field.types";
 import type { Language, Languages } from "@/types/generated.types";
-import type { MapEmitter, MapEmitterOptions } from "./types";
 
 type CreateMapsParams = {
 	languages: Languages;
@@ -16,28 +16,44 @@ type CreateMapsParams = {
 
 type CreateMapsType = (params: CreateMapsParams) => Promise<void>;
 
-const createMaps: CreateMapsType = async ({ config, languages, stats }) => {
+const createMaps: CreateMapsType = async ({ config, languages, stats: _stats }) => {
 	//
+
+	const stats = new Map(_stats);
 
 	const indexesDir = join(config.data.paths.mapsDir, ".");
 	await ensureDir(indexesDir);
 
-	const mapEmitters: MapEmitter<MapEmitterOptions>[] = [
-		{ name: "extension-to-name", emitter: emitMap, options: { kind: "set", left: "extensions", right: "name" } },
-		{ name: "filename-to-name", emitter: emitMap, options: { kind: "set", left: "filenames", right: "name" } },
-		{ name: "interpreter-to-name", emitter: emitMap, options: { kind: "set", left: "interpreters", right: "name" } },
-		{
-			name: "language-id-to-name",
-			options: { kind: "primitive", key: "language_id", value: "name" },
-			emitter: emitMap,
-		},
-		{ name: "name-to-type", emitter: emitMap, options: { kind: "primitive", key: "name", value: "type" } },
-		{ name: "extension-to-type", emitter: emitMap, options: { kind: "set", left: "extensions", right: "type" } },
-	];
+	const fieldSet = createFieldSet({ source: languages, config, _phase: "transform" });
+
+	const len = Object.keys(languages).length;
+
+	const fieldsArray = [...fieldSet]
+		.map((item) => {
+			const isUnique = Number(stats.get(item)?.uniqueValues.size) === len;
+
+			if (isUnique) return item;
+
+			return undefined;
+		})
+		.filter((item) => item !== undefined);
+
+	const UNIQUE_FIELDS = new Set(fieldsArray);
+
+	const mapEmitters = [...generateMapOptions([...fieldSet], UNIQUE_FIELDS)];
+
+	const seen = new Set();
 
 	await Promise.all(
-		mapEmitters.map(async ({ name, emitter, options }) => {
-			const { content, norm } = emitter({ languages, config, stats, name, options });
+		mapEmitters.map(async ({ name, emitter, options }, index) => {
+			//
+
+			if (seen.has(name)) throw new Error(`Duplicate mapping name found: "${name}" at index ${index}`);
+			seen.add(name);
+
+			const { norm, blocks } = emitter({ languages, config, stats: _stats, name, options });
+
+			const content = blocks.build();
 
 			const filePath = join(indexesDir, `${norm.fileName}.ts`);
 			await writeFile({ filePath, content });

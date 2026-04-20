@@ -1,4 +1,5 @@
 import { getUsageName } from "@gen/usage/get-usage-name";
+import { createBlockBuilder } from "@utils/create-block-builder";
 import { stringify } from "safe-stable-stringify";
 import { buildMap } from "@/transform/utils/build-map";
 import { normalizeName } from "@/transform/utils/normalize-name";
@@ -42,36 +43,33 @@ const emitMap: MapEmitterType<MapEmitterOptions> = ({ name, languages, options, 
 
 		const stat = stats.get(options.right);
 
-		//
-
 		if (!stat || !type) throw new Error("stats or type is null");
 
-		const imports = builder.import().types(["Dictionary"], []).from(paths.common).build();
+		const type_imports_static = builder.import().types(["Dictionary"], []).from(paths.common).build();
 
-		const imports_usage = builder.import().types([], [type]).from(paths.usage).build();
+		const itype_imports_dynamic = builder.import().types([], [type]).from(paths.usage).build();
 
 		const [stmt, stmt_export] = builder
 			.var(norm.varName)
 			.prefix("_")
 			.typeof()
-			// .wrap(stat.isArray ? "FallbackForUnknownKeys<$>" : "$[number]")
 			.wrap("Dictionary<$>")
 			.types([], [type])
 			.build();
 
 		const [type_stmt, type_stmt_export] = builder.var(norm.varName).typeof(norm.typeName).build();
 
-		const content = [
-			[imports, imports_usage].join("\n"),
-			prefixed_stmt,
-			stmt,
-			type_stmt,
-			prefixed_stmt_export,
-			stmt_export,
-			type_stmt_export,
-		].join("\n\n");
+		const blocks = createBlockBuilder()
+			.import(type_imports_static, "type", "TYPIMP01")
+			.import(itype_imports_dynamic, "type", "TYPIMP01")
+			.expr(prefixed_stmt, true)
+			.expr(stmt)
+			.type(type_stmt)
+			.exportExpr(prefixed_stmt_export, true)
+			.exportExpr(stmt_export)
+			.exportType(type_stmt_export);
 
-		return { content, norm };
+		return { norm, blocks };
 	}
 
 	//
@@ -95,11 +93,30 @@ const emitMap: MapEmitterType<MapEmitterOptions> = ({ name, languages, options, 
 
 		const [type_stmt, type_stmt_export] = builder.var(norm.varName).typeof(norm.typeName).build();
 
-		const content = [imports, prefixed_stmt, stmt, type_stmt, prefixed_stmt_export, stmt_export, type_stmt_export].join(
-			"\n\n",
-		);
+		// const [__meta, __meta_export] = builder
+		// 	.var("__meta")
+		// 	.record()
+		// 	.from()
+		// 	.record({
+		// 		source: options.key,
+		// 		target: options.value,
+		// 		kind: options.kind,
+		// 	})
+		// 	.asConst()
+		// 	.build();
 
-		return { content, norm };
+		const blocks = createBlockBuilder()
+			.import(imports, "type")
+			.expr(prefixed_stmt, true)
+			.expr(stmt)
+			.type(type_stmt)
+			.exportExpr(prefixed_stmt_export, true)
+			.exportExpr(stmt_export)
+			.exportType(type_stmt_export);
+		// .meta(__meta)
+		// .exportMeta(__meta_export)
+
+		return { norm, blocks };
 	}
 
 	//
@@ -109,7 +126,9 @@ const emitMap: MapEmitterType<MapEmitterOptions> = ({ name, languages, options, 
 		throw new Error(`no impl yet`);
 	}
 
-	return { content: "", norm };
+	const blocks = createBlockBuilder();
+
+	return { norm, blocks };
 };
 
 export { emitMap };

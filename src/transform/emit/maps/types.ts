@@ -1,3 +1,4 @@
+import type { CreateBlockBuilder } from "@utils/create-block-builder";
 import type { BuildParams } from "@/transform/utils/build-map";
 import type { NormalizedName } from "@/transform/utils/normalize-name";
 import type { Config } from "@/types/config.types";
@@ -12,7 +13,11 @@ type MapEmitterParams<TOptions> = {
 	stats: ProcessedFieldAnalysisArray<keyof Language>;
 };
 
-type MapEmitterType<TOptions> = (params: MapEmitterParams<TOptions>) => { content: string; norm: NormalizedName };
+type MapEmitterType<TOptions> = (params: MapEmitterParams<TOptions>) => {
+	// content: string;
+	norm: NormalizedName;
+	blocks: CreateBlockBuilder;
+};
 
 type MapEmitter<TOptions> = { name: string; emitter: MapEmitterType<TOptions>; options: TOptions };
 
