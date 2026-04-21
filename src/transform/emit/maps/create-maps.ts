@@ -28,17 +28,9 @@ const createMaps: CreateMapsType = async ({ config, languages, stats: _stats }) 
 
 	const len = Object.keys(languages).length;
 
-	const fieldsArray = [...fieldSet]
-		.map((item) => {
-			const isUnique = Number(stats.get(item)?.uniqueValues.size) === len;
+	const uniqueFields = [...fieldSet].filter((item) => stats.get(item)?.uniqueValues.size === len);
 
-			if (isUnique) return item;
-
-			return undefined;
-		})
-		.filter((item) => item !== undefined);
-
-	const UNIQUE_FIELDS = new Set(fieldsArray);
+	const UNIQUE_FIELDS = new Set(uniqueFields);
 
 	const mapEmitters = [...generateMapOptions([...fieldSet], UNIQUE_FIELDS)];
 
