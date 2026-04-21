@@ -1,8 +1,8 @@
 import type { Entries } from "@/types/utility.types";
 
-type BuildEntriesParams<T extends Record<string | number | symbol, object>> = { source: T };
+type BuildEntriesParams<T extends Record<PropertyKey, object>> = { source: T };
 
-type BuildEntriesType = <T extends Record<string | number | symbol, object>>(params: BuildEntriesParams<T>) => T;
+type BuildEntriesType = <T extends Record<PropertyKey, object>, R = T>(params: BuildEntriesParams<T>) => R;
 
 const buildEntries: BuildEntriesType = ({ source }) => {
 	//
