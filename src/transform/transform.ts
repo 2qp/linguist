@@ -49,7 +49,7 @@ const transform: Transform = async ({ config, source, stats: _stats }) => {
 	await Promise.all([
 		createCategories({ config, grouped }),
 
-		createIndexes({ languages, config }),
+		createIndexes({ languages, config, stats }),
 
 		createMaps({ languages, config, stats }),
 
