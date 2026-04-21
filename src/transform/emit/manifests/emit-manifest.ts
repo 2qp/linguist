@@ -7,9 +7,15 @@ import { createStatementPaths } from "@/transform/utils/statement/create-stateme
 
 import type { Language } from "@/types/generated.types";
 import type { KeyOf } from "@/types/utility.types";
-import type { MapEmitterOptions, MapEmitterType } from "../maps/types";
+import type { ManifestEmitterOptions, ManifestEmitterType } from "./types";
 
-const emitManifest: MapEmitterType<MapEmitterOptions> = ({ name, languages, options, config, stats: _stats }) => {
+const emitManifest: ManifestEmitterType<ManifestEmitterOptions> = ({
+	name,
+	languages,
+	options,
+	config,
+	stats: _stats,
+}) => {
 	//
 
 	const stats = new Map(_stats);
