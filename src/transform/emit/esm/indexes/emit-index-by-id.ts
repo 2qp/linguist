@@ -6,6 +6,10 @@ import { createStatementPaths } from "@/transform/utils/statement/create-stateme
 
 import type { IndexEmitterType } from "./types";
 
+/**
+ * @deprecated
+ */
+// @ts-expect-error
 const emitIndexById: IndexEmitterType = ({ languages, config }): string => {
 	//
 

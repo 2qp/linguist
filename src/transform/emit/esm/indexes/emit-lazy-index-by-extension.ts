@@ -7,6 +7,10 @@ import { createStatementPaths } from "@/transform/utils/statement/create-stateme
 
 import type { IndexEmitterType } from "./types";
 
+/**
+ * @deprecated
+ */
+// @ts-expect-error
 const emitLazyIndexByExtension: IndexEmitterType = ({ languages, config }): string => {
 	//
 
