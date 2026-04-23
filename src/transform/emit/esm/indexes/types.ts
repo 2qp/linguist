@@ -1,3 +1,4 @@
+import type { CreateBlockBuilder } from "@utils/create-block-builder";
 import type { BuildParams, BuildVariant } from "@/transform/utils/build-map";
 import type { NormalizedName } from "@/transform/utils/normalize-name";
 import type { Config } from "@/types/config.types";
@@ -13,7 +14,10 @@ type IndexEmitterParams<TOptions> = {
 	stats: ProcessedFieldAnalysisArray<keyof Language>;
 };
 
-type IndexEmitterType<TOptions> = (params: IndexEmitterParams<TOptions>) => { norm: NormalizedName; content: string };
+type IndexEmitterType<TOptions> = (params: IndexEmitterParams<TOptions>) => {
+	norm: NormalizedName;
+	blocks: CreateBlockBuilder;
+};
 
 type IndexEmitter<TOptions> = {
 	name: string;

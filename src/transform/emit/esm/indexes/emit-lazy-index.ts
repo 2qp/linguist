@@ -1,4 +1,4 @@
-import { join } from "@utils/join";
+import { createBlockBuilder } from "@utils/create-block-builder";
 import { LANG_DICTIONARY } from "@/constants/commons";
 import { buildMap } from "@/transform/utils/build-map";
 import { normalizeName } from "@/transform/utils/normalize-name";
@@ -80,18 +80,15 @@ const emitLazyIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages,
 			.types(["Language", "undefined"], [])
 			.build();
 
-		const content = [
-			typeImports.join("\n"),
-			externalTypeImports,
+		const blocks = createBlockBuilder()
+			.import(typeImports.join("\n"), "type")
+			.import(externalTypeImports, "type")
+			.expr(var_stmt)
+			.type(type_stmt)
+			.exportExpr(var_export_stmt)
+			.exportType(type_export_stmt);
 
-			var_stmt,
-			type_stmt,
-
-			var_export_stmt,
-			type_export_stmt,
-		].join("\n\n");
-
-		return { norm: _norm, content };
+		return { norm: _norm, blocks };
 	}
 
 	if (options.kind === "set") {
@@ -172,20 +169,15 @@ const emitLazyIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages,
 			.types(["Language[]", "undefined"], [])
 			.build();
 
-		const out = [
-			typeImports.join("\n"),
-			externalTypeImports,
+		const blocks = createBlockBuilder()
+			.import(typeImports.join("\n"), "type")
+			.import(externalTypeImports, "type")
+			.expr(var_stmt)
+			.type(type_stmt)
+			.exportExpr(var_export_stmt)
+			.exportType(type_export_stmt);
 
-			var_stmt,
-			type_stmt,
-
-			var_export_stmt,
-			type_export_stmt,
-		] as const;
-
-		const content = join(out, "\n\n");
-
-		return { norm: _norm, content };
+		return { norm: _norm, blocks };
 	}
 
 	throw Error("unexpected option.kind");

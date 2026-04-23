@@ -38,7 +38,9 @@ const createIndexes: CreateIndexesType = async ({ languages, config, stats: _sta
 		indexEmitters.flatMap(async ({ name, emitter, options }) => {
 			//
 
-			const { norm, content } = emitter({ languages, config, stats: _stats, name, options });
+			const { norm, blocks } = emitter({ languages, config, stats: _stats, name, options });
+
+			const content = blocks.build();
 
 			const filePath = join(indexesDir, `${norm.fileName}.ts`);
 
