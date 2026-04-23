@@ -15,7 +15,12 @@ type IndexEmitterParams<TOptions> = {
 
 type IndexEmitterType<TOptions> = (params: IndexEmitterParams<TOptions>) => { norm: NormalizedName; content: string };
 
-type IndexEmitter<TOptions> = { name: string; emitter: IndexEmitterType<TOptions>; options: TOptions };
+type IndexEmitter<TOptions> = {
+	name: string;
+	emitter: IndexEmitterType<TOptions>;
+	options: TOptions;
+	type: "eager" | "lazy";
+};
 
 type IndexEmitterOptions = {} & BuildParams<Languages, BuildVariant, KeysOfUnion<Languages[keyof Languages]>, "name">;
 

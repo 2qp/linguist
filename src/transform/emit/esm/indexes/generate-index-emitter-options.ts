@@ -23,6 +23,7 @@ const generateIndexEmitterOptions: GenerateIndexEmitterOptions = function* (fiel
 			{
 				name: `by-${source}`,
 				emitter: emitIndex,
+				type: "eager",
 				options: isSourceUnique
 					? { kind: "primitive", key: source, value: "name" }
 					: { kind: "set", left: source, right: "name" },
@@ -30,6 +31,7 @@ const generateIndexEmitterOptions: GenerateIndexEmitterOptions = function* (fiel
 			{
 				name: `lazy-by-${source}`,
 				emitter: emitLazyIndex,
+				type: "lazy",
 				options: isSourceUnique
 					? { kind: "primitive", key: source, value: "name" }
 					: { kind: "set", left: source, right: "name" },
