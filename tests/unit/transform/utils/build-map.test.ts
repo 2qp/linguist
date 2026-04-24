@@ -132,8 +132,6 @@ describe("buildMap", async () => {
 				right: "value",
 			});
 
-			console.log(result);
-
 			expect(result.size).toBe(1);
 			expect(result.get(1)).toEqual(new Set(["A", "B", "C", "D", "E"]));
 		});
