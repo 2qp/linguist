@@ -75,7 +75,8 @@
 		"on:guard:pass": "tsx ./src/scripts/on-guard-pass.ts",
 		"guard:generate": "pnpm run typecheck && pnpm run test:upstream:guard && pnpm run on:guard:pass && pnpm run generate",
 		"generate:build": "pnpm typecheck && pnpm test:upstream:guard && pnpm on:guard:pass && pnpm build",
-		"act:simulate": "act --artifact-server-path /tmp/artifacts --secret-file .secrets"
+		"act:simulate": "act --artifact-server-path /tmp/artifacts --secret-file .secrets",
+		"docs:meta:tables": "tsx ./src/scripts/create-meta-tables.ts"
 	},
 	"keywords": [
 		"linguist",
