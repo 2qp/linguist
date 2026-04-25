@@ -5,6 +5,7 @@ import {
 	createPrinter,
 	createProgram,
 	EmitHint,
+	factory,
 	isInterfaceDeclaration,
 	isTypeAliasDeclaration,
 	ModuleKind,
@@ -12,6 +13,7 @@ import {
 	NewLineKind,
 	ScriptTarget,
 	SymbolFlags,
+	SyntaxKind,
 } from "typescript";
 
 import type {
@@ -34,6 +36,7 @@ type ReExportConfig = {
 	extension?: string;
 	asNamespace?: boolean;
 	includeDefaultExports?: boolean;
+	exported?: boolean;
 	namespaceTemplate?: (fileName: string) => string;
 };
 
@@ -313,6 +316,29 @@ const generateSingleFileExports = async (
 	await writeExportFile(outputFilePath, exportLines, config);
 };
 
+const addExport = (decl: InterfaceDeclaration | TypeAliasDeclaration) => {
+	//
+
+	const exportModifier = factory.createModifier(SyntaxKind.ExportKeyword);
+
+	if (isInterfaceDeclaration(decl)) {
+		return factory.updateInterfaceDeclaration(
+			decl,
+			[exportModifier],
+			decl.name,
+			decl.typeParameters,
+			decl.heritageClauses,
+			decl.members,
+		);
+	}
+
+	if (isTypeAliasDeclaration(decl)) {
+		return factory.updateTypeAliasDeclaration(decl, [exportModifier], decl.name, decl.typeParameters, decl.type);
+	}
+
+	return decl;
+};
+
 const findTypeDeclaration = (
 	sourceFile: SourceFile,
 	typeName: string,
@@ -338,7 +364,7 @@ const findTypeDeclaration = (
 	return null;
 };
 
-const getTypeAsString = async (filePath: string, typeName: string, config: ReExportConfig): Promise<string | null> => {
+const createTypeAsStringBuilder = async (filePath: string, typeName: string, config: ReExportConfig) => {
 	//
 
 	const sourceFiles = await resolveSourceFiles(config);
@@ -364,9 +390,24 @@ const getTypeAsString = async (filePath: string, typeName: string, config: ReExp
 
 	const printer = createPrinter({ newLine: NewLineKind.LineFeed, removeComments: false });
 
-	const result = printer.printNode(EmitHint.Unspecified, typeDeclaration, sourceFile);
+	// const result = printer.printNode(EmitHint.Unspecified, typeDeclWithExportsOrNot, sourceFile);
 
-	return result;
+	return {
+		//
+
+		build: () => {
+			const result = printer.printNode(EmitHint.Unspecified, typeDeclaration, sourceFile);
+			return result;
+		},
+
+		addExport: () => ({
+			build: () => {
+				const declWithExport = addExport(typeDeclaration);
+				const result = printer.printNode(EmitHint.Unspecified, declWithExport, sourceFile);
+				return result;
+			},
+		}),
+	};
 };
 
 type CreateReExportsParams = ReExportConfig;
@@ -392,7 +433,7 @@ const createReExports: CreateReExportsType = async (config) => {
 	await generateSingleFileExports(program, checker, sourceFiles, config);
 };
 
-export { createReExports, getTypeAsString };
+export { createReExports, createTypeAsStringBuilder };
 export type { CreateReExportsParams, CreateReExportsType, ReExportConfig };
 
 //
