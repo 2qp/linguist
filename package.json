@@ -71,7 +71,7 @@
 		"lint": "biome check --write",
 		"test:upstream:guard": "vitest upstream.guard.test --run",
 		"test:core": "vitest --exclude=\"**/generated.test.ts\" --exclude=\"**/upstream.guard.test.ts\" --exclude=\"**/*.integrity.test.ts\" --run --typecheck",
-		"test:generated": "vitest generated --run --typecheck",
+		"test:generated": "vitest unit/generated --run --typecheck",
 		"on:guard:pass": "tsx ./src/scripts/on-guard-pass.ts",
 		"guard:generate": "pnpm run typecheck && pnpm run test:upstream:guard && pnpm run on:guard:pass && pnpm run generate",
 		"generate:build": "pnpm typecheck && pnpm test:upstream:guard && pnpm on:guard:pass && pnpm build",
