@@ -21,7 +21,7 @@ const generateIndexEmitterOptions: GenerateIndexEmitterOptions = function* (fiel
 
 		yield* [
 			{
-				name: `by-${source}`,
+				name: `by-${String(source)}`,
 				emitter: emitIndex,
 				type: "eager",
 				options: isSourceUnique
@@ -29,7 +29,7 @@ const generateIndexEmitterOptions: GenerateIndexEmitterOptions = function* (fiel
 					: { kind: "set", left: source, right: "name" },
 			},
 			{
-				name: `lazy-by-${source}`,
+				name: `lazy-by-${String(source)}`,
 				emitter: emitLazyIndex,
 				type: "lazy",
 				options: isSourceUnique

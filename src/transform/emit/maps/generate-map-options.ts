@@ -20,7 +20,7 @@ const generateMapOptions: GenerateMapOptions = function* (fields, UNIQUE_FIELDS)
 			if (source === target) continue;
 
 			yield {
-				name: `${source}-to-${target}`,
+				name: `${String(source)}-to-${String(target)}`,
 				emitter: emitMap,
 				options: isSourceUnique
 					? { kind: "primitive", key: source, value: target }
