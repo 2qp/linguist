@@ -63,6 +63,7 @@ jobs:
     outputs:
       updated_at: ${{ steps.upstream-date.outputs.updated_at }}
       hash: ${{ needs.check.outputs.hash }}
+      new_version: ${{ steps.version.outputs.new_version }}
     env:
       NODE_OPTIONS: --max-old-space-size=8192
 
@@ -120,6 +121,23 @@ jobs:
 
           echo "Created build-info.json with run_id: ${{ github.run_id }}"
 
+      - name: Determine next version
+        id: version
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="v$MAJOR.$MINOR.$NEW_PATCH"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Sync package.json version
+        id: version-sync
+        run: |
+          VERSION=${{ steps.version.outputs.new_version }}
+          npm pkg set version=${VERSION#v}
+          echo "VERSION is: $VERSION"
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -174,30 +192,15 @@ jobs:
             echo "content=No changelog generated" >> $GITHUB_OUTPUT
           fi
 
-      - name: Determine next version
-        id: version
-        run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          VERSION=${LATEST_TAG#v}
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
-          NEW_PATCH=$((PATCH + 1))
-          NEW_VERSION="v$MAJOR.$MINOR.$NEW_PATCH"
-          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
-
-      - name: Sync package.json version
-        run: |
-          VERSION=${{ steps.version.outputs.new_version }}
-          npm pkg set version=${VERSION#v}
-          echo "VERSION is: $VERSION"
 
       - name: Compute PR metadata
         id: prmeta
         run: |
           if [[ "${{ github.event.inputs.force_generate }}" == "true" ]]; then
-            MSG="chore(release): regenerate \`artifacts\` for \`${{ steps.version.outputs.new_version }}\`"
+            MSG="chore(release): regenerate \`artifacts\` for \`${{ needs.generate.outputs.new_version }}\`"
             TITLE="${MSG}"
           else
-            MSG="chore(release): sync \`linguist/languages.yml\` and regenerate \`artifacts\` for \`${{ steps.version.outputs.new_version }}\`"
+            MSG="chore(release): sync \`linguist/languages.yml\` and regenerate \`artifacts\` for \`${{ needs.generate.outputs.new_version }}\`"
             TITLE="${MSG}"
           fi
 
