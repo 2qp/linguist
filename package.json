@@ -104,7 +104,7 @@
 		"@biomejs/biome": "^2.4.13",
 		"@types/js-yaml": "^4.0.9",
 		"@types/node": "^25.6.0",
-		"@typescript/native-preview": "7.0.0-dev.20260216.1",
+		"@typescript/native-preview": "7.0.0-dev.20260426.1",
 		"glob": "^13.0.6",
 		"js-yaml": "^4.1.1",
 		"rimraf": "^6.1.3",
