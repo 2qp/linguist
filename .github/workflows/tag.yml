@@ -1,0 +1,79 @@
+name: linguist-tag
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  create-tag-on-merge:
+    if: |
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'chore/linguist-sync-')
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.version.outputs.new_version }}
+      hash: ${{ steps.extract.outputs.hash }}
+    
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: master
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract hash from PR branch name
+        id: extract
+        run: |
+          BRANCH="${{ github.event.pull_request.head.ref }}"
+          HASH="${BRANCH#chore/linguist-sync-}"
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+
+      - name: Determine next version
+        id: version
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="v$MAJOR.$MINOR.$NEW_PATCH"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create and push tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a ${{ steps.version.outputs.new_version }} -m "Release ${{ steps.version.outputs.new_version }} (linguist sync) - hash: ${{ steps.extract.outputs.hash }}"
+          git push origin ${{ steps.version.outputs.new_version }}
+
+  create-release:
+    needs: create-tag-on-merge
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ needs.create-tag-on-merge.outputs.new_version }}
+          name: ${{ needs.create-tag-on-merge.outputs.new_version }}
+          body: |
+            ${{ github.event.pull_request.body }}
+            
+            ---
+            ## Release Metadata
+            - **Version**: `${{ needs.create-tag-on-merge.outputs.new_version }}`
+            - **Upstream Hash**: `${{ needs.create-tag-on-merge.outputs.hash }}`
+            - **Changes**: +${{ github.event.pull_request.additions }} / -${{ github.event.pull_request.deletions }} lines
+            - **Merge Commit**: [`${{ github.event.pull_request.merge_commit_sha }}`](https://github.com/${{ github.repository }}/commit/${{ github.event.pull_request.merge_commit_sha }})
+            - **Pull Request**: [#${{ github.event.pull_request.number }}](${{ github.event.pull_request.html_url }})
+            
+            ### This release has been automatically published to npm.
+          draft: false
+          prerelease: false

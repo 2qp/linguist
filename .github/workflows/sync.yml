@@ -1,0 +1,223 @@
+name: linguist-sync
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+    inputs:
+      force_generate:
+        description: 'Force regenerate (creates PR even if no upstream changes)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+
+
+  check:
+    if: |
+      (github.event_name == 'schedule') ||
+      (github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
+      hash: ${{ steps.upstream.outputs.hash }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Get upstream SHA256
+        id: upstream
+        run: |
+          HASH256=$(curl -L https://raw.githubusercontent.com/github-linguist/linguist/main/lib/linguist/languages.yml | sha256sum | awk '{print $1}')
+          echo "hash=$HASH256" >> $GITHUB_OUTPUT
+
+      - name: Read current SHA256 from build-info.json
+        id: prev
+        run: |
+          if [ -f build-info.json ]; then
+            LOCAL_HASH=$(grep -o '"hash"[[:space:]]*:[[:space:]]*"[^"]*"' build-info.json | sed 's/.*: *"\([^"]*\)"/\1/')
+            echo "local_hash=$LOCAL_HASH" >> $GITHUB_OUTPUT
+          else
+            echo "local_hash=" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Compare hashes
+        id: check
+        run: |
+          FORCE="${{ github.event.inputs.force_generate }}"
+          if [ "$FORCE" = "true" ] || [ "${{ steps.upstream.outputs.hash }}" != "${{ steps.prev.outputs.local_hash }}" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+
+  generate:
+    needs: check
+    if: needs.check.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      updated_at: ${{ steps.upstream-date.outputs.updated_at }}
+      hash: ${{ needs.check.outputs.hash }}
+    env:
+      NODE_OPTIONS: --max-old-space-size=8192
+
+    steps:
+      - name: Get upstream updated date
+        id: upstream-date
+        run: |
+          UPDATED_AT=$(curl -s "https://api.github.com/repos/github-linguist/linguist/commits?path=lib/linguist/languages.yml&page=1&per_page=1" | jq -r '.[0].commit.committer.date')
+          echo "updated_at=$UPDATED_AT" >> $GITHUB_OUTPUT
+
+      - uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10.24.0
+          standalone: true
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24.14.1'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate build files
+        run: pnpm run generate:build
+
+      - name: Test generated files
+        run: pnpm test:generated
+
+      - name: Create build-info.json with metadata
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+
+          cat > build-info.json << EOF
+          {
+            "generated_at": "$TIMESTAMP",
+            "hash": "${{ needs.check.outputs.hash }}",
+            "source": "https://github.com/github-linguist/linguist/blob/main/lib/linguist/languages.yml?raw=true",
+            "workflow_run": {
+              "run_id": ${{ github.run_id }},
+              "run_attempt": ${{ github.run_attempt }},
+              "workflow_id": "${{ github.workflow }}",
+              "repository": "${{ github.repository }}",
+              "run_number": ${{ github.run_number }},
+              "trigger": "${{ github.event_name }}"
+            },
+            "upstream": {
+              "updated_at": "${{ steps.upstream-date.outputs.updated_at }}"
+            }
+          }
+          EOF
+
+          echo "Created build-info.json with run_id: ${{ github.run_id }}"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: generated-files-${{ needs.check.outputs.hash }}
+          path: |
+            build-info.json
+            package.json
+            changelog.md
+            changelog.tmp.md
+            dist/
+            tests/fixtures/upstream.baseline.yml
+          retention-days: 7
+
+      - name: Upload latest artifacts (for quick access)
+        uses: actions/upload-artifact@v7
+        with:
+          name: generated-files-latest
+          path: |
+            build-info.json
+            package.json
+            changelog.md
+            changelog.tmp.md
+            dist/
+            tests/fixtures/upstream.baseline.yml
+          retention-days: 7
+
+
+  create-sync-pr:
+    needs: [check, generate]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: generated-files-latest
+          path: .
+
+      - name: Read changelog for PR body
+        id: changelog
+        run: |
+          if [ -f changelog.tmp.md ]; then
+            echo "content<<EOF" >> $GITHUB_OUTPUT
+            cat changelog.tmp.md >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+            echo "content=No changelog generated" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Determine next version
+        id: version
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="v$MAJOR.$MINOR.$NEW_PATCH"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Sync package.json version
+        run: |
+          VERSION=${{ steps.version.outputs.new_version }}
+          npm pkg set version=${VERSION#v}
+          echo "VERSION is: $VERSION"
+
+      - name: Compute PR metadata
+        id: prmeta
+        run: |
+          if [[ "${{ github.event.inputs.force_generate }}" == "true" ]]; then
+            MSG="chore(release): regenerate \`artifacts\` for \`${{ steps.version.outputs.new_version }}\`"
+            TITLE="${MSG}"
+          else
+            MSG="chore(release): sync \`linguist/languages.yml\` and regenerate \`artifacts\` for \`${{ steps.version.outputs.new_version }}\`"
+            TITLE="${MSG}"
+          fi
+
+          echo "msg=$MSG" >> $GITHUB_OUTPUT
+          echo "title=$TITLE" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: ${{ steps.prmeta.outputs.msg }}
+          title: ${{ steps.prmeta.outputs.title }}
+          body: |
+            Automated update of linguist `languages.yml`.
+            
+            - **New hash**: `${{ needs.check.outputs.hash }}`
+            - **Updated**: ${{ needs.generate.outputs.updated_at }}
+            
+            ---
+            ${{ steps.changelog.outputs.content }}
+          branch: chore/linguist-sync-${{ needs.check.outputs.hash }}
+          delete-branch: true
+          base: master

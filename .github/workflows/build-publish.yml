@@ -1,0 +1,185 @@
+name: linguist-build-publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_run:
+      workflows: ["linguist-tag"]
+      types:
+        - completed
+  workflow_dispatch:
+    inputs:
+      publish_tag:
+        description: 'Tag to build and publish'
+        type: string
+        required: true
+
+permissions:
+  contents: read
+  id-token: write
+  attestations: write
+  actions: read
+
+jobs:
+  build-and-publish:
+
+    if: |
+      (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'push' && github.ref_name || github.event.inputs.publish_tag }}
+          fetch-depth: 1
+
+      - name: Read metadata from build-info.json
+        id: metadata
+        run: |
+          if [ ! -f build-info.json ]; then
+            echo "WARNING: build-info.json not found, will regenerate"
+            echo "has_metadata=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          HASH=$(jq -r '.hash' build-info.json)
+          RUN_ID=$(jq -r '.workflow_run.run_id // empty' build-info.json)
+
+          echo "has_metadata=true" >> $GITHUB_OUTPUT
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+          
+          echo "Found hash: $HASH"
+          echo "Found original run_id: ${RUN_ID:-none}"
+
+      - name: Download artifacts from original workflow
+        id: download-artifacts
+        # if: steps.metadata.outputs.run_id != ''
+        if: steps.metadata.outputs.has_metadata == 'true' && steps.metadata.outputs.run_id != ''
+        uses: actions/download-artifact@v8
+        continue-on-error: true
+        with:
+          name: generated-files-${{ steps.metadata.outputs.hash }}
+          run-id: ${{ steps.metadata.outputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Find and download artifacts by hash
+        # if: steps.metadata.outputs.run_id == '' || steps.download-artifacts.outcome == 'failure'
+        if: steps.metadata.outputs.has_metadata == 'true' && (steps.download-artifacts.outcome == 'failure' || steps.metadata.outputs.run_id == '')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          HASH="${{ steps.metadata.outputs.hash }}"
+          echo "Searching for artifacts with hash: $HASH"
+          
+          RUN_ID=$(gh run list \
+            --workflow="linguist-sync.yml" \
+            --branch=master \
+            --status=success \
+            --limit=30 \
+            --json databaseId,displayTitle \
+            --jq ".[] | select(.displayTitle | contains(\"$HASH\")) | .databaseId" | \
+            head -1)
+          
+          if [ -z "$RUN_ID" ]; then
+            RUN_ID=$(gh run list \
+              --workflow="linguist-sync.yml" \
+              --branch=master \
+              --status=success \
+              --limit=30 \
+              --json databaseId \
+              --jq '.[].databaseId' | \
+              while read id; do
+                if gh run download $id --name "generated-files-$HASH" --dir . 2>/dev/null; then
+                  echo $id
+                  break
+                fi
+              done)
+          fi
+          
+          if [ -n "$RUN_ID" ]; then
+            echo "Found artifacts in run $RUN_ID"
+          else
+            echo "No artifacts found for hash $HASH, will regenerate"
+            exit 1
+          fi
+
+      - name: Setup pnpm (regeneration if needed)
+        # if: steps.download-artifacts.outcome == 'failure'
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10.24.0
+          standalone: true
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24.14.1'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'pnpm'
+
+      - name: Install dependencies (regeneration if needed)
+        # if: steps.download-artifacts.outcome == 'failure'
+        if: steps.metadata.outputs.has_metadata != 'true' || steps.download-artifacts.outcome == 'failure'
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate build files (regeneration if needed)
+        # if: steps.download-artifacts.outcome == 'failure'
+        if: steps.metadata.outputs.has_metadata != 'true' || steps.download-artifacts.outcome == 'failure'
+        run: pnpm run generate:build
+
+      - name: Test generated files (regeneration if needed)
+        # if: steps.download-artifacts.outcome == 'failure'
+        if: steps.metadata.outputs.has_metadata != 'true' || steps.download-artifacts.outcome == 'failure'
+        run: pnpm test:generated
+
+      - name: Create build-info.json (regeneration)
+        if: steps.metadata.outputs.has_metadata != 'true' || steps.download-artifacts.outcome == 'failure'
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          HASH=$(curl -L https://raw.githubusercontent.com/github-linguist/linguist/main/lib/linguist/languages.yml | sha256sum | awk '{print $1}')
+
+          UPDATED_AT=$(curl -s "https://api.github.com/repos/github-linguist/linguist/commits?path=lib/linguist/languages.yml&page=1&per_page=1" | jq -r '.[0].commit.committer.date')
+
+          cat > build-info.json << EOF
+          {
+            "generated_at": "$TIMESTAMP",
+            "hash": "$HASH",
+            "source": "https://github.com/github-linguist/linguist/blob/main/lib/linguist/languages.yml?raw=true",
+            "workflow_run": {
+              "run_id": ${{ github.run_id }},
+              "run_attempt": ${{ github.run_attempt }},
+              "workflow_id": "${{ github.workflow }}",
+              "repository": "${{ github.repository }}",
+              "trigger": "manual_build"
+            },
+            "upstream": {
+              "updated_at": "$UPDATED_AT"
+            }
+          }
+          EOF
+
+      - name: Verify dist exists
+        run: |
+          if [ ! -d dist ]; then
+            echo "ERROR: dist directory not found!"
+            exit 1
+          fi
+          ls -la dist/
+
+      - name: Create package tarball
+        run: pnpm pack
+
+      - name: Generate build attestation
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-path: |
+            *.tgz
+            ${{ github.workspace }}/package.json
+
+      - name: Publish to npm
+        run: pnpm publish --provenance --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
