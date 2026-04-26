@@ -14,7 +14,7 @@ import type { Primitive } from "@/types/gen.types";
 import type { OutputDefs, OutputMap } from "@/types/output.types";
 import type { ExtractSetElement } from "@/types/utility.types";
 
-type ProcessFieldsParams<TField extends string = Field, TUnique extends Primitive = Primitive> = {
+type ProcessFieldsParams<TField extends PropertyKey = Field, TUnique extends Primitive = Primitive> = {
 	stats: FieldAnalysisArray<TField, TUnique>;
 	config: Config;
 	existing?: Existing<TUnique>;
@@ -37,7 +37,7 @@ type ProcessFieldsReturnType<TField = Field, TUnique extends Primitive = Primiti
 	stats: ProcessedFieldAnalysisArray<TField, TUnique>;
 };
 
-type ProcessFieldsType = <TField extends string = Field, TUnique extends Primitive = Primitive>(
+type ProcessFieldsType = <TField extends PropertyKey = Field, TUnique extends Primitive = Primitive>(
 	params: ProcessFieldsParams<TField, TUnique>,
 ) => ProcessFieldsReturnType<TField, TUnique>;
 
@@ -80,10 +80,12 @@ const processFields: ProcessFieldsType = ({
 		return processFields({ stats: remainingFields, config, existing, existingNames, ref, meta, _role, _task });
 	}
 
-	const res = getMappedFieldOrType({ value: field, from: "field", to: "type", remapper: config.type.naming.fields });
+	const _field = String(field);
 
-	const segmentBaseTypeName = res.resolved ? res.value : normalizeName(field).constant;
-	const segmentOwnerBaseTypeName = res.resolved ? res.value : normalizeName(field).typeName;
+	const res = getMappedFieldOrType({ value: _field, from: "field", to: "type", remapper: config.type.naming.fields });
+
+	const segmentBaseTypeName = res.resolved ? res.value : normalizeName(_field).constant;
+	const segmentOwnerBaseTypeName = res.resolved ? res.value : normalizeName(_field).typeName;
 
 	const secondary = _role === "secondary" && config.type.secondary.enabled;
 
@@ -107,7 +109,7 @@ const processFields: ProcessFieldsType = ({
 	const result = generateFieldType({ stats: newStats, typeName, config });
 
 	const uid = ref?.fieldToUid.get(field as unknown as Field);
-	if (!uid) throw new Error(`unable to find UID for field: "${field}" ~ "${typeNameKey}"`);
+	if (!uid) throw new Error(`unable to find UID for field: "${_field}" ~ "${typeNameKey}"`);
 
 	const remainingResult = processFields({
 		stats: remainingFields,
