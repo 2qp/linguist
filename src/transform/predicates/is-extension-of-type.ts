@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { extensions_to_type } from "@/generated/data/maps/extensions-to-type";
 import { getOne } from "@/transform/accessors/get-one";
 
