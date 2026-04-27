@@ -1,5 +1,5 @@
 {
-	"name": "linguist-map",
+	"name": "@2qp/linguist",
 	"version": "0.0.0",
 	"description": "Linguist `languages.yml` data",
 	"type": "module",
@@ -91,10 +91,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/2qp/linguist-map.git"
+		"url": "git+https://github.com/2qp/linguist.git"
 	},
 	"bugs": {
-		"url": "https://github.com/2qp/linguist-map/issues"
+		"url": "https://github.com/2qp/linguist/issues"
 	},
 	"license": "MIT",
 	"packageManager": "pnpm@10.24.0",

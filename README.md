@@ -1,4 +1,4 @@
-# linguist-map
+# @2qp/linguist
 
 [Linguist's `languages.yml`][linguist] language data.
 
@@ -9,17 +9,17 @@
 ## Install
 
 ```sh
-pnpm add linguist-map
+pnpm add @2qp/linguist
 ```
 
 ```sh
-npm install linguist-map
+npm install @2qp/linguist
 ```
 
 ## Usages
 
 ```ts
-import { typescript } from "linguist-map/languages/programming/typescript";
+import { typescript } from "@2qp/linguist/languages/programming/typescript";
 
 const name = typescript.color;
 //	   ^
@@ -27,7 +27,7 @@ const name = typescript.color;
 ```
 
 ```ts
-import { all } from "linguist-map/flat/all";
+import { all } from "@2qp/linguist/flat/all";
 
 const extensions = all["TypeScript"].extensions;
 //		  ^
@@ -35,7 +35,7 @@ const extensions = all["TypeScript"].extensions;
 ```
 
 ```ts
-import { normalized_all } from "linguist-map/flat/normalized-all";
+import { normalized_all } from "@2qp/linguist/flat/normalized-all";
 
 const id = normalized_all.typescript.language_id;
 //	   ^
@@ -43,8 +43,8 @@ const id = normalized_all.typescript.language_id;
 ```
 
 ```ts
-import { by_extension } from "linguist-map/indexes/by-extension";
-import { getOne } from "linguist-map/getters";
+import { by_extension } from "@2qp/linguist/indexes/by-extension";
+import { getOne } from "@2qp/linguist/getters";
 
 const result = getOne(by_extension, ".ts");
 const aliases = result[0].codemirror_mime_type;
@@ -55,8 +55,8 @@ const aliases = result[0].codemirror_mime_type;
 #### Types
 
 ```ts
-import type { Extensions, Language } from "linguist-map";
-import type { TypeScript } from "linguist-map/languages/programming/typescript";
+import type { Extensions, Language } from "@2qp/linguist";
+import type { TypeScript } from "@2qp/linguist/languages/programming/typescript";
 
 const sample: Language = {};
 // ERROR
@@ -73,7 +73,7 @@ const extension: Extensions = [".php", ".lisp"];
 ```
 
 ```ts
-import type { Extensions, ExtensionsRelax } from "linguist-map";
+import type { Extensions, ExtensionsRelax } from "@2qp/linguist";
 
 const extensions: Extensions = [".dockerfile", "unknown"];
 //                                                 ^
@@ -88,8 +88,8 @@ const extensionsRelax: ExtensionsRelax = [".dockerfile", "unknown"];
 
 ```ts
 
-import { by_extension } from "linguist-map/indexes/by-extension";
-import { getOne } from "linguist-map/getters";
+import { by_extension } from "@2qp/linguist/indexes/by-extension";
+import { getOne } from "@2qp/linguist/getters";
 
 // const extension = ".ts" as const; // or
 const result = getOne(by_extension, ".ts"); // [{ readonly ace_mode: "typescript"; readonly aliases: readonly ["ts"];
@@ -108,8 +108,8 @@ const lookupResult = getOne(by_extension, searchKey); // Language[] | undefined
 #### Get Many
 
 ```ts
-import { by_extension } from "linguist-map/indexes/by-extension";
-import { getMany } from "linguist-map/getters";
+import { by_extension } from "@2qp/linguist/indexes/by-extension";
+import { getMany } from "@2qp/linguist/getters";
 
 const result = getMany(by_extension, [".lua", ".json"]); // [[{ readonly ace_mode: "lua"; readonly codemirror_mime_type: "text/x-lua";
 
@@ -128,8 +128,8 @@ const lookupResult = getMany(by_extension, extensionQueries, false); // (Languag
 #### Get Lazy One
 
 ```ts
-import { lazy_by_id } from "linguist-map/indexes/lazy-by-id";
-import { getLazyOne } from "linguist-map/getters";
+import { lazy_by_id } from "@2qp/linguist/indexes/lazy-by-id";
+import { getLazyOne } from "@2qp/linguist/getters";
 
 const result = await getLazyOne(lazy_by_id, "327"); // { readonly ace_mode: "rust"; readonly aliases: readonly ["rs"];
 
@@ -147,8 +147,8 @@ const lookupResult = await getLazyOne(lazy_by_id, searchKey); // Language | unde
 #### Get Lazy Many
 
 ```ts
-import { by_extension } from "linguist-map/indexes/by-extension";
-import { getLazyMany } from "linguist-map/getters";
+import { by_extension } from "@2qp/linguist/indexes/by-extension";
+import { getLazyMany } from "@2qp/linguist/getters";
 
 const result = await getLazyMany(by_extension, [".c++", ".groovy", ".yaml", ".cs"]);
 //      ^
@@ -172,7 +172,7 @@ const lookupResult = await getLazyMany(by_extension, extensionQueries, false); /
 #### Is extension of type
 
 ```ts
-import { isExtensionOfType } from "linguist-map/predicates";
+import { isExtensionOfType } from "@2qp/linguist/predicates";
 
 const result = isExtensionOfType(".ts", "markup");
 //      ^
