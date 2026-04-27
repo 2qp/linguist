@@ -1,3 +1,4 @@
+import { join } from "@utils/join";
 import { getWrapped } from "@/transform/utils/statement/statement-builder-utils";
 
 import type { Primitive } from "@/types/gen.types";
@@ -58,6 +59,10 @@ const commonBuilder = () => ({
 				}),
 			}),
 		}),
+	}),
+
+	path: () => ({
+		from: <const TPaths extends string[]>(...paths: TPaths) => ({ build: () => `"${join(paths, "")}"` as const }),
 	}),
 });
 
