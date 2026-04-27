@@ -13,6 +13,7 @@ type Wrapper =
 	| `${Dictionary}<$>`
 	| `${Dictionary}<() => Promise<$>>`
 	| `${OptionalBrand}<$>`
+	| `${Dictionary}<${OptionalBrand}<$>>`
 	| "() => Promise.all([ $ ])"
 	| "() => Promise<[$]>"
 	| "() => Promise<$>"
