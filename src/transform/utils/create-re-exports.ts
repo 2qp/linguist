@@ -6,8 +6,13 @@ import {
 	createProgram,
 	EmitHint,
 	factory,
+	forEachChild,
+	isIdentifier,
 	isInterfaceDeclaration,
 	isTypeAliasDeclaration,
+	isTypeOperatorNode,
+	isVariableDeclaration,
+	isVariableStatement,
 	ModuleKind,
 	ModuleResolutionKind,
 	NewLineKind,
@@ -18,6 +23,7 @@ import {
 
 import type {
 	InterfaceDeclaration,
+	Node,
 	Program,
 	SourceFile,
 	Symbol as TsSymbol,
@@ -410,6 +416,75 @@ const createTypeAsStringBuilder = async (filePath: string, typeName: string, con
 	};
 };
 
+const extractBrandSymbol = (
+	sourceFile: SourceFile,
+	targetName: string,
+): { statement: string; node: Node } | null | undefined => {
+	//
+
+	const findNode = (node: Node): Node | null | undefined => {
+		//
+
+		if (isVariableStatement(node)) {
+			const hasDeclare = node.modifiers?.some((m) => m.kind === SyntaxKind.DeclareKeyword);
+
+			if (hasDeclare) {
+				const decl = node.declarationList.declarations[0];
+
+				if (
+					decl &&
+					isVariableDeclaration(decl) &&
+					isIdentifier(decl.name) &&
+					decl.name.text === targetName &&
+					decl.type &&
+					isTypeOperatorNode(decl.type) &&
+					decl.type.operator === SyntaxKind.UniqueKeyword &&
+					decl.type.type &&
+					decl.type.type.kind === SyntaxKind.SymbolKeyword
+				) {
+					return node;
+				}
+			}
+		}
+
+		return forEachChild(node, findNode);
+	};
+
+	const foundNode = findNode(sourceFile);
+
+	if (foundNode) {
+		const printer = createPrinter();
+
+		return {
+			statement: printer.printNode(EmitHint.Unspecified, foundNode, sourceFile),
+			node: foundNode,
+		};
+	}
+
+	return null;
+};
+
+const getSymbolAsString = async (filePath: string, symbolName: string, config: ReExportConfig) => {
+	//
+
+	const sourceFiles = await resolveSourceFiles(config);
+
+	const program = await createTypeScriptProgram(sourceFiles);
+
+	const sourceFile = program.getSourceFiles().find((sf) => {
+		//
+
+		const normalizedFileName = normalize(sf.fileName);
+		const normalizedFilePath = normalize(filePath);
+
+		return normalizedFileName === normalizedFilePath || normalizedFileName.endsWith(normalizedFilePath);
+	});
+
+	if (!sourceFile) return null;
+
+	return extractBrandSymbol(sourceFile, symbolName);
+};
+
 type CreateReExportsParams = ReExportConfig;
 
 type CreateReExportsType = (params: CreateReExportsParams) => Promise<void>;
@@ -433,7 +508,7 @@ const createReExports: CreateReExportsType = async (config) => {
 	await generateSingleFileExports(program, checker, sourceFiles, config);
 };
 
-export { createReExports, createTypeAsStringBuilder };
+export { createReExports, createTypeAsStringBuilder, getSymbolAsString };
 export type { CreateReExportsParams, CreateReExportsType, ReExportConfig };
 
 //
