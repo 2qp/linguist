@@ -2,6 +2,8 @@ declare const __brand: unique symbol;
 
 type Brand<T, B> = T & { readonly [__brand]: B };
 
+type OptionalBrand<T, B> = T & { readonly [__brand]?: B };
+
 /**
  * uid of a `Field` type
  */
@@ -16,4 +18,4 @@ type UID = Brand<string, "UID">;
  */
 type Field = Brand<string, "Field">;
 
-export type { Field, UID };
+export type { Field, OptionalBrand, UID };
