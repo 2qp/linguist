@@ -1,5 +1,5 @@
 import { mkdir, stat, writeFile } from "node:fs/promises";
-import { basename, dirname, extname, join, normalize, relative, resolve } from "node:path";
+import { basename, dirname, extname, join, normalize, relative, resolve, sep } from "node:path";
 import { glob } from "glob";
 import {
 	createPrinter,
@@ -33,11 +33,22 @@ import type {
 	TypeChecker,
 } from "typescript";
 
+type Depth = "all" | "shallow" | "deep";
+
+type BarrelOptions = {
+	depth?: Depth;
+	multi?: boolean;
+	recursive?: boolean;
+};
+
+type Variant = "barrel" | "per-file";
+
 type ReExportConfig = {
 	outputDir?: string;
 	outputFile?: string;
 	perFile?: boolean;
 	barrel?: boolean;
+	barrel_options?: BarrelOptions;
 	sourceDir?: string;
 	sourcePattern?: string;
 	sourceFiles?: string[];
@@ -217,6 +228,7 @@ const calculateImportPath = async (
 	sourceFile: SourceFile,
 	outputPath: string,
 	config: ReExportConfig,
+	variant: Variant = "barrel",
 ): Promise<string> => {
 	const isDirectory = config.perFile || extname(outputPath) === "";
 	const baseTargetDir = isDirectory ? outputPath : dirname(outputPath);
@@ -225,7 +237,7 @@ const calculateImportPath = async (
 	const sourceWithoutExt = basename(sourceFile.fileName, extname(sourceFile.fileName));
 
 	const targetDir =
-		config.perFile && config.sourceDir
+		variant === "per-file" && config.sourceDir
 			? join(baseTargetDir, relative(resolve(config.sourceDir), sourceDir))
 			: baseTargetDir;
 
@@ -264,8 +276,9 @@ const createExportStatements = async (
 	sourceFile: SourceFile,
 	outputPath: string,
 	config: ReExportConfig,
+	variant: Variant,
 ): Promise<string[]> => {
-	const importPath = await calculateImportPath(sourceFile, outputPath, config);
+	const importPath = await calculateImportPath(sourceFile, outputPath, config, variant);
 
 	if (config.asNamespace) {
 		const namespaceName = config.namespaceTemplate
@@ -286,6 +299,7 @@ const processSourceFile = async (
 	checker: TypeChecker,
 	outputPath: string,
 	config: ReExportConfig,
+	variant: Variant,
 ): Promise<string[]> => {
 	//
 
@@ -308,7 +322,7 @@ const processSourceFile = async (
 		return [];
 	}
 
-	return await createExportStatements(valueExports, typeExports, sourceFile, outputPath, config);
+	return await createExportStatements(valueExports, typeExports, sourceFile, outputPath, config, variant);
 };
 
 const writeExportFile = async (filePath: string, exportLines: string[], _config: ReExportConfig): Promise<void> => {
@@ -323,6 +337,64 @@ const writeExportFile = async (filePath: string, exportLines: string[], _config:
 	await writeFile(filePath, `${exportLines.join("\n")}\n`, "utf8");
 };
 
+const filterFiles = (files: string[], sourceDir?: string, options: BarrelOptions = {}) => {
+	//
+
+	if (!sourceDir) return files;
+
+	const { depth = "all" } = options;
+
+	return files.filter((file) => {
+		const rel = relative(sourceDir, file);
+
+		if (!rel || rel.startsWith("..")) return false;
+
+		const isDirectChild = !rel.includes(sep);
+
+		if (depth === "shallow") return isDirectChild;
+		if (depth === "deep") return !isDirectChild;
+
+		return true;
+	});
+};
+
+const createBarrels = async (
+	sourceFiles: ReadonlyArray<SourceFile>,
+	normalizedFiles: string[],
+	outputFilePath: string,
+	checker: TypeChecker,
+	config: ReExportConfig,
+) => {
+	//
+
+	if (config.barrel && config.barrel_options?.multi) {
+		//
+
+		if (!config.outputDir) throw new Error("outputDir must be provided, if its multi barrel");
+
+		const files = filterFiles(normalizedFiles, config.sourceDir, { depth: "deep" });
+		const sf = sourceFiles.filter((sourceFile) => shouldProcessFile(sourceFile, files));
+
+		const exportPromises = sf.map(async (s) => await processSourceFile(s, checker, outputFilePath, config, "per-file"));
+
+		const exportResults = await Promise.all(exportPromises);
+		const exportLines = exportResults.flat().filter((line): line is string => line !== null);
+
+		const resolvedSourceDir = resolve(config.sourceDir || "");
+		const outputDir = config.outputDir;
+
+		const writePromises = files.map(async (f) => {
+			const sourceFileDir = dirname(f);
+			const relativeDir = relative(resolvedSourceDir, sourceFileDir);
+			const file = join(outputDir, relativeDir, `index.ts`);
+
+			return await writeExportFile(file, exportLines, config);
+		});
+
+		await Promise.all(writePromises);
+	}
+};
+
 const generateSingleFileExports = async (
 	program: Program,
 	checker: TypeChecker,
@@ -335,22 +407,32 @@ const generateSingleFileExports = async (
 		throw new Error("outputFile must be provided if its single output");
 	}
 
-	const normalizedSourceFiles = sourceFiles.map((f) => resolve(f));
+	const source_files = program.getSourceFiles();
+
+	const normalizedSourceFiles_ = sourceFiles.map((f) => resolve(f));
+	const normalizedSourceFiles = filterFiles(normalizedSourceFiles_, config.sourceDir, config.barrel_options);
+
 	const outputFilePath = resolve(config.outputFile);
 
-	const sourceFilesToProcess = program
-		.getSourceFiles()
-		.filter((sourceFile) => shouldProcessFile(sourceFile, normalizedSourceFiles));
+	const sourceFilesToProcess = source_files.filter((sourceFile) =>
+		shouldProcessFile(sourceFile, normalizedSourceFiles),
+	);
 
-	const exportPromises = sourceFilesToProcess.map(async (sourceFile) => {
-		return await processSourceFile(sourceFile, checker, outputFilePath, config);
-	});
+	const exportPromises = sourceFilesToProcess.map(
+		async (sourceFile) => await processSourceFile(sourceFile, checker, outputFilePath, config, "barrel"),
+	);
 
 	const exportResults = await Promise.all(exportPromises);
 
 	const exportLines = exportResults.flat().filter((line): line is string => line !== null);
 
 	await writeExportFile(outputFilePath, exportLines, config);
+
+	if (config.barrel && config.barrel_options?.multi) {
+		//
+
+		await createBarrels(source_files, normalizedSourceFiles_, outputFilePath, checker, config);
+	}
 };
 
 const generatePerFileExports = async (
@@ -378,7 +460,7 @@ const generatePerFileExports = async (
 
 		if (!shouldProcessFile(sourceFile, normalizedSourceFiles)) return;
 
-		const statements = await processSourceFile(sourceFile, checker, outputDir, config);
+		const statements = await processSourceFile(sourceFile, checker, outputDir, config, "per-file");
 
 		if (statements.length === 0) return;
 

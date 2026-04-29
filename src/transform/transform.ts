@@ -59,9 +59,17 @@ const transform: Transform = async ({ config, source, stats: _stats }) => {
 
 		createArrays({ languages, config, stats }),
 
-		createReExports({
+		await createReExports({
 			sourceDir: config.data.sourcePaths.gettersDir,
 			outputFile: join(config.data.paths.gettersDir, "index.ts"),
+			outputDir: join(config.data.paths.gettersDir),
+			perFile: true,
+			barrel: true,
+			barrel_options: {
+				depth: "shallow",
+				multi: true,
+				recursive: true,
+			},
 		}),
 
 		createReExports({
