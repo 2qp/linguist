@@ -37,6 +37,7 @@ type ReExportConfig = {
 	outputDir?: string;
 	outputFile?: string;
 	perFile?: boolean;
+	barrel?: boolean;
 	sourceDir?: string;
 	sourcePattern?: string;
 	sourceFiles?: string[];
@@ -218,10 +219,15 @@ const calculateImportPath = async (
 	config: ReExportConfig,
 ): Promise<string> => {
 	const isDirectory = config.perFile || extname(outputPath) === "";
-	const targetDir = isDirectory ? outputPath : dirname(outputPath);
+	const baseTargetDir = isDirectory ? outputPath : dirname(outputPath);
 
 	const sourceDir = dirname(sourceFile.fileName);
 	const sourceWithoutExt = basename(sourceFile.fileName, extname(sourceFile.fileName));
+
+	const targetDir =
+		config.perFile && config.sourceDir
+			? join(baseTargetDir, relative(resolve(config.sourceDir), sourceDir))
+			: baseTargetDir;
 
 	const rawRelativePath = relative(targetDir, join(sourceDir, sourceWithoutExt));
 	const normalizedRelativePath = rawRelativePath.replace(/\\/g, "/");
@@ -345,6 +351,55 @@ const generateSingleFileExports = async (
 	const exportLines = exportResults.flat().filter((line): line is string => line !== null);
 
 	await writeExportFile(outputFilePath, exportLines, config);
+};
+
+const generatePerFileExports = async (
+	program: Program,
+	checker: TypeChecker,
+	sourceFiles: string[],
+	config: ReExportConfig,
+): Promise<void> => {
+	//
+
+	if (!config.outputDir) {
+		throw new Error("outputDir must be provided if its per file output");
+	}
+
+	if (!config.sourceDir) {
+		throw new Error("sourceDir must be provided if its per file output");
+	}
+
+	const normalizedSourceFiles = sourceFiles.map((f) => resolve(f));
+	const outputDir = resolve(config.outputDir);
+	const extension = config.extension || ".ts";
+
+	const processFile = async (sourceFile: SourceFile) => {
+		//
+
+		if (!shouldProcessFile(sourceFile, normalizedSourceFiles)) return;
+
+		const statements = await processSourceFile(sourceFile, checker, outputDir, config);
+
+		if (statements.length === 0) return;
+
+		if (!config.sourceDir) throw new Error("sourceDir must be provided if its per file output");
+
+		const outputFileName = getOutputFileName(sourceFile, outputDir, extension, config.sourceDir);
+
+		await writeExportFile(outputFileName, statements, config);
+	};
+
+	await Promise.all(program.getSourceFiles().map(processFile));
+};
+
+const getOutputFileName = (sourceFile: SourceFile, outputDir: string, extension: string, sourceDir: string): string => {
+	const sourceFileName = basename(sourceFile.fileName, extname(sourceFile.fileName));
+
+	const sourceFileDir = dirname(sourceFile.fileName);
+	const resolvedSourceDir = resolve(sourceDir);
+	const relativeDir = relative(resolvedSourceDir, sourceFileDir);
+
+	return join(outputDir, relativeDir, `${sourceFileName}${extension}`);
 };
 
 const addExport = (decl: InterfaceDeclaration | TypeAliasDeclaration) => {
@@ -528,7 +583,21 @@ const createReExports: CreateReExportsType = async (config) => {
 
 	const checker = program.getTypeChecker();
 
-	if (config.perFile) return; // will do later
+	if (config.barrel && config.perFile) {
+		//
+
+		await Promise.all([
+			generateSingleFileExports(program, checker, sourceFiles, { ...config, perFile: false }),
+			generatePerFileExports(program, checker, sourceFiles, config),
+		]);
+
+		return;
+	}
+
+	if (config.perFile) {
+		await generatePerFileExports(program, checker, sourceFiles, config);
+		return;
+	}
 
 	await generateSingleFileExports(program, checker, sourceFiles, config);
 };
