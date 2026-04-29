@@ -21,6 +21,9 @@ type TypeGeneratorConfig = {
 	out: Out;
 	options: Options;
 	naming: NamingConfig;
+
+	//
+	source_paths: SourcePaths;
 };
 
 type InternalFile = { name: string; ext: string };
@@ -55,6 +58,10 @@ type NamingConfig = {
 	secondaryPrefix: string;
 	secondarySuffix: string;
 	fields: FieldType[];
+};
+
+type SourcePaths = {
+	types: { branded: InteralOutDef };
 };
 
 type TypeGenConfigFile = {

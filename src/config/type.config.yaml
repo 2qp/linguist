@@ -62,6 +62,18 @@ type:
   #
   options:
 
+  #
+  source_paths:
+    types:
+      branded:
+        dir:
+          alias: "@/types/"
+          rel: "src/types/"
+        file:
+          name: "branded.types"
+          ext: ".ts"
+
+
 
 # type TypeGeneratorConfig = {
 #   maxLiteralValues: number;
