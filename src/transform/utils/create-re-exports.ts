@@ -7,6 +7,8 @@ import {
 	EmitHint,
 	factory,
 	forEachChild,
+	isExportDeclaration,
+	isExportSpecifier,
 	isIdentifier,
 	isInterfaceDeclaration,
 	isTypeAliasDeclaration,
@@ -137,23 +139,46 @@ const analyzeExport = (exp: TsSymbol, checker: TypeChecker) => {
 };
 
 const analyzeAliasedExport = (exp: TsSymbol, checker: TypeChecker, name: string) => {
-	const aliasedSymbol = checker.getAliasedSymbol(exp);
-	if (!aliasedSymbol) {
+	//
+
+	const isTypeOnlyExport = isExportedAsTypeOnly(exp);
+
+	if (isTypeOnlyExport) {
 		return {
 			name,
-			isType: false,
-			isValue: true,
+			isType: true,
+			isValue: false,
 			isNamespace: false,
 			isDefault: name === "default",
 		};
 	}
 
-	const isType = (aliasedSymbol.flags & SymbolFlags.Type) !== 0;
-	const isValue = (aliasedSymbol.flags & SymbolFlags.Value) !== 0;
+	const aliasedSymbol = checker.getAliasedSymbol(exp);
+
+	if (aliasedSymbol?.declarations) {
+		const isType = (aliasedSymbol.flags & SymbolFlags.Type) !== 0;
+		const isValue = (aliasedSymbol.flags & SymbolFlags.Value) !== 0;
+		const isDefault = name === "default";
+		return { name, isType, isValue, isNamespace: false, isDefault };
+	}
+
 	const isDefault = name === "default";
 
-	return { name, isType, isValue, isNamespace: false, isDefault };
+	return { name, isType: false, isValue: true, isNamespace: false, isDefault };
 };
+
+const isExportedAsTypeOnly = (symbol: TsSymbol): boolean => {
+	const declarations = symbol.getDeclarations();
+	if (!declarations) return false;
+
+	return declarations.some(isTypeOnlyDeclaration);
+};
+
+const isTypeOnlyDeclaration = (node: Node): boolean =>
+	(isExportSpecifier(node) && node.isTypeOnly) || (node.parent !== undefined && isTypeOnlyAncestor(node.parent));
+
+const isTypeOnlyAncestor = (node: Node): boolean =>
+	(isExportDeclaration(node) && node.isTypeOnly) || (node.parent !== undefined && isTypeOnlyAncestor(node.parent));
 
 const categorizeExports = (
 	exports: TsSymbol[],
