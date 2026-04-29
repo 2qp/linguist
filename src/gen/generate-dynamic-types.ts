@@ -1,3 +1,4 @@
+import { join } from "node:path";
 import { emitAutogenHeader } from "@/emit/emit-autogen-header";
 import { emitLanguagePropertyTypeName } from "@/emit/emit-language-property-type-name";
 import { emitLanguageType } from "@/emit/emit-language-type";
@@ -7,6 +8,7 @@ import { emitStats } from "@/emit/emit-stats";
 import { emitTypesSection } from "@/emit/emit-types-sections";
 import { emitTypeSafeAccessors } from "@/emit/emit-typesafe-accessors";
 import { emitUtilityTypes } from "@/emit/emit-utility-types";
+import { createStatementBuilder } from "@/transform/utils/statement/create-statement-builder";
 
 import type { Generator } from "./types";
 
@@ -37,8 +39,18 @@ const generateDynamicTypes: GenerateDynamicTypes = async ({ config, ...params })
 
 	const output_typeNames = emitLanguagePropertyTypeName({ ...params, config });
 
+	const builder = createStatementBuilder();
+
+	const brandedSourcePaths = config.type.source_paths.types.branded;
+	const brandedFile = join(brandedSourcePaths.dir.alias, brandedSourcePaths.file.name);
+
+	const types = builder.export().types(["OptionalBrand"], []).from(brandedFile).re_export().build();
+
 	const output = [
 		output_header,
+		"\n\n",
+		types,
+		"\n\n",
 		//
 		output_segments,
 		output_sorted_types,
