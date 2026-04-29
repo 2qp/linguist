@@ -1,4 +1,5 @@
 import { commonBuilder } from "./paths/common/common";
+import { exportBuilder } from "./paths/export/export";
 import { importBuilder } from "./paths/import/import";
 import { typeBuilder } from "./paths/type/type";
 import { varBuilder } from "./paths/var/var";
@@ -20,6 +21,8 @@ const createStatementBuilder = () => {
 		//
 
 		import: importBuilder,
+
+		export: exportBuilder,
 
 		var: varBuilder,
 
