@@ -59,7 +59,7 @@ const transform: Transform = async ({ config, source, stats: _stats }) => {
 
 		createArrays({ languages, config, stats }),
 
-		await createReExports({
+		createReExports({
 			sourceDir: config.data.sourcePaths.gettersDir,
 			outputFile: join(config.data.paths.gettersDir, "index.ts"),
 			outputDir: join(config.data.paths.gettersDir),
