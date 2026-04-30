@@ -62,7 +62,7 @@ const commonBuilder = () => ({
 	}),
 
 	path: () => ({
-		from: <const TPaths extends string[]>(...paths: TPaths) => ({ build: () => `"${join(paths, "")}"` as const }),
+		from: <const TPaths extends string[]>(...paths: TPaths) => ({ build: () => `\`${join(paths, "")}\`` as const }),
 	}),
 });
 
