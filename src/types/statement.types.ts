@@ -20,6 +20,7 @@ type Wrapper =
 	| "() => $"
 	| "$[number]"
 	| "[$]"
+	| "[$] as const"
 	| "($)"
 	| "$";
 
