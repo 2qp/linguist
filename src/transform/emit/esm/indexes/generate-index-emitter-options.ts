@@ -1,3 +1,4 @@
+import { emitDynamicIndex } from "./emit-dynamic-index";
 import { emitIndex } from "./emit-index";
 import { emitLazyIndex } from "./emit-lazy-index";
 
@@ -31,6 +32,14 @@ const generateIndexEmitterOptions: GenerateIndexEmitterOptions = function* (fiel
 			{
 				name: `lazy-by-${String(source)}`,
 				emitter: emitLazyIndex,
+				type: "lazy",
+				options: isSourceUnique
+					? { kind: "primitive", key: source, value: "name" }
+					: { kind: "set", left: source, right: "name" },
+			},
+			{
+				name: `dynamic-by-${String(source)}`,
+				emitter: emitDynamicIndex,
 				type: "lazy",
 				options: isSourceUnique
 					? { kind: "primitive", key: source, value: "name" }
