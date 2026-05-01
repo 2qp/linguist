@@ -15,6 +15,7 @@
 				"default": "./dist/data/*.cjs"
 			}
 		},
+
 		"./getters": {
 			"import": {
 				"types": "./dist/getters/index.d.ts",
@@ -25,6 +26,17 @@
 				"default": "./dist/getters/index.cjs"
 			}
 		},
+		"./getters/*": {
+			"import": {
+				"types": "./dist/getters/*.d.ts",
+				"default": "./dist/getters/*.js"
+			},
+			"require": {
+				"types": "./dist/getters/*.d.cts",
+				"default": "./dist/getters/*.cjs"
+			}
+		},
+
 		"./predicates": {
 			"import": {
 				"types": "./dist/predicates/index.d.ts",
@@ -35,6 +47,7 @@
 				"default": "./dist/predicates/index.cjs"
 			}
 		},
+
 		".": {
 			"import": {
 				"types": "./dist/types/common/index.d.ts",
@@ -45,6 +58,7 @@
 				"default": "./dist/types/common/index.cjs"
 			}
 		},
+
 		"./usage": {
 			"import": {
 				"types": "./dist/types/usage/index.d.ts",
@@ -59,7 +73,9 @@
 	"files": [
 		"dist",
 		"README.md",
-		"LICENSE"
+		"LICENSE",
+		"THIRD-PARTY-LICENSES.md",
+		"CHANGELOG.md"
 	],
 	"scripts": {
 		"test": "vitest --typecheck",
@@ -107,6 +123,7 @@
 		"@typescript/native-preview": "7.0.0-dev.20260426.1",
 		"glob": "^13.0.6",
 		"js-yaml": "^4.1.1",
+		"magic-string": "^0.30.21",
 		"rimraf": "^6.1.3",
 		"safe-stable-stringify": "^2.5.0",
 		"tsup": "^8.5.1",
