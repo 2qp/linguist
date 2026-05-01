@@ -32,6 +32,8 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 
 		const map = buildMap({ source: languages, ...options });
 
+		const types_map = new Map<string, [string, `T${number}`]>(); // :( mmmutable
+
 		const stat = stats.get(options.key);
 
 		const struct = `readonly [string, string]` as const;
@@ -44,6 +46,18 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 			const langData = languages[name];
 			const type = langData.type;
 
+			if (!types_map.has(type)) {
+				const index = types_map.size + 1;
+				const varName = `T${index}` as const;
+				const path = `./${typesDir}/${type}/` as const;
+
+				const [typeRef] = builder.var(varName).value(`"${path}"`).asConst().build();
+
+				types_map.set(type, [typeRef, varName] as const);
+			}
+
+			if (!types_map.has(type)) throw new Error("unable to find type on types_map !!!");
+
 			/**
 			 * `perFile: true` config affect the `dynamicPath`.
 			 *
@@ -51,7 +65,11 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 			 *
 			 * see [config]{@link (../../../transform.ts)}
 			 */
-			const dynamicPath = builder.common().path().from("./", typesDir, "/", type, "/", norm.fileName).build();
+			const dynamicPath = builder
+				.common()
+				.path()
+				.from(`$\{${types_map.get(type)?.[1]}}`, norm.fileName)
+				.build();
 
 			const typeImports = builder
 				.import()
@@ -71,7 +89,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 				.common()
 				.record()
 				.key(lid)
-				.wrap("[$]")
+				.wrap("[$] as const")
 				.values([dynamicPath, `"${norm.varName}"`])
 				.build();
 
@@ -81,6 +99,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 		const vars = statements.map((item) => item.vars);
 		const types = statements.map((item) => item.types);
 		const typeImports = statements.map((item) => item.typeImports);
+		const dynamic_t_statements = [...types_map.values()].map((item) => item[0]).join("\n");
 
 		const obj = `dynamic By ${stat?.type}` as const;
 		const norm = normalizeName(obj);
@@ -114,6 +133,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 		const blocks = createBlockBuilder()
 			.import(typeImports.join("\n"), "type")
 			.import(externalTypeImports, "type")
+			.expr(dynamic_t_statements)
 			.expr(var_stmt)
 			.type(type_stmt)
 			.exportExpr(var_export_stmt)
@@ -126,6 +146,8 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 		//
 
 		const map = buildMap({ source: languages, ...options });
+
+		const types_map = new Map<string, [string, `T${number}`]>(); // :( mmmutable
 
 		const stat = stats.get(options.left);
 
@@ -140,9 +162,25 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 				const language = languages[name];
 				const type = language.type;
 
+				if (!types_map.has(type)) {
+					const index = types_map.size + 1;
+					const varName = `T${index}` as const;
+					const path = `./${typesDir}/${type}/` as const;
+
+					const [typeRef] = builder.var(varName).value(`"${path}"`).asConst().build();
+
+					types_map.set(type, [typeRef, varName] as const);
+				}
+
 				const { varName, typeName, ...norm } = normalizeName(name);
 
-				const dynamicPath = builder.common().path().from("./", typesDir, "/", type, "/", norm.fileName).build();
+				if (!types_map.has(type)) throw new Error("unable to find type on types_map !!!");
+
+				const dynamicPath = builder
+					.common()
+					.path()
+					.from(`$\{${types_map.get(type)?.[1]}}`, norm.fileName)
+					.build();
 
 				const typeImports = builder
 					.import()
@@ -165,7 +203,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 				.values([struct, `[${typeNames.join(", ")}]`])
 				.build();
 
-			const vars = builder.common().record().key(ext).wrap("[$]").values(paths_).build();
+			const vars = builder.common().record().key(ext).wrap("[$] as const").values(paths_).build();
 
 			return { vars, types, typeImports };
 
@@ -175,6 +213,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 		const vars = statements.map((item) => item.vars);
 		const types = statements.map((item) => item.types);
 		const typeImports = [...new Set(statements.flatMap((item) => item.typeImports))];
+		const dynamic_t_statements = [...types_map.values()].map((item) => item[0]).join("\n");
 
 		const obj = `dynamic By ${stat?.type}` as const;
 
@@ -209,6 +248,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 		const blocks = createBlockBuilder()
 			.import(typeImports.join("\n"), "type")
 			.import(externalTypeImports, "type")
+			.expr(dynamic_t_statements)
 			.expr(var_stmt)
 			.type(type_stmt)
 			.exportExpr(var_export_stmt)
