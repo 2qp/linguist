@@ -23,6 +23,7 @@ yarn-error.log*
 .DS_Store
 *.pem
 changelog.tmp.md
+.cache
 
 # Sensitive
 .secrets
