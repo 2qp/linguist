@@ -1,18 +1,29 @@
 import type { ExtractExplicit } from "@/types/utility.types";
 
-type LookupOptions<S extends boolean = boolean> = { known?: S };
+type KeyMode = "known" | "hybrid" | "loose";
+
+type LookupOptions<M extends KeyMode> = {
+	/** `"known" | "hybrid" | "loose"` */
+	keys?: M;
+};
 
 type GetManyOverloaded = {
-	<I extends Record<string, unknown>, const T extends readonly (keyof ExtractExplicit<I>)[]>(
+	<I extends Record<string, unknown>, const T extends ReadonlyArray<keyof ExtractExplicit<I>>>(
 		registry: I,
 		keys: T,
-		options?: LookupOptions<true>,
+		options?: LookupOptions<"known">,
 	): { [K in keyof T]: I[T[K]] };
 
-	<I extends Record<string, unknown>, T extends string[]>(
+	<I extends Record<string, unknown>, T extends ReadonlyArray<string>>(
 		registry: I,
 		keys: T,
-		options: LookupOptions<false>,
+		options: LookupOptions<"hybrid">,
+	): { [K in keyof T]: I[T[K]] };
+
+	<I extends Record<string, unknown>, T extends ReadonlyArray<string>>(
+		registry: I,
+		keys: T,
+		options: LookupOptions<"loose">,
 	): I[string][] | undefined;
 };
 

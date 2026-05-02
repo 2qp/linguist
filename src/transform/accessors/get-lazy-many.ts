@@ -1,22 +1,33 @@
 import type { AwaitedReturnOrSelf, SyncOrAsyncFn } from "@/types/data-utility.types";
 import type { ExtractExplicit } from "@/types/utility.types";
 
-type LazyLookupOptions<S extends boolean = boolean> = { known?: S };
+type KeyMode = "known" | "loose" | "hybrid";
+
+type LazyLookupOptions<M extends KeyMode> = {
+	/** `"known" | "hybrid" | "loose"` */
+	keys?: M;
+};
 
 type GetLazyManyOverloaded = {
 	//
 
-	<I extends Record<string, unknown>, const T extends readonly (keyof ExtractExplicit<I>)[]>(
+	<I extends Record<string, unknown>, const T extends ReadonlyArray<keyof ExtractExplicit<I>>>(
 		registry: I,
 		keys: T,
-		options?: LazyLookupOptions<true>,
+		options?: LazyLookupOptions<"known">,
 	): Promise<{ [K in keyof T]: AwaitedReturnOrSelf<I[T[K]]> }>;
 
-	<I extends Record<string, unknown>, T extends string[]>(
+	<I extends Record<string, unknown>, const T extends ReadonlyArray<string>>(
 		registry: I,
 		keys: T,
-		options: LazyLookupOptions<false>,
-	): Promise<AwaitedReturnOrSelf<I[string]>[] | undefined>;
+		options: LazyLookupOptions<"hybrid">,
+	): Promise<{ [K in keyof T]: AwaitedReturnOrSelf<I[T[K]]> }>;
+
+	<I extends Record<string, unknown>, const T extends ReadonlyArray<string>>(
+		registry: I,
+		keys: T,
+		options: LazyLookupOptions<"loose">,
+	): Promise<AwaitedReturnOrSelf<I[string]>[]>;
 };
 
 type GetLazyManyType = GetLazyManyOverloaded;
@@ -24,9 +35,8 @@ type GetLazyManyType = GetLazyManyOverloaded;
 const getLazyMany: GetLazyManyType = async (registry: Record<string, SyncOrAsyncFn>, keys: string[]) => {
 	//
 
-	const items: unknown[] = [];
-
 	const length = keys.length;
+	const items: unknown[] = new Array(length).fill(undefined);
 
 	for (let index = 0; index < length; index++) {
 		const key = keys[index];
@@ -39,7 +49,7 @@ const getLazyMany: GetLazyManyType = async (registry: Record<string, SyncOrAsync
 
 		const modules = await loader();
 
-		items.push(modules);
+		items[index] = modules;
 	}
 
 	return items;
