@@ -145,7 +145,7 @@ jobs:
           path: |
             build-info.json
             package.json
-            changelog.md
+            CHANGELOG.md
             changelog.tmp.md
             dist/
             tests/fixtures/upstream.baseline.yml
@@ -158,7 +158,7 @@ jobs:
           path: |
             build-info.json
             package.json
-            changelog.md
+            CHANGELOG.md
             changelog.tmp.md
             dist/
             tests/fixtures/upstream.baseline.yml
