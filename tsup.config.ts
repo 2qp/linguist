@@ -1,4 +1,5 @@
 import { dynamicPathNormalizePlugin } from "./src/plugins/dynamic-path-normalize.plugin";
+import { postPatchChunks } from "./src/plugins/post-patch-chunks.plugin";
 import { defineConfig } from "tsup";
 
 const config = defineConfig({
@@ -31,6 +32,10 @@ const config = defineConfig({
 			...options.define,
 			"process.env.CURRENT_FORMAT": `"${context.format}"`,
 		};
+	},
+
+	onSuccess: async () => {
+		await postPatchChunks();
 	},
 });
 
