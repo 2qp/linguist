@@ -37,6 +37,27 @@
 			}
 		},
 
+		"./getters/client": {
+			"import": {
+				"types": "./dist/getters/client/index.d.ts",
+				"default": "./dist/getters/client/index.js"
+			},
+			"require": {
+				"types": "./dist/getters/client/index.d.cts",
+				"default": "./dist/getters/client/index.cjs"
+			}
+		},
+		"./getters/client/*": {
+			"import": {
+				"types": "./dist/getters/client/*.d.ts",
+				"default": "./dist/getters/client/*.js"
+			},
+			"require": {
+				"types": "./dist/getters/client/*.d.cts",
+				"default": "./dist/getters/client/*.cjs"
+			}
+		},
+
 		"./predicates": {
 			"import": {
 				"types": "./dist/predicates/index.d.ts",
