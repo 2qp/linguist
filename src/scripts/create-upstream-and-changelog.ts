@@ -16,7 +16,7 @@ const createUpstreamAndChangelog: CreateUpstreamAndChangelog = async () => {
 	const upstreamBuffer = Buffer.from(arrayBuffer);
 
 	const baselinePath = `./tests/fixtures/upstream.baseline.yml`;
-	const changelogPath = "./changelog.md";
+	const changelogPath = "./CHANGELOG.md";
 	const tempChangelogPath = "./changelog.tmp.md";
 
 	await createChangelog({ upstreamBuffer, baselinePath, changelogPath, tempChangelogPath });
