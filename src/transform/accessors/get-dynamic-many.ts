@@ -3,6 +3,8 @@ import type { ExtractExplicit } from "@/types/utility.types";
 
 type GetDynamicManyParams = {};
 
+type DynamicLookupOptions<S extends boolean = boolean> = { known?: S };
+
 type ExtractPayloadsAsTuple<T, K extends readonly (keyof T)[]> = {
 	[I in keyof K]: K[I] extends keyof T ? (T[K[I]] extends OptionalBrand<unknown, infer U> ? U : never) : never;
 };
@@ -11,13 +13,13 @@ type GetDynamicManyOverloaded = {
 	<const I extends Record<string, unknown>, const T extends readonly (keyof ExtractExplicit<I>)[]>(
 		registry: I,
 		keys: T,
-		strict?: true,
+		options?: DynamicLookupOptions<true>,
 	): Promise<ExtractPayloadsAsTuple<I, T>>;
 
 	<const I extends Record<string, unknown>, T extends string[]>(
 		registry: I,
 		keys: T,
-		strict: false,
+		options: DynamicLookupOptions<false>,
 	): Promise<ExtractPayloadsAsTuple<I, T>>;
 };
 
@@ -52,4 +54,4 @@ const getDynamicMany: GetDynamicMany = async (registry: Record<string, ReadonlyA
 };
 
 export { getDynamicMany };
-export type { GetDynamicMany, GetDynamicManyParams };
+export type { DynamicLookupOptions, GetDynamicMany, GetDynamicManyParams };

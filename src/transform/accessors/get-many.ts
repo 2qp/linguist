@@ -1,13 +1,19 @@
 import type { ExtractExplicit } from "@/types/utility.types";
 
+type LookupOptions<S extends boolean = boolean> = { known?: S };
+
 type GetManyOverloaded = {
 	<I extends Record<string, unknown>, const T extends readonly (keyof ExtractExplicit<I>)[]>(
 		registry: I,
 		keys: T,
-		strict?: true,
+		options?: LookupOptions<true>,
 	): { [K in keyof T]: I[T[K]] };
 
-	<I extends Record<string, unknown>, T extends string[]>(registry: I, keys: T, strict: false): I[string][] | undefined;
+	<I extends Record<string, unknown>, T extends string[]>(
+		registry: I,
+		keys: T,
+		options: LookupOptions<false>,
+	): I[string][] | undefined;
 };
 
 type GetManyType = GetManyOverloaded;
@@ -33,4 +39,4 @@ const getMany: GetManyType = (registry: Record<string, unknown>, keys: string[])
 };
 
 export { getMany };
-export type { GetManyType };
+export type { GetManyType, LookupOptions };
