@@ -7,16 +7,8 @@ import { createStatementPaths } from "@/transform/utils/statement/create-stateme
 
 import type { IndexEmitterOptions, IndexEmitterType } from "./types";
 
-const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
-	name,
-	languages,
-	options,
-	config,
-	stats: _stats,
-}) => {
+const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages, options, config }) => {
 	//
-
-	const stats = new Map(_stats);
 
 	const builder = createStatementBuilder();
 
@@ -34,7 +26,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 
 		const types_map = new Map<string, [string, `T${number}`]>(); // :( mmmutable
 
-		const stat = stats.get(options.key);
+		const field = options.key;
 
 		const struct = `readonly [string, string]` as const;
 
@@ -101,7 +93,8 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 		const typeImports = statements.map((item) => item.typeImports);
 		const dynamic_t_statements = [...types_map.values()].map((item) => item[0]).join("\n");
 
-		const obj = `dynamic By ${stat?.type}` as const;
+		const obj = `dynamic By ${field}` as const;
+
 		const norm = normalizeName(obj);
 		const paths = createStatementPaths(config);
 
@@ -149,7 +142,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 
 		const types_map = new Map<string, [string, `T${number}`]>(); // :( mmmutable
 
-		const stat = stats.get(options.left);
+		const field = options.left;
 
 		const struct = `readonly string[]` as const;
 
@@ -215,7 +208,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({
 		const typeImports = [...new Set(statements.flatMap((item) => item.typeImports))];
 		const dynamic_t_statements = [...types_map.values()].map((item) => item[0]).join("\n");
 
-		const obj = `dynamic By ${stat?.type}` as const;
+		const obj = `dynamic By ${field}` as const;
 
 		const norm = normalizeName(obj);
 		const paths = createStatementPaths(config);

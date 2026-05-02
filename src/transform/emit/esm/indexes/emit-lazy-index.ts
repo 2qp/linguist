@@ -7,10 +7,8 @@ import { createStatementPaths } from "@/transform/utils/statement/create-stateme
 
 import type { IndexEmitterOptions, IndexEmitterType } from "./types";
 
-const emitLazyIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages, options, config, stats: _stats }) => {
+const emitLazyIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages, options, config }) => {
 	//
-
-	const stats = new Map(_stats);
 
 	const builder = createStatementBuilder();
 
@@ -21,7 +19,7 @@ const emitLazyIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages,
 
 		const map = buildMap({ source: languages, ...options });
 
-		const stat = stats.get(options.key);
+		const field = options.key;
 
 		const statements = [...map].map(([lid, name]) => {
 			//
@@ -55,7 +53,8 @@ const emitLazyIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages,
 		const types = statements.map((item) => item.types);
 		const typeImports = statements.map((item) => item.typeImports);
 
-		const obj = `lazy By ${stat?.type}` as const;
+		const obj = `lazy By ${field}` as const;
+
 		const norm = normalizeName(obj);
 		const paths = createStatementPaths(config);
 
@@ -96,7 +95,7 @@ const emitLazyIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages,
 
 		const map = buildMap({ source: languages, ...options });
 
-		const stat = stats.get(options.left);
+		const field = options.left;
 
 		const statements = [...map].map(([ext, nameSet]) => {
 			//
@@ -143,7 +142,7 @@ const emitLazyIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages,
 		const types = statements.map((item) => item.types);
 		const typeImports = [...new Set(statements.flatMap((item) => item.typeImports))];
 
-		const obj = `lazy By ${stat?.type}` as const;
+		const obj = `lazy By ${field}` as const;
 
 		const norm = normalizeName(obj);
 		const paths = createStatementPaths(config);
