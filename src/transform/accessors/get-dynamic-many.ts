@@ -3,23 +3,28 @@ import type { ExtractExplicit } from "@/types/utility.types";
 
 type GetDynamicManyParams = {};
 
-type DynamicLookupOptions<S extends boolean = boolean> = { known?: S };
+type KeyMode = "known" | "loose" | "hybrid";
+
+type DynamicLookupOptions<M extends KeyMode> = {
+	/** `"known" | "hybrid"` */
+	keys?: M;
+};
 
 type ExtractPayloadsAsTuple<T, K extends readonly (keyof T)[]> = {
 	[I in keyof K]: K[I] extends keyof T ? (T[K[I]] extends OptionalBrand<unknown, infer U> ? U : never) : never;
 };
 
 type GetDynamicManyOverloaded = {
-	<const I extends Record<string, unknown>, const T extends readonly (keyof ExtractExplicit<I>)[]>(
+	<const I extends Record<string, unknown>, const T extends ReadonlyArray<keyof ExtractExplicit<I>>>(
 		registry: I,
 		keys: T,
-		options?: DynamicLookupOptions<true>,
+		options?: DynamicLookupOptions<"known">,
 	): Promise<ExtractPayloadsAsTuple<I, T>>;
 
-	<const I extends Record<string, unknown>, T extends string[]>(
+	<const I extends Record<string, unknown>, T extends ReadonlyArray<string>>(
 		registry: I,
 		keys: T,
-		options: DynamicLookupOptions<false>,
+		options: DynamicLookupOptions<"hybrid">,
 	): Promise<ExtractPayloadsAsTuple<I, T>>;
 };
 
@@ -28,13 +33,17 @@ type GetDynamicMany = GetDynamicManyOverloaded;
 const getDynamicMany: GetDynamicMany = async (registry: Record<string, ReadonlyArray<string>>, keys: string[]) => {
 	//
 
-	const promises: unknown[] = [];
 	const length = keys.length;
 
-	for (let index = 0; index < length; index++) {
+	const promises: unknown[][] = [];
+	const result = [];
+
+	for (let i = 0; i < length; i++) {
 		//
 
-		const key = keys[index];
+		promises[i] = [];
+
+		const key = keys[i];
 		if (!key) continue;
 
 		const loader = registry[key as keyof typeof registry];
@@ -42,15 +51,18 @@ const getDynamicMany: GetDynamicMany = async (registry: Record<string, ReadonlyA
 
 		const len = loader?.length;
 
-		for (let index = 0; index < len; index += 2) {
-			//
-
+		for (let j = 0; j < len; j += 2) {
 			// biome-ignore lint/style/noNonNullAssertion: pairs are guaranteed to exist
-			promises.push(import(loader[index]!).then((m) => m[loader[index + 1]!]));
+			promises[i]![j / 2] = import(loader[j]!).then((m) => m[loader[j + 1]!]);
 		}
 	}
 
-	return await Promise.all(promises);
+	for (let i = 0; i < promises.length; i++) {
+		// biome-ignore lint/style/noNonNullAssertion: <pairs are guaranteed to exist>
+		result[i] = await Promise.all(promises[i]!);
+	}
+
+	return result;
 };
 
 export { getDynamicMany };
