@@ -2,7 +2,7 @@ import { generateIndexEmitterOptions } from "./generate-index-emitter-options";
 import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { createFieldSet } from "@gen/utils/create-field-set";
-import { ensureDir } from "@utils/ensure-dir";
+import { ensureDir } from "@services/fs/ensure-dir";
 
 import type { Config } from "@/types/config.types";
 import type { ProcessedFieldAnalysisArray } from "@/types/field.types";

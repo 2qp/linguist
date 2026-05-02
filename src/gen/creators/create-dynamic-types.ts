@@ -1,8 +1,8 @@
 import { join } from "node:path";
 import { generateDynamicTypes } from "@gen/generate-dynamic-types";
-import { ensureDir } from "@utils/ensure-dir";
+import { ensureDir } from "@services/fs/ensure-dir";
+import { writeFile } from "@services/fs/write-file";
 import { resolvePath } from "@utils/resolve-path";
-import { writeFile } from "@utils/write-file";
 import { createOutFilesMeta } from "@/transform/utils/create-out-files-meta";
 import { createReExports } from "@/transform/utils/create-re-exports";
 

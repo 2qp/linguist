@@ -1,9 +1,9 @@
 import { readFile } from "node:fs/promises";
 import { basename } from "node:path";
+import { writeFile } from "@services/fs/write-file";
 import { bumpVersion } from "@utils/bump-version";
 import { createYamlDiff } from "@utils/create-yaml-diff";
 import { log } from "@utils/log";
-import { writeFile } from "@utils/write-file";
 import { ANSI_COLORS } from "@/constants/ansi-colors";
 
 type CreateChangelogParams = {

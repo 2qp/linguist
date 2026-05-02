@@ -1,4 +1,4 @@
-import { writeFile } from "@utils/write-file";
+import { writeFile } from "@services/fs/write-file";
 
 type CreateJsonExportParams = {
 	alias: string;

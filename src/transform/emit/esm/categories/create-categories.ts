@@ -1,7 +1,7 @@
 import { emitCategoryFile } from "./emit-category-file";
 import { join } from "node:path";
-import { ensureDir } from "@utils/ensure-dir";
-import { writeFile } from "@utils/write-file";
+import { ensureDir } from "@services/fs/ensure-dir";
+import { writeFile } from "@services/fs/write-file";
 
 import type { Config } from "@/types/config.types";
 import type { Languages, Type } from "@/types/generated.types";

@@ -1,4 +1,3 @@
-import { ensureDir } from "../utils/ensure-dir";
 import { groupByType } from "./core/group-by-type";
 import { createArrays } from "./emit/arrays/create-arrays";
 import { createCategories } from "./emit/esm/categories/create-categories";
@@ -9,6 +8,7 @@ import { createManifests } from "./emit/manifests/create-manifests";
 import { createMaps } from "./emit/maps/create-maps";
 import { createReExports } from "./utils/create-re-exports";
 import { join } from "node:path";
+import { ensureDir } from "@services/fs/ensure-dir";
 
 import type { Field } from "@/types/branded.types";
 import type { Config } from "@/types/config.types";

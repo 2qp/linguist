@@ -2,8 +2,8 @@ import { emitESMFlat } from "./emit-esm-flat";
 import { emitJSONFlat } from "./emit-json-flat";
 import { emitNormalizedAllFlat } from "./emit-normalized-all-flat";
 import { join } from "node:path";
-import { ensureDir } from "@utils/ensure-dir";
-import { writeFile } from "@utils/write-file";
+import { ensureDir } from "@services/fs/ensure-dir";
+import { writeFile } from "@services/fs/write-file";
 import { createJsonExport } from "@/transform/utils/create-json-export";
 
 import type { Config } from "@/types/config.types";

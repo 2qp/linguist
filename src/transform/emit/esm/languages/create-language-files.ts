@@ -1,6 +1,6 @@
 import { emitLanguageFile } from "./emit-language-file";
 import { join } from "node:path";
-import { writeFile } from "@utils/write-file";
+import { writeFile } from "@services/fs/write-file";
 import { normalizeName } from "@/transform/utils/normalize-name";
 
 import type { Config } from "@/types/config.types";

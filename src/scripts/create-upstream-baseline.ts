@@ -1,6 +1,6 @@
 import { basename } from "node:path";
+import { writeFile } from "@services/fs/write-file";
 import { log } from "@utils/log";
-import { writeFile } from "@utils/write-file";
 import { ANSI_COLORS } from "@/constants/ansi-colors";
 
 type CreateUpstreamBaselineParams = {

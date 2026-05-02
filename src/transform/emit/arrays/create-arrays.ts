@@ -2,8 +2,8 @@ import { emitArray } from "./emit-array";
 import { emitFieldArray } from "./emit-field-array";
 import { join } from "node:path";
 import { createFieldSet } from "@gen/utils/create-field-set";
-import { ensureDir } from "@utils/ensure-dir";
-import { writeFile } from "@utils/write-file";
+import { ensureDir } from "@services/fs/ensure-dir";
+import { writeFile } from "@services/fs/write-file";
 
 import type { Config } from "@/types/config.types";
 import type { ProcessedFieldAnalysisArray } from "@/types/field.types";
