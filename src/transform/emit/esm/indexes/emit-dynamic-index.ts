@@ -74,7 +74,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languag
 				.record()
 				.key(lid)
 				.wrap("OptionalBrand<$>")
-				.values([struct, `"[${norm.typeName}]"`])
+				.values([struct, `[${norm.typeName}]`])
 				.build();
 
 			const vars = builder
