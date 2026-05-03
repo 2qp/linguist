@@ -32,9 +32,9 @@ type GetManyType = GetManyOverloaded;
 const getMany: GetManyType = (registry: Record<string, unknown>, keys: string[]) => {
 	//
 
-	const items: unknown[] = [];
-
 	const length = keys.length;
+
+	const items: unknown[] = new Array(length);
 
 	for (let index = 0; index < length; index++) {
 		const key = keys[index];
@@ -43,7 +43,7 @@ const getMany: GetManyType = (registry: Record<string, unknown>, keys: string[])
 
 		const element = registry[key as keyof typeof registry];
 
-		items.push(element);
+		items[index] = element;
 	}
 
 	return items;

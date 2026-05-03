@@ -35,7 +35,7 @@ const getDynamicMany: GetDynamicMany = async (registry: Record<string, ReadonlyA
 
 	const length = keys.length;
 
-	const promises: unknown[][] = [];
+	const promises: unknown[][] = new Array(length);
 
 	for (let i = 0; i < length; i++) {
 		//
@@ -50,9 +50,12 @@ const getDynamicMany: GetDynamicMany = async (registry: Record<string, ReadonlyA
 
 		const len = loader?.length;
 
-		for (let j = 0; j < len; j += 2) {
+		// biome-ignore lint/style/noNonNullAssertion: pairs are guaranteed to exist
+		const target = promises[i]!;
+
+		for (let j = 0, p = 0; j < len; j += 2, p++) {
 			// biome-ignore lint/style/noNonNullAssertion: pairs are guaranteed to exist
-			promises[i]![j / 2] = import(loader[j]!).then((m) => m[loader[j + 1]!]);
+			target[p] = import(loader[j]!).then((m) => m[loader[j + 1]!]);
 		}
 	}
 

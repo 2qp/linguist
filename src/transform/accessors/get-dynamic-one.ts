@@ -20,16 +20,16 @@ const getDynamicOne: GetDynamicOne = async (registry: Record<string, ReadonlyArr
 	if (!loader) return undefined;
 
 	const len = loader.length;
-	const promises = [];
+	const promises = new Array(len >> 1);
 
-	for (let index = 0; index < len; index += 2) {
+	for (let index = 0, p = 0; index < len; index += 2, p++) {
 		// const path = loader[index];
 		// const exportName = loader[index + 1];
 
 		// if (!path || !exportName) continue;
 
 		// biome-ignore lint/style/noNonNullAssertion: pairs are guaranteed to exist
-		promises.push(import(loader[index]!).then((m) => m[loader[index + 1]!]));
+		promises[p] = import(loader[index]!).then((m) => m[loader[index + 1]!]);
 	}
 
 	const items = await Promise.all(promises);

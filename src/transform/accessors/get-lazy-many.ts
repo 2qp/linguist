@@ -36,7 +36,7 @@ const getLazyMany: GetLazyManyType = async (registry: Record<string, SyncOrAsync
 	//
 
 	const length = keys.length;
-	const items: unknown[] = new Array(length).fill(undefined);
+	const items: unknown[] = new Array(length);
 
 	for (let index = 0; index < length; index++) {
 		const key = keys[index];
@@ -45,7 +45,10 @@ const getLazyMany: GetLazyManyType = async (registry: Record<string, SyncOrAsync
 
 		const loader = registry[key as keyof typeof registry];
 
-		if (!loader) continue;
+		if (!loader) {
+			items[index] = undefined;
+			continue;
+		}
 
 		const modules = await loader();
 

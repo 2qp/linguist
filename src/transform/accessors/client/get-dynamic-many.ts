@@ -5,9 +5,9 @@ import type { GetDynamicMany } from "../get-dynamic-many";
 const getDynamicMany: GetDynamicMany = async (registry: Record<string, ReadonlyArray<string>>, keys: string[]) => {
 	//
 
-	const promises: unknown[][] = [];
-
 	const length = keys.length;
+
+	const promises: unknown[][] = new Array(length);
 
 	for (let i = 0; i < length; i++) {
 		//
@@ -22,16 +22,20 @@ const getDynamicMany: GetDynamicMany = async (registry: Record<string, ReadonlyA
 
 		const len = loader?.length;
 
-		for (let j = 0; j < len; j += 2) {
+		// biome-ignore lint/style/noNonNullAssertion: pairs are guaranteed to exist
+		const target = promises[i]!;
+
+		for (let j = 0, p = 0; j < len; j += 2, p++) {
 			//
 
 			const path = (loader[j] as unknown as string).slice(2);
-			const url = `${DYNAMIC_CDN}/${path}`;
+			const url = `${DYNAMIC_CDN}/${path}` as const;
 
-			const ignore = "IGNORE_WEBPACK";
+			// do not extract: causes extra chunking which breaks post-processing.
+			const ignore = "IGNORE_WEBPACK" as const;
 
 			// biome-ignore lint/style/noNonNullAssertion: pairs are guaranteed to exist
-			promises[i]![j / 2] = import(`${ignore}${url}`).then((m) => m[loader[j + 1]!]);
+			target[p] = import(`${ignore}${url}`).then((m) => m[loader[j + 1]!]);
 		}
 	}
 
