@@ -36,7 +36,6 @@ const getDynamicMany: GetDynamicMany = async (registry: Record<string, ReadonlyA
 	const length = keys.length;
 
 	const promises: unknown[][] = [];
-	const result = [];
 
 	for (let i = 0; i < length; i++) {
 		//
@@ -57,12 +56,7 @@ const getDynamicMany: GetDynamicMany = async (registry: Record<string, ReadonlyA
 		}
 	}
 
-	for (let i = 0; i < promises.length; i++) {
-		// biome-ignore lint/style/noNonNullAssertion: <pairs are guaranteed to exist>
-		result[i] = await Promise.all(promises[i]!);
-	}
-
-	return result;
+	return await Promise.all(promises.map((group) => Promise.all(group)));
 };
 
 export { getDynamicMany };
