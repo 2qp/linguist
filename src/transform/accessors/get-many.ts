@@ -14,13 +14,13 @@ type GetManyOverloaded = {
 		options?: LookupOptions<"known">,
 	): { [K in keyof T]: I[T[K]] };
 
-	<I extends Record<string, unknown>, T extends ReadonlyArray<string>>(
+	<I extends Record<string, unknown>, const T extends ReadonlyArray<string>>(
 		registry: I,
 		keys: T,
 		options: LookupOptions<"hybrid">,
 	): { [K in keyof T]: I[T[K]] };
 
-	<I extends Record<string, unknown>, T extends ReadonlyArray<string>>(
+	<I extends Record<string, unknown>, const T extends ReadonlyArray<string>>(
 		registry: I,
 		keys: T,
 		options: LookupOptions<"loose">,
