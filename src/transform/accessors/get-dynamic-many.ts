@@ -6,13 +6,15 @@ type GetDynamicManyParams = {};
 type KeyMode = "known" | "loose" | "hybrid";
 
 type DynamicLookupOptions<M extends KeyMode> = {
-	/** `"known" | "hybrid"` */
+	/** `"known" | "hybrid" | "loose"` */
 	keys?: M;
 };
 
 type ExtractPayloadsAsTuple<T, K extends readonly (keyof T)[]> = {
 	[I in keyof K]: K[I] extends keyof T ? (T[K[I]] extends OptionalBrand<unknown, infer U> ? U : never) : never;
 };
+
+type ExtractBrand<T> = T extends OptionalBrand<unknown, infer B> ? B : never;
 
 type GetDynamicManyOverloaded = {
 	<const I extends Record<string, unknown>, const T extends ReadonlyArray<keyof ExtractExplicit<I>>>(
@@ -21,11 +23,17 @@ type GetDynamicManyOverloaded = {
 		options?: DynamicLookupOptions<"known">,
 	): Promise<ExtractPayloadsAsTuple<I, T>>;
 
-	<const I extends Record<string, unknown>, T extends ReadonlyArray<string>>(
+	<const I extends Record<string, unknown>, const T extends ReadonlyArray<string>>(
 		registry: I,
 		keys: T,
 		options: DynamicLookupOptions<"hybrid">,
 	): Promise<ExtractPayloadsAsTuple<I, T>>;
+
+	<const I extends Record<string, unknown>, const T extends ReadonlyArray<string>>(
+		registry: I,
+		keys: T,
+		options: DynamicLookupOptions<"loose">,
+	): Promise<ReadonlyArray<ExtractBrand<I[string]>>>;
 };
 
 type GetDynamicMany = GetDynamicManyOverloaded;
