@@ -120,7 +120,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languag
 			.from()
 			.tuple(types)
 			.wrap("Dictionary<OptionalBrand<$>>")
-			.types([], [`${struct}, [Language]`, "undefined"])
+			.types([], [`${struct}, [Language] | []`])
 			.build();
 
 		const blocks = createBlockBuilder()
@@ -235,7 +235,7 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languag
 			.from()
 			.tuple(types)
 			.wrap("Dictionary<OptionalBrand<$>>")
-			.types([], [`${struct}, Language[]`, "undefined"])
+			.types([], [`${struct}, (Language | undefined)[]`])
 			.build();
 
 		const blocks = createBlockBuilder()
