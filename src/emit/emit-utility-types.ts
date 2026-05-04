@@ -6,7 +6,7 @@ const emitUtilityTypes = async (languageName: string) => {
 
 	const dictionaryBuilder = await createTypeAsStringBuilder("src/types/utility.types.ts", "Dictionary", {
 		sourceDir: resolvePath("src/types"),
-		sourcePattern: "utility.types.ts",
+		sourcePattern: ["utility.types.ts"],
 		exported: true,
 	});
 

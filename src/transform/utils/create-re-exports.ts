@@ -50,7 +50,7 @@ type ReExportConfig = {
 	barrel?: boolean;
 	barrel_options?: BarrelOptions;
 	sourceDir?: string;
-	sourcePattern?: string;
+	sourcePattern?: string[];
 	sourceFiles?: string[];
 	exclude?: string[];
 	extension?: string;
@@ -76,7 +76,7 @@ const validateConfig = (config: ReExportConfig) => {
 
 const findSourceFilesInDirectory = async (
 	sourceDir: string,
-	pattern: string = "**/*.ts",
+	pattern: string[] = ["**/*.ts"],
 	exclude?: string[],
 ): Promise<string[]> => {
 	//
