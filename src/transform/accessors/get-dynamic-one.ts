@@ -17,7 +17,7 @@ const getDynamicOne: GetDynamicOne = async (registry: Record<string, ReadonlyArr
 
 	const loader = registry[key as keyof typeof registry];
 
-	if (!loader) return undefined;
+	if (!loader) return [];
 
 	const len = loader.length;
 	const promises = new Array(len >> 1);
