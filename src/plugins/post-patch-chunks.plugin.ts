@@ -1,28 +1,39 @@
 import { existsSync } from "node:fs";
 import { readdir, readFile } from "node:fs/promises";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { writeFile } from "@services/fs/write-file";
+import { clr } from "@utils/colors";
 import { log } from "@utils/log";
-import { ANSI_COLORS } from "@/constants/ansi-colors";
+import { patchDynamicImports } from "@/build/transforms/patch-dynamic-imports";
+import { IGNORE_WEBPACK } from "@/constants/transforms";
 
 const dist = "./dist" as const;
 const entryPaths = ["./dist/getters/client"] as const;
 const exts = [".js", ".cjs"] as const;
 
-const applyPatch = async (filePath: string, content: string): Promise<void> => {
+const applyPatch = async (filePath: string, content: string, entryPath: string): Promise<void> => {
 	//
 
-	if (!content.includes("IGNORE_WEBPACK")) return;
+	if (!content.includes(IGNORE_WEBPACK)) return;
 
-	const patched = content.replace(
-		/import\([`"']IGNORE_WEBPACK(.*?)[`"']\)/g,
-		"import(/* webpackIgnore: true */ `$1` )",
-	);
+	// const patched = content.replace(
+	// 	/import\([`"']IGNORE_WEBPACK(.*?)[`"']\)/g,
+	// 	"import(/* webpackIgnore: true */ `$1` )",
+	// );
+
+	const target = IGNORE_WEBPACK;
+	const replacement = " webpackIgnore: true " as const;
+
+	const patched = patchDynamicImports({ content, target, replacement });
 
 	await writeFile({ filePath, content: patched });
-	log.info(
-		`${ANSI_COLORS.fg.green}\u2192${ANSI_COLORS.reset} patched: ${ANSI_COLORS.bright}${filePath}${ANSI_COLORS.reset}`,
-	);
+
+	const cwd = process.cwd();
+
+	const entry = relative(cwd, entryPath);
+	const effected = relative(cwd, filePath);
+
+	log.info(`${clr("fg.green", "\u2192")} patched: ${clr("bright", entry)} ${clr("fg.yellow", "\u2192")} ${effected}`);
 };
 
 // esbuild or sum always stripping legal magic comments.
@@ -46,7 +57,7 @@ const postPatchChunks = async (_dist = dist) => {
 				const entryPath = join(targetDir, entryFile);
 				const entryContent = await readFile(entryPath, "utf8");
 
-				await applyPatch(entryPath, entryContent);
+				await applyPatch(entryPath, entryContent, entryPath);
 
 				const chunkMatches = [...entryContent.matchAll(chunkRegex)];
 
@@ -63,7 +74,7 @@ const postPatchChunks = async (_dist = dist) => {
 
 					if (isChunkExsit) {
 						const chunkContent = await readFile(chunkAbsolutePath, "utf8");
-						await applyPatch(chunkAbsolutePath, chunkContent);
+						await applyPatch(chunkAbsolutePath, chunkContent, entryPath);
 					}
 
 					if (!isChunkExsit) {

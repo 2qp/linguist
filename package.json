@@ -15,7 +15,6 @@
 				"default": "./dist/data/*.cjs"
 			}
 		},
-
 		"./getters": {
 			"import": {
 				"types": "./dist/getters/index.d.ts",
@@ -36,7 +35,6 @@
 				"default": "./dist/getters/*.cjs"
 			}
 		},
-
 		"./getters/client": {
 			"import": {
 				"types": "./dist/getters/client/index.d.ts",
@@ -57,7 +55,6 @@
 				"default": "./dist/getters/client/*.cjs"
 			}
 		},
-
 		"./predicates": {
 			"import": {
 				"types": "./dist/predicates/index.d.ts",
@@ -68,7 +65,6 @@
 				"default": "./dist/predicates/index.cjs"
 			}
 		},
-
 		".": {
 			"import": {
 				"types": "./dist/types/common/index.d.ts",
@@ -79,7 +75,6 @@
 				"default": "./dist/types/common/index.cjs"
 			}
 		},
-
 		"./usage": {
 			"import": {
 				"types": "./dist/types/usage/index.d.ts",
@@ -136,9 +131,13 @@
 	"license": "MIT",
 	"packageManager": "pnpm@10.24.0",
 	"devDependencies": {
-		"@babel/parser": "^7.29.2",
+		"@babel/generator": "^7.29.1",
+		"@babel/parser": "^7.29.3",
+		"@babel/traverse": "^7.29.0",
 		"@babel/types": "^7.29.0",
 		"@biomejs/biome": "^2.4.13",
+		"@types/babel__generator": "^7.27.0",
+		"@types/babel__traverse": "^7.28.0",
 		"@types/js-yaml": "^4.0.9",
 		"@types/node": "^25.6.0",
 		"@typescript/native-preview": "7.0.0-dev.20260426.1",
