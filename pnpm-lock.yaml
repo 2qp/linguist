@@ -21,7 +21,7 @@ importers:
         specifier: ^7.29.0
         version: 7.29.0
       '@biomejs/biome':
-        specifier: ^2.4.13
+        specifier: ^2.4.14
         version: 2.4.14
       '@types/babel__generator':
         specifier: ^7.27.0
