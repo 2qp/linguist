@@ -3,7 +3,7 @@
 [Linguist's `languages.yml`][linguist] language data.
 
 - preprocessed into files, maps, and indexes
-- fast lookups by id, name, and extension
+- fast lookups by id, name, extension …
 - typed data, maps, and type safe getters
 
 ## Install
@@ -35,6 +35,14 @@ const extensions = all["TypeScript"].extensions;
 ```
 
 ```ts
+import { programming } from "@2qp/linguist/categories/programming";
+
+const mms = programming["235"];
+//		  ^
+// { readonly ace_mode: "text"; readonly name: "Module Management System"; readonly extensions: readonly [".mms", ".mmk"]; ... }
+```
+
+```ts
 import { normalized_all } from "@2qp/linguist/flat/normalized-all";
 
 const id = normalized_all.typescript.language_id;
@@ -43,10 +51,10 @@ const id = normalized_all.typescript.language_id;
 ```
 
 ```ts
-import { by_extension } from "@2qp/linguist/indexes/by-extension";
+import { by_extensions } from "@2qp/linguist/indexes/by-extensions";
 import { getOne } from "@2qp/linguist/getters";
 
-const result = getOne(by_extension, ".ts");
+const result = getOne(by_extensions, ".ts");
 const aliases = result[0].codemirror_mime_type;
 //       ^
 // "application/typescript"
@@ -82,39 +90,56 @@ const extensions: Extensions = [".dockerfile", "unknown"];
 
 const extensionsRelax: ExtensionsRelax = [".dockerfile", "unknown"];
 ```
+
+
 ## Getters
 
 #### Get One
 
 ```ts
 
-import { by_extension } from "@2qp/linguist/indexes/by-extension";
 import { getOne } from "@2qp/linguist/getters";
+import { by_extensions } from "@2qp/linguist/indexes/by-extensions";
+import { extensions_to_name } from "@2qp/linguist/maps/extensions-to-name";
 
 // const extension = ".ts" as const; // or
-const result = getOne(by_extension, ".ts"); // [{ readonly ace_mode: "typescript"; readonly aliases: readonly ["ts"];
+const result = getOne(by_extensions, ".ts");
+//      ^
+// [{ readonly ace_mode: "typescript"; readonly aliases: readonly ["ts"];
 
 const searchKey: string = ".jsx";
-const lookupResult = getOne(by_extension, searchKey); // Language[] | undefined
+const lookupResult = getOne(by_extensions, searchKey); // Language[] | undefined
+
+const mapResult = getOne(extensions_to_name, ".ts"); // readonly ["TypeScript", "XML"]
 
 ```
 
 | Parameter    | Type                                 | Description                                                                 |
 | :----------- | :----------------------------------- | :-------------------------------------------------------------------------- |
-| `registry`   | `Record<string, unknown>`            | **Required**. The source registry (e.g., byExtension) used for the lookup. |
+| `registry`   | `Record<string, unknown>`            | **Required**. The source registry (e.g., by_extensions) used for the lookup.|
 | `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (extension or ID) used to retrieve the value. |
 
 
 #### Get Many
 
 ```ts
-import { by_extension } from "@2qp/linguist/indexes/by-extension";
 import { getMany } from "@2qp/linguist/getters";
+import { by_ace_mode } from "@2qp/linguist/indexes/by-ace-mode";
+import { by_extensions } from "@2qp/linguist/indexes/by-extensions";
+import { extensions_to_interpreters } from "@2qp/linguist/maps/extensions-to-interpreters";
 
-const result = getMany(by_extension, [".lua", ".json"]); // [[{ readonly ace_mode: "lua"; readonly codemirror_mime_type: "text/x-lua";
+const result = getMany(by_extensions, [".lua", ".json"]);
+//      ^
+// [[{ readonly ace_mode: "lua"; readonly codemirror_mime_type: "text/x-lua";
+
+const hybridResult = getMany(by_ace_mode, ["astro", "clojurex" as string], { keys: "hybrid" });
+//      ^
+// readonly [[{ readonly ace_mode: "astro"; ... }], Language[] | undefined]
 
 const extensionQueries: string[] = [".dart", ".py"];
-const lookupResult = getMany(by_extension, extensionQueries, false); // (Language[] | undefined)[] | undefined
+const lookupResult = getMany(by_extensions, extensionQueries, { keys: "loose" }); // (Language[] | undefined)[]
+
+const mapResult = getMany(extensions_to_interpreters, [".ts", ".tsx"]); // readonly [readonly ["bun", "deno", "ts-node", "tsx"], readonly []]
 
 ```
 
@@ -122,49 +147,195 @@ const lookupResult = getMany(by_extension, extensionQueries, false); // (Languag
 | :----------- | :----------------------------------- | :------------------------------------------------------------------------------------------------ |
 | `registry`   | `Record<string, unknown>`            | **Required**. The source registry                                                                 |
 | `key`        | `(keyof typeof registry)[]` , `string[]` | **Required**. The unique identifiers                                                            |
-| `strict`     | `boolean`                            | **Optional**. If `true`, restricts input to strict literal types; if `false`, allows a general `string[]`. |
+| `options`    | `{ keys?: "known" \| "hybrid" \| "loose" }`       | **Optional.** Controls type strictness: `"known"` restricts input to literal keys; `"hybrid"` allows `string[]` while preserving tuple inference (unknown values fall back to `T`); `"loose"` allows `string[]` and resolves to `T[]`. |
 
 
 #### Get Lazy One
 
 ```ts
-import { lazy_by_id } from "@2qp/linguist/indexes/lazy-by-id";
 import { getLazyOne } from "@2qp/linguist/getters";
+import { lazy_by_language_id } from "@2qp/linguist/indexes/lazy-by-language-id";
 
-const result = await getLazyOne(lazy_by_id, "327"); // { readonly ace_mode: "rust"; readonly aliases: readonly ["rs"];
+const result = await getLazyOne(lazy_by_language_id, "327");
+//      ^
+// { readonly ace_mode: "rust"; readonly aliases: readonly ["rs"];
 
 const searchKey: string = "326";
-const lookupResult = await getLazyOne(lazy_by_id, searchKey); // Language | undefined
+const lookupResult = await getLazyOne(lazy_by_language_id, searchKey); // Language | undefined
 
 ```
 
 | Parameter    | Type                                 | Description                                                                                       |
 | :----------- | :----------------------------------- | :------------------------------------------------------------------------------------------------ |
-| `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The dynamic / lazy source registry (e.g., lazyByExtension, lazyById) used for the lookup. |
+| `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The lazy source registry (e.g., lazy_by_name ) used for the lookup.                 |
 | `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (extension or ID) used to retrieve the value.                 |
 
 
 #### Get Lazy Many
 
 ```ts
-import { by_extension } from "@2qp/linguist/indexes/by-extension";
 import { getLazyMany } from "@2qp/linguist/getters";
+import { lazy_by_extensions } from "@2qp/linguist/indexes/lazy-by-extensions";
+import { lazy_by_name } from "@2qp/linguist/indexes/lazy-by-name";
+import { lazy_by_type } from "@2qp/linguist/indexes/lazy-by-type";
 
-const result = await getLazyMany(by_extension, [".c++", ".groovy", ".yaml", ".cs"]);
+const result = await getLazyMany(lazy_by_extensions, [".c++", ".groovy", ".yaml", ".cs"]);
 //      ^
 // readonly [[{ readonly ace_mode: "c_cpp"; readonly aliases: readonly ["cpp"]; [...], [...], [...]]
 
+const hybridResult = await getLazyMany(lazy_by_name, ["Boo", "Brainfuck" as string], { keys: "hybrid" });
+//      ^
+// readonly [{ readonly ace_mode: "text"; readonly color: "#d4bec1"; ... }, Language | undefined]
 
-const extensionQueries: string[] = [".env", ".swift"];
-const lookupResult = await getLazyMany(by_extension, extensionQueries, false); // (Language[] | undefined)[] | undefined
+const typeQueries: string[] = ["data", "prose"];
+const lookupResult = await getLazyMany(lazy_by_type, typeQueries, { keys: "loose" }); // (Language[] | undefined)[]
 
 ```
 
 | Parameter    | Type                                       | Description                                                                                       |
 | :----------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------ |
-| `registry`   | `Record<string, () => Promise<T>>`         | **Required**. The dynamic / lazy source registry (e.g., lazyByExtension, lazyById) used for the lookup. |
+| `registry`   | `Record<string, () => Promise<T>>`         | **Required**. The lazy source registry (e.g., lazy_by_language_id ) used for the lookup.     |
 | `key`        | `(keyof typeof registry)[]` , `string[]`   | **Required**. The unique identifiers.                                                             |
-| `strict`     | `boolean`                                  | **Optional**. If `true`, restricts input to strict literal types; if `false`, allows a general `string[]`. |
+| `options`    | `{ keys?: "known" \| "hybrid" \| "loose" }`       | **Optional.** Controls type strictness: `"known"` restricts input to literal keys; `"hybrid"` allows `string[]` while preserving tuple inference (unknown values fall back to `T`); `"loose"` allows `string[]` and resolves to `T[]`. |
+
+
+#### Get Dynamic One
+
+```ts
+import { getDynamicOne } from "@2qp/linguist/getters/dynamic";
+import { dynamic_by_extensions } from "@2qp/linguist/indexes/dynamic-by-extensions";
+import { dynamic_by_name } from "@2qp/linguist/indexes/dynamic-by-name";
+
+const result = await getDynamicOne(dynamic_by_extensions, ".gleam"); 
+//      ^
+// [{ readonly ace_mode: "text"; readonly color: "#ffaff3"; readonly extensions: readonly [".gleam"];
+
+const searchKey: string = ".html";
+const lookupResult = await getDynamicOne(dynamic_by_extensions, searchKey); // (Language | undefined)[]
+
+const name: string = "...";
+const lang = await getDynamicOne(dynamic_by_name, name); // [Language] | []
+const [l] = lang;
+//     ^
+// Language | undefined
+
+```
+
+| Parameter    | Type                                 | Description                                                                                       |
+| :----------- | :----------------------------------- | :------------------------------------------------------------------------------------------------ |
+| `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The dynamic source registry (e.g., dynamic_by_extensions) used for the lookup.      |
+| `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (extension or ID) used to retrieve the value.                 |
+
+
+#### Get Dynamic Many
+
+```ts
+import { getDynamicMany } from "@2qp/linguist/getters/dynamic";
+import { dynamic_by_aliases } from "@2qp/linguist/indexes/dynamic-by-aliases";
+import { dynamic_by_filenames } from "@2qp/linguist/indexes/dynamic-by-filenames";
+
+const result = await getDynamicMany(dynamic_by_aliases, ["lisp", "emacs", "vim", "jsp", "npmrc"]);
+//      ^
+// readonly [[{ readonly ace_mode: "lisp"; readonly aliases: readonly ["lisp"]; }], [...], [...], [...]]
+
+const hybridResult = await getDynamicMany(dynamic_by_filenames, ["unknown", "BUILD.bazel"], { keys: "hybrid" });
+//      ^
+// readonly [(Language | undefined)[], [{ readonly ace_mode: "python"; readonly aliases: readonly ["bazel", "bzl"], ...}] ...];
+
+const filenames: string[] = ["LICENSE.mysql", "Podfile"];
+const lookupResult = await getDynamicMany(dynamic_by_filenames, filenames, { keys: "loose" }); // (Language | undefined)[][]
+
+```
+
+| Parameter  | Type                                              | Description |
+| :--------- | :------------------------------------------------ | :---------- |
+| `registry` | `Record<string, () => Promise<T>>`                | **Required.** The dynamic/lazy source registry (e.g., `lazyByExtension`, `lazyById`) used for lookups. |
+| `key`      | `(keyof typeof registry)[] \| string[]`           | **Required.** The identifiers to resolve. |
+| `options`  | `{ keys?: "known" \| "hybrid" \| "loose" }`       | **Optional.** Controls type strictness: `"known"` restricts input to literal keys; `"hybrid"` allows `string[]` while preserving tuple inference (unknown values fall back to `T`); `"loose"` allows `string[]` and resolves to `T[]`. |
+
+<br>
+
+
+> **Note:** For server-side usage, you may need to externalize `@2qp/linguist` depending on your bundler setup.
+>
+> **Turbopack (Next.js):**
+> ```ts
+> serverExternalPackages: ["@2qp/linguist/getters/dynamic"]
+> ```
+>
+> **Vite:**
+> ```ts
+> optimizeDeps: {
+>   exclude: ["@2qp/linguist"]
+> }
+> ```
+>
+> scoped externalization or optimization of dependencies may vary across bundlers.
+
+<br>
+
+
+#### Client/Get Dynamic One
+
+```ts
+import { getDynamicOne } from "@2qp/linguist/getters/dynamic/client";
+import { dynamic_by_extensions } from "@2qp/linguist/indexes/dynamic-by-extensions";
+import { dynamic_by_name } from "@2qp/linguist/indexes/dynamic-by-name";
+
+const result = await getDynamicOne(dynamic_by_extensions, ".svelte");
+//      ^
+//  result: [{ readonly ace_mode: "html"; readonly codemirror_mode: "htmlmixed"; readonly color: "#ff3e00"; ... }]
+
+const searchKey: string = ".sh";
+const lookupResult = await getDynamicOne(dynamic_by_extensions, searchKey); // (Language | undefined)[]
+
+const name: string = "...";
+const lang = await getDynamicOne(dynamic_by_name, name); // [Language] | []
+const [l] = lang;
+//     ^
+// Language | undefined
+
+```
+
+| Parameter    | Type                                 | Description                                                                                       |
+| :----------- | :----------------------------------- | :------------------------------------------------------------------------------------------------ |
+| `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The dynamic source registry (e.g., dynamic_by_name ) used for the lookup. |
+| `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (extension or ID) used to retrieve the value.                 |
+
+
+#### Client/Get Dynamic Many
+
+```ts
+import { getDynamicMany } from "@2qp/linguist/getters/dynamic/client";
+import { dynamic_by_aliases } from "@2qp/linguist/indexes/dynamic-by-aliases";
+import { dynamic_by_color } from "@2qp/linguist/indexes/dynamic-by-color";
+import { dynamic_by_group } from "@2qp/linguist/indexes/dynamic-by-group";
+
+const result = await getDynamicMany(dynamic_by_aliases, ["make", "asm", "regex", "squeak", "Cabal"]);
+//      ^
+// readonly [[{ readonly ace_mode: "makefile"; readonly aliases: readonly ["bsdmake", "make", "mf"]; }], [...], [...], [...]]
+
+const hybridResult = await getDynamicMany(dynamic_by_group, ["Smalltalk" as string, "Julia"], { keys: "hybrid" });
+//      ^
+// readonly [(Language | undefined)[], [{ readonly ace_mode: "text"; readonly color: "#a270ba"; readonly group: "Julia"; ...}] ...];
+
+const colorsQueries: string[] = ["#28430A", "#28431f"];
+const lookupResult = await getDynamicMany(dynamic_by_color, colorsQueries, { keys: "loose" }); // readonly (Language | undefined)[][]
+
+
+```
+
+| Parameter  | Type                                              | Description |
+| :--------- | :------------------------------------------------ | :---------- |
+| `registry` | `Record<string, () => Promise<T>>`                | **Required.** The dynamic source registry (e.g., `dynamic_by_group`, `dynamic_by_color`) used for lookups. |
+| `key`      | `(keyof typeof registry)[] \| string[]`           | **Required.** The identifiers to resolve. |
+| `options`  | `{ keys?: "known" \| "hybrid" \| "loose" }`       | **Optional.** Controls type strictness: `"known"` restricts input to literal keys; `"hybrid"` allows `string[]` while preserving tuple inference (unknown values fall back to `T`); `"loose"` allows `string[]` and resolves to `T[]`. |
+
+<br>
+
+> **Note:** client-dynamic getters uses `cdn.jsdelivr.net` to dynamically fetch modules at runtime.
+>
+> avoids bundling, but requires network access when the getter is called.
 
 
 ## Predicates
@@ -248,6 +419,11 @@ const lookupResult = isExtensionOfType(extension, "prose"); // boolean
 | `by-searchable.ts` | `by_searchable` | `Record<Searchable, Language[]>` | searchable to name | `{ "false": [ gemfile_lock ] } as const` |
 | `lazy-by-searchable.ts` | `lazy_by_searchable` | `Record<Searchable, () => Promise<Language[]>>` | searchable to name | `{ "false": () => Promise.all([ import('…/gemfile-lock').then(({ gemfile_lock }) => gemfi… } as const` |
 
+
+<br>
+
+> **Note:** `dynamic-by-*.ts` are not documented.
+>
 
 
 ### Manifest
