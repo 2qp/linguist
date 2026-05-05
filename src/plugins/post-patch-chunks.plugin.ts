@@ -8,7 +8,7 @@ import { patchDynamicImports } from "@/build/transforms/patch-dynamic-imports";
 import { IGNORE_WEBPACK } from "@/constants/transforms";
 
 const dist = "./dist" as const;
-const entryPaths = ["./dist/getters/client"] as const;
+const entryPaths = ["./dist/getters/dynamic/client"] as const;
 const exts = [".js", ".cjs"] as const;
 
 const applyPatch = async (filePath: string, content: string, entryPath: string): Promise<void> => {

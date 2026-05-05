@@ -8,6 +8,7 @@ data:
     manifestsDir: "src/generated/data/manifests"
     arraysDir: "src/generated/data/arrays"
     gettersDir: "src/generated/getters/"
+    getters_dynamic_dir: "src/generated/getters/dynamic/"
     predicatesDir: "src/generated/predicates/"
 
   sourcePaths:

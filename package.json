@@ -35,24 +35,45 @@
 				"default": "./dist/getters/*.cjs"
 			}
 		},
-		"./getters/client": {
+
+		"./getters/dynamic": {
 			"import": {
-				"types": "./dist/getters/client/index.d.ts",
-				"default": "./dist/getters/client/index.js"
+				"types": "./dist/getters/dynamic/index.d.ts",
+				"default": "./dist/getters/dynamic/index.js"
 			},
 			"require": {
-				"types": "./dist/getters/client/index.d.cts",
-				"default": "./dist/getters/client/index.cjs"
+				"types": "./dist/getters/dynamic/index.d.cts",
+				"default": "./dist/getters/dynamic/index.cjs"
 			}
 		},
-		"./getters/client/*": {
+		"./getters/dynamic/*": {
 			"import": {
-				"types": "./dist/getters/client/*.d.ts",
-				"default": "./dist/getters/client/*.js"
+				"types": "./dist/getters/dynamic/*.d.ts",
+				"default": "./dist/getters/dynamic/*.js"
 			},
 			"require": {
-				"types": "./dist/getters/client/*.d.cts",
-				"default": "./dist/getters/client/*.cjs"
+				"types": "./dist/getters/dynamic/*.d.cts",
+				"default": "./dist/getters/dynamic/*.cjs"
+			}
+		},
+		"./getters/dynamic/client": {
+			"import": {
+				"types": "./dist/getters/dynamic/client/index.d.ts",
+				"default": "./dist/getters/dynamic/client/index.js"
+			},
+			"require": {
+				"types": "./dist/getters/dynamic/client/index.d.cts",
+				"default": "./dist/getters/dynamic/client/index.cjs"
+			}
+		},
+		"./getters/dynamic/client/*": {
+			"import": {
+				"types": "./dist/getters/dynamic/client/*.d.ts",
+				"default": "./dist/getters/dynamic/client/*.js"
+			},
+			"require": {
+				"types": "./dist/getters/dynamic/client/*.d.cts",
+				"default": "./dist/getters/dynamic/client/*.cjs"
 			}
 		},
 		"./predicates": {

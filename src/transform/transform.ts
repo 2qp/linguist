@@ -69,6 +69,20 @@ const transform: Transform = async ({ config, source, stats: _stats }) => {
 				depth: "shallow",
 				multi: true,
 			},
+			exclude: ["**/get-dynamic-*.ts"],
+		}),
+
+		createReExports({
+			sourceDir: config.data.sourcePaths.gettersDir,
+			outputFile: join(config.data.paths.getters_dynamic_dir, "index.ts"),
+			outputDir: join(config.data.paths.getters_dynamic_dir),
+			perFile: true,
+			barrel: true,
+			barrel_options: {
+				depth: "shallow",
+				multi: true,
+			},
+			sourcePattern: ["**/get-dynamic-*.ts"],
 		}),
 
 		createReExports({

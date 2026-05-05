@@ -8,6 +8,7 @@ type Paths = {
 	arraysDir: string;
 
 	gettersDir: string;
+	getters_dynamic_dir: string; // :3 y not
 	predicatesDir: string;
 };
 
