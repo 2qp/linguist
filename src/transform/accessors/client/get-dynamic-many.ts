@@ -43,4 +43,3 @@ const getDynamicMany: GetDynamicMany = async (registry: Record<string, ReadonlyA
 };
 
 export { getDynamicMany };
-export type { GetDynamicMany };
