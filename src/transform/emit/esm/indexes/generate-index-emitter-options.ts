@@ -41,6 +41,7 @@ const generateIndexEmitterOptions: GenerateIndexEmitterOptions = function* (fiel
 				name: `dynamic-by-${String(source)}`,
 				emitter: emitDynamicIndex,
 				type: "lazy",
+				meta: false,
 				options: isSourceUnique
 					? { kind: "primitive", key: source, value: "name" }
 					: { kind: "set", left: source, right: "name" },

@@ -24,6 +24,7 @@ type IndexEmitter<TOptions> = {
 	emitter: IndexEmitterType<TOptions>;
 	options: TOptions;
 	type: "eager" | "lazy";
+	meta?: boolean;
 };
 
 type IndexEmitterOptions = {} & BuildParams<Languages, BuildVariant, KeysOfUnion<Languages[keyof Languages]>, "name">;

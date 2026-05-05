@@ -53,7 +53,7 @@ const createMetaTables: CreateMetaTables = async () => {
 	const UNIQUE_FIELDS = new Set(uniqueFields);
 
 	const mapEmitters = [...generateMapOptions([...fieldSet], UNIQUE_FIELDS)];
-	const indexEmitters = [...generateIndexEmitterOptions([...fieldSet], UNIQUE_FIELDS)];
+	const indexEmitters = [...generateIndexEmitterOptions([...fieldSet], UNIQUE_FIELDS)].filter((item) => item.meta);
 
 	const header = `| File                      | Variable               | Type                                     | Description           | Example                                                                 |
 | :------------------------ | :--------------------- | :--------------------------------------- | :-------------------- | :---------------------------------------------------------------------- |
