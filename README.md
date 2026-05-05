@@ -108,9 +108,13 @@ const result = getOne(by_extensions, ".ts");
 // [{ readonly ace_mode: "typescript"; readonly aliases: readonly ["ts"];
 
 const searchKey: string = ".jsx";
-const lookupResult = getOne(by_extensions, searchKey); // Language[] | undefined
+const lookupResult = getOne(by_extensions, searchKey); 
+//      ^
+// Language[] | undefined
 
-const mapResult = getOne(extensions_to_name, ".ts"); // readonly ["TypeScript", "XML"]
+const mapResult = getOne(extensions_to_name, ".ts"); 
+//      ^
+// readonly ["TypeScript", "XML"]
 
 ```
 
@@ -137,9 +141,13 @@ const hybridResult = getMany(by_ace_mode, ["astro", "clojurex" as string], { key
 // readonly [[{ readonly ace_mode: "astro"; ... }], Language[] | undefined]
 
 const extensionQueries: string[] = [".dart", ".py"];
-const lookupResult = getMany(by_extensions, extensionQueries, { keys: "loose" }); // (Language[] | undefined)[]
+const lookupResult = getMany(by_extensions, extensionQueries, { keys: "loose" }); 
+//      ^
+// (Language[] | undefined)[]
 
-const mapResult = getMany(extensions_to_interpreters, [".ts", ".tsx"]); // readonly [readonly ["bun", "deno", "ts-node", "tsx"], readonly []]
+const mapResult = getMany(extensions_to_interpreters, [".ts", ".tsx"]); 
+//      ^
+// readonly [readonly ["bun", "deno", "ts-node", "tsx"], readonly []]
 
 ```
 
@@ -161,7 +169,9 @@ const result = await getLazyOne(lazy_by_language_id, "327");
 // { readonly ace_mode: "rust"; readonly aliases: readonly ["rs"];
 
 const searchKey: string = "326";
-const lookupResult = await getLazyOne(lazy_by_language_id, searchKey); // Language | undefined
+const lookupResult = await getLazyOne(lazy_by_language_id, searchKey); 
+//      ^
+// Language | undefined
 
 ```
 
@@ -188,7 +198,9 @@ const hybridResult = await getLazyMany(lazy_by_name, ["Boo", "Brainfuck" as stri
 // readonly [{ readonly ace_mode: "text"; readonly color: "#d4bec1"; ... }, Language | undefined]
 
 const typeQueries: string[] = ["data", "prose"];
-const lookupResult = await getLazyMany(lazy_by_type, typeQueries, { keys: "loose" }); // (Language[] | undefined)[]
+const lookupResult = await getLazyMany(lazy_by_type, typeQueries, { keys: "loose" }); 
+//      ^
+// (Language[] | undefined)[]
 
 ```
 
@@ -211,7 +223,9 @@ const result = await getDynamicOne(dynamic_by_extensions, ".gleam");
 // [{ readonly ace_mode: "text"; readonly color: "#ffaff3"; readonly extensions: readonly [".gleam"];
 
 const searchKey: string = ".html";
-const lookupResult = await getDynamicOne(dynamic_by_extensions, searchKey); // (Language | undefined)[]
+const lookupResult = await getDynamicOne(dynamic_by_extensions, searchKey); 
+//      ^
+// (Language | undefined)[]
 
 const name: string = "...";
 const lang = await getDynamicOne(dynamic_by_name, name); // [Language] | []
@@ -243,7 +257,9 @@ const hybridResult = await getDynamicMany(dynamic_by_filenames, ["unknown", "BUI
 // readonly [(Language | undefined)[], [{ readonly ace_mode: "python"; readonly aliases: readonly ["bazel", "bzl"], ...}] ...];
 
 const filenames: string[] = ["LICENSE.mysql", "Podfile"];
-const lookupResult = await getDynamicMany(dynamic_by_filenames, filenames, { keys: "loose" }); // (Language | undefined)[][]
+const lookupResult = await getDynamicMany(dynamic_by_filenames, filenames, { keys: "loose" }); 
+//      ^
+// (Language | undefined)[][]
 
 ```
 
@@ -290,7 +306,10 @@ const searchKey: string = ".sh";
 const lookupResult = await getDynamicOne(dynamic_by_extensions, searchKey); // (Language | undefined)[]
 
 const name: string = "...";
-const lang = await getDynamicOne(dynamic_by_name, name); // [Language] | []
+const lang = await getDynamicOne(dynamic_by_name, name); 
+//      ^
+// [Language] | []
+
 const [l] = lang;
 //     ^
 // Language | undefined
@@ -320,7 +339,9 @@ const hybridResult = await getDynamicMany(dynamic_by_group, ["Smalltalk" as stri
 // readonly [(Language | undefined)[], [{ readonly ace_mode: "text"; readonly color: "#a270ba"; readonly group: "Julia"; ...}] ...];
 
 const colorsQueries: string[] = ["#28430A", "#28431f"];
-const lookupResult = await getDynamicMany(dynamic_by_color, colorsQueries, { keys: "loose" }); // readonly (Language | undefined)[][]
+const lookupResult = await getDynamicMany(dynamic_by_color, colorsQueries, { keys: "loose" }); 
+//      ^
+// readonly (Language | undefined)[][]
 
 
 ```
@@ -347,10 +368,12 @@ import { isExtensionOfType } from "@2qp/linguist/predicates";
 
 const result = isExtensionOfType(".ts", "markup");
 //      ^
-// result: false
+// false
 
 const extension: string = ".js";
-const lookupResult = isExtensionOfType(extension, "prose"); // boolean
+const lookupResult = isExtensionOfType(extension, "prose"); 
+//      ^
+// boolean
 
 ```
 
