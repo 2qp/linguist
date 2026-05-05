@@ -38,7 +38,6 @@ type Depth = "all" | "shallow" | "deep";
 type BarrelOptions = {
 	depth?: Depth;
 	multi?: boolean;
-	recursive?: boolean;
 };
 
 type Variant = "barrel" | "per-file";

@@ -68,7 +68,6 @@ const transform: Transform = async ({ config, source, stats: _stats }) => {
 			barrel_options: {
 				depth: "shallow",
 				multi: true,
-				recursive: true,
 			},
 		}),
 
