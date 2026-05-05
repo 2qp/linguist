@@ -24,7 +24,7 @@ type GetManyOverloaded = {
 		registry: I,
 		keys: T,
 		options: LookupOptions<"loose">,
-	): I[string][] | undefined;
+	): I[string][];
 };
 
 type GetManyType = GetManyOverloaded;
