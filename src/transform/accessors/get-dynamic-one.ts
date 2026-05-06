@@ -1,4 +1,6 @@
+import type { OneOptions } from "@/types/accessors.types";
 import type { OptionalBrand } from "@/types/branded.types";
+import type { Explicit } from "@/types/utility.types";
 
 type GetDynamicOneParams = {};
 
@@ -8,6 +10,12 @@ type GetDynamicOneOverloaded = {
 	<const I, const T extends keyof I>(registry: I, key: T): Promise<ExtractPayload<I[T]>>;
 
 	<const I, const T extends string>(registry: I, key: T): Promise<I[keyof I] | undefined>;
+
+	<const I extends Record<string, unknown>, const T extends keyof Explicit<I>>(
+		registry: I,
+		key: T,
+		options: OneOptions<"known">,
+	): Promise<ExtractPayload<I[T]>>;
 };
 
 type GetDynamicOne = GetDynamicOneOverloaded;
