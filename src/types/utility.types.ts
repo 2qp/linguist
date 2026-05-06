@@ -8,6 +8,10 @@ type Prettify<T> = {
 	[K in keyof T]: T[K];
 } & {};
 
+type Explicit<T> = {
+	[K in keyof T as string extends K ? never : K]: T[K];
+} & {};
+
 type ExtractExplicit<T extends Record<string, unknown>> = {
 	[K in keyof T as string extends K ? never : K]: T[K];
 };
@@ -80,6 +84,7 @@ export type {
 	Dictionary,
 	ElementOf,
 	Entries,
+	Explicit,
 	ExplicitDictionary,
 	ExtractExplicit,
 	ExtractIndexSignature,
