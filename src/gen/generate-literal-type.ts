@@ -37,6 +37,29 @@ const generateLiteralType: GenerateLiteralType = ({ baseType, config, stats, typ
 	if (!shouldSplit) {
 		//
 
+		if (baseType === "number") {
+			//
+
+			const literals = sortedValues.map((values) => {
+				const template = `${values}` as const;
+
+				const escapedQuotes = replacer(template, '"' as const, '\\"' as const);
+				const escapedQuotesAndNewlines = replacer(escapedQuotes, "\n" as const, "\\n" as const);
+
+				return `${escapedQuotesAndNewlines}` as const;
+			});
+
+			const joinedLits = join(literals, " | " as const);
+
+			const typeDef = createElementType({ combined: joinedLits, base: baseType, config });
+
+			return {
+				typeDef,
+				segmentDefs: [],
+				type: stats.type,
+			};
+		}
+
 		const literals = sortedValues.map((values) => {
 			const template = `${values}` as const;
 
