@@ -18,6 +18,8 @@ type PipeUnion<T extends Primitive> = `${T} | ${T}`;
 
 type InLineExpr<T extends Primitive, TBase extends ElementBase> = EleExpr<TypeDefUnion<T>, TBase>;
 
+type InLineNonStrLitExpr<T extends Primitive, TBase extends ElementBase> = EleExpr<PipeUnion<T>, TBase>;
+
 type InLineListExpr<T extends Primitive, TBase extends ElementBase> = ArrayTypeDef<EleExpr<TypeDefUnion<T>, TBase>>;
 
 type InLineUnionEleListExpr<T extends Primitive, TBase extends ElementBase> = EleListExpr<PipeUnion<T>, TBase>;
@@ -47,6 +49,7 @@ type TypeDef<TName extends string, T extends Primitive, TBase extends ElementBas
 	| ((SplitTypeDef<TName, TBase> & {}) | (SplitReadonlyTypeDef<TName, TBase> & {}))
 	| (ArrayTypeDef<TBase> & {})
 	| (InLineExpr<T, TBase> & {})
+	| (InLineNonStrLitExpr<T, TBase> & {})
 	| (InLineListExpr<T, TBase> & {})
 	| (InLineUnionEleListExpr<T, TBase> & {})
 	| (LiteralSegment<TName, TBase> & {})
