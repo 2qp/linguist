@@ -79,6 +79,13 @@ type Dictionary<T> = Record<string & {}, T>;
 
 type KeyOf<T> = Extract<keyof T, string>;
 
+type ReverseTuple<T extends readonly string[]> = T extends readonly [
+	infer First extends string,
+	...infer Rest extends string[],
+]
+	? readonly [...ReverseTuple<Rest>, First]
+	: [];
+
 export type {
 	DeepPartial,
 	Dictionary,
@@ -98,6 +105,7 @@ export type {
 	NonNullableValueFromUnionByKey,
 	NonUndefined,
 	Prettify,
+	ReverseTuple,
 	ValueFromUnion,
 	ValueFromUnionByKey,
 };
