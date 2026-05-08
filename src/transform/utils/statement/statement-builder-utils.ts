@@ -3,6 +3,7 @@ import { safeReplacer } from "@utils/safe-replacer";
 
 import type { Primitive } from "@/types/gen.types";
 import type { Separator, Wrapper } from "@/types/statement.types";
+import type { ReverseWrapTuple, WrapEach } from "@/types/statement-utils.types";
 
 const getWrapped = <
 	const TSource extends ReadonlyArray<string>,
@@ -13,6 +14,22 @@ const getWrapped = <
 	wrapper: TWrapper = "$" as TWrapper,
 	separator: TSeparator = " | " as TSeparator,
 ) => safeReplacer(wrapper, "$" as const, join(input, separator));
+
+const wrap = <const TSource extends Readonly<string>, const TWrapper extends Wrapper = "$">(
+	input: TSource,
+	wrapper: TWrapper = "$" as TWrapper,
+) => safeReplacer(wrapper, "$" as const, input);
+
+const wrapEach = <const T extends readonly string[], const W extends Wrapper>(arr: T, w: W) =>
+	arr.map((item) => wrap(item, w)) as WrapEach<T, W>;
+
+const wrapTupleReversed = <
+	const T extends string,
+	const W extends Wrapper,
+	const A extends readonly (readonly [T, W])[],
+>(
+	arr: A,
+) => arr.map(([item, w]) => wrap(`${item}` as const, w)).toReversed() as ReverseWrapTuple<T, W, A>;
 
 const wrapAsConst = <const T extends Primitive>(str: T) => `${str} as const;` as const;
 
@@ -64,5 +81,8 @@ export {
 	extendType,
 	extendTypeDef,
 	getWrapped,
+	wrap,
 	wrapAsConst,
+	wrapEach,
+	wrapTupleReversed,
 };
