@@ -12,6 +12,7 @@ type Wrapper =
 	| "readonly $[]"
 	| "readonly [$]"
 	| "readonly [$] | readonly []"
+	| "readonly $[] | readonly []"
 	| "readonly ($)[]"
 	| `${Dictionary}<ReadonlyArray<$>>`
 	| `${Dictionary}<$>`
