@@ -18,7 +18,7 @@ type GetManyOverloaded = {
 		registry: I,
 		keys: T,
 		options: ManyOptions<"loose">,
-	): I[string][];
+	): readonly I[string][];
 };
 
 type GetManyType = GetManyOverloaded;
