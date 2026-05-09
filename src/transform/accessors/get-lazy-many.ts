@@ -21,7 +21,7 @@ type GetLazyManyOverloaded = {
 		registry: I,
 		keys: T,
 		options: ManyOptions<"loose">,
-	): Promise<AwaitedReturnOrSelf<I[string]>[]>;
+	): Promise<readonly AwaitedReturnOrSelf<I[string]>[]>;
 };
 
 type GetLazyManyType = GetLazyManyOverloaded;
