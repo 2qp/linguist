@@ -1,14 +1,18 @@
 import { join } from "@utils/join";
+import { joinSimple } from "@utils/join-simple";
 import {
 	createExportType,
 	createType,
 	extendTypeDef,
 	getWrapped,
+	wrap,
+	wrapEach,
+	wrapTupleReversed,
 } from "@/transform/utils/statement/statement-builder-utils";
 
 import type { Primitive } from "@/types/gen.types";
 import type { RecordToLiteral } from "@/types/segment.types";
-import type { SL, TypeRef, Wrapper } from "@/types/statement.types";
+import type { Separator, SL, TypeRef, Wrapper } from "@/types/statement.types";
 
 const typeBuilder = () => ({
 	//
@@ -34,11 +38,63 @@ const typeBuilder = () => ({
 				}),
 
 				tuple: <const TExpressions extends ReadonlyArray<Primitive>>(exp: TExpressions) => ({
-					wrap: <const TWrapper extends Wrapper>(wrapper: TWrapper) => ({
-						types: <const TStrict extends TypeRef[], const TLoose extends string[]>(...args: SL<TStrict, TLoose>) => ({
+					wrap: <const TWrapper extends Wrapper, const TSeparator extends Separator = " | ">(
+						wrapper: TWrapper,
+						separator: TSeparator = " | " as TSeparator,
+					) => ({
+						//
+
+						type: () => {
+							//
+
+							const builder = <
+								const T extends string,
+								const W extends Wrapper,
+								const A extends readonly (readonly [T, W])[],
+							>(
+								children: A = [] as unknown as A,
+							) => ({
+								//
+
+								add: <const CT extends TypeRef | (string & {}), const CW extends W>(content: readonly [CT, CW]) =>
+									builder([content, ...children] as const),
+
+								build: () =>
+									[
+										extendTypeDef("")(wrap(joinSimple(wrapTupleReversed([...children] as const), separator), wrapper))(
+											createType(typeName)(`{ ${exp.join("\n")} }`),
+										),
+
+										createExportType(typeName),
+									] as const,
+							});
+
+							return builder();
+						},
+
+						each: <const TEWrapper extends Wrapper, const TESeparator extends Separator = " | ">(
+							w: TEWrapper,
+							s: TESeparator = " | " as TESeparator,
+						) => ({
+							types: <const TStrict extends readonly TypeRef[], const TLoose extends readonly string[]>(
+								...args: SL<TStrict, TLoose>
+							) => ({
+								build: () =>
+									[
+										extendTypeDef("")(wrap(join(wrapEach([...args[0], ...args[1]], w), s), wrapper))(
+											createType(typeName)(`{ ${exp.join("\n")} }`),
+										),
+										createExportType(typeName),
+									] as const,
+							}),
+						}),
+
+						types: <const TStrict extends readonly TypeRef[], const TLoose extends readonly string[]>(
+							...args: SL<TStrict, TLoose>
+						) => ({
 							build: () =>
 								[
-									extendTypeDef("")(getWrapped([...args[0], ...args[1]], wrapper))(
+									extendTypeDef("")(getWrapped([...args[0], ...args[1]], wrapper, separator))(
 										createType(typeName)(`{ ${exp.join("\n")} }`),
 									),
 									createExportType(typeName),

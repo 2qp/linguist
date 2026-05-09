@@ -1092,6 +1092,91 @@ describe("createStatementBuilder", async () => {
 			expect(stmt).toEqual(`type ${typeName} = { ${expected} } &  Dictionary<() => Promise<AceMode | ${type}>>;`);
 			expect(stmt_export).toEqual(`export type { ${typeName} };`);
 		});
+
+		it("emits with tuple type name and wrapped and each type given single wrapper wrapped type expressions", () => {
+			const builder = createStatementBuilder();
+
+			const typeName = "SomeType";
+
+			const element1 = `"0": "value",`;
+			const element2 = `"1": "value",`;
+
+			const tuple = [element1, element2] as const;
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("($)")
+				.each("Partial<$>", ", ")
+				.types(["AceMode", "Group"], ["SomeType"])
+				.build();
+
+			const expected = `"0": "value",\n"1": "value",` as const;
+
+			expect(stmt).toEqual(`type SomeType = { ${expected} } &  (Partial<AceMode>, Partial<Group>, Partial<SomeType>);`);
+			expect(stmt_export).toEqual(`export type { SomeType };`);
+		});
+
+		it("emits with tuple type name and wrapped and individually wrapped type expressions", () => {
+			const builder = createStatementBuilder();
+
+			const typeName = "SomeType";
+
+			const element1 = `"0": "value",`;
+			const element2 = `"1": "value",`;
+
+			const tuple = [element1, element2] as const;
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("Dictionary<() => Promise<$>>")
+				.type()
+				.add(["AceMode", "readonly [$]"])
+				.add(["SomeType", "Dictionary<$>"])
+				.build();
+
+			const expected = `"0": "value",\n"1": "value",` as const;
+
+			expect(stmt).toEqual(
+				`type SomeType = { ${expected} } &  Dictionary<() => Promise<readonly [AceMode] | Dictionary<SomeType>>>;`,
+			);
+			expect(stmt_export).toEqual(`export type { SomeType };`);
+		});
+
+		it("emits with tuple type name and wrapped and individually wrapped type expressions with custom separator", () => {
+			const builder = createStatementBuilder();
+
+			const typeName = "SomeType";
+
+			const element1 = `"0": "value",`;
+			const element2 = `"1": "value",`;
+
+			const tuple = [element1, element2] as const;
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("Dictionary<$>", ", ")
+				.type()
+				.add(["undefined", "($)"])
+				.add(["SomeType", "[$] as const"])
+				.build();
+
+			const expected = `"0": "value",\n"1": "value",` as const;
+
+			expect(stmt).toEqual(`type SomeType = { ${expected} } &  Dictionary<(undefined), [SomeType] as const>;`);
+			expect(stmt_export).toEqual(`export type { SomeType };`);
+		});
 	});
 
 	describe("common way", () => {

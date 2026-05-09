@@ -1193,6 +1193,163 @@ describe("createStatementBuilder-template literal types", async () => {
 			expectTypeOf(stmt).toEqualTypeOf<`type SomeType = { ${string} } &  Dictionary<() => Promise<AceMode>>;`>();
 			expectTypeOf(stmt_export).toEqualTypeOf<`export type { SomeType };`>();
 		});
+
+		it("infers tuple type name and wrapped type expression with default separator", () => {
+			const builder = createStatementBuilder();
+
+			const typeName = "SomeType";
+
+			const element1 = `"0": "value",`;
+			const element2 = `"1": "value",`;
+
+			const tuple = [element1, element2] as const;
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("Dictionary<() => Promise<$>>")
+				.types(["AceMode", "Language"], ["SomeType"])
+				.build();
+
+			expectTypeOf(
+				stmt,
+			).toEqualTypeOf<`type SomeType = { ${string} } &  Dictionary<() => Promise<AceMode | Language | SomeType>>;`>();
+			expectTypeOf(stmt_export).toEqualTypeOf<`export type { SomeType };`>();
+		});
+
+		it("infers tuple type name and wrapped type expression with custom separator", () => {
+			const builder = createStatementBuilder();
+
+			const typeName = "SomeType";
+
+			const element1 = `"0": "value",`;
+			const element2 = `"1": "value",`;
+
+			const tuple = [element1, element2] as const;
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("Dictionary<() => Promise<$>>", ", ")
+				.types(["AceMode", "Language"], ["SomeType"])
+				.build();
+
+			expectTypeOf(
+				stmt,
+			).toEqualTypeOf<`type SomeType = { ${string} } &  Dictionary<() => Promise<AceMode, Language, SomeType>>;`>();
+			expectTypeOf(stmt_export).toEqualTypeOf<`export type { SomeType };`>();
+		});
+
+		it("infers tuple type name and wrapped type expression, with each type individually wrapped", () => {
+			const builder = createStatementBuilder();
+
+			const typeName = "SomeType";
+
+			const element1 = `"0": "value",`;
+			const element2 = `"1": "value",`;
+
+			const tuple = [element1, element2] as const;
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("Dictionary<() => Promise<$>>")
+				.each("($)")
+				.types(["AceMode", "Group[]"], ["SomeType", "*__*", "o_o"])
+				.build();
+
+			expectTypeOf(
+				stmt,
+			).toEqualTypeOf<`type SomeType = { ${string} } &  Dictionary<() => Promise<(AceMode) | (Group[]) | (SomeType) | (*__*) | (o_o)>>;`>();
+			expectTypeOf(stmt_export).toEqualTypeOf<`export type { SomeType };`>();
+		});
+
+		it("infers widened tuple type name and wrapped type expression, with each type individually wrapped", () => {
+			const builder = createStatementBuilder();
+
+			const typeName = "SomeType";
+
+			const tuple = [] as const;
+
+			const types = ["SomeType" as string, "*__*", "o_o" as string] as const;
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("Dictionary<() => Promise<$>>")
+				.each("($)", " | ")
+				.types(["Group[]"], types)
+				.build();
+
+			expectTypeOf(
+				stmt,
+			).toEqualTypeOf<`type SomeType = { ${string} } &  Dictionary<() => Promise<(Group[]) | (${string}) | (*__*) | (${string})>>;`>();
+			expectTypeOf(stmt_export).toEqualTypeOf<`export type { SomeType };`>();
+		});
+
+		it("infers tuple type name and wrapped type expression, with each type individually wrapped their own wrapper", () => {
+			const builder = createStatementBuilder();
+
+			const typeName = "SomeType";
+
+			const tuple = [] as const;
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("Dictionary<$>", ", ")
+				.type()
+				.add(["undefined", "($)"])
+				.add(["SomeType", "[$] as const"])
+				.add(["Aliases", "() => Promise<[$]>"])
+				.build();
+
+			expectTypeOf(
+				stmt,
+			).toEqualTypeOf<`type SomeType = { ${string} } &  Dictionary<(undefined), [SomeType] as const, () => Promise<[Aliases]>>;`>();
+			expectTypeOf(stmt_export).toEqualTypeOf<`export type { SomeType };`>();
+		});
+
+		it("infers widened tuple type name and wrapped type expression, with each type individually wrapped their own wrapper", () => {
+			const builder = createStatementBuilder();
+
+			const typeName = "SomeType";
+
+			const tuple = [] as const;
+
+			const [stmt, stmt_export] = builder
+				.type()
+				.alias(typeName)
+				.exp()
+				.from()
+				.tuple(tuple)
+				.wrap("Dictionary<$>", ", ")
+				.type()
+				.add(["undefined", "($)"])
+				.add(["SomeType" as string, "[$] as const"])
+				.add(["1" as string, "() => Promise<[$]>"])
+				.build();
+
+			expectTypeOf(
+				stmt,
+			).toEqualTypeOf<`type SomeType = { ${string} } &  Dictionary<(undefined), [${string}] as const, () => Promise<[${string}]>>;`>();
+			expectTypeOf(stmt_export).toEqualTypeOf<`export type { SomeType };`>();
+		});
 	});
 
 	describe("common way", () => {
