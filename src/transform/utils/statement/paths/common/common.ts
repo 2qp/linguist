@@ -1,5 +1,6 @@
 import { join } from "@utils/join";
-import { getWrapped } from "@/transform/utils/statement/statement-builder-utils";
+import { joinSimple } from "@utils/join-simple";
+import { getWrapped, wrap, wrapTupleReversed } from "@/transform/utils/statement/statement-builder-utils";
 
 import type { Primitive } from "@/types/gen.types";
 import type { Separator, Wrapper } from "@/types/statement.types";
@@ -20,6 +21,33 @@ const commonBuilder = () => ({
 				value: <const TValue extends string>(value: TValue) => ({
 					build: () => `"${key}": ${getWrapped([value], wrapper, separator)},` as const,
 				}),
+
+				value_: () => {
+					//
+
+					const builder = <
+						const T extends string,
+						const W extends Wrapper,
+						const A extends readonly (readonly [T, W])[],
+					>(
+						children: A = [] as unknown as A,
+					) => ({
+						//
+
+						add: <const CT extends string, const CW extends W>(content: readonly [CT, CW]) =>
+							builder([content, ...children] as const),
+
+						suffix: <const TSuffix extends string = ",">(suffix: TSuffix = "," as TSuffix) => ({
+							build: () =>
+								`"${key}": ${wrap(joinSimple(wrapTupleReversed([...children] as const), separator), wrapper)}${suffix}` as const,
+						}),
+
+						build: () =>
+							`"${key}": ${wrap(joinSimple(wrapTupleReversed([...children] as const), separator), wrapper)},` as const,
+					});
+
+					return builder();
+				},
 
 				values: <const TValue extends string[]>(value: TValue) => ({
 					build: () => `"${key}": ${getWrapped(value, wrapper, separator)},` as const,

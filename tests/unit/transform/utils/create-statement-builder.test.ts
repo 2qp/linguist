@@ -1240,6 +1240,52 @@ describe("createStatementBuilder", async () => {
 					`${_key}: () => Promise.all([ import('TYPES_DIR/TYPE/${_fileName}').then(({ ${_varName} }) => ${_varName}) ]),`,
 				);
 			});
+
+			//
+			it("emits wrapped record values with individually wrapped values", () => {
+				const builder = createStatementBuilder();
+
+				const key = "KEY";
+				const varName = "VAR_NAME";
+
+				const stmt = builder
+					.common()
+					.record()
+					.key(key)
+					.wrap("[$]", ", ")
+					.value_()
+					.add(["string, string", "readonly [$]"])
+					.add([varName, "readonly $[]"])
+					.build();
+
+				const _key = `"KEY"`;
+				const _varName = `VAR_NAME`;
+
+				expect(stmt).toEqual(`${_key}: [readonly [string, string], readonly ${_varName}[]],`);
+			});
+
+			it("emits wrapped record values with individually wrapped values, with suffix", () => {
+				const builder = createStatementBuilder();
+
+				const key = "KEY";
+				const varName = "VAR_NAME";
+
+				const stmt = builder
+					.common()
+					.record()
+					.key(key)
+					.wrap("[$]", ", ")
+					.value_()
+					.add(["string, string", "readonly [$]"])
+					.add([varName, "readonly $[]"])
+					.suffix(";")
+					.build();
+
+				const _key = `"KEY"`;
+				const _varName = `VAR_NAME`;
+
+				expect(stmt).toEqual(`${_key}: [readonly [string, string], readonly ${_varName}[]];`);
+			});
 		});
 
 		describe("tuple", () => {

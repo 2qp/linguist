@@ -1471,6 +1471,99 @@ describe("createStatementBuilder-template literal types", async () => {
 					stmt,
 				).toEqualTypeOf<`${Key}: () => Promise.all([ import('${string}/TYPE/${FileName}').then(({ ${VarName} }) => ${VarName}) ]),`>();
 			});
+
+			//
+			it("emits wrapped record values with individually wrapped values with their own wrapper", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const varName = `VAR_NAME`;
+
+				type Key = `"KEY"`;
+				type VarName = `VAR_NAME`;
+
+				const stmt = builder
+					.common()
+					.record()
+					.key(key)
+					.wrap("[$]", ", ")
+					.value_()
+					.add(["string, string", "readonly [$]"])
+					.add([varName, "readonly $[]"])
+					.build();
+
+				expectTypeOf(stmt).toEqualTypeOf<`${Key}: [readonly [string, string], readonly ${VarName}[]],`>();
+			});
+
+			it("emits widened wrapped record values with individually wrapped values with their own wrapper", () => {
+				const builder = createStatementBuilder();
+
+				const key: string = `...`;
+				const varName: string = `...`;
+
+				type Key = `"${string}"`;
+				type VarName = `${string}`;
+
+				const stmt = builder
+					.common()
+					.record()
+					.key(key)
+					.wrap("[$]", ", ")
+					.value_()
+					.add(["string, string", "readonly [$]"])
+					.add([varName, "readonly $[]"])
+					.build();
+
+				expectTypeOf(stmt).toEqualTypeOf<`${Key}: [readonly [string, string], readonly ${VarName}[]],`>();
+			});
+
+			it("emits wrapped record values with individually wrapped values, with suffix", () => {
+				const builder = createStatementBuilder();
+
+				const key = `KEY`;
+				const varName = `VAR_NAME`;
+
+				type Key = `"KEY"`;
+				type VarName = `VAR_NAME`;
+
+				const stmt = builder
+					.common()
+					.record()
+					.key(key)
+					.wrap("[$]", ", ")
+					.value_()
+					.add(["string, string", "readonly [$]"])
+					.add([varName, "readonly $[]"])
+					.suffix(";")
+					.build();
+
+				expectTypeOf(stmt).toEqualTypeOf<`${Key}: [readonly [string, string], readonly ${VarName}[]];`>();
+			});
+
+			it("emits widened wrapped record values with individually wrapped values, with suffix", () => {
+				const builder = createStatementBuilder();
+
+				const key: string = `...`;
+				const varName: string = `...`;
+				const suffix: string = `...`;
+
+				type Key = `"${string}"`;
+				type VarName = `${string}`;
+				type Suffix = `${string}`;
+
+				const stmt = builder
+					.common()
+					.record()
+					.key(key)
+					.wrap("[$]", ", ")
+					.value_()
+					.add(["string, string", "readonly [$]"])
+					.add([varName, "readonly $[]"])
+					.suffix(suffix)
+					.build();
+
+				expectTypeOf(stmt).toEqualTypeOf<`${Key}: [readonly [string, string], readonly ${VarName}[]]${Suffix}`>();
+			});
 		});
 
 		describe("tuple", () => {
