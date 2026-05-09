@@ -27,12 +27,12 @@ const by_extensions: ByExtensions = {
 } as const;
 
 type ByExtensions = {
-	".bsl": [_1CEnterprise];
-	".2da": [_2DimensionalArray];
-	".asc": [AGSScript, AsciiDoc, PublicKey];
-	".ash": [AGSScript, KoLmafiaASH];
-	".aidl": [AIDL];
-	".apib": [APIBlueprint];
-} & Dictionary<Language[] | undefined>;
+	".bsl": readonly [_1CEnterprise];
+	".2da": readonly [_2DimensionalArray];
+	".asc": readonly [AGSScript, AsciiDoc, PublicKey];
+	".ash": readonly [AGSScript, KoLmafiaASH];
+	".aidl": readonly [AIDL];
+	".apib": readonly [APIBlueprint];
+} & Dictionary<readonly Language[] | undefined>;
 
 export { by_extensions };

@@ -14,25 +14,25 @@ const T3 = "@tests/fixtures/languages/markup/" as const;
 const T4 = "@tests/fixtures/languages/prose/" as const;
 
 const _dynamic_by_name: DynamicByName = {
-	"1C Enterprise": [`${T1}1c-enterprise`, "_1c_enterprise"] as const,
-	"2-Dimensional Array": [`${T2}2-dimensional-array`, "_2_dimensional_array"] as const,
-	AIDL: [`${T1}aidl`, "aidl"] as const,
-	"AGS Script": [`${T1}ags-script`, "ags_script"] as const,
-	"API Blueprint": [`${T3}api-blueprint`, "api_blueprint"] as const,
-	"Public Key": [`${T2}public-key`, "public_key"] as const,
-	"KoLmafia ASH": [`${T1}kolmafia-ash`, "kolmafia_ash"] as const,
-	AsciiDoc: [`${T4}asciidoc`, "asciidoc"] as const,
+	"1C Enterprise": [`${T1}1c-enterprise`, "_1c_enterprise"],
+	"2-Dimensional Array": [`${T2}2-dimensional-array`, "_2_dimensional_array"],
+	AIDL: [`${T1}aidl`, "aidl"],
+	"AGS Script": [`${T1}ags-script`, "ags_script"],
+	"API Blueprint": [`${T3}api-blueprint`, "api_blueprint"],
+	"Public Key": [`${T2}public-key`, "public_key"],
+	"KoLmafia ASH": [`${T1}kolmafia-ash`, "kolmafia_ash"],
+	AsciiDoc: [`${T4}asciidoc`, "asciidoc"],
 } as const;
 
 type DynamicByName = {
-	"1C Enterprise": OptionalBrand<readonly [string, string], [_1CEnterprise]>;
-	"2-Dimensional Array": OptionalBrand<readonly [string, string], [_2DimensionalArray]>;
-	AsciiDoc: OptionalBrand<readonly [string, string], [AsciiDoc]>;
-	"AGS Script": OptionalBrand<readonly [string, string], [AGSScript]>;
-	"Public Key": OptionalBrand<readonly [string, string], [PublicKey]>;
-	"KoLmafia ASH": OptionalBrand<readonly [string, string], [KoLmafiaASH]>;
-	"API Blueprint": OptionalBrand<readonly [string, string], [APIBlueprint]>;
-} & Dictionary<OptionalBrand<readonly [string, string], [Language] | []>>;
+	"1C Enterprise": OptionalBrand<readonly [string, string], readonly [_1CEnterprise]>;
+	"2-Dimensional Array": OptionalBrand<readonly [string, string], readonly [_2DimensionalArray]>;
+	AsciiDoc: OptionalBrand<readonly [string, string], readonly [AsciiDoc]>;
+	"AGS Script": OptionalBrand<readonly [string, string], readonly [AGSScript]>;
+	"Public Key": OptionalBrand<readonly [string, string], readonly [PublicKey]>;
+	"KoLmafia ASH": OptionalBrand<readonly [string, string], readonly [KoLmafiaASH]>;
+	"API Blueprint": OptionalBrand<readonly [string, string], readonly [APIBlueprint]>;
+} & Dictionary<OptionalBrand<readonly [string, string], readonly [Language] | readonly []>>;
 
 const dynamic_by_name = Object.fromEntries(
 	(Object.entries(_dynamic_by_name) as Entries<typeof _dynamic_by_name>).map(

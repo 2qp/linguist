@@ -38,6 +38,6 @@ type LazyByExtensions = {
 	".ash": () => Promise<[AGSScript, KoLmafiaASH]>;
 	".aidl": () => Promise<[AIDL]>;
 	".apib": () => Promise<[APIBlueprint]>;
-} & Dictionary<() => Promise<Language[] | undefined>>;
+} & Dictionary<() => Promise<readonly Language[] | undefined>>;
 
 export { lazy_by_extensions };

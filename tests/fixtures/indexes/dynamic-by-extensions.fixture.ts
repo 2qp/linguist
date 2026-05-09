@@ -15,22 +15,22 @@ const T3 = "@tests/fixtures/languages/prose/" as const;
 const T4 = "@tests/fixtures/languages/markup/" as const;
 
 const _dynamic_by_extensions: DynamicByExtensions = {
-	".bsl": [`${T1}1c-enterprise`, "_1c_enterprise"] as const,
-	".2da": [`${T2}2-dimensional-array`, "_2_dimensional_array"] as const,
-	".asc": [`${T1}ags-script`, "ags_script", `${T3}asciidoc`, "asciidoc", `${T2}public-key`, "public_key"] as const,
-	".ash": [`${T1}ags-script`, "ags_script", `${T1}kolmafia-ash`, "kolmafia_ash"] as const,
-	".aidl": [`${T1}aidl`, "aidl"] as const,
-	".apib": [`${T4}api-blueprint`, "api_blueprint"] as const,
+	".bsl": [`${T1}1c-enterprise`, "_1c_enterprise"],
+	".2da": [`${T2}2-dimensional-array`, "_2_dimensional_array"],
+	".asc": [`${T1}ags-script`, "ags_script", `${T3}asciidoc`, "asciidoc", `${T2}public-key`, "public_key"],
+	".ash": [`${T1}ags-script`, "ags_script", `${T1}kolmafia-ash`, "kolmafia_ash"],
+	".aidl": [`${T1}aidl`, "aidl"],
+	".apib": [`${T4}api-blueprint`, "api_blueprint"],
 } as const;
 
 type DynamicByExtensions = {
-	".bsl": OptionalBrand<readonly string[], [_1CEnterprise]>;
-	".2da": OptionalBrand<readonly string[], [_2DimensionalArray]>;
-	".asc": OptionalBrand<readonly string[], [AGSScript, AsciiDoc, PublicKey]>;
-	".ash": OptionalBrand<readonly string[], [AGSScript, KoLmafiaASH]>;
-	".aidl": OptionalBrand<readonly string[], [AIDL]>;
-	".apib": OptionalBrand<readonly string[], [APIBlueprint]>;
-} & Dictionary<OptionalBrand<readonly string[], (Language | undefined)[]>>;
+	".bsl": OptionalBrand<readonly string[], readonly [_1CEnterprise]>;
+	".2da": OptionalBrand<readonly string[], readonly [_2DimensionalArray]>;
+	".asc": OptionalBrand<readonly string[], readonly [AGSScript, AsciiDoc, PublicKey]>;
+	".ash": OptionalBrand<readonly string[], readonly [AGSScript, KoLmafiaASH]>;
+	".aidl": OptionalBrand<readonly string[], readonly [AIDL]>;
+	".apib": OptionalBrand<readonly string[], readonly [APIBlueprint]>;
+} & Dictionary<OptionalBrand<readonly string[], readonly Language[] | readonly []>>;
 
 const dynamic_by_extensions = Object.fromEntries(
 	(Object.entries(_dynamic_by_extensions) as Entries<typeof _dynamic_by_extensions>).map(([key, list]) => [
