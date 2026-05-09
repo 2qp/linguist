@@ -9,6 +9,10 @@ type Wrapper =
 	| "ReadonlyArray<$>"
 	| "Partial<$>"
 	| "ReadonlyArray<Partial<$>>"
+	| "readonly $[]"
+	| "readonly [$]"
+	| "readonly [$] | readonly []"
+	| "readonly ($)[]"
 	| `${Dictionary}<ReadonlyArray<$>>`
 	| `${Dictionary}<$>`
 	| `${Dictionary}<() => Promise<$>>`
