@@ -165,7 +165,9 @@ const emitLazyIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages,
 			.from()
 			.tuple(types)
 			.wrap("Dictionary<() => Promise<$>>")
-			.types(["Language[]", "undefined"], [])
+			.type()
+			.add(["Language", "readonly $[]"])
+			.add(["undefined", "$"])
 			.build();
 
 		const blocks = createBlockBuilder()

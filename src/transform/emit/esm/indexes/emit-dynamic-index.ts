@@ -28,8 +28,6 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languag
 
 		const field = options.key;
 
-		const struct = `readonly [string, string]` as const;
-
 		const statements = [...map].map(([lid, name]) => {
 			//
 
@@ -74,7 +72,9 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languag
 				.record()
 				.key(lid)
 				.wrap("OptionalBrand<$>")
-				.values([struct, `[${norm.typeName}]`])
+				.value_()
+				.add(["string, string", "readonly [$]"])
+				.add([norm.typeName, "readonly [$]"])
 				.build();
 
 			const vars = builder
@@ -119,8 +119,10 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languag
 			.exp()
 			.from()
 			.tuple(types)
-			.wrap("Dictionary<OptionalBrand<$>>")
-			.types([], [`${struct}, [Language] | []`])
+			.wrap("Dictionary<OptionalBrand<$>>", ", ")
+			.type()
+			.add(["string, string", "readonly [$]"])
+			.add(["Language", "readonly [$] | readonly []"])
 			.build();
 
 		const blocks = createBlockBuilder()
@@ -143,8 +145,6 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languag
 		const types_map = new Map<string, [string, `T${number}`]>(); // :( mmmutable
 
 		const field = options.left;
-
-		const struct = `readonly string[]` as const;
 
 		const statements = [...map].map(([ext, nameSet]) => {
 			//
@@ -193,10 +193,12 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languag
 				.record()
 				.key(ext)
 				.wrap("OptionalBrand<$>")
-				.values([struct, `[${typeNames.join(", ")}]`])
+				.value_()
+				.add(["string", "readonly $[]"])
+				.add([typeNames.join(", "), "readonly [$]"])
 				.build();
 
-			const vars = builder.common().record().key(ext).wrap("[$] as const").values(paths_).build();
+			const vars = builder.common().record().key(ext).wrap("[$]").values(paths_).build();
 
 			return { vars, types, typeImports };
 
@@ -234,8 +236,10 @@ const emitDynamicIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languag
 			.exp()
 			.from()
 			.tuple(types)
-			.wrap("Dictionary<OptionalBrand<$>>")
-			.types([], [`${struct}, (Language | undefined)[]`])
+			.wrap("Dictionary<OptionalBrand<$>>", ", ")
+			.type()
+			.add(["string", "readonly $[]"])
+			.add(["Language", "readonly $[] | readonly []"])
 			.build();
 
 		const blocks = createBlockBuilder()

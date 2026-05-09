@@ -121,7 +121,7 @@ const emitIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages, opt
 			const typeImports = processed.map((item) => item.typeImports);
 
 			const vars = builder.common().record().key(ext).wrap("[$]").values(varNames).build();
-			const types = builder.common().record().key(ext).wrap("[$]").values(typeNames).build();
+			const types = builder.common().record().key(ext).wrap("readonly [$]").values(typeNames).build();
 
 			return { vars, types, valueImports, typeImports };
 
@@ -154,7 +154,9 @@ const emitIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages, opt
 			.from()
 			.tuple(typeEntries)
 			.wrap("Dictionary<$>")
-			.types(["Language[]", "undefined"], [])
+			.type()
+			.add(["Language", "readonly $[]"])
+			.add(["undefined", "$"])
 			.build();
 
 		const blocks = createBlockBuilder()
