@@ -32,12 +32,12 @@ const lazy_by_extensions: LazyByExtensions = {
 } as const;
 
 type LazyByExtensions = {
-	".bsl": () => Promise<[_1CEnterprise]>;
-	".2da": () => Promise<[_2DimensionalArray]>;
-	".asc": () => Promise<[AGSScript, AsciiDoc, PublicKey]>;
-	".ash": () => Promise<[AGSScript, KoLmafiaASH]>;
-	".aidl": () => Promise<[AIDL]>;
-	".apib": () => Promise<[APIBlueprint]>;
+	".bsl": () => Promise<readonly [_1CEnterprise]>;
+	".2da": () => Promise<readonly [_2DimensionalArray]>;
+	".asc": () => Promise<readonly [AGSScript, AsciiDoc, PublicKey]>;
+	".ash": () => Promise<readonly [AGSScript, KoLmafiaASH]>;
+	".aidl": () => Promise<readonly [AIDL]>;
+	".apib": () => Promise<readonly [APIBlueprint]>;
 } & Dictionary<() => Promise<readonly Language[] | undefined>>;
 
 export { lazy_by_extensions };
