@@ -59,6 +59,44 @@ type DeepPartialObject<T> = {
 	[K in keyof T]?: DeepPartial<T[K]>;
 };
 
+type Mutable<T> = {
+	-readonly [P in keyof T]: T[P];
+};
+
+type DeepMutable<T> = {
+	-readonly [P in keyof T]: T[P] extends object ? DeepMutable<T[P]> : T[P];
+};
+
+type DeepReadonlyValue<T> = T extends readonly unknown[] ? DeepReadonlyArray<T> : T;
+
+type DeepReadonlyArray<T> = {
+	readonly [K in keyof T]: DeepReadonlyValue<T[K]>;
+};
+
+type DeepReadonly<T> = T extends (...args: unknown[]) => unknown
+	? T
+	: T extends readonly unknown[]
+		? { readonly [K in keyof T]: DeepReadonly<T[K]> }
+		: T extends object
+			? { readonly [K in keyof T]: DeepReadonly<T[K]> }
+			: T;
+
+type GetWritableKeys<T> = {
+	[K in keyof T]: IfEquals<{ [P in K]: T[P] }, { -readonly [P in K]: T[P] }, K, never>;
+}[keyof T];
+
+type IfEquals<X, Y, A, B> = (<T>() => T extends X ? 1 : 2) extends <T>() => T extends Y ? 1 : 2 ? A : B;
+
+type ElementArraysOf<T extends readonly unknown[]> = {
+	[K in keyof T]: T[K] extends undefined
+		? undefined
+		: T[K] extends readonly (infer U)[]
+			? T[K] extends unknown[]
+				? U[]
+				: readonly U[]
+			: T[K];
+};
+
 type ExplicitDictionary<T> = {
 	[K in string & {}]: T;
 };
@@ -87,8 +125,12 @@ type ReverseTuple<T extends readonly string[]> = T extends readonly [
 	: [];
 
 export type {
+	DeepMutable,
 	DeepPartial,
+	DeepReadonly,
+	DeepReadonlyArray,
 	Dictionary,
+	ElementArraysOf,
 	ElementOf,
 	Entries,
 	Explicit,
@@ -96,10 +138,12 @@ export type {
 	ExtractExplicit,
 	ExtractIndexSignature,
 	ExtractSetElement,
+	GetWritableKeys,
 	HomogeneousArray,
 	KeyOf,
 	KeysOfUnion,
 	LooseToStrict,
+	Mutable,
 	NonNullableElementOf,
 	NonNullableValueFromUnion,
 	NonNullableValueFromUnionByKey,
