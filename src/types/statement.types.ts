@@ -21,6 +21,7 @@ type Wrapper =
 	| `${Dictionary}<${OptionalBrand}<$>>`
 	| "() => Promise.all([ $ ])"
 	| "() => Promise<[$]>"
+	| "() => Promise<readonly [$]>"
 	| "() => Promise<$>"
 	| "() => $"
 	| "$[number]"
