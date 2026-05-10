@@ -129,7 +129,7 @@ const emitLazyIndex: IndexEmitterType<IndexEmitterOptions> = ({ name, languages,
 			const valueImports_ = processed.map((item) => item.valueImports);
 			const typeImports = processed.map((item) => item.typeImports);
 
-			const types = builder.common().record().key(ext).wrap("() => Promise<[$]>").values(typeNames).build();
+			const types = builder.common().record().key(ext).wrap("() => Promise<readonly [$]>").values(typeNames).build();
 
 			const vars = builder.common().record().key(ext).wrap("() => Promise.all([ $ ])").values(valueImports_).build();
 
