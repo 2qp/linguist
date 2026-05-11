@@ -4,6 +4,7 @@ import type { PublicKey } from "../languages/data/public-key";
 import type { APIBlueprint } from "../languages/markup/api-blueprint";
 import type { _1CEnterprise } from "../languages/programming/1c-enterprise";
 import type { AGSScript } from "../languages/programming/ags-script";
+import type { AIDL } from "../languages/programming/aidl";
 import type { KoLmafiaASH } from "../languages/programming/kolmafia-ash";
 import type { AsciiDoc } from "../languages/prose/asciidoc";
 import type { Dictionary, Language, OptionalBrand } from "../types/language-types.generated";
@@ -27,6 +28,7 @@ const _dynamic_by_name: DynamicByName = {
 type DynamicByName = {
 	"1C Enterprise": OptionalBrand<readonly [string, string], readonly [_1CEnterprise]>;
 	"2-Dimensional Array": OptionalBrand<readonly [string, string], readonly [_2DimensionalArray]>;
+	AIDL: OptionalBrand<readonly [string, string], readonly [AIDL]>;
 	AsciiDoc: OptionalBrand<readonly [string, string], readonly [AsciiDoc]>;
 	"AGS Script": OptionalBrand<readonly [string, string], readonly [AGSScript]>;
 	"Public Key": OptionalBrand<readonly [string, string], readonly [PublicKey]>;
