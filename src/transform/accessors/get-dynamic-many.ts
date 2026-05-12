@@ -1,6 +1,6 @@
 import type { ManyOptions } from "@/types/accessors.types";
 import type { OptionalBrand } from "@/types/branded.types";
-import type { Explicit } from "@/types/utility.types";
+import type { ExplicitKeys } from "@/types/utility.types";
 
 type GetDynamicManyParams = {};
 
@@ -11,28 +11,28 @@ type ExtractPayloadsAsTuple<T, K extends readonly (keyof T)[]> = {
 type ExtractBrand<T> = T extends OptionalBrand<unknown, infer B> ? B : never;
 
 type GetDynamicManyOverloaded = {
-	<const I extends Record<string, unknown>, const T extends ReadonlyArray<keyof Explicit<I>>>(
+	<const I extends Record<string, unknown>, const T extends ExplicitKeys<I>>(
 		registry: I,
 		keys: T,
 		options?: ManyOptions<"known">,
 	): Promise<ExtractPayloadsAsTuple<I, T>>;
 
-	<const I extends Record<string, unknown>, const T extends ReadonlyArray<string>>(
+	<const I extends Record<string, unknown>, const T extends readonly string[], E extends ExplicitKeys<I>>(
 		registry: I,
-		keys: T,
+		keys: T | E,
 		options: ManyOptions<"hybrid">,
 	): Promise<ExtractPayloadsAsTuple<I, T>>;
 
-	<const I extends Record<string, unknown>, const T extends ReadonlyArray<string>>(
+	<const I extends Record<string, unknown>, const T extends readonly string[], E extends ExplicitKeys<I>>(
 		registry: I,
-		keys: T,
+		keys: T | E,
 		options: ManyOptions<"loose">,
-	): Promise<ReadonlyArray<ExtractBrand<I[string]>>>;
+	): Promise<readonly ExtractBrand<I[string]>[]>;
 };
 
 type GetDynamicMany = GetDynamicManyOverloaded;
 
-const getDynamicMany: GetDynamicMany = async (registry: Record<string, ReadonlyArray<string>>, keys: string[]) => {
+const getDynamicMany: GetDynamicMany = async (registry: Record<string, readonly string[]>, keys: string[]) => {
 	//
 
 	const length = keys.length;

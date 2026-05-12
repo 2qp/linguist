@@ -1,22 +1,22 @@
 import type { ManyOptions } from "@/types/accessors.types";
-import type { Explicit } from "@/types/utility.types";
+import type { ExplicitKeys } from "@/types/utility.types";
 
 type GetManyOverloaded = {
-	<I extends Record<string, unknown>, const T extends ReadonlyArray<keyof Explicit<I>>>(
+	<const I extends Record<string, unknown>, const T extends ExplicitKeys<I>>(
 		registry: I,
 		keys: T,
 		options?: ManyOptions<"known">,
 	): { [K in keyof T]: I[T[K]] };
 
-	<I extends Record<string, unknown>, const T extends ReadonlyArray<string>>(
+	<const I extends Record<string, unknown>, const T extends readonly string[], E extends ExplicitKeys<I>>(
 		registry: I,
-		keys: T,
+		keys: T | E,
 		options: ManyOptions<"hybrid">,
 	): { [K in keyof T]: I[T[K]] };
 
-	<I extends Record<string, unknown>, const T extends ReadonlyArray<string>>(
+	<const I extends Record<string, unknown>, const T extends readonly string[], E extends ExplicitKeys<I>>(
 		registry: I,
-		keys: T,
+		keys: T | E,
 		options: ManyOptions<"loose">,
 	): readonly I[string][];
 };
