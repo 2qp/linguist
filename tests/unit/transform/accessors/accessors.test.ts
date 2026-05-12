@@ -1,3 +1,4 @@
+import { T_INVALID } from "@tests/fixtures/constants/common";
 import { by_extensions } from "@tests/fixtures/indexes/by-extensions.fixture";
 import { by_name } from "@tests/fixtures/indexes/by-name.fixture";
 import { dynamic_by_extensions } from "@tests/fixtures/indexes/dynamic-by-extensions.fixture";
@@ -44,6 +45,24 @@ describe("accessors", () => {
 
 			expect(result).toEqual(expect.arrayContaining(expected));
 		});
+
+		it("from record (1:1) invalid key", () => {
+			const source = by_name;
+			const result = getOne(source, T_INVALID);
+
+			const expected = undefined;
+
+			expect(result).toEqual(expected);
+		});
+
+		it("from record (1:N) invalid key", () => {
+			const source = by_extensions;
+			const result = getOne(source, T_INVALID);
+
+			const expected = undefined;
+
+			expect(result).toEqual(expected);
+		});
 	});
 
 	describe("get Many", () => {
@@ -56,16 +75,48 @@ describe("accessors", () => {
 			expect(result).toEqual(expected);
 		});
 
-		it("from record (1:N)]", () => {
+		it("from record (1:N)", () => {
 			const source = by_extensions;
 			const result = getMany(source, [".asc", ".ash"]);
 
-			const expected = [
-				[ags_script, asciidoc, public_key],
-				[ags_script, kolmafia_ash],
-			];
+			const expected = {
+				asc: [ags_script, asciidoc, public_key],
+				ash: [kolmafia_ash, ags_script],
+			};
 
-			expect(result).toEqual(expected);
+			expect(result).toEqual([expect.arrayContaining(expected.asc), expect.arrayContaining(expected.ash)]);
+		});
+
+		describe("from record (1:1) invalid key", () => {
+			const source = by_name;
+
+			it("mixed valid/invalid keys", () => {
+				const result = getMany(source, ["1C Enterprise", T_INVALID], { keys: "hybrid" });
+				const expected = [_1c_enterprise, undefined];
+				expect(result).toEqual(expected);
+			});
+
+			it("all invalid keys", () => {
+				const result_ = getMany(source, [T_INVALID, T_INVALID], { keys: "hybrid" });
+				const expected_ = [undefined, undefined];
+				expect(result_).toEqual(expected_);
+			});
+		});
+
+		describe("from record (1:N) invalid key", () => {
+			const source = by_extensions;
+
+			it("mixed valid/invalid keys", () => {
+				const result = getMany(source, [".ash", T_INVALID], { keys: "hybrid" });
+				const expected = { ".ash": [ags_script, kolmafia_ash], T_INVALID: undefined };
+				expect(result).toEqual([expect.arrayContaining(expected[".ash"]), expected.T_INVALID]);
+			});
+
+			it("all invalid keys", () => {
+				const result = getMany(source, [T_INVALID, T_INVALID], { keys: "hybrid" });
+				const expected = { ".ash": undefined, T_INVALID: undefined };
+				expect(result).toEqual([expected[".ash"], expected.T_INVALID]);
+			});
 		});
 	});
 
@@ -88,6 +139,24 @@ describe("accessors", () => {
 
 			expect(result).toEqual(expect.arrayContaining(expected));
 		});
+
+		it("from record (1:1) invalid key", async () => {
+			const source = lazy_by_name;
+			const result = await getLazyOne(source, T_INVALID);
+
+			const expected = undefined;
+
+			expect(result).toEqual(expected);
+		});
+
+		it("from record (1:N) invalid key", async () => {
+			const source = lazy_by_extensions;
+			const result = await getLazyOne(source, T_INVALID);
+
+			const expected = undefined;
+
+			expect(result).toEqual(expected);
+		});
 	});
 
 	describe("get Lazy Many", () => {
@@ -105,13 +174,53 @@ describe("accessors", () => {
 			const result = await getLazyMany(source, [".asc", ".ash"]);
 
 			const expected = {
-				asc: [ags_script, asciidoc, public_key],
+				asc: [ags_script, public_key, asciidoc],
 				ash: [kolmafia_ash, ags_script],
 			};
 
-			expect(result).toEqual(
-				expect.arrayContaining([expect.arrayContaining(expected.asc), expect.arrayContaining(expected.ash)]),
-			);
+			expect(result).toEqual([expect.arrayContaining(expected.asc), expect.arrayContaining(expected.ash)]);
+		});
+
+		describe("from record (1:1) invalid key", () => {
+			const source = lazy_by_name;
+
+			it("mixed valid/invalid keys", async () => {
+				const result = await getLazyMany(source, [T_INVALID, "1C Enterprise", "KoLmafia ASH"], { keys: "hybrid" });
+				const expected = [undefined, _1c_enterprise, kolmafia_ash];
+				expect(result).toEqual(expected);
+			});
+
+			it("all invalid keys", async () => {
+				const result_ = await getLazyMany(source, [T_INVALID, T_INVALID], { keys: "hybrid" });
+				const expected_ = [undefined, undefined];
+				expect(result_).toEqual(expected_);
+			});
+		});
+
+		describe("from record (1:N) invalid key", () => {
+			const source = lazy_by_extensions;
+
+			it("mixed valid/invalid keys", async () => {
+				const result = await getLazyMany(source, [T_INVALID, ".asc", ".ash"], { keys: "hybrid" });
+
+				const expected = {
+					ash: [ags_script, kolmafia_ash],
+					asc: [asciidoc, public_key, ags_script],
+					T_INVALID: undefined,
+				};
+
+				expect(result).toEqual([
+					expected.T_INVALID,
+					expect.arrayContaining(expected.asc),
+					expect.arrayContaining(expected.ash),
+				]);
+			});
+
+			it("all invalid keys", async () => {
+				const result = await getLazyMany(source, [T_INVALID, T_INVALID], { keys: "hybrid" });
+				const expected = { ash: undefined, T_INVALID: undefined };
+				expect(result).toEqual([expected.ash, expected.T_INVALID]);
+			});
 		});
 	});
 
@@ -140,6 +249,24 @@ describe("accessors", () => {
 
 			//
 		});
+
+		it("from record (1:1) invalid key", async () => {
+			const source = dynamic_by_name;
+			const result = await getDynamicOne(source, T_INVALID);
+
+			const expected = [] as const;
+
+			expect(result).toEqual(expected);
+		});
+
+		it("from record (1:N) invalid key", async () => {
+			const source = dynamic_by_extensions;
+			const result = await getDynamicOne(source, T_INVALID);
+
+			const expected = [] as const;
+
+			expect(result).toEqual(expected);
+		});
 	});
 
 	describe("get Dynamic Many", () => {
@@ -161,9 +288,50 @@ describe("accessors", () => {
 				asc: [asciidoc, public_key, ags_script],
 			};
 
-			expect(result).toEqual(
-				expect.arrayContaining([expect.arrayContaining(expected.bsl), expect.arrayContaining(expected.asc)]),
-			);
+			expect(result).toEqual([expect.arrayContaining(expected.bsl), expect.arrayContaining(expected.asc)]);
+		});
+
+		describe("from record (1:1) invalid key", () => {
+			const source = dynamic_by_name;
+
+			it("mixed valid/invalid keys", async () => {
+				const result = await getDynamicMany(source, [T_INVALID, "1C Enterprise", "KoLmafia ASH"], { keys: "hybrid" });
+				const expected = [[], [_1c_enterprise], [kolmafia_ash]];
+				expect(result).toEqual(expected);
+			});
+
+			it("all invalid keys", async () => {
+				const result_ = await getDynamicMany(source, [T_INVALID, T_INVALID], { keys: "hybrid" });
+				const expected_ = [[], []];
+				expect(result_).toEqual(expected_);
+			});
+		});
+
+		describe("from record (1:N) invalid key", () => {
+			const source = dynamic_by_extensions;
+
+			it("mixed valid/invalid keys", async () => {
+				const result = await getDynamicMany(source, [T_INVALID, ".asc", T_INVALID, ".ash"], { keys: "hybrid" });
+
+				const expected = {
+					ash: [ags_script, kolmafia_ash],
+					asc: [asciidoc, public_key, ags_script],
+					T_INVALID: [],
+				};
+
+				expect(result).toEqual([
+					expected.T_INVALID,
+					expect.arrayContaining(expected.asc),
+					expected.T_INVALID,
+					expect.arrayContaining(expected.ash),
+				]);
+			});
+
+			it("all invalid keys", async () => {
+				const result = await getDynamicMany(source, [T_INVALID, T_INVALID], { keys: "hybrid" });
+				const expected = { ash: [], T_INVALID: [] };
+				expect(result).toEqual([expected.ash, expected.T_INVALID]);
+			});
 		});
 	});
 
@@ -189,6 +357,24 @@ describe("accessors", () => {
 
 			expect(result).toEqual(expect.arrayContaining(expected));
 		});
+
+		it("from record (1:1) invalid key", async () => {
+			const source = dynamic_by_name;
+			const result = await getDynamicOneClient(source, T_INVALID);
+
+			const expected = [] as const;
+
+			expect(result).toEqual(expected);
+		});
+
+		it("from record (1:N) invalid key", async () => {
+			const source = dynamic_by_extensions;
+			const result = await getDynamicOneClient(source, T_INVALID);
+
+			const expected = [] as const;
+
+			expect(result).toEqual(expected);
+		});
 	});
 
 	describe("get Dynamic Many - Client", () => {
@@ -210,9 +396,52 @@ describe("accessors", () => {
 				apib: [asciidoc, public_key, ags_script],
 			};
 
-			expect(result).toEqual(
-				expect.arrayContaining([expect.arrayContaining(expected.bsl), expect.arrayContaining(expected.apib)]),
-			);
+			expect(result).toEqual([expect.arrayContaining(expected.bsl), expect.arrayContaining(expected.apib)]);
+		});
+
+		describe("from record (1:1) invalid key", () => {
+			const source = dynamic_by_name;
+
+			it("mixed valid/invalid keys", async () => {
+				const result = await getDynamicManyClient(source, [T_INVALID, "1C Enterprise", "KoLmafia ASH"], {
+					keys: "hybrid",
+				});
+				const expected = [[], [_1c_enterprise], [kolmafia_ash]];
+				expect(result).toEqual(expected);
+			});
+
+			it("all invalid keys", async () => {
+				const result_ = await getDynamicManyClient(source, [T_INVALID, T_INVALID], { keys: "hybrid" });
+				const expected_ = [[], []];
+				expect(result_).toEqual(expected_);
+			});
+		});
+
+		describe("from record (1:N) invalid key", () => {
+			const source = dynamic_by_extensions;
+
+			it("mixed valid/invalid keys", async () => {
+				const result = await getDynamicManyClient(source, [T_INVALID, ".asc", T_INVALID, ".ash"], { keys: "hybrid" });
+
+				const expected = {
+					ash: [ags_script, kolmafia_ash],
+					asc: [asciidoc, public_key, ags_script],
+					T_INVALID: [],
+				};
+
+				expect(result).toEqual([
+					expected.T_INVALID,
+					expect.arrayContaining(expected.asc),
+					expected.T_INVALID,
+					expect.arrayContaining(expected.ash),
+				]);
+			});
+
+			it("all invalid keys", async () => {
+				const result = await getDynamicManyClient(source, [T_INVALID, T_INVALID], { keys: "hybrid" });
+				const expected = { ash: [], T_INVALID: [] };
+				expect(result).toEqual([expected.ash, expected.T_INVALID]);
+			});
 		});
 	});
 });
