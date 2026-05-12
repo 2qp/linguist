@@ -35,7 +35,6 @@
 				"default": "./dist/getters/*.cjs"
 			}
 		},
-
 		"./getters/dynamic": {
 			"import": {
 				"types": "./dist/getters/dynamic/index.d.ts",
@@ -156,12 +155,12 @@
 		"@babel/parser": "^7.29.3",
 		"@babel/traverse": "^7.29.0",
 		"@babel/types": "^7.29.0",
-		"@biomejs/biome": "^2.4.14",
+		"@biomejs/biome": "^2.4.15",
 		"@types/babel__generator": "^7.27.0",
 		"@types/babel__traverse": "^7.28.0",
 		"@types/js-yaml": "^4.0.9",
-		"@types/node": "^25.6.0",
-		"@typescript/native-preview": "7.0.0-dev.20260426.1",
+		"@types/node": "^25.7.0",
+		"@typescript/native-preview": "7.0.0-dev.20260511.1",
 		"glob": "^13.0.6",
 		"js-yaml": "^4.1.1",
 		"magic-string": "^0.30.21",
@@ -171,6 +170,6 @@
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3",
 		"vite-tsconfig-paths": "^6.1.1",
-		"vitest": "^4.1.5"
+		"vitest": "^4.1.6"
 	}
 }
