@@ -51,8 +51,8 @@ const id = normalized_all.typescript.language_id;
 ```
 
 ```ts
-import { by_extensions } from "@2qp/linguist/indexes/by-extensions";
 import { getOne } from "@2qp/linguist/getters";
+import { by_extensions } from "@2qp/linguist/indexes/by-extensions";
 
 const result = getOne(by_extensions, ".ts");
 const aliases = result[0].codemirror_mime_type;
@@ -70,12 +70,9 @@ const sample: Language = {};
 // ERROR
 // Type '{}' is missing the following properties
 
-
 const ts: TypeScript = {};
 // ERROR
 // Type '{}' is missing the following properties
-
-
 
 const extension: Extensions = [".php", ".lisp"];
 ```
@@ -87,12 +84,48 @@ const extensions: Extensions = [".dockerfile", "unknown"];
 //                                                 ^
 // Type '"unknown"' is not assignable to type '".ts" | ".cts" ...
 
-
 const extensionsRelax: ExtensionsRelax = [".dockerfile", "unknown"];
 ```
 
 
 ## Getters
+
+#### Structure
+
+---
+
+##### Outer
+
+- outer tuple positions are guaranteed to remain stable.
+- tuple positions always match the order of the requested keys.
+
+```ts
+const [php, json] = getMany(by_extensions, [".php", ".json"]);
+//      ^     ^
+// result[0] always corresponds to ".php"
+// result[1] always corresponds to ".json"
+// always corresponds to ".php" and ".json" in requested order.
+```
+
+##### Inner
+
+- inner array ordering is not guaranteed across versions.
+- inner arrays may change in size over time across versions.
+- grouping is preserved (no cross-key mixing occurs).
+
+```ts
+const [[hack, php], [json, oasv2, oasv3]] = await getLazyMany(lazy_by_extensions, [".php", ".json"]);
+//         ^--^              ^--^--^--^
+//    order may change / new items may appear anywhere (front, middle, or end) in new releases
+
+// do not rely on:
+// - order of inner elements
+// - fixed length of inner arrays
+//
+// treat inner arrays as dynamic, unordered collections
+```
+
+---
 
 #### Get One
 
@@ -105,16 +138,20 @@ import { extensions_to_name } from "@2qp/linguist/maps/extensions-to-name";
 // const extension = ".ts" as const; // or
 const result = getOne(by_extensions, ".ts");
 //      ^
-// [{ readonly ace_mode: "typescript"; readonly aliases: readonly ["ts"];
+// readonly [{ readonly ace_mode: "typescript"; readonly aliases: readonly ["ts"];
 
 const searchKey: string = ".jsx";
-const lookupResult = getOne(by_extensions, searchKey); 
+const lookupResult = getOne(by_extensions, searchKey);
 //      ^
-// Language[] | undefined
+// readonly Language[] | undefined
 
-const mapResult = getOne(extensions_to_name, ".ts"); 
+const mapResult = getOne(extensions_to_name, ".ts");
 //      ^
 // readonly ["TypeScript", "XML"]
+
+const typo = getOne(extensions_to_name, "ts", { key: "known" });
+// ERROR                                  ^
+// Argument of type '"ts"' is not assignable to parameter of type '".ts" | ".bsl" | ".os" ...
 
 ```
 
@@ -122,6 +159,7 @@ const mapResult = getOne(extensions_to_name, ".ts");
 | :----------- | :----------------------------------- | :-------------------------------------------------------------------------- |
 | `registry`   | `Record<string, unknown>`            | **Required**. The source registry (e.g., by_extensions) used for the lookup.|
 | `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (extension or ID) used to retrieve the value. |
+| `options`    | `{ key?: "known" }`                  | **Optional.** Controls type strictness: `"known"` restricts input to literal keys; |
 
 
 #### Get Many
@@ -134,18 +172,18 @@ import { extensions_to_interpreters } from "@2qp/linguist/maps/extensions-to-int
 
 const result = getMany(by_extensions, [".lua", ".json"]);
 //      ^
-// [[{ readonly ace_mode: "lua"; readonly codemirror_mime_type: "text/x-lua";
+// readonly [readonly [{ readonly ace_mode: "lua"; readonly codemirror_mime_type: "text/x-lua" ... }], ... ];
 
 const hybridResult = getMany(by_ace_mode, ["astro", "clojurex" as string], { keys: "hybrid" });
 //      ^
-// readonly [[{ readonly ace_mode: "astro"; ... }], Language[] | undefined]
+// readonly [readonly [{ readonly ace_mode: "astro"; ... }], readonly Language[] | undefined]
 
 const extensionQueries: string[] = [".dart", ".py"];
-const lookupResult = getMany(by_extensions, extensionQueries, { keys: "loose" }); 
+const lookupResult = getMany(by_extensions, extensionQueries, { keys: "loose" });
 //      ^
-// (Language[] | undefined)[]
+// readonly (readonly Language[] | undefined)[]
 
-const mapResult = getMany(extensions_to_interpreters, [".ts", ".tsx"]); 
+const mapResult = getMany(extensions_to_interpreters, [".ts", ".tsx"]);
 //      ^
 // readonly [readonly ["bun", "deno", "ts-node", "tsx"], readonly []]
 
@@ -169,9 +207,13 @@ const result = await getLazyOne(lazy_by_language_id, "327");
 // { readonly ace_mode: "rust"; readonly aliases: readonly ["rs"];
 
 const searchKey: string = "326";
-const lookupResult = await getLazyOne(lazy_by_language_id, searchKey); 
+const lookupResult = await getLazyOne(lazy_by_language_id, searchKey);
 //      ^
 // Language | undefined
+
+const typo = await getLazyOne(lazy_by_language_id, "0x", { key: "known" });
+// ERROR                                            ^
+// Argument of type '"0x"' is not assignable to parameter of type '"327" | "0" | "387204628" ...
 
 ```
 
@@ -179,7 +221,7 @@ const lookupResult = await getLazyOne(lazy_by_language_id, searchKey);
 | :----------- | :----------------------------------- | :------------------------------------------------------------------------------------------------ |
 | `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The lazy source registry (e.g., lazy_by_name ) used for the lookup.                 |
 | `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (extension or ID) used to retrieve the value.                 |
-
+| `options`    | `{ key?: "known" }`                  | **Optional.** Controls type strictness: `"known"` restricts input to literal keys;                |
 
 #### Get Lazy Many
 
@@ -191,16 +233,16 @@ import { lazy_by_type } from "@2qp/linguist/indexes/lazy-by-type";
 
 const result = await getLazyMany(lazy_by_extensions, [".c++", ".groovy", ".yaml", ".cs"]);
 //      ^
-// readonly [[{ readonly ace_mode: "c_cpp"; readonly aliases: readonly ["cpp"]; [...], [...], [...]]
+// readonly [readonly [{ readonly ace_mode: "c_cpp"; readonly aliases: readonly ["cpp"]; [...], [...], [...]]
 
 const hybridResult = await getLazyMany(lazy_by_name, ["Boo", "Brainfuck" as string], { keys: "hybrid" });
 //      ^
 // readonly [{ readonly ace_mode: "text"; readonly color: "#d4bec1"; ... }, Language | undefined]
 
 const typeQueries: string[] = ["data", "prose"];
-const lookupResult = await getLazyMany(lazy_by_type, typeQueries, { keys: "loose" }); 
+const lookupResult = await getLazyMany(lazy_by_type, typeQueries, { keys: "loose" });
 //      ^
-// (Language[] | undefined)[]
+// readonly (readonly Language[] | undefined)[]
 
 ```
 
@@ -218,20 +260,24 @@ import { getDynamicOne } from "@2qp/linguist/getters/dynamic";
 import { dynamic_by_extensions } from "@2qp/linguist/indexes/dynamic-by-extensions";
 import { dynamic_by_name } from "@2qp/linguist/indexes/dynamic-by-name";
 
-const result = await getDynamicOne(dynamic_by_extensions, ".gleam"); 
+const result = await getDynamicOne(dynamic_by_extensions, ".gleam");
 //      ^
-// [{ readonly ace_mode: "text"; readonly color: "#ffaff3"; readonly extensions: readonly [".gleam"];
+// readonly [{ readonly ace_mode: "text"; readonly color: "#ffaff3"; readonly extensions: readonly [".gleam"];
 
 const searchKey: string = ".html";
-const lookupResult = await getDynamicOne(dynamic_by_extensions, searchKey); 
+const lookupResult = await getDynamicOne(dynamic_by_extensions, searchKey);
 //      ^
-// (Language | undefined)[]
+// readonly Language[] | readonly []
 
 const name: string = "...";
-const lang = await getDynamicOne(dynamic_by_name, name); // [Language] | []
+const lang = await getDynamicOne(dynamic_by_name, name); // readonly [] | readonly [Language]
 const [l] = lang;
 //     ^
 // Language | undefined
+
+const typo = await getDynamicOne(dynamic_by_name, "Pearl", { key: "known" });
+// ERROR                                            ^
+// Argument of type '"Pearl"' is not assignable to parameter of type '"1C Enterprise" | "2-Dimensional Array" | "Perl" ...
 
 ```
 
@@ -239,7 +285,7 @@ const [l] = lang;
 | :----------- | :----------------------------------- | :------------------------------------------------------------------------------------------------ |
 | `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The dynamic source registry (e.g., dynamic_by_extensions) used for the lookup.      |
 | `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (extension or ID) used to retrieve the value.                 |
-
+| `options`    | `{ key?: "known" }`                  | **Optional.** Controls type strictness: `"known"` restricts input to literal keys;                |
 
 #### Get Dynamic Many
 
@@ -250,16 +296,16 @@ import { dynamic_by_filenames } from "@2qp/linguist/indexes/dynamic-by-filenames
 
 const result = await getDynamicMany(dynamic_by_aliases, ["lisp", "emacs", "vim", "jsp", "npmrc"]);
 //      ^
-// readonly [[{ readonly ace_mode: "lisp"; readonly aliases: readonly ["lisp"]; }], [...], [...], [...]]
+// readonly [readonly [{ readonly ace_mode: "lisp"; readonly aliases: readonly ["lisp"]; }], [...], [...], [...]]
 
 const hybridResult = await getDynamicMany(dynamic_by_filenames, ["unknown", "BUILD.bazel"], { keys: "hybrid" });
 //      ^
-// readonly [(Language | undefined)[], [{ readonly ace_mode: "python"; readonly aliases: readonly ["bazel", "bzl"], ...}] ...];
+// readonly [readonly Language[] | readonly [], readonly [{ readonly ace_mode: "python"; readonly aliases: readonly ["bazel", "bzl"], ...}] ...];
 
 const filenames: string[] = ["LICENSE.mysql", "Podfile"];
-const lookupResult = await getDynamicMany(dynamic_by_filenames, filenames, { keys: "loose" }); 
+const lookupResult = await getDynamicMany(dynamic_by_filenames, filenames, { keys: "loose" });
 //      ^
-// (Language | undefined)[][]
+// readonly (readonly Language[] | readonly [])[]
 
 ```
 
@@ -300,15 +346,15 @@ import { dynamic_by_name } from "@2qp/linguist/indexes/dynamic-by-name";
 
 const result = await getDynamicOne(dynamic_by_extensions, ".svelte");
 //      ^
-//  result: [{ readonly ace_mode: "html"; readonly codemirror_mode: "htmlmixed"; readonly color: "#ff3e00"; ... }]
+// readonly [{ readonly ace_mode: "html"; readonly codemirror_mode: "htmlmixed"; readonly color: "#ff3e00"; ... }]
 
 const searchKey: string = ".sh";
-const lookupResult = await getDynamicOne(dynamic_by_extensions, searchKey); // (Language | undefined)[]
+const lookupResult = await getDynamicOne(dynamic_by_extensions, searchKey); // readonly Language[] | readonly []
 
 const name: string = "...";
-const lang = await getDynamicOne(dynamic_by_name, name); 
+const lang = await getDynamicOne(dynamic_by_name, name);
 //      ^
-// [Language] | []
+// readonly [] | readonly [Language]
 
 const [l] = lang;
 //     ^
@@ -332,16 +378,16 @@ import { dynamic_by_group } from "@2qp/linguist/indexes/dynamic-by-group";
 
 const result = await getDynamicMany(dynamic_by_aliases, ["make", "asm", "regex", "squeak", "Cabal"]);
 //      ^
-// readonly [[{ readonly ace_mode: "makefile"; readonly aliases: readonly ["bsdmake", "make", "mf"]; }], [...], [...], [...]]
+// readonly [readonly [{ readonly ace_mode: "makefile"; readonly aliases: readonly ["bsdmake", "make", "mf"]; }], [...], [...], [...]]
 
 const hybridResult = await getDynamicMany(dynamic_by_group, ["Smalltalk" as string, "Julia"], { keys: "hybrid" });
 //      ^
-// readonly [(Language | undefined)[], [{ readonly ace_mode: "text"; readonly color: "#a270ba"; readonly group: "Julia"; ...}] ...];
+// readonly [readonly Language[] | readonly [], readonly [{ readonly ace_mode: "text"; readonly color: "#a270ba"; readonly group: "Julia"; ...}] ...];
 
 const colorsQueries: string[] = ["#28430A", "#28431f"];
-const lookupResult = await getDynamicMany(dynamic_by_color, colorsQueries, { keys: "loose" }); 
+const lookupResult = await getDynamicMany(dynamic_by_color, colorsQueries, { keys: "loose" });
 //      ^
-// readonly (Language | undefined)[][]
+// readonly (readonly Language[] | readonly [])[]
 
 
 ```
