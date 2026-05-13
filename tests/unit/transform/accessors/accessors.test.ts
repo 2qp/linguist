@@ -14,11 +14,12 @@ import { aidl } from "@tests/fixtures/languages/programming/aidl";
 import { kolmafia_ash } from "@tests/fixtures/languages/programming/kolmafia-ash";
 import { asciidoc } from "@tests/fixtures/languages/prose/asciidoc";
 import { describe, expect, it } from "vitest";
-import { getLazyMany, getLazyOne } from "@/generated/getters";
 import { getDynamicMany as getDynamicManyClient } from "@/transform/accessors/client/get-dynamic-many";
 import { getDynamicOne as getDynamicOneClient } from "@/transform/accessors/client/get-dynamic-one";
 import { getDynamicMany } from "@/transform/accessors/get-dynamic-many";
 import { getDynamicOne } from "@/transform/accessors/get-dynamic-one";
+import { getLazyMany } from "@/transform/accessors/get-lazy-many";
+import { getLazyOne } from "@/transform/accessors/get-lazy-one";
 import { getMany } from "@/transform/accessors/get-many";
 import { getOne } from "@/transform/accessors/get-one";
 
