@@ -8,12 +8,6 @@ on:
       workflows: ["linguist-tag"]
       types:
         - completed
-  workflow_dispatch:
-    inputs:
-      publish_tag:
-        description: 'Tag to build and publish'
-        type: string
-        required: true
 
 permissions:
   contents: read
@@ -35,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
         with:
-          ref: ${{ github.event_name == 'push' && github.ref_name || github.event.inputs.publish_tag }}
+          ref: ${{ github.ref }}
           fetch-depth: 1
 
       - name: Read metadata from build-info.json
@@ -59,8 +53,7 @@ jobs:
 
       - name: Download artifacts from original workflow
         id: download-artifacts
-        # if: steps.metadata.outputs.run_id != ''
-        if: steps.metadata.outputs.has_metadata == 'true' && steps.metadata.outputs.run_id != ''
+        if: github.event_name == 'workflow_run' && steps.metadata.outputs.has_metadata == 'true' && steps.metadata.outputs.run_id != ''
         uses: actions/download-artifact@v8
         continue-on-error: true
         with:
@@ -69,8 +62,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Find and download artifacts by hash
-        # if: steps.metadata.outputs.run_id == '' || steps.download-artifacts.outcome == 'failure'
-        if: steps.metadata.outputs.has_metadata == 'true' && (steps.download-artifacts.outcome == 'failure' || steps.metadata.outputs.run_id == '')
+        id: download-cached-artifacts
+        if: github.event_name == 'workflow_run' && steps.metadata.outputs.has_metadata == 'true' && (steps.download-artifacts.outcome == 'failure' || steps.metadata.outputs.run_id == '')
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -78,7 +72,7 @@ jobs:
           echo "Searching for artifacts with hash: $HASH"
           
           RUN_ID=$(gh run list \
-            --workflow="linguist-sync.yml" \
+            --workflow="sync.yml" \
             --branch=master \
             --status=success \
             --limit=30 \
@@ -88,7 +82,7 @@ jobs:
           
           if [ -z "$RUN_ID" ]; then
             RUN_ID=$(gh run list \
-              --workflow="linguist-sync.yml" \
+              --workflow="sync.yml" \
               --branch=master \
               --status=success \
               --limit=30 \
@@ -109,8 +103,18 @@ jobs:
             exit 1
           fi
 
-      - name: Setup pnpm (regeneration if needed)
-        # if: steps.download-artifacts.outcome == 'failure'
+      - name: Determine artifact availability
+        id: artifact-status
+        if: always()
+        run: |
+          if [ "${{ steps.download-artifacts.outcome }}" = "success" ] || \
+             [ "${{ steps.download-cached-artifacts.outcome }}" = "success" ]; then
+            echo "available=true" >> $GITHUB_OUTPUT
+          else
+            echo "available=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup pnpm
         uses: pnpm/action-setup@v5
         with:
           version: 10.24.0
@@ -123,22 +127,23 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies (regeneration if needed)
-        # if: steps.download-artifacts.outcome == 'failure'
-        if: steps.metadata.outputs.has_metadata != 'true' || steps.download-artifacts.outcome == 'failure'
+        if: steps.artifact-status.outputs.available != 'true'
         run: pnpm install --frozen-lockfile
 
+      - name: Run core test suites (retest if needed)
+        if: steps.artifact-status.outputs.available != 'true'
+        run: pnpm test:core
+
       - name: Generate build files (regeneration if needed)
-        # if: steps.download-artifacts.outcome == 'failure'
-        if: steps.metadata.outputs.has_metadata != 'true' || steps.download-artifacts.outcome == 'failure'
+        if: steps.artifact-status.outputs.available != 'true'
         run: pnpm run generate:build
 
       - name: Test generated files (regeneration if needed)
-        # if: steps.download-artifacts.outcome == 'failure'
-        if: steps.metadata.outputs.has_metadata != 'true' || steps.download-artifacts.outcome == 'failure'
+        if: steps.artifact-status.outputs.available != 'true'
         run: pnpm test:generated
 
       - name: Create build-info.json (regeneration)
-        if: steps.metadata.outputs.has_metadata != 'true' || steps.download-artifacts.outcome == 'failure'
+        if: steps.artifact-status.outputs.available != 'true'
         run: |
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           HASH=$(curl -L https://raw.githubusercontent.com/github-linguist/linguist/main/lib/linguist/languages.yml | sha256sum | awk '{print $1}')
@@ -155,6 +160,7 @@ jobs:
               "run_attempt": ${{ github.run_attempt }},
               "workflow_id": "${{ github.workflow }}",
               "repository": "${{ github.repository }}",
+              "run_number": ${{ github.run_number }},
               "trigger": "manual_build"
             },
             "upstream": {
