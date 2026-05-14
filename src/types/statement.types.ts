@@ -14,6 +14,7 @@ type Wrapper =
 	| "readonly [$] | readonly []"
 	| "readonly $[] | readonly []"
 	| "readonly ($)[]"
+	| "readonly Readonly<$>[]"
 	| `${Dictionary}<ReadonlyArray<$>>`
 	| `${Dictionary}<$>`
 	| `${Dictionary}<() => Promise<$>>`
