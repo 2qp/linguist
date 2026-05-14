@@ -1,66 +1,85 @@
 import { createSafeName } from "./create-safe-name";
+import { isNullish } from "@utils/guards";
 import { toUpperCase } from "@utils/to-uppercase";
 
+type ReplacementOptions = {
+	separate?: boolean;
+};
+
+const defaultOptions: Required<ReplacementOptions> = {
+	separate: true,
+};
+
+type CharReplacement = [replacement: string, options?: ReplacementOptions];
+
+const getConfig = ([replacement, _options = {}]: CharReplacement) => {
+	//
+
+	const options = { ...defaultOptions, ..._options };
+
+	return [replacement, options] as const;
+};
+
 const SPECIAL_CHAR_REPLACEMENTS = {
-	"#": "Sharp",
-	"*": "Star",
-	"+": "Plus",
-	"-": "_",
-	"&": "And",
-	"|": "Or",
-	"@": "At",
-	$: "Dollar",
-	"%": "Percent",
-	"^": "Caret",
-	"=": "Equals",
-	"!": "Not",
-	"?": "Question",
-	"~": "Tilde",
-	"`": "Backtick",
-	"'": "Prime",
-	'"': "DoubleQuote",
-	"<": "LessThan",
-	">": "GreaterThan",
-	"/": "Slash",
-	"\\": "Backslash",
-	"(": "ParenL",
-	")": "ParenR",
-	"[": "BracketL",
-	"]": "BracketR",
-	"{": "BraceL",
-	"}": "BraceR",
+	"#": ["Sharp"],
+	"*": ["Star"],
+	"+": ["Plus"],
+	"-": ["_"],
+	"&": ["And"],
+	"|": ["Or"],
+	"@": ["At"],
+	$: ["Dollar"],
+	"%": ["Percent"],
+	"^": ["Caret"],
+	"=": ["Equals"],
+	"!": ["Not"],
+	"?": ["Question"],
+	"~": ["Tilde"],
+	"`": ["Backtick"],
+	"'": ["", { separate: false }],
+	'"': ["DoubleQuote"],
+	"<": ["LessThan"],
+	">": ["GreaterThan"],
+	"/": ["Slash"],
+	"\\": ["Backslash"],
+	"(": [""],
+	")": [""],
+	"[": [""],
+	"]": [""],
+	"{": [""],
+	"}": [""],
 	// " ": "",
-} as const satisfies Record<string, string>;
+} as const satisfies Record<string, CharReplacement>;
 
 // for file names
 const DASH_REPLACEMENTS = {
-	"#": "-sharp",
-	"*": "-star",
-	"+": "-plus",
-	"&": "-and",
-	"@": "-at",
-	$: "-dollar",
-	"%": "-percent",
-	"^": "-caret",
-	"=": "-equals",
-	"!": "-not",
-	"?": "-question",
-	"~": "-tilde",
-	"'": "-prime",
-	'"': "-double-quote",
-	"<": "-less-than",
-	">": "-greater-than",
-	"/": "-slash",
-	"\\": "-backslash",
-	"(": "-paren-l",
-	")": "-paren-r",
-	"[": "-bracket-l",
-	"]": "-bracket-r",
-	"{": "-brace-l",
-	"}": "-brace-r",
-	".": "-",
-	_: "-",
-} as const satisfies Record<string, string>;
+	"#": ["-sharp"],
+	"*": ["-star"],
+	"+": ["-plus"],
+	"&": ["-and"],
+	"@": ["-at"],
+	$: ["-dollar"],
+	"%": ["-percent"],
+	"^": ["-caret"],
+	"=": ["-equals"],
+	"!": ["-not"],
+	"?": ["-question"],
+	"~": ["-tilde"],
+	"'": ["", { separate: false }],
+	'"': ["-double-quote"],
+	"<": ["-less-than"],
+	">": ["-greater-than"],
+	"/": ["-slash"],
+	"\\": ["-backslash"],
+	"(": [""],
+	")": [""],
+	"[": [""],
+	"]": [""],
+	"{": [""],
+	"}": [""],
+	".": ["-"],
+	_: ["-"],
+} as const satisfies Record<string, CharReplacement>;
 
 const capitalize = (s: string): string => {
 	return (s?.[0]?.toUpperCase() ?? "") + (s?.slice(1) ?? "");
@@ -93,16 +112,51 @@ const toCamelCase = (str: string): string => {
 
 const escapeForCharClass = (s: string) => s.replace(/[\\^$.*+?()[\]{}|-]/g, "\\$&");
 
+const SPECIAL_CHARS = Object.keys(SPECIAL_CHAR_REPLACEMENTS).map(escapeForCharClass).join("");
+const DASH_CHARS = Object.keys(DASH_REPLACEMENTS).map(escapeForCharClass).join("");
+
+const SPECIAL_REGEX = new RegExp(`[${SPECIAL_CHARS}]`, "g");
+const DASH_REGEX = new RegExp(`[${DASH_CHARS}]`, "g");
+
+const spacedReplace = (str: string, reg: RegExp, replacements: Record<string, CharReplacement>): string => {
+	//
+
+	return str.replace(reg, (match) => {
+		//
+
+		const obj = replacements[match as keyof typeof replacements];
+		if (isNullish(obj)) return match;
+
+		const [replacement, { separate }] = getConfig(obj);
+
+		return separate ? ` ${replacement} ` : replacement;
+	});
+};
+
+const replace = (str: string, reg: RegExp, replacements: Record<string, CharReplacement>): string => {
+	//
+
+	return str.replace(reg, (match) => {
+		//
+
+		const obj = replacements[match as keyof typeof replacements];
+		if (isNullish(obj)) return match;
+
+		const [replacement] = getConfig(obj);
+
+		return replacement;
+	});
+};
+
 const sanitizeFileName = (str: string) => {
+	//
+
 	const strs = str.toLowerCase();
 
-	const regex = new RegExp(`[${Object.keys(DASH_REPLACEMENTS).map(escapeForCharClass).join("")}]`, "g");
+	const replaced = spacedReplace(strs, DASH_REGEX, DASH_REPLACEMENTS);
 
-	const strDashReplaced = strs.replace(regex, (match) => DASH_REPLACEMENTS[match as keyof typeof DASH_REPLACEMENTS]);
-
-	const strDashed = strDashReplaced.replace(/\s+/g, "-");
-
-	const result = strDashed
+	const result = replaced
+		.replace(/\s+/g, "-")
 		.replace(/[^a-z0-9-]/g, "_")
 		.replace(/-+/g, "-")
 		.replace(/_+/g, "_")
@@ -114,12 +168,7 @@ const sanitizeFileName = (str: string) => {
 const sanitizeTypeName = (str: string) => {
 	//
 
-	const regex = new RegExp(`[${Object.keys(SPECIAL_CHAR_REPLACEMENTS).map(escapeForCharClass).join("")}]`, "g");
-
-	const replaced = str.replace(
-		regex,
-		(match) => SPECIAL_CHAR_REPLACEMENTS[match as keyof typeof SPECIAL_CHAR_REPLACEMENTS],
-	);
+	const replaced = replace(str, SPECIAL_REGEX, SPECIAL_CHAR_REPLACEMENTS);
 
 	const pascalized = pascalize(replaced);
 
@@ -136,42 +185,34 @@ const sanitizeTypeName = (str: string) => {
 const sanitizeConstant = <const TName extends string>(str: TName): Uppercase<TName> => {
 	//
 
-	const regex = new RegExp(
-		`[${Object.keys(SPECIAL_CHAR_REPLACEMENTS).map(escapeForCharClass).join("")}]` as const,
-		"g",
-	);
+	const replaced = spacedReplace(str, SPECIAL_REGEX, SPECIAL_CHAR_REPLACEMENTS);
 
-	const replaced = str.replace(
-		regex,
-		(match) => SPECIAL_CHAR_REPLACEMENTS[match as keyof typeof SPECIAL_CHAR_REPLACEMENTS],
-	);
+	const cleaned = replaced
+		.replace(/\s+/g, "_")
+		.replace(/[^a-zA-Z0-9_$]/g, "_")
+		.replace(/_+/g, "_")
+		.replace(/^_|_$/g, "");
 
-	const uppercased = replaced.toUpperCase();
-
-	const result = uppercased.replace(/[^a-zA-Z0-9_$]/g, "_");
-	if (!result) {
-		const transformed = toUpperCase(`Unknown` as TName);
-		return transformed;
+	if (!cleaned) {
+		return "UNKNOWN" as Uppercase<TName>;
 	}
 
-	const ready = /^\d/.test(result) ? `_${result}` : result;
+	const safeName = /^\d/.test(cleaned) ? `_${cleaned}` : cleaned;
 
-	const safeName = createSafeName(ready) as TName;
-
-	const transformed = toUpperCase(safeName);
-
-	return transformed;
+	return toUpperCase(safeName as TName);
 };
 
 const sanitizeVarName = <const TName extends string>(str: TName) => {
-	const regex = new RegExp(`[${Object.keys(SPECIAL_CHAR_REPLACEMENTS).map(escapeForCharClass).join("")}]`, "g");
+	//
 
-	const replaced = str.replace(
-		regex,
-		(match) => SPECIAL_CHAR_REPLACEMENTS[match as keyof typeof SPECIAL_CHAR_REPLACEMENTS],
-	);
+	const replaced = spacedReplace(str, SPECIAL_REGEX, SPECIAL_CHAR_REPLACEMENTS);
 
-	const prevResult = replaced.replace(/[^a-zA-Z0-9_$]/g, "_");
+	const prevResult = replaced
+		.replace(/\s+/g, "_")
+		.replace(/[^a-zA-Z0-9_$]/g, "_")
+		.replace(/_+/g, "_")
+		.replace(/^_|_$/g, "");
+
 	const result = prevResult.toLowerCase();
 
 	if (!result) return "_unknown" as const;
