@@ -60,6 +60,39 @@ const mime = result[0].codemirror_mime_type;
 // "application/typescript"
 ```
 
+```ts
+import { e_mail } from "@2qp/linguist/languages/data/e-mail";
+import { oasv3_json } from "@2qp/linguist/languages/data/oasv3-json";
+import { html_plus_razor } from "@2qp/linguist/languages/markup/html-plus-razor";
+import { c_plus_plus } from "@2qp/linguist/languages/programming/c-plus-plus";
+import { c_sharp } from "@2qp/linguist/languages/programming/c-sharp";
+import { f_star } from "@2qp/linguist/languages/programming/f-star";
+
+const { name } = html_plus_razor;
+//       ^
+// "HTML+Razor"
+
+const { extensions } = c_plus_plus;
+//          ^
+// readonly [".cpp", ".c++", ".cc", ".cp", ".cppm" ... ]
+
+const { tm_scope } = c_sharp;
+//         ^
+// "source.cs"
+
+const { language_id } = e_mail;
+//          ^
+// 529653389
+
+const { type } = f_star;
+//       ^
+// "programming"
+
+const { color } = oasv3_json;
+//        ^
+// "#85ea2d"
+```
+
 #### Types
 
 ```ts
