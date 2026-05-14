@@ -68,7 +68,7 @@ const emitArray: ArrayEmitterFn<ArrayEmitterOptions> = ({ name, config, language
 		const [prefixed_as_value_stmt, prefixed_as_value_export] = var_builder
 			.asValue()
 			.type()
-			.wrap("ReadonlyArray<$>")
+			.wrap("readonly Readonly<$>[]")
 			.types([], [objTypes])
 			.build();
 
