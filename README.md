@@ -21,7 +21,7 @@ npm install @2qp/linguist
 ```ts
 import { typescript } from "@2qp/linguist/languages/programming/typescript";
 
-const name = typescript.color;
+const color = typescript.color;
 //	   ^
 // "#3178c6"
 ```
@@ -38,7 +38,7 @@ const extensions = all["TypeScript"].extensions;
 import { programming } from "@2qp/linguist/categories/programming";
 
 const mms = programming["235"];
-//		  ^
+//     ^
 // { readonly ace_mode: "text"; readonly name: "Module Management System"; readonly extensions: readonly [".mms", ".mmk"]; ... }
 ```
 
@@ -55,8 +55,8 @@ import { getOne } from "@2qp/linguist/getters";
 import { by_extensions } from "@2qp/linguist/indexes/by-extensions";
 
 const result = getOne(by_extensions, ".ts");
-const aliases = result[0].codemirror_mime_type;
-//       ^
+const mime = result[0].codemirror_mime_type;
+//	   ^
 // "application/typescript"
 ```
 
@@ -85,6 +85,16 @@ const extensions: Extensions = [".dockerfile", "unknown"];
 // Type '"unknown"' is not assignable to type '".ts" | ".cts" ...
 
 const extensionsRelax: ExtensionsRelax = [".dockerfile", "unknown"];
+```
+
+```ts
+import type { NameWithExtensions } from "@2qp/linguist/usage";
+
+const invalidLanguages = ["Cloud Firestore Security Rules"] satisfies NameWithExtensions;
+// ERROR                                    ^
+// Type '"Cloud Firestore Security Rules"' is not assignable to type '"1C Enterprise" | "2-Dimensional Array" | "4D" ...
+
+const validLanguages = ["JavaScript", "Ruby", "Rust"] satisfies NameWithExtensions;
 ```
 
 
@@ -116,7 +126,7 @@ const [php, json] = getMany(by_extensions, [".php", ".json"]);
 ```ts
 const [[hack, php], [json, oasv2, oasv3]] = await getLazyMany(lazy_by_extensions, [".php", ".json"]);
 //         ^--^              ^--^--^--^
-//    order may change / new items may appear anywhere (front, middle, or end) in new releases
+// order may change / new items may appear anywhere (front, middle, or end) in new releases
 
 // do not rely on:
 // - order of inner elements
@@ -497,12 +507,12 @@ const lookupResult = isExtensionOfType(extension, "prose");
 
 ### Manifest
 
-| File             | Variable      | Type                                                                 | Description                | Example                                                                          |
-| :--------------- | :------------ | :------------------------------------------------------------------- | :------------------------  | :------------------------------------------------------------------------------- |
-| `extensions.ts`  | `extensions`  | `Record<Extensions, LanguageName[]>`                                 | All the languages          | `{ ".rs": ["RenderScript", "Rust", "XML"], … }`                                 |
-| `filenames`      | `filenames`   | `Record<Filenames, LanguageName[]>`                                  | All the `Language` objects | `{ "Jenkinsfile": ["Groovy"], … }`                                              |
-| `interpreters`   | `interpreters`| `Record<Interpreters, LanguageName[]>`                               | All the `Language` objects | `{ "deno": ["TypeScript"], … }`                                                 |
-| `languages`      | `languages`   | `Record<LanguageName, { id: LanguageId; name: LanguageName }>`       | All the `Language` objects | `{ "Elixir": { id: 100, name: "Elixir" }, … }`                                  |
+| File             | Variable      | Type                                                                     | Description                | Example                                           |
+| :--------------- | :------------ | :----------------------------------------------------------------------- | :------------------------  | :------------------------------------------------ |
+| `extensions.ts`  | `extensions`  | `Record<Extensions, LanguageName[]>`                                     | extension to language names          | `{ ".rs": ["RenderScript", "Rust", "XML"], … }`   |
+| `filenames`      | `filenames`   | `Record<Filenames, LanguageName[]>`                                      | filename to language names | `{ "Jenkinsfile": ["Groovy"], … }`                |
+| `interpreters`   | `interpreters`| `Record<Interpreters, LanguageName[]>`                                   | interpreter to language names | `{ "deno": ["TypeScript"], … }`                   |
+| `languages`      | `languages`   | `Record<LanguageName, { language_id: LanguageId; name: LanguageName }>`  | language name to `obj` | `{ "Elixir": { language_id: 100, name: "Elixir" }, … }`    |
 
 
 ### Maps
@@ -761,15 +771,15 @@ const lookupResult = isExtensionOfType(extension, "prose");
 | `all.ts`                        | `all`                                             | `Language[]`                                        | All language objects in an array | `[{"ace_mode":"text", … }, {"ace_mode":"text","color":"#38761D", … }]`     |
 | `id-name.ts`                    | `id_name`                                         | `{ name: LanguageName, language_id: LanguageId }[]` | Array of Language name–ID pairs  | `[{"language_id":577529595,"name":"4D"}, {"language_id":1,"name":"ABAP"}, … ]` |
 | `ace-mode-array.ts`             | `ace_mode_array`, `ace_mode_array_relax`          | `AceMode[]`, `AceModeRelax[]`                       | Array of Ace editor modes        | `["text", "abap", "c_cpp", "pascal", "markdown" … ]`                       |
-| `aliases-array.ts`              | `aliases_array`, `aliases_array_relax`            | `Aliases[]`, `AliasesRelax[]`                       | Array of aliases                 | `["ags", "aspx", "aspx-vb", "ats2", "actionscript 3" … ]`                  |
+| `aliases-array.ts`              | `aliases_array`, `aliases_array_relax`            | `Aliases`, `AliasesRelax`                       | Array of aliases                 | `["ags", "aspx", "aspx-vb", "ats2", "actionscript 3" … ]`                  |
 | `codemirror-mime-type-array.ts` | `codemirror_mime_type_array`, `codemirror_mime_type_array_relax` | `CodemirrorMimeType[]`, `CodemirrorMimeTypeRelax[]` | Array of code mirror mimes        | `["text/x-c++src", "text/x-pascal", "text/apl", … ]`                       |
 | `codemirror-mode-array.ts`      | `codemirror_mode_array`, `codemirror_mode_array_relax` | `CodemirrorMode[]`, `CodemirrorModeRelax[]`         | Array of code mirror modes       | `["clike", "pascal", "apl", "asn.1", "htmlembedded", … ]`                  |
 | `color-array.ts`                | `color_array`, `color_array_relax`                | `Color[]`, `ColorRelax[]`                           | Array of colors                  | `["#814CCC", "#38761D", "#004289", "#E8274B", … ]`                         |
-| `extensions-array.ts`           | `extensions_array`, `extensions_array_relax`      | `Extensions[]`, `ExtensionsRelax[]`                 | Array of extensions              | `[".bsl", ".os", ".2da", ".4dm", ".abap", … ]`                             |
-| `filenames-array.ts`            | `filenames_array`, `filenames_array_relax`        | `Filenames[]`, `FilenamesRelax[]`                   | Array of filenames               | `["APKBUILD", "ant.xml", "build.xml", ".htaccess", … ]`                    |
+| `extensions-array.ts`           | `extensions_array`, `extensions_array_relax`      | `Extensions`, `ExtensionsRelax`                 | Array of extensions              | `[".bsl", ".os", ".2da", ".4dm", ".abap", … ]`                             |
+| `filenames-array.ts`            | `filenames_array`, `filenames_array_relax`        | `Filenames`, `FilenamesRelax`                   | Array of filenames               | `["APKBUILD", "ant.xml", "build.xml", ".htaccess", … ]`                    |
 | `fs-name-array.ts`              | `fs_name_array`, `fs_name_array_relax`            | `FsName[]`, `FsNameRelax[]`                         | Array of filesystem names        | `["Fstar", … ]`                                                            |
 | `group-array.ts`                | `group_array`, `group_array_relax`                | `Group[]`, `GroupRelax[]`                           | Array of groups                  | `["Shell", "Assembly", "TeX", "Yacc", … ]`                                 |
-| `interpreters-array.ts`         | `interpreters_array`, `interpreters_array_relax`  | `Interpreters[]`, `InterpretersRelax[]`             | Array of interpreters            | `["aidl", "apl", "aplx", "dyalog", "clingo", … ]`                          |
+| `interpreters-array.ts`         | `interpreters_array`, `interpreters_array_relax`  | `Interpreters`, `InterpretersRelax`             | Array of interpreters            | `["aidl", "apl", "aplx", "dyalog", "clingo", … ]`                          |
 | `language-id-array.ts`          | `language_id_array`, `language_id_array_relax`    | `LanguageId[]`, `LanguageIdRelax[]`                 | Array of language IDs            | `[0, 387204628, 577529595, 1, 452681853, 429, … ]`                         |
 | `name-array.ts`                 | `name_array`, `name_array_relax`                  | `LanguageName[]`, `LanguageNameRelax[]`             | Array of names                   | `["1C Enterprise", "2-Dimensional Array", "4D", … ]`                       |
 | `searchable-array.ts`           | `searchable_array`, `searchable_array_relax`      | `Searchable[]`, `SearchableRelax[]`                 | Array of searchable booleans     | `[false, … ]`                                                              |
@@ -833,6 +843,11 @@ const lookupResult = isExtensionOfType(extension, "prose");
 | -------- | -------------------------------------------------------------------------- | ------------------------ |
 | —        | `GetLanguage<Name extends LanguageName>`                                   | `Languages[Name]`        |
 | —        | `GetLanguageField<Name extends LanguageName, Field extends LanguageField>` | `Languages[Name][Field]` |
+
+
+<br>
+
+---
 
 
 [//]: # 
