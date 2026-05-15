@@ -17,8 +17,9 @@ type CreateChangelog = (params: CreateChangelogParams) => Promise<void>;
 const createChangelog: CreateChangelog = async ({ upstreamBuffer, baselinePath, changelogPath, tempChangelogPath }) => {
 	//
 
-	const [prevStr, existing] = await Promise.all([
+	const [prevStr, pkgStr, existing] = await Promise.all([
 		readFile(baselinePath, "utf-8"),
+		readFile("./package.json", "utf-8"),
 		readFile(changelogPath, "utf-8").catch(() => ""),
 	]);
 
@@ -29,7 +30,8 @@ const createChangelog: CreateChangelog = async ({ upstreamBuffer, baselinePath, 
 	const today = new Date();
 	const formatted = today.toISOString().split("T")[0];
 
-	const pkgVersion = `${__PKG_VERSION__}`;
+	const pkg = JSON.parse(pkgStr);
+	const pkgVersion = pkg.version;
 
 	const content = [`## [${pkgVersion}] - ${formatted}`, "", ...diff, "---", "\n"].join("\n");
 
