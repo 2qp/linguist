@@ -29,7 +29,7 @@ const createChangelog: CreateChangelog = async ({ upstreamBuffer, baselinePath, 
 	const today = new Date();
 	const formatted = today.toISOString().split("T")[0];
 
-	const pkgVersion = __PKG_VERSION__;
+	const pkgVersion = `${__PKG_VERSION__}`;
 
 	const content = [`## [${pkgVersion}] - ${formatted}`, "", ...diff, "---", "\n"].join("\n");
 
