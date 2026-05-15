@@ -1,7 +1,6 @@
 import { readFile } from "node:fs/promises";
 import { basename } from "node:path";
 import { writeFile } from "@services/fs/write-file";
-import { bumpVersion } from "@utils/bump-version";
 import { createYamlDiff } from "@utils/create-yaml-diff";
 import { log } from "@utils/log";
 import { ANSI_COLORS } from "@/constants/ansi-colors";
@@ -18,9 +17,8 @@ type CreateChangelog = (params: CreateChangelogParams) => Promise<void>;
 const createChangelog: CreateChangelog = async ({ upstreamBuffer, baselinePath, changelogPath, tempChangelogPath }) => {
 	//
 
-	const [prevStr, pkgStr, existing] = await Promise.all([
+	const [prevStr, existing] = await Promise.all([
 		readFile(baselinePath, "utf-8"),
-		readFile("./package.json", "utf-8"),
 		readFile(changelogPath, "utf-8").catch(() => ""),
 	]);
 
@@ -31,8 +29,7 @@ const createChangelog: CreateChangelog = async ({ upstreamBuffer, baselinePath, 
 	const today = new Date();
 	const formatted = today.toISOString().split("T")[0];
 
-	const pkg = JSON.parse(pkgStr);
-	const pkgVersion = bumpVersion(pkg.version);
+	const pkgVersion = __PKG_VERSION__;
 
 	const content = [`## [${pkgVersion}] - ${formatted}`, "", ...diff, "---", "\n"].join("\n");
 
