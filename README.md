@@ -443,9 +443,28 @@ const lookupResult = await getDynamicMany(dynamic_by_color, colorsQueries, { key
 
 <br>
 
-> **Note:** client-dynamic getters uses `cdn.jsdelivr.net` to dynamically fetch modules at runtime.
+
+> **Note:**
+>
+> `client-dynamic` getters use `cdn.jsdelivr.net` to dynamically fetch modules at runtime.
 >
 > avoids bundling, but requires network access when the getter is called.
+>
+> ---
+>
+> **Post-Patch:**
+>
+> during build time, a `webpackIgnore: true` magic comment is injected into `client` getter's dynamic `import()` statement.
+>
+> instructing `Webpack/Turbopack/Rspack` to preserve the runtime import instead of statically analyzing or bundling it.
+>
+> ```ts
+> import(/* webpackIgnore: true */ `${path}`)
+> ```
+> <br>
+
+
+---
 
 
 ## Predicates
