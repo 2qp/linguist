@@ -215,7 +215,7 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          sign-commits: true
           commit-message: ${{ steps.prmeta.outputs.msg }}
           title: ${{ steps.prmeta.outputs.title }}
           body: |
