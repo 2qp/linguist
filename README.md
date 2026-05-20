@@ -559,12 +559,14 @@ const lookupResult = isExtensionOfType(extension, "prose");
 
 ### Manifest
 
-| File             | Variable      | Type                                                                     | Description                | Example                                           |
-| :--------------- | :------------ | :----------------------------------------------------------------------- | :------------------------  | :------------------------------------------------ |
-| `extensions.ts`  | `extensions`  | `Record<Extensions, LanguageName[]>`                                     | extension to language names          | `{ ".rs": ["RenderScript", "Rust", "XML"], … }`   |
-| `filenames`      | `filenames`   | `Record<Filenames, LanguageName[]>`                                      | filename to language names | `{ "Jenkinsfile": ["Groovy"], … }`                |
-| `interpreters`   | `interpreters`| `Record<Interpreters, LanguageName[]>`                                   | interpreter to language names | `{ "deno": ["TypeScript"], … }`                   |
-| `languages`      | `languages`   | `Record<LanguageName, { language_id: LanguageId; name: LanguageName }>`  | language name to `obj` | `{ "Elixir": { language_id: 100, name: "Elixir" }, … }`    |
+
+| File              | Variable       | Type                                                                    | Description                             | Example                                                 |
+| ----------------- | -------------- | ----------------------------------------------------------------------- | --------------------------------------- | ------------------------------------------------------- |
+| `extensions.ts`   | `extensions`   | `Record<ExtensionsWithName[number], NameWithExtensions>`                | Maps file extensions to languages       | `{ ".rs": ["RenderScript", "Rust", "XML"], … }`         |
+| `filenames.ts`    | `filenames`    | `Record<FilenamesWithName[number], NameWithFilenames>`                  | Maps filenames to languages             | `{ "Jenkinsfile": ["Groovy"], … }`                      |
+| `interpreters.ts` | `interpreters` | `Record<InterpretersWithName[number], NameWithInterpreters>`            | Maps interpreters to languages          | `{ "deno": ["TypeScript"], … }`                         |
+| `languages.ts`    | `languages`    | `Record<LanguageName, { language_id: LanguageId; name: LanguageName }>` | Maps language names to metadata objects | `{ "Elixir": { language_id: 100, name: "Elixir" }, … }` |
+
 
 
 ### Maps
