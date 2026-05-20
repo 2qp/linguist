@@ -11,6 +11,8 @@ const cdnMock = (): Plugin => {
 			if (source.startsWith(`${IGNORE_WEBPACK}https://cdn.jsdelivr.net/`)) {
 				return `\0cdn-mock:${source}`;
 			}
+
+			return undefined;
 		},
 
 		load(id) {
@@ -29,6 +31,8 @@ const cdnMock = (): Plugin => {
 
 				return `export { ${ctx} } from '/tests/fixtures${path}.ts';`;
 			}
+
+			return undefined;
 		},
 	};
 };
