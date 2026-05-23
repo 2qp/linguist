@@ -200,8 +200,8 @@ const typo = getOne(extensions_to_name, "ts", { key: "known" });
 
 | Parameter    | Type                                 | Description                                                                 |
 | :----------- | :----------------------------------- | :-------------------------------------------------------------------------- |
-| `registry`   | `Record<string, unknown>`            | **Required**. The source registry (e.g., by_extensions) used for the lookup.|
-| `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (extension or ID) used to retrieve the value. |
+| `registry`   | `Record<string, unknown>`            | **Required**. The source registry (e.g., `by_extensions`) used for the lookup.|
+| `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (e.g., `extension`, `name`) used to retrieve the value. |
 | `options`    | `{ key?: "known" }`                  | **Optional.** Controls type strictness: `"known"` restricts input to literal keys; |
 
 
@@ -234,8 +234,8 @@ const mapResult = getMany(extensions_to_interpreters, [".ts", ".tsx"]);
 
 | Parameter    | Type                                 | Description                                                                                       |
 | :----------- | :----------------------------------- | :------------------------------------------------------------------------------------------------ |
-| `registry`   | `Record<string, unknown>`            | **Required**. The source registry                                                                 |
-| `key`        | `(keyof typeof registry)[]` , `string[]` | **Required**. The unique identifiers                                                            |
+| `registry`   | `Record<string, unknown>`            | **Required**. The source registry (e.g., `extensions_to_interpreters`) used for the lookup.       |
+| `key`        | `(keyof typeof registry)[]` , `string[]` | **Required**. The unique identifiers (e.g., `interpreters`) used to retrieve the values.      |
 | `options`    | `{ keys?: "known" \| "hybrid" \| "loose" }`       | **Optional.** Controls type strictness: `"known"` restricts input to literal keys; `"hybrid"` allows `string[]` while preserving tuple inference (unknown values fall back to `T`); `"loose"` allows `string[]` and resolves to `T[]`. |
 
 
@@ -262,8 +262,8 @@ const typo = await getLazyOne(lazy_by_language_id, "0x", { key: "known" });
 
 | Parameter    | Type                                 | Description                                                                                       |
 | :----------- | :----------------------------------- | :------------------------------------------------------------------------------------------------ |
-| `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The lazy source registry (e.g., lazy_by_name ) used for the lookup.                 |
-| `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (extension or ID) used to retrieve the value.                 |
+| `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The lazy source registry (e.g., `lazy_by_name` ) used for the lookup.                 |
+| `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (e.g., `extension`, `name`) used to retrieve the value.                 |
 | `options`    | `{ key?: "known" }`                  | **Optional.** Controls type strictness: `"known"` restricts input to literal keys;                |
 
 #### Get Lazy Many
@@ -291,8 +291,8 @@ const lookupResult = await getLazyMany(lazy_by_type, typeQueries, { keys: "loose
 
 | Parameter    | Type                                       | Description                                                                                       |
 | :----------- | :----------------------------------------- | :------------------------------------------------------------------------------------------------ |
-| `registry`   | `Record<string, () => Promise<T>>`         | **Required**. The lazy source registry (e.g., lazy_by_language_id ) used for the lookup.     |
-| `key`        | `(keyof typeof registry)[]` , `string[]`   | **Required**. The unique identifiers.                                                             |
+| `registry`   | `Record<string, () => Promise<T>>`         | **Required**. The lazy source registry (e.g., `lazy_by_language_id` ) used for the lookup.        |
+| `key`        | `(keyof typeof registry)[]` , `string[]`   | **Required**. The unique identifiers (e.g., `name`, `language_id`) used to retrieve the values.   |
 | `options`    | `{ keys?: "known" \| "hybrid" \| "loose" }`       | **Optional.** Controls type strictness: `"known"` restricts input to literal keys; `"hybrid"` allows `string[]` while preserving tuple inference (unknown values fall back to `T`); `"loose"` allows `string[]` and resolves to `T[]`. |
 
 
@@ -326,8 +326,8 @@ const typo = await getDynamicOne(dynamic_by_name, "Pearl", { key: "known" });
 
 | Parameter    | Type                                 | Description                                                                                       |
 | :----------- | :----------------------------------- | :------------------------------------------------------------------------------------------------ |
-| `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The dynamic source registry (e.g., dynamic_by_extensions) used for the lookup.      |
-| `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (extension or ID) used to retrieve the value.                 |
+| `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The dynamic source registry (e.g., `dynamic_by_extensions`) used for the lookup.      |
+| `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (e.g., `extension`, `name`) used to retrieve the value.                 |
 | `options`    | `{ key?: "known" }`                  | **Optional.** Controls type strictness: `"known"` restricts input to literal keys;                |
 
 #### Get Dynamic Many
@@ -354,8 +354,8 @@ const lookupResult = await getDynamicMany(dynamic_by_filenames, filenames, { key
 
 | Parameter  | Type                                              | Description |
 | :--------- | :------------------------------------------------ | :---------- |
-| `registry` | `Record<string, () => Promise<T>>`                | **Required.** The dynamic/lazy source registry (e.g., `lazyByExtension`, `lazyById`) used for lookups. |
-| `key`      | `(keyof typeof registry)[] \| string[]`           | **Required.** The identifiers to resolve. |
+| `registry` | `Record<string, () => Promise<T>>`                | **Required.** The dynamic/lazy source registry (e.g., `lazy_by_extensions`, `lazy_by_language_id`) used for lookups. |
+| `key`      | `(keyof typeof registry)[] \| string[]`           | **Required.** The unique identifiers (e.g., `name`, `language_id`) used to retrieve the values. |
 | `options`  | `{ keys?: "known" \| "hybrid" \| "loose" }`       | **Optional.** Controls type strictness: `"known"` restricts input to literal keys; `"hybrid"` allows `string[]` while preserving tuple inference (unknown values fall back to `T`); `"loose"` allows `string[]` and resolves to `T[]`. |
 
 <br>
@@ -407,8 +407,8 @@ const [l] = lang;
 
 | Parameter    | Type                                 | Description                                                                                       |
 | :----------- | :----------------------------------- | :------------------------------------------------------------------------------------------------ |
-| `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The dynamic source registry (e.g., dynamic_by_name ) used for the lookup. |
-| `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (extension or ID) used to retrieve the value.                 |
+| `registry`   | `Record<string, () => Promise<T>>`   | **Required**. The dynamic source registry (e.g., `dynamic_by_name` ) used for the lookup. |
+| `key`        | `keyof typeof registry` , `string`   | **Required**. The unique identifier (e.g., `extension`, `name`) used to retrieve the value.                 |
 
 
 #### Client/Get Dynamic Many
@@ -438,7 +438,7 @@ const lookupResult = await getDynamicMany(dynamic_by_color, colorsQueries, { key
 | Parameter  | Type                                              | Description |
 | :--------- | :------------------------------------------------ | :---------- |
 | `registry` | `Record<string, () => Promise<T>>`                | **Required.** The dynamic source registry (e.g., `dynamic_by_group`, `dynamic_by_color`) used for lookups. |
-| `key`      | `(keyof typeof registry)[] \| string[]`           | **Required.** The identifiers to resolve. |
+| `key`      | `(keyof typeof registry)[] \| string[]`           | **Required.** The unique identifiers (e.g., `group`, `color`) used to retrieve the values. |
 | `options`  | `{ keys?: "known" \| "hybrid" \| "loose" }`       | **Optional.** Controls type strictness: `"known"` restricts input to literal keys; `"hybrid"` allows `string[]` while preserving tuple inference (unknown values fall back to `T`); `"loose"` allows `string[]` and resolves to `T[]`. |
 
 <br>
