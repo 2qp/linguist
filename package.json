@@ -133,9 +133,9 @@
 	"keywords": [
 		"linguist",
 		"languages",
-		"language-data",
-		"language-metadata",
-		"extension"
+		"typescript",
+		"file-extensions",
+		"language-metadata"
 	],
 	"author": {
 		"name": "2qp",
