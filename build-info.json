@@ -1,16 +1,16 @@
 {
-  "generated_at": "2026-05-15T10:22:06Z",
-  "hash": "327d72307a046be44aa68adfb9b0b07eee330bee9cdbf796b373094c584d896c",
+  "generated_at": "2026-05-24T02:45:37Z",
+  "hash": "d06e4fb4a06933418b0cdc69f84109ae4d633ba7635738b6bea53c8f4af2e591",
   "source": "https://github.com/github-linguist/linguist/blob/main/lib/linguist/languages.yml?raw=true",
   "workflow_run": {
-    "run_id": 25912749815,
+    "run_id": 26349974388,
     "run_attempt": 1,
     "workflow_id": "linguist-sync",
     "repository": "2qp/linguist",
-    "run_number": 5,
-    "trigger": "workflow_dispatch"
+    "run_number": 7,
+    "trigger": "schedule"
   },
   "upstream": {
-    "updated_at": "2026-05-01T14:12:03Z"
+    "updated_at": "2026-05-20T09:34:20Z"
   }
 }
