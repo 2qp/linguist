@@ -64,8 +64,6 @@ const formatDiff = (changes: Change[]): string[] => {
 				? c.path.substring(c.path.indexOf(COMBINATOR) + COMBINATOR.length)
 				: "";
 
-			console.log(c.path, "-->", subPath);
-
 			const p = subPath ? `"${subPath}"` : "root";
 			const indent = "- ";
 
