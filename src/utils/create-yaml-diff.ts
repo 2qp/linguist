@@ -33,13 +33,15 @@ ${c}
 	return `\`${c}\``;
 };
 
+const COMBINATOR = "__" as const;
+
 const formatDiff = (changes: Change[]): string[] => {
 	//
 
 	const grouped = new Map<string, Change[]>();
 
 	for (const change of changes) {
-		const root = change.path.split(".")[0] || "General";
+		const root = change.path.split(COMBINATOR)[0] || "General";
 
 		if (!grouped.has(root)) grouped.set(root, []);
 
@@ -58,7 +60,11 @@ const formatDiff = (changes: Change[]): string[] => {
 		output.push(`#### ${context}`);
 
 		for (const c of contextChanges ?? []) {
-			const subPath = c.path.includes(".") ? c.path.substring(c.path.indexOf(".") + 1) : "";
+			const subPath = c.path.includes(COMBINATOR)
+				? c.path.substring(c.path.indexOf(COMBINATOR) + COMBINATOR.length)
+				: "";
+
+			console.log(c.path, "-->", subPath);
 
 			const p = subPath ? `"${subPath}"` : "root";
 			const indent = "- ";
@@ -120,7 +126,14 @@ const createYamlDiff = (oldRaw: string, newRaw: string): string[] => {
 			const allKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
 
 			for (const key of allKeys) {
-				compare(obj1[key as keyof typeof obj1], obj2[key as keyof typeof obj2], path ? `${path}.${key}` : key);
+				//
+
+				compare(
+					obj1[key as keyof typeof obj1],
+					obj2[key as keyof typeof obj2],
+
+					path ? `${path}${COMBINATOR}${key}` : key,
+				);
 			}
 
 			return;
