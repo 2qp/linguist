@@ -151,6 +151,11 @@ jobs:
             },
             "upstream": {
               "updated_at": "${{ steps.upstream-date.outputs.updated_at }}"
+            },
+            "workflow_inputs": {
+              "force_generate": ${{ github.event.inputs.force_generate || false }},
+              "bypass": ${{ github.event.inputs.bypass || false }},
+              "removals": ${{ github.event.inputs.removals || false }}
             }
           }
           EOF
@@ -227,6 +232,24 @@ jobs:
           echo "msg=$MSG" >> $GITHUB_OUTPUT
           echo "title=$TITLE" >> $GITHUB_OUTPUT
 
+
+      - name: Compute execution metadata
+        id: execmeta
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+
+            echo "body_addon<<EOF" >> $GITHUB_OUTPUT
+            echo "---" >> $GITHUB_OUTPUT
+            echo "### Execution Flags" >> $GITHUB_OUTPUT
+            echo "* **Force Generate**: \`${{ github.event.inputs.force_generate }}\`" >> $GITHUB_OUTPUT
+            echo "* **Bypass Enabled**: \`${{ github.event.inputs.bypass }}\`" >> $GITHUB_OUTPUT
+            echo "* **Target Removals**: \`${{ github.event.inputs.removals }}\`" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+          else
+
+            echo "body_addon=" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8
         with:
@@ -238,6 +261,8 @@ jobs:
             
             - **New hash**: `${{ needs.check.outputs.hash }}`
             - **Updated**: ${{ needs.generate.outputs.updated_at }}
+
+            ${{ steps.execmeta.outputs.body_addon }}
             
             ---
             ${{ steps.changelog.outputs.content }}

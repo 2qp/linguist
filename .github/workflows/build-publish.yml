@@ -169,6 +169,10 @@ jobs:
             "upstream": {
               "updated_at": "$UPDATED_AT"
             }
+            "workflow_inputs": {
+              "bypass": ${{ true }},
+              "removals": ${{ true }}
+            }
           }
           EOF
 
