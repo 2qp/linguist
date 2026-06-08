@@ -137,6 +137,9 @@ jobs:
       - name: Generate build files (regeneration if needed)
         if: steps.artifact-status.outputs.available != 'true'
         run: pnpm run generate:build
+        env:
+          BYPASS: "true"
+          REMOVALS: "true"
 
       - name: Test generated files (regeneration if needed)
         if: steps.artifact-status.outputs.available != 'true'

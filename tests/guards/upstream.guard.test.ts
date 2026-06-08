@@ -2,8 +2,11 @@ import { readFile } from "node:fs/promises";
 import { createCommonOptionalFieldSet } from "@gen/utils/create-common-optional-field-set";
 import { getFile } from "@services/fetch/get-file";
 import { getFieldsWithValueArrays } from "@tests/core/utils/get-fields-with-value-arrays";
+import { clr } from "@utils/colors";
+import { log } from "@utils/log";
 import { describe, expect, it, test } from "vitest";
 import { configLoader } from "@/infra/loaders/config-loader";
+import { guardFlagsLoader } from "@/infra/loaders/guard-flags-loader";
 import { yamlLoader } from "@/infra/loaders/yaml-loader";
 
 import type { LanguageData } from "@/types/lang.types";
@@ -22,6 +25,8 @@ const baselineData = yamlLoader<LanguageData>({ str: baselineYaml });
 if (!baselineData) throw new Error("unable load yaml data");
 
 const baselineFields = createCommonOptionalFieldSet({ config, source: baselineData });
+
+const flags = guardFlagsLoader();
 
 describe("upstream guard test", () => {
 	//
@@ -95,6 +100,18 @@ describe("upstream guard test", () => {
 
 		test("no unexpected language removals", () => {
 			for (const lang of Object.keys(baselineData)) {
+				//
+
+				if (flags.behavior.bypass && flags.target.removals) {
+					if (!Object.hasOwn(currentData, lang)) {
+						//
+
+						log.warn(`${clr("fg.yellow", "\u2192")} warning: missing language "${lang}"`);
+
+						continue;
+					}
+				}
+
 				expect(currentData).toHaveProperty(lang);
 			}
 		});

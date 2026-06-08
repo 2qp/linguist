@@ -10,6 +10,16 @@ on:
         type: boolean
         default: false
 
+      bypass:
+        description: "behavior: bypass"
+        type: boolean
+        default: false
+
+      removals:
+        description: "target: removals"
+        type: boolean
+        default: false
+
 permissions:
   contents: write
   pull-requests: write
@@ -115,6 +125,9 @@ jobs:
 
       - name: Generate build files
         run: pnpm run generate:build
+        env:
+          BYPASS: ${{ inputs.bypass }}
+          REMOVALS: ${{ inputs.removals }}
 
       - name: Test generated files
         run: pnpm test:generated
