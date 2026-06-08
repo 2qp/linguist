@@ -68,7 +68,7 @@ const formatDiff = (changes: Change[]): string[] => {
 					output.push(`${indent}[+] ADDED   : ${p} -> \n${wrap(stringify(c.value))}`);
 					break;
 				case "REMOVED":
-					output.push(`${indent}[-] REMOVED : ${p} -> (was \n${wrap(stringify(c.value))})`);
+					output.push(`${indent}[-] REMOVED : ${p} -> was \n${wrap(stringify(c.value))}`);
 					break;
 				case "UPDATED":
 					output.push(
