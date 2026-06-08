@@ -240,10 +240,10 @@ jobs:
 
             echo "body_addon<<EOF" >> $GITHUB_OUTPUT
             echo "---" >> $GITHUB_OUTPUT
-            echo "### Execution Flags" >> $GITHUB_OUTPUT
-            echo "* **Force Generate**: \`${{ github.event.inputs.force_generate }}\`" >> $GITHUB_OUTPUT
-            echo "* **Bypass Enabled**: \`${{ github.event.inputs.bypass }}\`" >> $GITHUB_OUTPUT
-            echo "* **Target Removals**: \`${{ github.event.inputs.removals }}\`" >> $GITHUB_OUTPUT
+            echo "#### Execution Flags" >> $GITHUB_OUTPUT
+            echo "* **Force generate**: \`${{ github.event.inputs.force_generate }}\`" >> $GITHUB_OUTPUT
+            echo "* **Bypass enabled**: \`${{ github.event.inputs.bypass }}\`" >> $GITHUB_OUTPUT
+            echo "* **Target removals**: \`${{ github.event.inputs.removals }}\`" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
           else
 
