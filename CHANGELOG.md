@@ -1,3 +1,42 @@
+## [0.0.4] - 2026-06-30
+
+#### Blueprint
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "blp"
+  ],
+  "color": "#3584E4",
+  "extensions": [
+    ".blp"
+  ],
+  "language_id": 765545512,
+  "tm_scope": "source.blueprint",
+  "type": "markup"
+}
+```
+
+#### C#
+- [*] CHANGED : `color` from 
+`#178600` to 
+`#7355dd`
+
+#### Git Config
+- [+] ADDED   : `filenames` -> 
+`.tgitconfig`
+- [+] ADDED   : `filenames` -> 
+`config.worktree`
+
+#### Ignore List
+- [+] ADDED   : `filenames` -> 
+`.ckignore`
+- [+] ADDED   : `filenames` -> 
+`.rgignore`
+
+---
+
 ## [0.0.3] - 2026-06-08
 
 #### BAML
