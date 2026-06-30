@@ -1,3 +1,4 @@
+import { isNullish } from "./guards";
 import { load } from "js-yaml";
 import { stringify } from "safe-stable-stringify";
 
@@ -11,23 +12,30 @@ type Change = {
 	type: ChangeType;
 };
 
-const isJsonObjectOrArray = (str: string = ""): boolean => {
+const isJsonObjectOrArray = (str: unknown = ""): boolean => {
+	//
+
 	try {
-		const parsed = JSON.parse(str);
-		return typeof parsed === "object" && parsed !== null;
+		//
+
+		if (isNullish(str)) return false;
+
+		if (typeof str === "object") return true;
+
+		return false;
 	} catch {
 		return false;
 	}
 };
 
-const wrap = (c: string = "") => {
+const wrap = (c: unknown = "") => {
 	//
 
 	const json = isJsonObjectOrArray(c);
 
 	if (json)
 		return `\`\`\`json
-${c}
+${stringify(c, null, 2)}
 \`\`\``;
 
 	return `\`${c}\``;
@@ -64,20 +72,18 @@ const formatDiff = (changes: Change[]): string[] => {
 				? c.path.substring(c.path.indexOf(COMBINATOR) + COMBINATOR.length)
 				: "";
 
-			const p = subPath ? `"${subPath}"` : "root";
+			const p = subPath ? `\`${subPath}\`` : `\`root\``;
 			const indent = "- ";
 
 			switch (c.type) {
 				case "ADDED":
-					output.push(`${indent}[+] ADDED   : ${p} -> \n${wrap(stringify(c.value))}`);
+					output.push(`${indent}[+] ADDED   : ${p} -> \n${wrap(c.value)}`);
 					break;
 				case "REMOVED":
-					output.push(`${indent}[-] REMOVED : ${p} -> was \n${wrap(stringify(c.value))}`);
+					output.push(`${indent}[-] REMOVED : ${p} -> was \n${wrap(c.value)}`);
 					break;
 				case "UPDATED":
-					output.push(
-						`${indent}[*] CHANGED : ${p} from \n${wrap(stringify(c.oldValue))} to \n${wrap(stringify(c.newValue))}`,
-					);
+					output.push(`${indent}[*] CHANGED : ${p} from \n${wrap(c.oldValue)} to \n${wrap(c.newValue)}`);
 					break;
 			}
 		}
