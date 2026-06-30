@@ -161,7 +161,7 @@ jobs:
             "workflow_inputs": {
               "force_generate": ${{ github.event.inputs.force_generate || false }},
               "bypass": ${{ github.event.inputs.bypass || false }},
-              "removals": ${{ github.event.inputs.removals || false }}
+              "removals": ${{ github.event.inputs.removals || false }},
               "consistency": ${{ github.event.inputs.consistency || false }}
             }
           }

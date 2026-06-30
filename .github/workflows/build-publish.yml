@@ -172,7 +172,7 @@ jobs:
             }
             "workflow_inputs": {
               "bypass": ${{ true }},
-              "removals": ${{ true }}
+              "removals": ${{ true }},
               "consistency": ${{ true }}
             }
           }
