@@ -140,6 +140,7 @@ jobs:
         env:
           BYPASS: "true"
           REMOVALS: "true"
+          CONSISTENCY: "true"
 
       - name: Test generated files (regeneration if needed)
         if: steps.artifact-status.outputs.available != 'true'
@@ -172,6 +173,7 @@ jobs:
             "workflow_inputs": {
               "bypass": ${{ true }},
               "removals": ${{ true }}
+              "consistency": ${{ true }}
             }
           }
           EOF

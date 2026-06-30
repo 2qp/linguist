@@ -20,6 +20,11 @@ on:
         type: boolean
         default: false
 
+      consistency:
+        description: "target: consistency"
+        type: boolean
+        default: false
+
 permissions:
   contents: write
   pull-requests: write
@@ -128,6 +133,7 @@ jobs:
         env:
           BYPASS: ${{ inputs.bypass }}
           REMOVALS: ${{ inputs.removals }}
+          CONSISTENCY: ${{ inputs.consistency }}
 
       - name: Test generated files
         run: pnpm test:generated
@@ -156,6 +162,7 @@ jobs:
               "force_generate": ${{ github.event.inputs.force_generate || false }},
               "bypass": ${{ github.event.inputs.bypass || false }},
               "removals": ${{ github.event.inputs.removals || false }}
+              "consistency": ${{ github.event.inputs.consistency || false }}
             }
           }
           EOF
@@ -244,6 +251,7 @@ jobs:
             echo "* **Force generate**: \`${{ github.event.inputs.force_generate }}\`" >> $GITHUB_OUTPUT
             echo "* **Bypass enabled**: \`${{ github.event.inputs.bypass }}\`" >> $GITHUB_OUTPUT
             echo "* **Target removals**: \`${{ github.event.inputs.removals }}\`" >> $GITHUB_OUTPUT
+            echo "* **Target consistency**: \`${{ github.event.inputs.consistency }}\`" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
           else
 

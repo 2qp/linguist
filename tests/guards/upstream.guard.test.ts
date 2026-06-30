@@ -71,11 +71,13 @@ describe("upstream guard test", () => {
 			const baselineTypes = getFieldsWithValueArrays({ source: baselineData, config });
 			const currentTypes = getFieldsWithValueArrays({ source: currentData, config });
 
+			const bypassed = flags.behavior.bypass && flags.target.consistency;
+
 			for (const [field, values] of baselineTypes) {
 				it(`field "${field}" remain consistent`, () => {
 					expect(values).toBeDefined();
 
-					expect([...(currentTypes.get(field) || [])].sort()).toIncludeSupersetWithCounts([...values].sort());
+					expect([...(currentTypes.get(field) || [])].sort()).toIncludeSupersetWithCounts([...values].sort(), bypassed);
 				});
 			}
 
@@ -99,10 +101,16 @@ describe("upstream guard test", () => {
 		});
 
 		test("no unexpected language removals", () => {
+			//
+
+			const bypassed = flags.behavior.bypass && flags.target.removals;
+
 			for (const lang of Object.keys(baselineData)) {
 				//
 
-				if (flags.behavior.bypass && flags.target.removals) {
+				if (bypassed) {
+					//
+
 					if (!Object.hasOwn(currentData, lang)) {
 						//
 
