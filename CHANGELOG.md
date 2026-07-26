@@ -1,3 +1,43 @@
+## [0.0.5] - 2026-07-26
+
+#### Carbon
+- [*] CHANGED : `ace_mode` from 
+`golang` to 
+`text`
+- [-] REMOVED : `codemirror_mode` -> was 
+`go`
+- [-] REMOVED : `codemirror_mime_type` -> was 
+`text/x-go`
+- [*] CHANGED : `tm_scope` from 
+`source.v` to 
+`source.carbon`
+
+#### Gno
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "golang",
+  "aliases": [
+    "gnolang"
+  ],
+  "codemirror_mime_type": "text/x-go",
+  "codemirror_mode": "go",
+  "color": "#226c57",
+  "extensions": [
+    ".gno"
+  ],
+  "language_id": 279301301,
+  "tm_scope": "source.gno",
+  "type": "programming"
+}
+```
+
+#### JSON
+- [+] ADDED   : `filenames` -> 
+`.secrets.baseline`
+
+---
+
 ## [0.0.4] - 2026-06-30
 
 #### Blueprint
