@@ -1,3 +1,279 @@
+## [0.0.6] - 2026-08-16
+
+#### Aleo
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#154BF9",
+  "extensions": [
+    ".aleo"
+  ],
+  "language_id": 566431048,
+  "tm_scope": "source.aleo",
+  "type": "programming"
+}
+```
+
+#### AutoHotkey
+- [+] ADDED   : `extensions` -> 
+`.ah1`
+- [+] ADDED   : `extensions` -> 
+`.ah2`
+
+#### B
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#da7666",
+  "extensions": [
+    ".b"
+  ],
+  "language_id": 700792152,
+  "tm_scope": "source.c",
+  "type": "programming"
+}
+```
+
+#### B (Formal Method)
+- [*] CHANGED : `language_id` from 
+`700792152` to 
+`993355937`
+
+#### BBCode
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#CAFF42",
+  "extensions": [
+    ".bbcode"
+  ],
+  "language_id": 206921123,
+  "tm_scope": "text.bbcode",
+  "type": "markup"
+}
+```
+
+#### BIRD2
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "bird",
+    "bird3"
+  ],
+  "color": "#b6d7e4",
+  "filenames": [
+    "bird.conf"
+  ],
+  "language_id": 584191811,
+  "tm_scope": "source.bird2",
+  "type": "data"
+}
+```
+
+#### ImHex Pattern Language
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "c_cpp",
+  "aliases": [
+    "ImHex",
+    "ImHexPatternLanguage",
+    "imhexpl"
+  ],
+  "codemirror_mime_type": "text/x-csrc",
+  "codemirror_mode": "clike",
+  "color": "#3a6be0",
+  "extensions": [
+    ".hexpat"
+  ],
+  "language_id": 805861688,
+  "tm_scope": "source.pl",
+  "type": "programming"
+}
+```
+
+#### JASS
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "jass2"
+  ],
+  "color": "#FF0303",
+  "extensions": [
+    ".j"
+  ],
+  "language_id": 504860504,
+  "tm_scope": "source.jass",
+  "type": "programming"
+}
+```
+
+#### JSON with Comments
+- [+] ADDED   : `extensions` -> 
+`.hujson`
+
+#### Lobster
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "python",
+  "color": "#f95428",
+  "extensions": [
+    ".lobster"
+  ],
+  "language_id": 790066842,
+  "tm_scope": "source.lobster",
+  "type": "programming"
+}
+```
+
+#### MiniScript
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#4B4A56",
+  "extensions": [
+    ".ms"
+  ],
+  "language_id": 704299647,
+  "tm_scope": "source.ms",
+  "type": "programming"
+}
+```
+
+#### Salt
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "yaml",
+  "aliases": [
+    "saltstack",
+    "saltstate"
+  ],
+  "codemirror_mime_type": "text/x-yaml",
+  "codemirror_mode": "yaml",
+  "color": "#57bcad",
+  "extensions": [
+    ".sls"
+  ],
+  "language_id": 339,
+  "tm_scope": "source.yaml.salt",
+  "type": "programming"
+}
+```
+
+#### SaltStack
+- [-] REMOVED : `root` -> was 
+```json
+{
+  "ace_mode": "yaml",
+  "aliases": [
+    "saltstate",
+    "salt"
+  ],
+  "codemirror_mime_type": "text/x-yaml",
+  "codemirror_mode": "yaml",
+  "color": "#646464",
+  "extensions": [
+    ".sls"
+  ],
+  "language_id": 339,
+  "tm_scope": "source.yaml.salt",
+  "type": "programming"
+}
+```
+
+#### Shell
+- [+] ADDED   : `extensions` -> 
+`.pacscript`
+
+#### Tape
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "vhs"
+  ],
+  "extensions": [
+    ".tape"
+  ],
+  "language_id": 516874200,
+  "tm_scope": "source.vhs",
+  "type": "programming"
+}
+```
+
+#### Tolk
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "codemirror_mime_type": "text/x-styl",
+  "codemirror_mode": "stylus",
+  "color": "#30A1F5",
+  "extensions": [
+    ".tolk"
+  ],
+  "language_id": 678673060,
+  "tm_scope": "source.tolk",
+  "type": "programming"
+}
+```
+
+#### TypeScript
+- [+] ADDED   : `interpreters` -> 
+`node`
+
+#### Verse
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#518ef8",
+  "extensions": [
+    ".verse"
+  ],
+  "language_id": 180832205,
+  "tm_scope": "source.verse",
+  "type": "programming"
+}
+```
+
+#### XML
+- [+] ADDED   : `extensions` -> 
+`.rbxmx`
+
+#### ucode
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "javascript",
+  "codemirror_mime_type": "text/javascript",
+  "codemirror_mode": "javascript",
+  "color": "#00b8d4",
+  "extensions": [
+    ".uc"
+  ],
+  "interpreters": [
+    "ucode"
+  ],
+  "language_id": 365454253,
+  "tm_scope": "source.ucode",
+  "type": "programming"
+}
+```
+
+---
+
 ## [0.0.5] - 2026-07-26
 
 #### Carbon
