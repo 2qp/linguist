@@ -1,3 +1,133 @@
+## [0.0.7] - 2026-08-23
+
+#### CoffeeScript
+- [+] ADDED   : `extensions` -> 
+`.coffee.erb`
+
+#### FPP
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#d37327",
+  "extensions": [
+    ".fpp",
+    ".fppi"
+  ],
+  "language_id": 252360067,
+  "tm_scope": "source.fpp",
+  "type": "programming"
+}
+```
+
+#### Git Commit
+- [+] ADDED   : `filenames` -> 
+`.gitmessage`
+
+#### INI
+- [+] ADDED   : `filenames` -> 
+`.gitreview`
+
+#### Ignore List
+- [+] ADDED   : `filenames` -> 
+`.agignore`
+
+#### JSON
+- [+] ADDED   : `filenames` -> 
+`.releaserc`
+
+#### JSON with Comments
+- [+] ADDED   : `filenames` -> 
+`.eslintrc`
+
+#### R
+- [+] ADDED   : `extensions` -> 
+`.rhistory`
+- [+] ADDED   : `filenames` -> 
+`.Rapp.history`
+- [+] ADDED   : `filenames` -> 
+`.Rhistory`
+
+#### Vim Script
+- [-] REMOVED : `root` -> was 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "vim",
+    "viml",
+    "nvim",
+    "vimscript"
+  ],
+  "color": "#199f4b",
+  "extensions": [
+    ".vim",
+    ".vba",
+    ".vimrc",
+    ".vmb"
+  ],
+  "filenames": [
+    ".exrc",
+    ".gvimrc",
+    ".nvimrc",
+    ".vimrc",
+    "_vimrc",
+    "gvimrc",
+    "nvimrc",
+    "vimrc"
+  ],
+  "language_id": 388,
+  "tm_scope": "source.viml",
+  "type": "programming"
+}
+```
+
+#### Vim script
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "vim",
+    "viml",
+    "nvim",
+    "vimscript"
+  ],
+  "color": "#199f4b",
+  "extensions": [
+    ".vim",
+    ".vba",
+    ".vimrc",
+    ".vmb"
+  ],
+  "filenames": [
+    ".exrc",
+    ".gvimrc",
+    ".nvimrc",
+    ".vimrc",
+    "_vimrc",
+    "gvimrc",
+    "nvimrc",
+    "vimrc"
+  ],
+  "language_id": 388,
+  "tm_scope": "source.viml",
+  "type": "programming"
+}
+```
+
+#### XML
+- [+] ADDED   : `extensions` -> 
+`.meta4`
+
+#### YAML
+- [+] ADDED   : `filenames` -> 
+`.eslintrc`
+- [+] ADDED   : `filenames` -> 
+`.releaserc`
+
+---
+
 ## [0.0.6] - 2026-08-16
 
 #### Aleo
