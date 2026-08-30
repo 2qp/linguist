@@ -1,3 +1,74 @@
+## [0.0.8] - 2026-08-30
+
+#### Quartus Simulation IP
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "tcl",
+  "codemirror_mime_type": "text/x-tcl",
+  "codemirror_mode": "tcl",
+  "color": "#58C42E",
+  "extensions": [
+    ".sip"
+  ],
+  "language_id": 828144309,
+  "tm_scope": "source.tcl",
+  "type": "data"
+}
+```
+
+#### Rhai
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#FBA63B",
+  "extensions": [
+    ".rhai"
+  ],
+  "language_id": 713228814,
+  "tm_scope": "source.rhai",
+  "type": "programming"
+}
+```
+
+#### SIP
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "c_cpp",
+  "codemirror_mime_type": "text/x-c++src",
+  "codemirror_mode": "clike",
+  "color": "#4E8D83",
+  "extensions": [
+    ".sip"
+  ],
+  "language_id": 796891177,
+  "tm_scope": "source.c++",
+  "type": "programming"
+}
+```
+
+#### Vespa Schema Definition
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "vespa"
+  ],
+  "color": "#61D790",
+  "extensions": [
+    ".sd"
+  ],
+  "language_id": 587879709,
+  "tm_scope": "source.vespaSchema",
+  "type": "data"
+}
+```
+
+---
+
 ## [0.0.7] - 2026-08-23
 
 #### CoffeeScript
