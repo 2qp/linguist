@@ -1,3 +1,42 @@
+## [0.0.9] - 2026-09-13
+
+#### ArkTS
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "typescript",
+  "codemirror_mime_type": "application/typescript",
+  "codemirror_mode": "javascript",
+  "color": "#0080ff",
+  "extensions": [
+    ".ets"
+  ],
+  "language_id": 56341321,
+  "tm_scope": "source.ets",
+  "type": "programming"
+}
+```
+
+#### LLVM TableGen
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "tablegen"
+  ],
+  "color": "#6E8B3D",
+  "extensions": [
+    ".td"
+  ],
+  "language_id": 184265095,
+  "tm_scope": "source.tablegen",
+  "type": "programming"
+}
+```
+
+---
+
 ## [0.0.8] - 2026-08-30
 
 #### Quartus Simulation IP
