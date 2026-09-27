@@ -1,3 +1,38 @@
+## [0.0.10] - 2026-09-27
+
+#### Bend
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "bend2"
+  ],
+  "extensions": [
+    ".bend"
+  ],
+  "language_id": 571794812,
+  "tm_scope": "source.bend",
+  "type": "programming"
+}
+```
+
+#### Elixir
+- [*] CHANGED : `color` from 
+`#6e4a7e` to 
+`#8847B9`
+
+#### MoonBit
+- [+] ADDED   : `filenames` -> 
+```json
+[
+  "moon.mod",
+  "moon.pkg"
+]
+```
+
+---
+
 ## [0.0.9] - 2026-09-13
 
 #### ArkTS
