@@ -1,3 +1,22 @@
+## [0.0.11] - 2026-10-26
+
+#### Tree-sitter Query
+- [*] CHANGED : `type` from 
+`programming` to 
+`data`
+- [*] CHANGED : `tm_scope` from 
+`source.scm` to 
+`source.tsq`
+- [*] CHANGED : `ace_mode` from 
+`text` to 
+`scheme`
+- [+] ADDED   : `codemirror_mode` -> 
+`scheme`
+- [+] ADDED   : `codemirror_mime_type` -> 
+`text/x-scheme`
+
+---
+
 ## [0.0.10] - 2026-09-27
 
 #### Bend
