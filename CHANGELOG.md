@@ -1,3 +1,207 @@
+## [0.0.12] - 2026-11-08
+
+#### AviSynth
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "avisynth+",
+    "avisynthplus",
+    "avs",
+    "avsplus"
+  ],
+  "color": "#6C5D95",
+  "extensions": [
+    ".avs",
+    ".avsi"
+  ],
+  "language_id": 781893374,
+  "tm_scope": "source.avisynth",
+  "type": "programming"
+}
+```
+
+#### EasyCrypt
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#2a5db0",
+  "extensions": [
+    ".ec"
+  ],
+  "language_id": 1032978328,
+  "tm_scope": "source.easycrypt",
+  "type": "programming"
+}
+```
+
+#### Emacs Lisp
+- [+] ADDED   : `aliases` -> 
+`lisp data`
+- [+] ADDED   : `extensions` -> 
+`.eld`
+
+#### IFC
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "extensions": [
+    ".ifc"
+  ],
+  "group": "STEP",
+  "language_id": 423304113,
+  "tm_scope": "source.ifc",
+  "type": "data"
+}
+```
+
+#### INI
+- [+] ADDED   : `filenames` -> 
+`.codespellrc`
+
+#### Ignore List
+- [+] ADDED   : `filenames` -> 
+`.aiexclude`
+- [+] ADDED   : `filenames` -> 
+`.aiignore`
+- [+] ADDED   : `filenames` -> 
+`.clang-format-ignore`
+- [+] ADDED   : `filenames` -> 
+`.cursorignore`
+- [+] ADDED   : `filenames` -> 
+`.elpaignore`
+- [+] ADDED   : `filenames` -> 
+`.nxignore`
+- [+] ADDED   : `filenames` -> 
+`.stow-local-ignore`
+
+#### JSON
+- [+] ADDED   : `filenames` -> 
+`.autorc`
+
+#### METAFONT
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#8a4a2b",
+  "extensions": [
+    ".mf"
+  ],
+  "language_id": 1058854440,
+  "tm_scope": "source.metafont",
+  "type": "programming"
+}
+```
+
+#### MetaPost
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#2b6cb0",
+  "extensions": [
+    ".mp"
+  ],
+  "language_id": 330845793,
+  "tm_scope": "source.metapost",
+  "type": "programming"
+}
+```
+
+#### Option List
+- [+] ADDED   : `filenames` -> 
+`.ert-runner`
+
+#### Power Query
+- [+] ADDED   : `aliases` -> 
+`m language`
+- [+] ADDED   : `aliases` -> 
+`m formula language`
+
+#### Python
+- [+] ADDED   : `extensions` -> 
+`.vpy`
+
+#### STEP
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "iso-10303-21",
+    "p21"
+  ],
+  "extensions": [
+    ".step",
+    ".stp"
+  ],
+  "language_id": 32760317,
+  "tm_scope": "source.ifc",
+  "type": "data"
+}
+```
+
+#### TSRX
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#6f00ff",
+  "extensions": [
+    ".tsrx"
+  ],
+  "language_id": 647519071,
+  "tm_scope": "source.tsrx",
+  "type": "programming"
+}
+```
+
+#### Text
+- [+] ADDED   : `aliases` -> 
+`indented text`
+- [+] ADDED   : `aliases` -> 
+`paragraph indent text`
+- [+] ADDED   : `aliases` -> 
+`parindent`
+- [+] ADDED   : `codemirror_mime_type` -> 
+`text/plain`
+
+#### Uiua
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#c87dff",
+  "extensions": [
+    ".ua"
+  ],
+  "language_id": 52486065,
+  "tm_scope": "source.uiua",
+  "type": "programming"
+}
+```
+
+#### WESL
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#0391e3",
+  "extensions": [
+    ".wesl"
+  ],
+  "language_id": 858810660,
+  "tm_scope": "source.wesl",
+  "type": "programming"
+}
+```
+
+---
+
 ## [0.0.11] - 2026-10-26
 
 #### Tree-sitter Query
