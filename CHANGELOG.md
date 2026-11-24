@@ -1,3 +1,83 @@
+## [0.0.13] - 2026-11-22
+
+#### APL
+- [+] ADDED   : `interpreters` -> 
+`dyalogscript`
+
+#### Bend
+- [+] ADDED   : `color` -> 
+`#8b83b5`
+
+#### Cedar
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#51732F",
+  "extensions": [
+    ".cedar"
+  ],
+  "language_id": 658370221,
+  "tm_scope": "source.cedar",
+  "type": "programming"
+}
+```
+
+#### Goose
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#40E0D0",
+  "extensions": [
+    ".goose"
+  ],
+  "language_id": 897293049,
+  "tm_scope": "source.goose",
+  "type": "programming"
+}
+```
+
+#### KerML
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "color": "#5C6BC0",
+  "extensions": [
+    ".kerml"
+  ],
+  "language_id": 435722551,
+  "tm_scope": "source.kerml",
+  "type": "programming"
+}
+```
+
+#### Lean
+- [+] ADDED   : `color` -> 
+`#3d6ac9`
+
+#### SysML
+- [+] ADDED   : `root` -> 
+```json
+{
+  "ace_mode": "text",
+  "aliases": [
+    "sysmlv2",
+    "sysml2"
+  ],
+  "color": "#3F51B5",
+  "extensions": [
+    ".sysml"
+  ],
+  "language_id": 627066216,
+  "tm_scope": "source.sysml",
+  "type": "programming"
+}
+```
+
+---
+
 ## [0.0.12] - 2026-11-08
 
 #### AviSynth
